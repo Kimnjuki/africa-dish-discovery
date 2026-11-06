@@ -16,7 +16,7 @@ const Install = () => {
     if (success) {
       toast({
         title: "App Installed!",
-        description: "TasteAfrica is now on your home screen.",
+        description: "LadhaQuest is now on your home screen.",
       });
     }
   };
@@ -30,7 +30,7 @@ const Install = () => {
     {
       icon: Smartphone,
       title: "Home Screen Access",
-      description: "Launch TasteAfrica like a native app from your device"
+      description: "Launch LadhaQuest like a native app from your device"
     },
     {
       icon: ChefHat,
@@ -42,8 +42,8 @@ const Install = () => {
   return (
     <div className="min-h-screen bg-background">
       <PageMeta
-        title="Install TasteAfrica App | Offline African Recipes"
-        description="Install TasteAfrica on your device for offline access to authentic African recipes. Works without internet connection."
+        title="Install LadhaQuest App | Offline African Recipes"
+        description="Install LadhaQuest on your device for offline access to authentic African recipes. Works without internet connection."
         keywords="install app, pwa, offline recipes, african cooking app"
       />
       
@@ -64,7 +64,7 @@ const Install = () => {
           </div>
 
           <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">
-            Install TasteAfrica
+            Install LadhaQuest
           </h1>
           
           <p className="text-xl text-muted-foreground mb-8">
@@ -80,7 +80,7 @@ const Install = () => {
                   <span className="text-lg font-medium">App is installed!</span>
                 </div>
                 <p className="text-muted-foreground mt-2">
-                  TasteAfrica is ready on your home screen
+                  LadhaQuest is ready on your home screen
                 </p>
               </CardContent>
             </Card>

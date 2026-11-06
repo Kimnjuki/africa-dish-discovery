@@ -8,10 +8,10 @@ const TermsOfService = () => {
   return (
     <div className="min-h-screen bg-background">
       <PageMeta
-        title="Terms of Service | TasteAfrica"
-        description="Read TasteAfrica's terms of service. Understand your rights and responsibilities when using our African recipe platform."
-        keywords="terms of service, terms and conditions, user agreement, TasteAfrica"
-        canonical="https://tasteafrica.com/terms-of-service"
+        title="Terms of Service | LadhaQuest"
+        description="Read LadhaQuest's terms of service. Understand your rights and responsibilities when using our African recipe platform."
+        keywords="terms of service, terms and conditions, user agreement, LadhaQuest"
+        canonical="https://www.ladhaquest.com/terms-of-service"
       />
       
       <Navigation />
@@ -24,14 +24,14 @@ const TermsOfService = () => {
           <section>
             <h2 className="text-2xl font-semibold text-foreground mb-4">1. Acceptance of Terms</h2>
             <p className="text-muted-foreground leading-relaxed">
-              By accessing and using TasteAfrica ("the Service"), you accept and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our Service.
+              By accessing and using LadhaQuest ("the Service"), you accept and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our Service.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-semibold text-foreground mb-4">2. Description of Service</h2>
             <p className="text-muted-foreground leading-relaxed">
-              TasteAfrica is an online platform that provides:
+              LadhaQuest is an online platform that provides:
             </p>
             <ul className="list-disc list-inside text-muted-foreground mt-4 space-y-2">
               <li>Authentic African recipes from across the continent</li>
@@ -70,7 +70,7 @@ const TermsOfService = () => {
           <section>
             <h2 className="text-2xl font-semibold text-foreground mb-4">5. Intellectual Property</h2>
             <p className="text-muted-foreground leading-relaxed">
-              All content on TasteAfrica, including recipes, images, text, logos, and design elements, is protected by copyright and other intellectual property laws. You may not reproduce, distribute, or create derivative works without our express permission.
+              All content on LadhaQuest, including recipes, images, text, logos, and design elements, is protected by copyright and other intellectual property laws. You may not reproduce, distribute, or create derivative works without our express permission.
             </p>
           </section>
 
@@ -92,7 +92,7 @@ const TermsOfService = () => {
           <section>
             <h2 className="text-2xl font-semibold text-foreground mb-4">7. Recipe Disclaimer</h2>
             <p className="text-muted-foreground leading-relaxed">
-              Recipes and cooking instructions are provided for informational purposes only. TasteAfrica is not responsible for:
+              Recipes and cooking instructions are provided for informational purposes only. LadhaQuest is not responsible for:
             </p>
             <ul className="list-disc list-inside text-muted-foreground mt-4 space-y-2">
               <li>Allergic reactions to ingredients</li>
@@ -108,7 +108,7 @@ const TermsOfService = () => {
           <section>
             <h2 className="text-2xl font-semibold text-foreground mb-4">8. Limitation of Liability</h2>
             <p className="text-muted-foreground leading-relaxed">
-              TasteAfrica is provided "as is" without warranties of any kind. We are not liable for any indirect, incidental, special, or consequential damages arising from your use of the Service.
+              LadhaQuest is provided "as is" without warranties of any kind. We are not liable for any indirect, incidental, special, or consequential damages arising from your use of the Service.
             </p>
           </section>
 
@@ -130,8 +130,8 @@ const TermsOfService = () => {
             <h2 className="text-2xl font-semibold text-foreground mb-4">11. Contact Information</h2>
             <p className="text-muted-foreground leading-relaxed">
               For questions about these Terms, please contact us at:{" "}
-              <a href="mailto:legal@tasteafrica.com" className="text-primary hover:underline">
-                legal@tasteafrica.com
+              <a href="mailto:legal@ladhaquest.com" className="text-primary hover:underline">
+                legal@ladhaquest.com
               </a>
             </p>
           </section>

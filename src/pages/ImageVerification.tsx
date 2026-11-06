@@ -7,7 +7,7 @@ const ImageVerification = () => {
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <PageMeta
-        title="Image Verification Tool | Ensure Authentic Dish Photos | TasteAfrica"
+        title="Image Verification Tool | Ensure Authentic Dish Photos | LadhaQuest"
         description="Verify that recipe images accurately represent their authentic cultural dishes. Flag incorrect or low-quality images for review."
       />
       <Navigation />

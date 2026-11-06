@@ -396,10 +396,10 @@ const MealPlannerCalendar = () => {
   return (
     <div className="min-h-screen">
       <PageMeta
-        title="Calendar Meal Planner | Drag & Drop Weekly Meals | TasteAfrica"
+        title="Calendar Meal Planner | Drag & Drop Weekly Meals | LadhaQuest"
         description="Plan your weekly African cuisine meals with drag-and-drop calendar view. Organize breakfast, lunch, and dinner effortlessly."
         keywords="meal planning calendar, drag and drop meal planner, weekly meal organization, african meal prep"
-        canonical="https://tasteafrica.com/meal-planner-calendar"
+        canonical="https://www.ladhaquest.com/meal-planner-calendar"
       />
       
       <Navigation />

@@ -29,10 +29,10 @@ const Index = () => {
       )}
     <div className="min-h-screen">
       <PageMeta
-        title="TasteAfrica | 500+ Authentic African & World Recipes | Smart Pantry Matching"
+        title="LadhaQuest | 500+ Authentic African & World Recipes | Smart Pantry Matching"
         description="Discover 500+ authentic recipes from Africa and the world. AI-powered pantry intelligence matches recipes to your ingredients. Meal planning, cultural stories, and step-by-step cooking guides."
         keywords="african recipes, world recipes, recipe finder, pantry management, meal planning, cooking guide, nigerian recipes, ethiopian food, smart kitchen"
-        canonical="https://tasteafrica.com/"
+        canonical="https://www.ladhaquest.com/"
       />
       
       <Navigation />

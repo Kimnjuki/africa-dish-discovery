@@ -79,7 +79,7 @@ const CuisineMap = () => {
 
   return (
     <div className="min-h-screen">
-      <PageMeta title="Cuisine Map of Africa | TasteAfrica" description="Explore African dishes by region and country on an interactive map, with native names and cultural context." canonical="https://tasteafrica.com/cuisine-map" />
+      <PageMeta title="Cuisine Map of Africa | LadhaQuest" description="Explore African dishes by region and country on an interactive map, with native names and cultural context." canonical="https://www.ladhaquest.com/cuisine-map" />
       <Navigation />
       <main className="pt-24 pb-16 container mx-auto px-6">
         <h1 className="text-4xl font-bold mb-2">Cuisine map of Africa</h1>

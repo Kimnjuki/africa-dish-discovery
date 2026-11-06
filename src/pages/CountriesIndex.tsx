@@ -63,9 +63,9 @@ const CountriesIndex = () => {
   return (
     <div className="min-h-screen">
       <PageMeta
-        title="Browse Recipes by Country | TasteAfrica"
+        title="Browse Recipes by Country | LadhaQuest"
         description="Explore authentic recipes from every country, organized by continent. Discover regional cuisines, cultural stories, and traditional dishes from around the world."
-        canonical="https://tasteafrica.com/countries"
+        canonical="https://www.ladhaquest.com/countries"
       />
       <Navigation />
       <main className="container mx-auto px-6 py-12">

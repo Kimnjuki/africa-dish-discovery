@@ -94,7 +94,7 @@ export const MealPlanShare = ({
       try {
         await navigator.share({
           title: `Meal Plan: ${mealPlanName}`,
-          text: `Check out my meal plan "${mealPlanName}" on TasteAfrica!`,
+          text: `Check out my meal plan "${mealPlanName}" on LadhaQuest!`,
           url: shareUrl,
         });
       } catch (error) {

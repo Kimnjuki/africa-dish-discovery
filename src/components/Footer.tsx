@@ -17,7 +17,7 @@ const Footer = () => {
                 <ChefHat className="w-6 h-6 text-primary-foreground" />
               </div>
               <div>
-                <div className="font-bold text-lg">TasteAfrica</div>
+                <div className="font-bold text-lg">LadhaQuest</div>
                 <div className="text-xs text-background/70">Recipe Discovery</div>
               </div>
             </div>
@@ -133,7 +133,7 @@ const Footer = () => {
         {/* Bottom */}
         <div className="border-t border-background/20 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="flex flex-wrap items-center justify-center gap-2 text-sm text-background/80">
-            <span>© 2026 TasteAfrica</span>
+            <span>© 2026 LadhaQuest</span>
             <span className="hidden sm:inline">•</span>
             <span className="flex items-center gap-1">
               Made with <Heart className="w-3 h-3 text-red-400 fill-current" /> for African cuisine

@@ -167,10 +167,10 @@ const Ingredients = () => {
   return (
     <div className="min-h-screen">
       <PageMeta
-        title="African Cooking Ingredients Guide | Spices, Staples & Produce | TasteAfrica"
+        title="African Cooking Ingredients Guide | Spices, Staples & Produce | LadhaQuest"
         description="Complete guide to African ingredients. Learn about spices, grains, vegetables, proteins, and where to buy authentic African ingredients online and locally."
         keywords="african ingredients, african spices, african grains, where to buy african food, african cooking staples, african produce, ingredient guide"
-        canonical="https://tasteafrica.com/ingredients"
+        canonical="https://www.ladhaquest.com/ingredients"
       />
       
       <Navigation />

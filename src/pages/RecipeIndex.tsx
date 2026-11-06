@@ -178,9 +178,9 @@ const RecipeIndex = () => {
     <div className="min-h-screen">
       <PageMeta
         title="Recipe Index | Browse African & World Recipes by Country, Diet & Time"
-        description="Browse every recipe on TasteAfrica with filters for country, region, meal type, ingredient, diet, cooking time and difficulty. Find exactly what you can cook tonight."
+        description="Browse every recipe on LadhaQuest with filters for country, region, meal type, ingredient, diet, cooking time and difficulty. Find exactly what you can cook tonight."
         keywords="recipe index, african recipes by country, browse recipes, recipe filter, meal type, dietary recipes"
-        canonical="https://tasteafrica.com/recipe-index"
+        canonical="https://www.ladhaquest.com/recipe-index"
       />
       <Navigation />
 

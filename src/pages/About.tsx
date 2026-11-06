@@ -7,10 +7,10 @@ const About = () => {
   return (
     <div className="min-h-screen bg-background">
       <PageMeta
-        title="About TasteAfrica | Our Mission & Story"
-        description="Learn about TasteAfrica's mission to share authentic African recipes with the world. Meet our team and discover our passion for African culinary heritage."
-        keywords="about TasteAfrica, African cuisine, mission, team, African recipes, culinary heritage"
-        canonical="https://tasteafrica.com/about"
+        title="About LadhaQuest | Our Mission & Story"
+        description="Learn about LadhaQuest's mission to share authentic African recipes with the world. Meet our team and discover our passion for African culinary heritage."
+        keywords="about LadhaQuest, African cuisine, mission, team, African recipes, culinary heritage"
+        canonical="https://www.ladhaquest.com/about"
       />
       
       <Navigation />
@@ -23,7 +23,7 @@ const About = () => {
               Celebrating Africa's Culinary Heritage
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              TasteAfrica is more than a recipe platform—it's a journey through the diverse flavors, 
+              LadhaQuest is more than a recipe platform—it's a journey through the diverse flavors, 
               traditions, and stories that make African cuisine truly extraordinary.
             </p>
           </div>
@@ -117,7 +117,7 @@ const About = () => {
           <div className="container mx-auto px-6">
             <h2 className="text-3xl font-bold text-foreground text-center mb-6">Meet Our Team</h2>
             <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-12">
-              TasteAfrica is built by a passionate team of food lovers, technologists, and 
+              LadhaQuest is built by a passionate team of food lovers, technologists, and 
               cultural enthusiasts dedicated to sharing Africa's rich culinary heritage.
             </p>
             <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">

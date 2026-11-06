@@ -33,7 +33,7 @@ async function wiki(query: string, requireOverlap = true): Promise<Source | null
   if (attempt) await new Promise((r) => setTimeout(r, 700 * attempt + Math.random() * 500));
   try {
     const url = `${WIKI}?action=query&list=search&srsearch=${encodeURIComponent(query)}&srlimit=3&format=json&origin=*`;
-    const res = await fetch(url, { headers: { "User-Agent": "TasteAfrica/1.0 (citation-backfill)" } });
+    const res = await fetch(url, { headers: { "User-Agent": "LadhaQuest/1.0 (citation-backfill)" } });
     if (res.ok) {
       const data = await res.json();
       const hits: WikiSearchHit[] = data?.query?.search ?? [];
@@ -68,7 +68,7 @@ async function extract(title: string): Promise<string> {
       const url =
         `${WIKI}?action=query&prop=extracts&explaintext=1&redirects=1&format=json&origin=*&titles=` +
         encodeURIComponent(title);
-      const res = await fetch(url, { headers: { "User-Agent": "TasteAfrica/1.0 (citation-backfill)" } });
+      const res = await fetch(url, { headers: { "User-Agent": "LadhaQuest/1.0 (citation-backfill)" } });
       if (!res.ok) continue;
       const data = await res.json();
       const pages = data?.query?.pages ?? {};
@@ -268,7 +268,7 @@ serve(async (req) => {
           const url =
             `${WIKI}?action=query&prop=pageimages&piprop=original&redirects=1&format=json&origin=*&titles=` +
             encodeURIComponent(hit.title);
-          const res = await fetch(url, { headers: { "User-Agent": "TasteAfrica/1.0 (image-backfill)" } });
+          const res = await fetch(url, { headers: { "User-Agent": "LadhaQuest/1.0 (image-backfill)" } });
           if (!res.ok) return { id: r.id, name: r.name, status: "skipped", reason: `wiki ${res.status}` };
           const json = await res.json();
           const pages = json?.query?.pages ?? {};

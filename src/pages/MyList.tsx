@@ -18,7 +18,7 @@ const MyList = () => {
   const { user, items, loading, remove } = useSavedItems();
   return (
     <div className="min-h-screen">
-      <PageMeta title="My list | TasteAfrica" description="Your saved African dishes, recipes and countries." />
+      <PageMeta title="My list | LadhaQuest" description="Your saved African dishes, recipes and countries." />
       <Navigation />
       <main className="pt-24 pb-16 container mx-auto px-6">
         <h1 className="text-4xl font-bold mb-6 flex items-center gap-3"><Heart className="w-8 h-8 text-primary" />My list</h1>

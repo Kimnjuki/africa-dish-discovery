@@ -47,7 +47,7 @@ export const PrintRecipeButton = ({ recipe, servingMultiplier = 1 }: PrintRecipe
 
     printWindow.document.write(`
       <!DOCTYPE html>
-      <html><head><title>${recipe.name} - TasteAfrica</title>
+      <html><head><title>${recipe.name} - LadhaQuest</title>
       <style>
         body { font-family: Georgia, serif; max-width: 700px; margin: 40px auto; padding: 0 20px; color: #333; }
         h1 { font-size: 28px; margin-bottom: 4px; }
@@ -85,7 +85,7 @@ export const PrintRecipeButton = ({ recipe, servingMultiplier = 1 }: PrintRecipe
       <ul>${ingredients.map(i => `<li>${i}</li>`).join('')}</ul>
       <h2>Instructions</h2>
       <ol>${steps.map(s => `<li>${s}</li>`).join('')}</ol>
-      <div class="footer">Printed from TasteAfrica • tasteafrica.com</div>
+      <div class="footer">Printed from LadhaQuest • www.ladhaquest.com</div>
       </body></html>
     `);
     printWindow.document.close();

@@ -97,9 +97,9 @@ const RecipeDetail = () => {
   return (
     <div className="min-h-screen">
       <PageMeta
-        title={`${title} Recipe${country ? ` — ${country}` : ""} | TasteAfrica`}
+        title={`${title} Recipe${country ? ` — ${country}` : ""} | LadhaQuest`}
         description={recipe?.summary || `How to cook ${title}: ingredients, step-by-step method, tips and cultural history.`}
-        canonical={`https://tasteafrica.com/recipe/${slug}`}
+        canonical={`https://www.ladhaquest.com/recipe/${slug}`}
         ogImage={recipe?.image_url || undefined}
         type="article"
       />

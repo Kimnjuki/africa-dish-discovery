@@ -6,7 +6,7 @@ export interface Crumb {
   href?: string;
 }
 
-const SITE = "https://tasteafrica.com";
+const SITE = "https://www.ladhaquest.com";
 
 /** Visible breadcrumb trail plus matching BreadcrumbList JSON-LD. */
 export const Breadcrumbs = ({ items }: { items: Crumb[] }) => {

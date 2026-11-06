@@ -45,7 +45,7 @@ export const PageMeta = ({
     updateMeta('og:title', title, true);
     updateMeta('og:description', description, true);
     updateMeta('og:image', ogImage, true);
-    updateMeta('og:site_name', 'TasteAfrica', true);
+    updateMeta('og:site_name', 'LadhaQuest', true);
 
     // Twitter tags
     updateMeta('twitter:card', 'summary_large_image');

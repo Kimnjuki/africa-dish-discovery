@@ -176,7 +176,7 @@ const AdminDishQA = () => {
 
   return (
     <div className="min-h-screen">
-      <PageMeta title="Admin · Dish QA Dashboard | TasteAfrica" description="Verify dish country/region assignments and filter correctness." canonical="https://tasteafrica.com/admin/dish-qa" />
+      <PageMeta title="Admin · Dish QA Dashboard | LadhaQuest" description="Verify dish country/region assignments and filter correctness." canonical="https://www.ladhaquest.com/admin/dish-qa" />
       <Navigation />
       <main className="container mx-auto px-6 py-10 space-y-8">
         <header>

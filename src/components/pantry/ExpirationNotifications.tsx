@@ -52,7 +52,7 @@ const ExpirationNotifications = ({ items, userEmail }: ExpirationNotificationsPr
         toast.success("Notifications enabled!");
         
         // Send a test notification
-        new Notification("TasteAfrica Pantry", {
+        new Notification("LadhaQuest Pantry", {
           body: "You'll now receive alerts for expiring ingredients!",
           icon: "/favicon.ico"
         });

@@ -8,10 +8,10 @@ const Pantry = () => {
   return (
     <div className="min-h-screen">
       <PageMeta
-        title="Smart Pantry Intelligence | AI Recipe Matching | TasteAfrica"
+        title="Smart Pantry Intelligence | AI Recipe Matching | LadhaQuest"
         description="AI-powered pantry management for African cooking. Get personalized recipe suggestions based on your ingredients, smart substitutions, and reduce food waste."
         keywords="pantry management, recipe matching, ingredient substitution, african cooking, smart kitchen, meal planning, food waste reduction"
-        canonical="https://tasteafrica.com/pantry"
+        canonical="https://www.ladhaquest.com/pantry"
       />
 
       <Navigation />

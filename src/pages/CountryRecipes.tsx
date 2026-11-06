@@ -131,7 +131,7 @@ const CountryRecipes = () => {
     hasPart: recipes.slice(0, 20).map(r => ({
       "@type": "Recipe",
       name: r.name,
-      url: `https://tasteafrica.com/recipes?recipe=${r.slug}`,
+      url: `https://www.ladhaquest.com/recipes?recipe=${r.slug}`,
       image: r.image_url || undefined,
     })),
   };
@@ -139,9 +139,9 @@ const CountryRecipes = () => {
   return (
     <div className="min-h-screen">
       <PageMeta
-        title={`${country} Food Guide — Authentic Recipes & Cuisine | TasteAfrica`}
+        title={`${country} Food Guide — Authentic Recipes & Cuisine | LadhaQuest`}
         description={`A complete guide to ${country} cuisine: staple pantry, meal structure, festive dishes and ${recipes.length}+ authentic recipes with cultural context and step-by-step instructions.`}
-        canonical={`https://tasteafrica.com/country/${countrySlug}`}
+        canonical={`https://www.ladhaquest.com/country/${countrySlug}`}
       />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Navigation />

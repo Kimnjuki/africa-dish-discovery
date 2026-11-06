@@ -62,7 +62,7 @@ export const NewsletterSignup = ({ variant = "default", source = "website" }: Ne
         if (error) throw error;
 
         toast({
-          title: "Welcome to TasteAfrica! 🎉",
+          title: "Welcome to LadhaQuest! 🎉",
           description: "You'll receive weekly African recipes and cooking tips.",
         });
         setSubscribed(true);

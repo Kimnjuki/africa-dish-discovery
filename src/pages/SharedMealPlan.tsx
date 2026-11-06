@@ -174,10 +174,10 @@ const SharedMealPlan = () => {
   return (
     <div className="min-h-screen">
       <PageMeta
-        title={`${mealPlan.name} | Shared Meal Plan | TasteAfrica`}
+        title={`${mealPlan.name} | Shared Meal Plan | LadhaQuest`}
         description={`View this shared weekly meal plan featuring African cuisine recipes. Discover delicious African dishes planned for the week.`}
         keywords="shared meal plan, african recipes, weekly meal plan, meal planning"
-        canonical={`https://tasteafrica.com/shared-meal-plan/${shareToken}`}
+        canonical={`https://www.ladhaquest.com/shared-meal-plan/${shareToken}`}
       />
       
       <Navigation />
@@ -187,7 +187,7 @@ const SharedMealPlan = () => {
             <div className="mb-8">
               <Link to="/" className="text-sm text-muted-foreground hover:text-primary mb-4 inline-flex items-center">
                 <ArrowLeft className="w-4 h-4 mr-1" />
-                Back to TasteAfrica
+                Back to LadhaQuest
               </Link>
               
               <div className="text-center">
@@ -302,7 +302,7 @@ const SharedMealPlan = () => {
                   <ChefHat className="w-12 h-12 mx-auto text-primary mb-4" />
                   <h2 className="text-xl font-bold mb-2">Create Your Own Meal Plan</h2>
                   <p className="text-muted-foreground mb-4">
-                    Sign up for TasteAfrica to create and share your own weekly meal plans with AI-powered suggestions.
+                    Sign up for LadhaQuest to create and share your own weekly meal plans with AI-powered suggestions.
                   </p>
                   <div className="flex gap-3 justify-center">
                     <Link to="/auth">

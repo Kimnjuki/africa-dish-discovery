@@ -182,10 +182,10 @@ const BlogArticle = () => {
   return (
     <div className="min-h-screen">
       <PageMeta
-        title={`${post.title} | TasteAfrica Blog`}
+        title={`${post.title} | LadhaQuest Blog`}
         description={post.excerpt}
         keywords={post.tags.join(", ")}
-        canonical={`https://tasteafrica.com/blog/${post.slug}`}
+        canonical={`https://www.ladhaquest.com/blog/${post.slug}`}
       />
       <BlogSchema post={post} />
 

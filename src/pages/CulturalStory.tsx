@@ -102,9 +102,9 @@ const CulturalStory = () => {
   return (
     <div className="min-h-screen">
       <PageMeta
-        title={`${dish.name} — Cultural Story, Origin & History | TasteAfrica`}
+        title={`${dish.name} — Cultural Story, Origin & History | LadhaQuest`}
         description={(dish.cultural_significance || dish.summary || `Learn the cultural origin and history of ${dish.name} from ${dish.country}.`).slice(0, 160)}
-        canonical={`https://tasteafrica.com/story/${dish.slug}`}
+        canonical={`https://www.ladhaquest.com/story/${dish.slug}`}
       />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Navigation />

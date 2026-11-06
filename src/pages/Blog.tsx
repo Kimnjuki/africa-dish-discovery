@@ -32,10 +32,10 @@ const Blog = () => {
   return (
     <div className="min-h-screen bg-background">
       <PageMeta
-        title="African Food Blog | Authentic Recipes, Guides & Cooking Tips | TasteAfrica"
+        title="African Food Blog | Authentic Recipes, Guides & Cooking Tips | LadhaQuest"
         description="Discover authentic African recipes with step-by-step guides. From Nigerian Jollof to Ethiopian Doro Wat, learn to cook Africa's most beloved dishes at home."
         keywords="african food blog, african recipes, nigerian food, ethiopian recipes, ghanaian food, west african cooking, east african cuisine"
-        canonical="https://tasteafrica.com/blog"
+        canonical="https://www.ladhaquest.com/blog"
       />
       
       <Navigation />

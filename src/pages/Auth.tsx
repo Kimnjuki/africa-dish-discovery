@@ -330,7 +330,7 @@ const Auth = () => {
               <ChefHat className="w-6 h-6 text-primary-foreground" />
             </div>
             <div>
-              <div className="font-bold text-2xl text-gradient">TasteAfrica</div>
+              <div className="font-bold text-2xl text-gradient">LadhaQuest</div>
               <div className="text-sm text-muted-foreground">Recipe Discovery</div>
             </div>
           </div>
@@ -346,7 +346,7 @@ const Auth = () => {
                 ? "Enter your email to receive a password reset link"
                 : (isLogin 
                   ? "Sign in to access your recipes and pantry" 
-                  : "Join TasteAfrica to explore African cuisine"
+                  : "Join LadhaQuest to explore African cuisine"
                 )}
             </CardDescription>
           </CardHeader>

@@ -17,8 +17,8 @@ export default defineConfig(({ mode }) => ({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'robots.txt', 'images/**/*'],
       manifest: {
-        name: 'TasteAfrica - African Recipes',
-        short_name: 'TasteAfrica',
+        name: 'LadhaQuest - African Recipes',
+        short_name: 'LadhaQuest',
         description: 'Discover authentic African recipes with smart pantry matching. Cook with ingredients you already have.',
         theme_color: '#D97706',
         background_color: '#1a1a1a',

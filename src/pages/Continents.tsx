@@ -7,10 +7,10 @@ const Continents = () => {
   return (
     <div className="min-h-screen">
       <PageMeta
-        title="Explore African Continents | Regional Cuisines | TasteAfrica"
+        title="Explore African Continents | Regional Cuisines | LadhaQuest"
         description="Discover authentic recipes from West, East, North, Central, and Southern Africa. Explore 54 countries and their unique culinary traditions on an interactive map."
         keywords="african regions, west african cuisine, east african food, north african recipes, southern african dishes, african continents, interactive map"
-        canonical="https://tasteafrica.com/continents"
+        canonical="https://www.ladhaquest.com/continents"
       />
       
       <Navigation />

@@ -69,7 +69,7 @@ Traditional accompaniments include fried plantains, coleslaw, grilled chicken, o
     publishedAt: "2026-01-14",
     image: "/placeholder.svg",
     featured: true,
-    author: "TasteAfrica Team",
+    author: "LadhaQuest Team",
     tags: ["jollof rice", "nigerian food", "ghanaian food", "west african", "rice dishes", "one-pot meals"]
   },
   {
@@ -125,7 +125,7 @@ Always serve on injera bread – the spongy, sourdough flatbread that acts as bo
     publishedAt: "2026-01-13",
     image: "/placeholder.svg",
     featured: true,
-    author: "TasteAfrica Team",
+    author: "LadhaQuest Team",
     tags: ["doro wat", "ethiopian food", "chicken stew", "berbere", "injera", "east african"]
   },
   {
@@ -191,7 +191,7 @@ Serve hot alongside your preferred swallow – pounded yam remains the most trad
     publishedAt: "2026-01-12",
     image: "/placeholder.svg",
     featured: false,
-    author: "TasteAfrica Team",
+    author: "LadhaQuest Team",
     tags: ["egusi soup", "nigerian food", "melon seed", "african soups", "west african"]
   },
   {
@@ -258,7 +258,7 @@ Present the tagine directly at the table for dramatic effect. Serve with couscou
     publishedAt: "2026-01-11",
     image: "/placeholder.svg",
     featured: true,
-    author: "TasteAfrica Team",
+    author: "LadhaQuest Team",
     tags: ["tagine", "moroccan food", "north african", "slow cooking", "lamb", "chicken"]
   },
   {
@@ -332,7 +332,7 @@ This dish proves that the most beloved recipes often emerge from cultural fusion
     publishedAt: "2026-01-10",
     image: "/placeholder.svg",
     featured: false,
-    author: "TasteAfrica Team",
+    author: "LadhaQuest Team",
     tags: ["bobotie", "south african food", "cape malay", "curry", "casserole", "comfort food"]
   },
   {
@@ -405,7 +405,7 @@ This dish represents not just a meal but a philosophy of sharing, abundance, and
     publishedAt: "2026-01-09",
     image: "/placeholder.svg",
     featured: false,
-    author: "TasteAfrica Team",
+    author: "LadhaQuest Team",
     tags: ["thieboudienne", "senegalese food", "fish and rice", "west african", "one-pot", "UNESCO heritage"]
   },
   {
@@ -491,7 +491,7 @@ This dish embodies Ghana's relationship with the sea and the importance of commu
     publishedAt: "2026-01-08",
     image: "/placeholder.svg",
     featured: false,
-    author: "TasteAfrica Team",
+    author: "LadhaQuest Team",
     tags: ["banku", "tilapia", "ghanaian food", "grilled fish", "fermented", "street food"]
   },
   {
@@ -584,7 +584,7 @@ This tradition proves that sometimes the simplest preparations create the most m
     publishedAt: "2026-01-07",
     image: "/placeholder.svg",
     featured: false,
-    author: "TasteAfrica Team",
+    author: "LadhaQuest Team",
     tags: ["nyama choma", "kenyan food", "barbecue", "grilled meat", "east african", "social food"]
   },
   {
@@ -688,7 +688,7 @@ This dish proves that culinary greatness often emerges from humble ingredients c
     publishedAt: "2026-01-06",
     image: "/placeholder.svg",
     featured: false,
-    author: "TasteAfrica Team",
+    author: "LadhaQuest Team",
     tags: ["koshari", "egyptian food", "street food", "vegetarian", "north african", "comfort food"]
   },
   {
@@ -796,7 +796,7 @@ This dish represents Central Africa's contribution to global gastronomy – rich
     publishedAt: "2026-01-05",
     image: "/placeholder.svg",
     featured: false,
-    author: "TasteAfrica Team",
+    author: "LadhaQuest Team",
     tags: ["moambe", "congolese food", "palm butter", "central african", "chicken stew", "comfort food"]
   },
   {
@@ -908,7 +908,7 @@ This street food exemplifies how simple techniques and bold flavors create unfor
     publishedAt: "2026-01-04",
     image: "/placeholder.svg",
     featured: true,
-    author: "TasteAfrica Team",
+    author: "LadhaQuest Team",
     tags: ["suya", "nigerian food", "street food", "kebabs", "grilled meat", "yaji"]
   },
   {
@@ -1025,7 +1025,7 @@ This dish carries the history of trade routes and cultural exchange in every aro
     publishedAt: "2026-01-03",
     image: "/placeholder.svg",
     featured: false,
-    author: "TasteAfrica Team",
+    author: "LadhaQuest Team",
     tags: ["pilau", "tanzanian food", "spiced rice", "zanzibar", "east african", "celebration food"]
   }
 ];

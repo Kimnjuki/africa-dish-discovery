@@ -90,7 +90,7 @@ const OfflineRecipes = () => {
   return (
     <div className="min-h-screen bg-background">
       <PageMeta
-        title="Offline Recipes | TasteAfrica"
+        title="Offline Recipes | LadhaQuest"
         description="Access your saved African recipes offline. Cook your favorite dishes even without internet connection."
         keywords="offline recipes, cached recipes, african food offline"
       />
@@ -289,7 +289,7 @@ const OfflineRecipes = () => {
             </li>
             <li className="flex items-start gap-2">
               <span className="text-primary">•</span>
-              Install TasteAfrica as an app for the best offline experience
+              Install LadhaQuest as an app for the best offline experience
             </li>
           </ul>
           {isOnline && (

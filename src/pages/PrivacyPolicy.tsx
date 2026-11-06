@@ -8,10 +8,10 @@ const PrivacyPolicy = () => {
   return (
     <div className="min-h-screen bg-background">
       <PageMeta
-        title="Privacy Policy | TasteAfrica"
-        description="Learn how TasteAfrica collects, uses, and protects your personal information. Our privacy policy explains your rights under GDPR and CCPA."
-        keywords="privacy policy, data protection, GDPR, CCPA, cookies, TasteAfrica"
-        canonical="https://tasteafrica.com/privacy-policy"
+        title="Privacy Policy | LadhaQuest"
+        description="Learn how LadhaQuest collects, uses, and protects your personal information. Our privacy policy explains your rights under GDPR and CCPA."
+        keywords="privacy policy, data protection, GDPR, CCPA, cookies, LadhaQuest"
+        canonical="https://www.ladhaquest.com/privacy-policy"
       />
       
       <Navigation />
@@ -100,7 +100,7 @@ const PrivacyPolicy = () => {
           <section>
             <h2 className="text-2xl font-semibold text-foreground mb-4">6. Children's Privacy</h2>
             <p className="text-muted-foreground leading-relaxed">
-              TasteAfrica is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13. If we discover that a child under 13 has provided us with personal information, we will delete it immediately.
+              LadhaQuest is not intended for children under 13 years of age. We do not knowingly collect personal information from children under 13. If we discover that a child under 13 has provided us with personal information, we will delete it immediately.
             </p>
           </section>
 
@@ -115,8 +115,8 @@ const PrivacyPolicy = () => {
             <h2 className="text-2xl font-semibold text-foreground mb-4">8. Contact Us</h2>
             <p className="text-muted-foreground leading-relaxed">
               For any questions regarding this policy or to exercise your data rights, please contact us at:{" "}
-              <a href="mailto:privacy@tasteafrica.com" className="text-primary hover:underline">
-                privacy@tasteafrica.com
+              <a href="mailto:privacy@ladhaquest.com" className="text-primary hover:underline">
+                privacy@ladhaquest.com
               </a>
             </p>
           </section>

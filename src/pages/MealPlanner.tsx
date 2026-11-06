@@ -301,10 +301,10 @@ const MealPlanner = () => {
   return (
     <div className="min-h-screen">
       <PageMeta
-        title="Meal Planner | Plan Your Weekly African Meals | TasteAfrica"
+        title="Meal Planner | Plan Your Weekly African Meals | LadhaQuest"
         description="Plan your weekly African cuisine meals and automatically generate shopping lists. Organize breakfast, lunch, and dinner with authentic African recipes."
         keywords="meal planning, weekly meal plan, african meal prep, shopping list generator, meal organization"
-        canonical="https://tasteafrica.com/meal-planner"
+        canonical="https://www.ladhaquest.com/meal-planner"
       />
       
       <Navigation />

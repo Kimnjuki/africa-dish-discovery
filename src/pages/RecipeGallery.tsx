@@ -180,7 +180,7 @@ const RecipeGallery = () => {
   return (
     <div className="min-h-screen bg-background">
       <PageMeta
-        title="Recipe Image Gallery | Browse Authentic Dish Photos | TasteAfrica"
+        title="Recipe Image Gallery | Browse Authentic Dish Photos | LadhaQuest"
         description="Explore our curated gallery of authentic recipe images from around the world. Filter by continent, country, and browse high-quality dish photos."
       />
       <Navigation />

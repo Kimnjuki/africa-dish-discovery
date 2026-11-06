@@ -203,10 +203,10 @@ const Meals = () => {
     return (
       <div className="min-h-screen">
         <PageMeta
-          title="African Meals by Time of Day | Breakfast, Lunch & Dinner | TasteAfrica"
+          title="African Meals by Time of Day | Breakfast, Lunch & Dinner | LadhaQuest"
           description="Explore African recipes organized by meal type. Find breakfast, lunch, dinner, and snack recipes from across the continent. Perfect meal planning for any time of day."
           keywords="african breakfast, african lunch recipes, african dinner ideas, african snacks, meal planning, african cuisine by meal type"
-          canonical="https://tasteafrica.com/meals"
+          canonical="https://www.ladhaquest.com/meals"
         />
         
         <Navigation />
@@ -226,10 +226,10 @@ const Meals = () => {
   return (
     <div className="min-h-screen">
       <PageMeta
-        title="African Meals by Time of Day | Breakfast, Lunch & Dinner | TasteAfrica"
+        title="African Meals by Time of Day | Breakfast, Lunch & Dinner | LadhaQuest"
         description="Explore African recipes organized by meal type. Find breakfast, lunch, dinner, and snack recipes from across the continent. Perfect meal planning for any time of day."
         keywords="african breakfast, african lunch recipes, african dinner ideas, african snacks, meal planning, african cuisine by meal type"
-        canonical="https://tasteafrica.com/meals"
+        canonical="https://www.ladhaquest.com/meals"
       />
       
       <Navigation />

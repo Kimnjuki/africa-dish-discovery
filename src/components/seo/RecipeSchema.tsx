@@ -29,10 +29,10 @@ export const RecipeSchema = ({ recipe }: RecipeSchemaProps) => {
         recipe.image_url,
         recipe.image_url,
         recipe.image_url
-      ] : ["https://6fde0ee8-1c45-43f7-b769-be75373bc9da.lovableproject.com/placeholder.svg"],
+      ] : ["https://www.ladhaquest.com/placeholder.svg"],
       "author": {
         "@type": "Organization",
-        "name": "TasteAfrica"
+        "name": "LadhaQuest"
       },
       "datePublished": recipe.created_at || new Date().toISOString(),
       "description": recipe.summary || `Authentic ${recipe.country} recipe for ${recipe.name}`,
@@ -51,7 +51,7 @@ export const RecipeSchema = ({ recipe }: RecipeSchemaProps) => {
             "@type": "HowToStep",
             "name": `Step ${index + 1}`,
             "text": typeof step === 'string' ? step : step.instruction || step.text || step,
-            "url": `https://tasteafrica.com/recipes/${recipe.slug}#step${index + 1}`
+            "url": `https://www.ladhaquest.com/recipes/${recipe.slug}#step${index + 1}`
           }))
         : [],
       "aggregateRating": {

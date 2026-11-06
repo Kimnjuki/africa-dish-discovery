@@ -93,7 +93,7 @@ serve(async (req: Request): Promise<Response> => {
           <div style="max-width: 600px; margin: 0 auto; background: white; border-radius: 12px; overflow: hidden; margin-top: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
             <!-- Header -->
             <div style="background: linear-gradient(135deg, #f97316, #ea580c); padding: 30px; text-align: center;">
-              <h1 style="color: white; margin: 0; font-size: 24px;">🥘 TasteAfrica Pantry</h1>
+              <h1 style="color: white; margin: 0; font-size: 24px;">🥘 LadhaQuest Pantry</h1>
               <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">Your Weekly Expiry Digest</p>
             </div>
             
@@ -130,13 +130,13 @@ serve(async (req: Request): Promise<Response> => {
               <ul style="margin: 0; padding: 0 0 0 20px; color: #15803d; font-size: 14px;">
                 <li style="margin-bottom: 5px;">Use expiring vegetables in stews or soups</li>
                 <li style="margin-bottom: 5px;">Freeze items you can't use in time</li>
-                <li>Check TasteAfrica for recipes using your expiring items</li>
+                <li>Check LadhaQuest for recipes using your expiring items</li>
               </ul>
             </div>
             
             <!-- CTA -->
             <div style="padding: 30px; text-align: center;">
-              <a href="https://tasteafrica.lovable.app/pantry" style="display: inline-block; background: #f97316; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 600;">
+              <a href="https://www.ladhaquest.com/pantry" style="display: inline-block; background: #f97316; color: white; padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 600;">
                 View My Pantry
               </a>
             </div>
@@ -144,7 +144,7 @@ serve(async (req: Request): Promise<Response> => {
             <!-- Footer -->
             <div style="padding: 20px; background: #f9fafb; text-align: center; font-size: 12px; color: #6b7280;">
               <p style="margin: 0;">You're receiving this because you enabled pantry alerts.</p>
-              <p style="margin: 5px 0 0 0;">TasteAfrica - Discover African Cuisine</p>
+              <p style="margin: 5px 0 0 0;">LadhaQuest - Discover African Cuisine</p>
             </div>
           </div>
         </body>
@@ -152,7 +152,7 @@ serve(async (req: Request): Promise<Response> => {
     `;
 
     const emailResponse = await resend.emails.send({
-      from: "TasteAfrica <onboarding@resend.dev>",
+      from: "LadhaQuest <onboarding@resend.dev>",
       to: [email],
       subject: `🥘 ${expiringItems.length} pantry item${expiringItems.length > 1 ? 's' : ''} expiring soon`,
       html: html,

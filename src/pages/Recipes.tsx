@@ -176,10 +176,10 @@ const Recipes = () => {
   return (
     <div className="min-h-screen bg-gradient-earth">
       <PageMeta
-        title="African Recipes | Authentic Dishes from West, East, North & Southern Africa | TasteAfrica"
+        title="African Recipes | Authentic Dishes from West, East, North & Southern Africa | LadhaQuest"
         description="Explore 50+ authentic African recipes from Nigeria, Ghana, Kenya, Ethiopia & more. Find Jollof Rice, Fufu, Injera, Nyama Choma with step-by-step guides. Filter by country and difficulty."
         keywords="african recipes, nigerian jollof rice, ghanaian fufu, ethiopian injera, kenyan nyama choma, african food, west african recipes, east african cuisine"
-        canonical="https://6fde0ee8-1c45-43f7-b769-be75373bc9da.lovableproject.com/recipes"
+        canonical="https://www.ladhaquest.com/recipes"
       />
       <Navigation />
       

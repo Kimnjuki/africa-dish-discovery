@@ -199,7 +199,7 @@ const DishAtlas = () => {
         "@type": "ListItem",
         position: i + 1,
         name: r.name,
-        url: `https://tasteafrica.com/dish/${r.slug || toSlug(r.name)}`,
+        url: `https://www.ladhaquest.com/dish/${r.slug || toSlug(r.name)}`,
       })),
     };
   }, [ranked]);
@@ -210,7 +210,7 @@ const DishAtlas = () => {
         title="African Food Atlas | Top 50 Dishes, Best Stews & 100 Foods to Try"
         description="Ranked lists of Africa's best dishes, scored on reader ratings and authenticity depth. Explore the top 50 African dishes, the best stews and soups, and 100 foods to try across the continent."
         keywords="top african dishes, best african stews, foods to try in africa, african food atlas, dish rankings"
-        canonical="https://tasteafrica.com/atlas"
+        canonical="https://www.ladhaquest.com/atlas"
       />
       {itemListJsonLd && (
         <script type="application/ld+json">{JSON.stringify(itemListJsonLd)}</script>

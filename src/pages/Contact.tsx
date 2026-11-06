@@ -89,10 +89,10 @@ const Contact = () => {
   return (
     <div className="min-h-screen bg-background">
       <PageMeta
-        title="Contact Us | TasteAfrica"
-        description="Get in touch with the TasteAfrica team. We'd love to hear from you about recipes, partnerships, or any questions."
-        keywords="contact TasteAfrica, get in touch, support, feedback, African recipes"
-        canonical="https://tasteafrica.com/contact"
+        title="Contact Us | LadhaQuest"
+        description="Get in touch with the LadhaQuest team. We'd love to hear from you about recipes, partnerships, or any questions."
+        keywords="contact LadhaQuest, get in touch, support, feedback, African recipes"
+        canonical="https://www.ladhaquest.com/contact"
       />
       
       <Navigation />
@@ -119,8 +119,8 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-medium text-foreground">Email</h3>
-                      <a href="mailto:hello@tasteafrica.com" className="text-muted-foreground hover:text-primary transition-colors">
-                        hello@tasteafrica.com
+                      <a href="mailto:hello@ladhaquest.com" className="text-muted-foreground hover:text-primary transition-colors">
+                        hello@ladhaquest.com
                       </a>
                     </div>
                   </div>
@@ -131,7 +131,7 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-medium text-foreground">Social Media</h3>
-                      <p className="text-muted-foreground">@TasteAfricaRecipes</p>
+                      <p className="text-muted-foreground">@LadhaQuestRecipes</p>
                     </div>
                   </div>
 
@@ -160,7 +160,7 @@ const Contact = () => {
               <div className="bg-muted/30 p-6 rounded-xl">
                 <h3 className="font-semibold text-foreground mb-3">Partnership Inquiries</h3>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Interested in collaborating with TasteAfrica? We're open to:
+                  Interested in collaborating with LadhaQuest? We're open to:
                 </p>
                 <ul className="text-sm text-muted-foreground space-y-2">
                   <li>• Recipe collaborations</li>

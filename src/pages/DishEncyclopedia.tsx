@@ -142,7 +142,7 @@ const DishEncyclopedia = () => {
           recipe?.summary ||
           `${title}: native name, pronunciation, region, cultural history and where to eat it.`
         }
-        canonical={`https://tasteafrica.com/dish/${dishSlug}`}
+        canonical={`https://www.ladhaquest.com/dish/${dishSlug}`}
       />
       {jsonLd && <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>}
       <Navigation />

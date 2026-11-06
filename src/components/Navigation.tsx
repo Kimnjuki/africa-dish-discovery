@@ -81,7 +81,7 @@ const Navigation = () => {
               <ChefHat className="w-6 h-6 text-primary-foreground" />
             </div>
             <div>
-              <div className="font-bold text-lg text-gradient">TasteAfrica</div>
+              <div className="font-bold text-lg text-gradient">LadhaQuest</div>
               <div className="text-xs text-muted-foreground">Recipe Discovery</div>
             </div>
           </Link>

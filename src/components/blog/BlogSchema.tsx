@@ -12,24 +12,24 @@ export const BlogSchema = ({ post }: BlogSchemaProps) => {
       "@type": "BlogPosting",
       "headline": post.title,
       "description": post.excerpt,
-      "image": post.image || "https://tasteafrica.com/placeholder.svg",
+      "image": post.image || "https://www.ladhaquest.com/placeholder.svg",
       "author": {
         "@type": "Person",
         "name": post.author
       },
       "publisher": {
         "@type": "Organization",
-        "name": "TasteAfrica",
+        "name": "LadhaQuest",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://tasteafrica.com/pwa-512x512.png"
+          "url": "https://www.ladhaquest.com/pwa-512x512.png"
         }
       },
       "datePublished": post.publishedAt,
       "dateModified": post.publishedAt,
       "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": `https://tasteafrica.com/blog/${post.slug}`
+        "@id": `https://www.ladhaquest.com/blog/${post.slug}`
       },
       "articleSection": post.category,
       "keywords": post.tags?.join(", ") || post.category

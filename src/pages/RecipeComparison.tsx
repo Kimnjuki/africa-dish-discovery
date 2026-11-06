@@ -282,7 +282,7 @@ const RecipeComparison = () => {
         title="World-Class Recipe Comparison | Africa Dish Discovery"
         description="Compare African dishes against global standards with Michelin-style criteria, molecular flavor profiling, and ancestral health indices."
         keywords="recipe comparison, african food, culinary prestige, flavor profiling, nutrition comparison, TasteAtlas"
-        canonical="https://tasteafrica.com/recipe-comparison"
+        canonical="https://www.ladhaquest.com/recipe-comparison"
       />
       
       <Navigation />
