@@ -1,0 +1,51 @@
+
+-- Batch 2: African recipes (Ethiopia through Kenya/East Africa)
+UPDATE recipes SET continent = 'Africa', history = 'Ethiopian Injera is the iconic sourdough flatbread made from teff, an ancient grain endemic to the Ethiopian highlands. Teff has been cultivated for over 5,000 years and remains Ethiopia''s most important crop. Injera serves as both plate and utensil in Ethiopian communal dining, embodying the concept of "gursha" - feeding others as an act of love.' WHERE slug = 'ethiopian-injera';
+
+UPDATE recipes SET continent = 'Africa', history = 'Shiro Wat is Ethiopia''s most popular everyday stew, made from roasted chickpea or fava bean flour seasoned with berbere spice. During the 250+ fasting days observed annually by Ethiopian Orthodox Christians, shiro provides essential protein. The dish exemplifies how religious practice shaped one of the world''s great vegetarian cuisines.' WHERE slug = 'shiro-wat-ethiopia';
+
+UPDATE recipes SET continent = 'Africa', history = 'Firfir (Chechebsa) is a traditional Ethiopian-Eritrean breakfast dish made from torn injera sautéed with berbere spice and niter kibbeh (spiced butter). This dish embodies the zero-waste philosophy of Ethiopian cooking, transforming leftover injera into a satisfying morning meal. It has sustained highland communities for centuries.' WHERE slug = 'firfir-chechebsa-ethiopia-eritrea';
+
+UPDATE recipes SET continent = 'Africa', history = 'Injera Pizza is a modern Ethiopian-American fusion that emerged in Ethiopian diaspora communities in the United States. It layers pizza toppings on injera bread, creating a cross-cultural culinary bridge. This innovative dish represents how Ethiopian cuisine adapts and evolves in global diaspora communities.' WHERE slug = 'injera-pizza-ethiopian';
+
+UPDATE recipes SET continent = 'Africa', history = 'Nyembwe Chicken is Gabon''s national dish, a rich chicken stew cooked in nyembwe (palm nut) sauce. The dish reflects the importance of the oil palm in Central African cuisine and economy. Traditionally prepared for celebrations and honored guests, it represents Gabonese hospitality and the bounty of the equatorial rainforest.' WHERE slug = 'nyembwe-chicken-gabon';
+
+UPDATE recipes SET continent = 'Africa', history = 'Domoda is Gambia''s national dish, a hearty peanut stew that reflects the importance of groundnuts in West African agriculture and cuisine. Introduced from South America via Portuguese traders in the 16th century, peanuts became integral to Gambian cooking. Domoda is comfort food served at family gatherings and celebrations.' WHERE slug = 'domoda-peanut-stew-gambia';
+
+UPDATE recipes SET continent = 'Africa', history = 'Superkanja is a traditional Gambian okra and leafy greens stew that showcases the rich vegetable traditions of the Senegambia region. The dish combines indigenous African greens with fish or meat in a nutritious one-pot meal. It represents the communal cooking traditions where women gather to prepare family meals.' WHERE slug = 'superkanja';
+
+UPDATE recipes SET continent = 'Africa', history = 'Banku is a fermented corn and cassava dough ball that is a staple food of the Ga and Ewe peoples of southern Ghana. The fermentation process, lasting 2-3 days, gives banku its distinctive sour taste and improved digestibility. It is typically paired with soups, stews, or grilled tilapia with pepper sauce.' WHERE slug = 'banku-gh';
+
+UPDATE recipes SET continent = 'Africa', history = 'Fufu is one of West Africa''s most iconic dishes, made by pounding cassava and plantain into a smooth, stretchy dough. The rhythmic pounding of fufu using a large wooden mortar and pestle is a cultural tradition passed through generations. In Ghana, fufu is the foundation of countless soup and stew pairings.' WHERE slug = 'fufu-gh';
+
+UPDATE recipes SET continent = 'Africa', history = 'Kenkey is a traditional Ga and Fante fermented corn dumpling wrapped and steamed in corn husks or banana leaves. Dating back centuries, the fermentation process makes it highly digestible and nutritious. Kenkey is a cornerstone of coastal Ghanaian cuisine, typically served with fried fish and hot pepper sauce.' WHERE slug = 'kenkey-gh';
+
+UPDATE recipes SET continent = 'Africa', history = 'Koose (bean fritters) are a beloved Ghanaian street food made from ground black-eyed peas, deep-fried until golden and crispy. Known as akara in Nigeria and accara in other West African countries, these protein-rich fritters are a breakfast staple. They showcase the ancient West African tradition of legume-based cooking.' WHERE slug = 'koose-gh';
+
+UPDATE recipes SET continent = 'Africa', history = 'Nkatenkwan (Peanut Soup) is a rich, creamy soup that is a cornerstone of Akan cuisine in Ghana. Groundnuts, introduced to West Africa from South America in the 16th century, quickly became essential to local cooking. This nourishing soup is traditionally served with fufu and is central to Ghanaian hospitality.' WHERE slug = 'nkatenkwan-gh';
+
+UPDATE recipes SET continent = 'Africa', history = 'Plantain chips are a popular Ghanaian snack reflecting the ubiquity of plantains in West African cuisine. Thinly sliced and fried until crispy, they showcase how simple ingredients are transformed into irresistible street food. Plantain cultivation in West Africa dates back over 2,500 years via trade routes from Southeast Asia.' WHERE slug = 'plantain-chips-gh';
+
+UPDATE recipes SET continent = 'Africa', history = 'Akotonshi (Stuffed Crabs) is a beloved Ghanaian coastal dish, particularly popular in the Greater Accra and Central regions. Fresh crab meat is seasoned, mixed with spices and breadcrumbs, then stuffed back into crab shells and baked. This dish reflects the maritime traditions of the Ga and Fante peoples.' WHERE slug = 'akotonshi';
+
+UPDATE recipes SET continent = 'Africa', history = 'Aprapransa is a traditional Ghanaian palm nut and corn dough dish, particularly popular among the Fante people of the Central Region. This nutritious dish combines the rich, oily flavor of palm fruit with fermented corn dough, creating a uniquely satisfying meal that has sustained coastal communities for generations.' WHERE slug = 'aprapransa-ghana';
+
+UPDATE recipes SET continent = 'Africa', history = 'Banku and Okro Stew is one of Ghana''s most beloved combinations. The fermented corn and cassava dough (banku) paired with the slimy, nutritious okro stew represents the culinary genius of Ghanaian cuisine. This pairing is a daily staple across southern Ghana, reflecting centuries of agricultural and culinary traditions.' WHERE slug = 'banku-okro-stew-ghana';
+
+UPDATE recipes SET continent = 'Africa', history = 'Bofrot (Puff Puff) is Ghana''s version of the beloved West African fried dough. These sweet, pillowy balls of fried batter are a festive treat served at celebrations, Christmas, and Easter. The recipe has been passed down through generations and represents the joy of Ghanaian communal celebrations.' WHERE slug = 'bofrot';
+
+UPDATE recipes SET continent = 'Africa', history = 'Kelewele is a beloved Ghanaian street food of spicy fried plantains seasoned with ginger, chili, and spices. Originating from the Ga people of Greater Accra, kelewele is sold by street vendors in the evening and is a quintessential Ghanaian nightlife snack. Its sweet-spicy flavor profile is uniquely West African.' WHERE slug = 'kelewele-spicy-plantains';
+
+UPDATE recipes SET continent = 'Africa', history = 'Konkonte with Groundnut Soup is a traditional Ghanaian dish combining dried cassava flour dough with rich peanut soup. Konkonte, also called "face the wall," was historically considered a poor person''s food but has gained appreciation as authentic heritage cuisine. It represents Ghanaian resourcefulness and the nutritional wisdom of traditional diets.' WHERE slug = 'konkonte-groundnut-soup';
+
+UPDATE recipes SET continent = 'Africa', history = 'Ofam is a traditional Ghanaian plantain loaf from the Ashanti region, made by mashing ripe plantains with palm oil and spices, then steaming in banana leaves. This dish represents the ingenuity of Akan cooking, transforming the humble plantain into a special-occasion food with deep cultural roots.' WHERE slug = 'ofam-plantain-loaf-ghana';
+
+UPDATE recipes SET continent = 'Africa', history = 'Red Red is a beloved Ghanaian bean stew made with black-eyed peas cooked in palm oil, giving it its distinctive red color. The dish''s name comes from the red palm oil and red-skinned beans. Paired with fried plantains, Red Red is a comfort food staple that showcases the West African love of legumes and plantains.' WHERE slug = 'red-red-bean-stew';
+
+UPDATE recipes SET continent = 'Africa', history = 'Tuo Zaafi with Ayoyo Soup is a signature dish of northern Ghana, particularly among the Dagomba and Mamprusi peoples. The thick millet or corn flour ball (tuo zaafi) paired with jute leaf soup (ayoyo) represents the staple food culture of the Sahel region. This dish has sustained northern communities for centuries.' WHERE slug = 'tuo-zaafi-ayoyo-soup';
+
+UPDATE recipes SET continent = 'Africa', history = 'Waakye is Ghana''s most popular street food, a hearty combination of rice and beans cooked with dried millet leaves (waakye leaves) that give it a distinctive reddish-brown color. Originating from northern Ghana, waakye has become a national dish served with shito (hot pepper sauce), spaghetti, and protein.' WHERE slug = 'waakye-shito-ghana';
+
+UPDATE recipes SET continent = 'Africa', history = 'Yam Abunu Abunu is a traditional Ghanaian dish from the Volta Region, featuring boiled yam served with a kontomire (cocoyam leaf) stew. The name means "half and half" in Ewe, referring to the pairing. Yam cultivation has been central to Ghanaian agriculture and culture for thousands of years.' WHERE slug = 'yam-abunu-abunu-ghana';
+
+UPDATE recipes SET continent = 'Africa', history = 'Kokonte with Groundnut Soup is a traditional dish shared between Ghana and Togo, featuring dried cassava flour dough paired with rich peanut soup. This cross-border dish reflects the culinary connections between the Ewe people who live in both countries. It represents the shared food heritage of the Volta region.' WHERE slug = 'kokonte-groundnut-soup-ghana-togo';

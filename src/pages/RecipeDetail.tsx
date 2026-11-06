@@ -1,0 +1,239 @@
+import { useEffect, useMemo, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
+import { PageMeta } from "@/components/seo/PageMeta";
+import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { supabase } from "@/integrations/supabase/client";
+import { EnhancedRecipePreparation } from "@/components/enhanced/EnhancedRecipePreparation";
+import RecipeImagePlaceholder from "@/components/RecipeImagePlaceholder";
+import { IngredientChecklist } from "@/components/recipe/IngredientChecklist";
+import { NutritionBadge } from "@/components/NutritionBadge";
+import { PrintRecipeButton } from "@/components/PrintRecipeButton";
+import { RecipeTrustNotice } from "@/components/recipe/RecipeTrustNotice";
+import { SourceCitations } from "@/components/cultural/SourceCitations";
+import { SaveButton } from "@/components/SaveButton";
+import { getCountryFlag } from "@/utils/countryFlags";
+import { itemText, toList, toSlug } from "@/lib/recipeText";
+import { Clock, Users, ChefHat, Utensils, Lightbulb, Globe2, Minus, Plus, BookOpen } from "lucide-react";
+import { withParsedRecipeFields, type CookableRecipe } from "@/types/content";
+
+const RecipeDetail = () => {
+  const { slug } = useParams();
+  const [loading, setLoading] = useState(true);
+  const [recipe, setRecipe] = useState<CookableRecipe | null>(null);
+  const [related, setRelated] = useState<CookableRecipe[]>([]);
+  const [servings, setServings] = useState(4);
+  const [cooking, setCooking] = useState(false);
+
+  useEffect(() => {
+    if (!slug) return;
+    (async () => {
+      setLoading(true);
+      let { data: rec } = await supabase.from("recipes").select("*").eq("slug", slug).maybeSingle();
+      if (!rec) {
+        const { data: d } = await supabase.from("dishes").select("id,name").eq("slug", slug).maybeSingle();
+        if (d) {
+          const { data } = await supabase.from("recipes").select("*").or(`dish_id.eq.${d.id},name.eq.${d.name}`).limit(1);
+          rec = data?.[0] ?? null;
+        }
+      }
+      setRecipe(rec ? withParsedRecipeFields(rec) : null);
+      setServings(rec?.servings || 4);
+      if (rec?.country) {
+        const { data } = await supabase
+          .from("recipes")
+          .select("id,name,slug,country,image_url,category")
+          .eq("country", rec.country)
+          .neq("id", rec.id)
+          .limit(6);
+        setRelated(data || []);
+      }
+      setLoading(false);
+    })();
+  }, [slug]);
+
+  const base = recipe?.servings || 4;
+  const mult = servings / base;
+  const steps = useMemo(() => toList(recipe?.steps).map(itemText).filter(Boolean), [recipe]);
+  const tips = useMemo(() => {
+    const t: string[] = [];
+    const tagTips = toList(recipe?.tags).filter((x): x is string => typeof x === "string" && /tip|store|serve/i.test(x));
+    t.push(...tagTips);
+    if (recipe?.cuisine_type) t.push(`Serve as part of a ${recipe.cuisine_type} meal.`);
+    if (recipe?.world_equivalent_dish) t.push(`Similar to ${recipe.world_equivalent_dish} — use that as a texture reference.`);
+    t.push("Store leftovers covered in the fridge and eat within 2–3 days; reheat until piping hot.");
+    t.push("Taste and adjust salt and heat at the end of cooking — village and city versions vary.");
+    return t;
+  }, [recipe]);
+
+  const jsonLd = useMemo(() => {
+    if (!recipe) return null;
+    return {
+      "@context": "https://schema.org",
+      "@type": "Recipe",
+      name: recipe.name,
+      description: recipe.summary || recipe.brief_description,
+      image: recipe.image_url ? [recipe.image_url] : undefined,
+      recipeCuisine: recipe.country,
+      recipeYield: `${base} servings`,
+      prepTime: recipe.prep_time ? `PT${recipe.prep_time}M` : undefined,
+      cookTime: recipe.cook_time ? `PT${recipe.cook_time}M` : undefined,
+      recipeIngredient: toList(recipe.ingredients).map(itemText),
+      recipeInstructions: steps.map((s) => ({ "@type": "HowToStep", text: s })),
+      nutrition: recipe.calories ? { "@type": "NutritionInformation", calories: `${recipe.calories} calories` } : undefined,
+    };
+  }, [recipe, steps, base]);
+
+  if (cooking && recipe) return <EnhancedRecipePreparation recipe={recipe} onBack={() => setCooking(false)} />;
+
+  const title = recipe?.name || "Recipe";
+  const country = recipe?.country || "";
+
+  return (
+    <div className="min-h-screen">
+      <PageMeta
+        title={`${title} Recipe${country ? ` — ${country}` : ""} | TasteAfrica`}
+        description={recipe?.summary || `How to cook ${title}: ingredients, step-by-step method, tips and cultural history.`}
+        canonical={`https://tasteafrica.com/recipe/${slug}`}
+        ogImage={recipe?.image_url || undefined}
+        type="article"
+      />
+      {jsonLd && <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>}
+      <Navigation />
+      <main className="pt-20 pb-16">
+        <div className="container mx-auto px-6">
+          <Breadcrumbs
+            items={[
+              { label: "Home", href: "/" },
+              { label: "Recipes", href: "/recipe-index" },
+              ...(country ? [{ label: country, href: `/country/${toSlug(country)}` }] : []),
+              { label: title },
+            ]}
+          />
+          {loading ? (
+            <div className="space-y-4"><Skeleton className="h-72 w-full" /><Skeleton className="h-40 w-full" /></div>
+          ) : !recipe ? (
+            <Card><CardContent className="py-16 text-center">
+              <ChefHat className="w-12 h-12 mx-auto text-muted-foreground/50 mb-4" />
+              <h1 className="text-xl font-semibold mb-4">Recipe not found</h1>
+              <Button asChild variant="outline"><Link to="/atlas">Back to the atlas</Link></Button>
+            </CardContent></Card>
+          ) : (
+            <>
+              <header className="grid lg:grid-cols-5 gap-8 mb-10">
+                <div className="lg:col-span-3 rounded-lg overflow-hidden h-64 lg:h-96">
+                  {recipe.image_url ? (
+                    <img src={recipe.image_url} alt={`${title} from ${country}`} className="w-full h-full object-cover" />
+                  ) : (
+                    <RecipeImagePlaceholder name={title} country={country} />
+                  )}
+                </div>
+                <div className="lg:col-span-2">
+                  <h1 className="text-4xl font-bold mb-3">{title}</h1>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {country && <Badge variant="secondary">{getCountryFlag(country)} {country}</Badge>}
+                    {recipe.continent && <Badge variant="outline">{recipe.continent}</Badge>}
+                    {recipe.category && <Badge variant="outline">{recipe.category}</Badge>}
+                    <NutritionBadge calories={recipe.calories} protein={recipe.protein} carbs={recipe.carbs} fats={recipe.fats} />
+                  </div>
+                  <p className="text-muted-foreground mb-4">{recipe.summary || recipe.brief_description}</p>
+                  <div className="grid grid-cols-3 gap-3 text-sm mb-5">
+                    <div className="rounded-md border p-3"><Clock className="w-4 h-4 text-primary mb-1" />Prep {recipe.prep_time || recipe.prep_time_minutes || "—"} min</div>
+                    <div className="rounded-md border p-3"><Clock className="w-4 h-4 text-primary mb-1" />Cook {recipe.cook_time || recipe.cook_time_minutes || "—"} min</div>
+                    <div className="rounded-md border p-3"><ChefHat className="w-4 h-4 text-primary mb-1" />{recipe.difficulty || "—"}</div>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    <Button variant="hero" onClick={() => setCooking(true)}><Utensils className="w-4 h-4 mr-2" />Start cooking</Button>
+                    <SaveButton type="recipe" slug={recipe.slug} id={recipe.id} label={recipe.name} />
+                    <PrintRecipeButton recipe={recipe} servingMultiplier={mult} />
+                  </div>
+                  <RecipeTrustNotice verificationStatus={recipe.verification_status} safetyNotes={recipe.safety_notes} itemType={recipe.item_type} className="mt-4" />
+                </div>
+              </header>
+
+              <div className="grid lg:grid-cols-3 gap-8">
+                <div className="space-y-4">
+                  <Card>
+                    <CardContent className="p-4 flex items-center justify-between">
+                      <span className="flex items-center gap-2 text-sm"><Users className="w-4 h-4 text-primary" />Servings</span>
+                      <div className="flex items-center gap-2">
+                        <Button size="icon" variant="outline" aria-label="Fewer servings" onClick={() => setServings((s) => Math.max(1, s - 1))}><Minus className="w-4 h-4" /></Button>
+                        <span className="w-6 text-center font-semibold">{servings}</span>
+                        <Button size="icon" variant="outline" aria-label="More servings" onClick={() => setServings((s) => s + 1)}><Plus className="w-4 h-4" /></Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  <IngredientChecklist ingredients={recipe.ingredients} multiplier={mult} country={country} dishName={title} />
+                </div>
+
+                <div className="lg:col-span-2 space-y-6">
+                  <Card>
+                    <CardHeader><CardTitle>Method</CardTitle></CardHeader>
+                    <CardContent>
+                      {steps.length ? (
+                        <ol className="space-y-4">
+                          {steps.map((s, i) => (
+                            <li key={i} className="flex gap-4">
+                              <span className="shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-bold">{i + 1}</span>
+                              <p className="pt-1">{s}</p>
+                            </li>
+                          ))}
+                        </ol>
+                      ) : <p className="text-muted-foreground">Method is being verified for this dish.</p>}
+                    </CardContent>
+                  </Card>
+
+                  <Card>
+                    <CardHeader><CardTitle className="flex items-center gap-2"><Lightbulb className="w-5 h-5 text-primary" />Tips & storage</CardTitle></CardHeader>
+                    <CardContent>
+                      <ul className="list-disc pl-5 space-y-2 text-muted-foreground">
+                        {tips.map((t, i) => <li key={i}>{t}</li>)}
+                      </ul>
+                    </CardContent>
+                  </Card>
+
+                  {recipe.history && (
+                    <Card>
+                      <CardHeader><CardTitle className="flex items-center gap-2"><Globe2 className="w-5 h-5 text-primary" />Cultural history</CardTitle></CardHeader>
+                      <CardContent className="text-muted-foreground space-y-3">
+                        <p className="whitespace-pre-line">{recipe.history}</p>
+                        <SourceCitations sources={recipe.history_sources} />
+                        <Button asChild variant="link" className="px-0">
+                          <Link to={`/dish/${recipe.slug}`}><BookOpen className="w-4 h-4 mr-1" />Read the encyclopedia entry</Link>
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {related.length > 0 && (
+                    <Card>
+                      <CardHeader><CardTitle>More from {country}</CardTitle></CardHeader>
+                      <CardContent className="grid sm:grid-cols-2 gap-3">
+                        {related.map((r) => (
+                          <Link key={r.id} to={`/recipe/${r.slug || toSlug(r.name)}`} className="flex gap-3 items-center rounded-md border p-2 hover:border-primary/50">
+                            <div className="w-14 h-14 rounded overflow-hidden shrink-0">
+                              {r.image_url ? <img src={r.image_url} alt={r.name} loading="lazy" className="w-full h-full object-cover" /> : <RecipeImagePlaceholder name={r.name} country={r.country} />}
+                            </div>
+                            <div className="min-w-0"><p className="font-medium text-sm truncate">{r.name}</p><p className="text-xs text-muted-foreground">{r.category || country}</p></div>
+                          </Link>
+                        ))}
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      </main>
+      <Footer />
+    </div>
+  );
+};
+
+export default RecipeDetail;

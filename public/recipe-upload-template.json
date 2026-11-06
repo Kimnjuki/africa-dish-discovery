@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Jollof Rice",
+    "country": "Nigeria",
+    "summary": "Popular West African one-pot rice dish cooked in a flavorful tomato sauce with spices",
+    "ingredients": [
+      {"name": "long grain rice", "quantity": "2", "unit": "cups"},
+      {"name": "tomato paste", "quantity": "3", "unit": "tbsp"},
+      {"name": "onions", "quantity": "2", "unit": "medium"},
+      {"name": "bell peppers", "quantity": "2", "unit": "medium"},
+      {"name": "scotch bonnet pepper", "quantity": "1", "unit": "piece"},
+      {"name": "vegetable oil", "quantity": "1/4", "unit": "cup"},
+      {"name": "chicken stock", "quantity": "3", "unit": "cups"},
+      {"name": "curry powder", "quantity": "1", "unit": "tbsp"},
+      {"name": "thyme", "quantity": "1", "unit": "tsp"},
+      {"name": "bay leaves", "quantity": "2", "unit": "pieces"},
+      {"name": "salt", "quantity": "to taste", "unit": ""}
+    ],
+    "steps": [
+      {"instruction": "Blend tomatoes, onions, and peppers into a smooth paste"},
+      {"instruction": "Heat oil in a large pot and fry the tomato paste for 5 minutes"},
+      {"instruction": "Add curry powder, thyme, and bay leaves, stir well"},
+      {"instruction": "Pour in chicken stock and bring to a boil"},
+      {"instruction": "Add washed rice, stir once, and cover with lid"},
+      {"instruction": "Cook on low heat for 30 minutes until rice is tender"},
+      {"instruction": "Fluff with fork and serve hot"}
+    ],
+    "prep_time": 20,
+    "cook_time": 35,
+    "servings": 6,
+    "difficulty": "medium",
+    "tags": ["west-african", "main-course", "rice", "one-pot"],
+    "slug": "jollof-rice-nigeria",
+    "is_african": true
+  },
+  {
+    "name": "Pad Thai",
+    "country": "Thailand",
+    "summary": "Classic Thai stir-fried rice noodles with shrimp, tofu, eggs, and tangy tamarind sauce",
+    "ingredients": [
+      {"name": "rice noodles", "quantity": "8", "unit": "oz"},
+      {"name": "shrimp", "quantity": "8", "unit": "oz"},
+      {"name": "firm tofu", "quantity": "4", "unit": "oz"},
+      {"name": "eggs", "quantity": "2", "unit": "large"},
+      {"name": "tamarind paste", "quantity": "3", "unit": "tbsp"},
+      {"name": "fish sauce", "quantity": "2", "unit": "tbsp"},
+      {"name": "palm sugar", "quantity": "2", "unit": "tbsp"},
+      {"name": "garlic", "quantity": "3", "unit": "cloves"},
+      {"name": "bean sprouts", "quantity": "1", "unit": "cup"},
+      {"name": "peanuts", "quantity": "1/4", "unit": "cup"},
+      {"name": "lime", "quantity": "1", "unit": "piece"},
+      {"name": "green onions", "quantity": "3", "unit": "stalks"}
+    ],
+    "steps": [
+      {"instruction": "Soak rice noodles in warm water for 30 minutes, then drain"},
+      {"instruction": "Mix tamarind paste, fish sauce, and palm sugar to make sauce"},
+      {"instruction": "Heat wok over high heat, add oil and fry tofu until golden"},
+      {"instruction": "Add shrimp and cook until pink, then push to side"},
+      {"instruction": "Scramble eggs in the wok, then add garlic"},
+      {"instruction": "Add drained noodles and sauce, toss everything together"},
+      {"instruction": "Add bean sprouts and green onions, stir-fry for 1 minute"},
+      {"instruction": "Serve with crushed peanuts and lime wedges"}
+    ],
+    "prep_time": 40,
+    "cook_time": 15,
+    "servings": 4,
+    "difficulty": "medium",
+    "tags": ["thai", "noodles", "stir-fry", "asian"],
+    "slug": "pad-thai-thailand",
+    "is_african": false
+  }
+]

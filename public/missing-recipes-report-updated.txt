@@ -1,0 +1,397 @@
+====================================================================
+MISSING RECIPES ANALYSIS REPORT - UPDATED
+Generated: October 28, 2025
+====================================================================
+
+PURPOSE:
+This report identifies dishes referenced in continent explorer components
+that are missing complete recipe data (ingredients and steps) in the database.
+
+====================================================================
+DATABASE STATUS UPDATE
+====================================================================
+
+GOOD NEWS - RECIPES NOW IN DATABASE:
+✓ Jollof Rice (Nigeria)
+✓ Pad Thai (Thailand)  
+✓ Chicken Tikka Masala (India)
+✓ Sushi (Japan)
+✓ Bobotie (South Africa)
+✓ Bunny Chow (South Africa)
+✓ Chakalaka (South Africa)
+✓ Egyptian Koshari (Egypt)
+✓ Egyptian Falafel (Egypt)
+✓ Moroccan Couscous (Morocco)
+✓ Moroccan Harira Soup (Morocco)
+✓ Moroccan Tagine (Morocco)
+✓ Kenyan Chapati (Kenya)
+✓ Mandazi (Kenya)
+✓ Fufu and Egusi Soup (Nigeria)
+✓ Injera with Doro Wat (Ethiopia)
+✓ Fish and Chips (United Kingdom)
+✓ Croissant (France)
+✓ Paella (Spain)
+✓ Bruschetta (Italy)
+✓ Moussaka (Greece)
+✓ Goulash (Hungary)
+✓ Baklava (Greece)
+✓ Falafel (Lebanon)
+✓ Greek Salad (Greece)
+✓ Biryani (India)
+✓ Butter Chicken (India)
+✓ Kimchi (South Korea)
+✓ Miso Soup (Japan)
+✓ Gyoza (Japan)
+✓ Dim Sum (China)
+✓ Nasi Goreng (Indonesia)
+✓ Laksa (Malaysia)
+✓ Beef Rendang (Indonesia)
+✓ Chicken Adobo (Philippines)
+✓ Pho (Vietnam)
+
+====================================================================
+STILL MISSING RECIPES BY CONTINENT
+====================================================================
+
+========================================
+AFRICA - Missing Recipes
+========================================
+
+West Africa:
+- Suya (Nigeria) - PRIORITY HIGH
+- Thieboudienne (Senegal) - PRIORITY HIGH  
+- Groundnut Stew (West Africa) - PRIORITY MEDIUM
+
+East Africa:
+- Ugali (Kenya/Tanzania) - PRIORITY HIGH
+- Nyama Choma (Kenya) - PRIORITY HIGH
+- Pilau (East Africa) - PRIORITY MEDIUM
+- Sambusa (Somalia/East Africa) - PRIORITY MEDIUM
+
+North Africa:
+- Couscous (North Africa) - PRIORITY MEDIUM
+- Harira (Morocco) - Already in DB ✓
+- Ful Medames (Egypt) - PRIORITY MEDIUM
+- Chermoula (Morocco) - PRIORITY LOW
+
+Central Africa:
+- Moambe Chicken (DRC/Gabon) - PRIORITY HIGH
+- Saka Saka (DRC) - PRIORITY MEDIUM
+- Pepe Soup (Cameroon) - PRIORITY MEDIUM
+- Kwanga (Central Africa) - PRIORITY LOW
+- Ndolé (Cameroon) - PRIORITY HIGH
+
+Southern Africa:
+- Pap (South Africa) - PRIORITY MEDIUM
+- Sadza (Zimbabwe) - PRIORITY MEDIUM
+
+========================================
+ASIA - Missing Recipes
+========================================
+
+East Asia:
+- Ramen (Japan) - PRIORITY HIGH
+- Peking Duck (China) - PRIORITY HIGH
+- Xiaolongbao (China) - PRIORITY MEDIUM
+- Bulgogi (South Korea) - PRIORITY HIGH
+- Bibimbap (South Korea) - PRIORITY HIGH
+
+South Asia:
+- Masala Dosa (India) - PRIORITY HIGH
+- Samosa (India) - PRIORITY HIGH
+- Dal Makhani (India) - PRIORITY MEDIUM
+- Tandoori Chicken (India) - PRIORITY MEDIUM
+
+Southeast Asia:
+- Tom Yum (Thailand) - PRIORITY HIGH
+- Green Curry (Thailand) - PRIORITY HIGH
+- Banh Mi (Vietnam) - PRIORITY HIGH
+- Spring Rolls (Vietnam) - PRIORITY MEDIUM
+- Satay (Indonesia/Malaysia) - PRIORITY MEDIUM
+
+========================================
+EUROPE - Missing Recipes  
+========================================
+
+Western Europe:
+- Coq au Vin (France) - PRIORITY MEDIUM
+- Sauerbraten (Germany) - PRIORITY LOW
+- Risotto (Italy) - PRIORITY HIGH
+- Moules Frites (Belgium) - PRIORITY LOW
+- Stroopwafel (Netherlands) - PRIORITY LOW
+- Pastéis de Nata (Portugal) - PRIORITY MEDIUM
+- Fondue (Switzerland) - PRIORITY MEDIUM
+- Schnitzel (Austria) - PRIORITY MEDIUM
+
+Eastern Europe:
+- Borscht (Russia/Ukraine) - PRIORITY MEDIUM
+- Pierogi (Poland) - PRIORITY MEDIUM
+- Cabbage Rolls (Eastern Europe) - PRIORITY LOW
+- Mici (Romania) - PRIORITY LOW
+- Banitsa (Bulgaria) - PRIORITY LOW
+
+Northern Europe:
+- Swedish Meatballs (Sweden) - PRIORITY MEDIUM
+- Gravlax/Salmon (Norway) - PRIORITY MEDIUM
+- Smørrebrød (Denmark) - PRIORITY LOW
+- Karjalanpiirakka (Finland) - PRIORITY LOW
+- Irish Stew (Ireland) - PRIORITY LOW
+- Haggis (Scotland) - PRIORITY LOW
+
+Southern Europe:
+- Döner Kebab (Turkey) - PRIORITY HIGH
+- Ćevapi (Croatia/Serbia) - PRIORITY LOW
+- Sarma (Serbia) - PRIORITY LOW
+- Byrek (Albania) - PRIORITY LOW
+- Burek (Bosnia) - PRIORITY LOW
+
+========================================
+NORTH AMERICA - Missing Recipes
+========================================
+
+United States:
+- BBQ Ribs (USA) - PRIORITY HIGH
+- Tex-Mex Tacos (USA) - PRIORITY HIGH
+- New York Pizza (USA) - PRIORITY HIGH
+- Gumbo (Louisiana) - PRIORITY MEDIUM
+- Poke Bowl (Hawaii) - PRIORITY MEDIUM
+- Key Lime Pie (Florida) - PRIORITY LOW
+- Deep Dish Pizza (Chicago) - PRIORITY MEDIUM
+- Clam Chowder (USA) - PRIORITY MEDIUM
+
+Canada:
+- Poutine (Canada) - PRIORITY HIGH
+- Tourtière (Quebec) - PRIORITY MEDIUM
+- Butter Tarts (Canada) - PRIORITY LOW
+- Nanaimo Bars (Canada) - PRIORITY LOW
+- BeaverTails (Canada) - PRIORITY LOW
+
+Mexico:
+- Mole (Mexico) - PRIORITY HIGH
+- Chiles Rellenos (Mexico) - PRIORITY MEDIUM
+- Cochinita Pibil (Yucatan) - PRIORITY MEDIUM
+- Pozole (Mexico) - PRIORITY MEDIUM
+- Carnitas (Mexico) - PRIORITY MEDIUM
+- Tamales (Mexico) - PRIORITY MEDIUM
+
+Central America:
+- Pepián (Guatemala) - PRIORITY MEDIUM
+- Pupusas (El Salvador) - PRIORITY HIGH
+- Baleadas (Honduras) - PRIORITY LOW
+- Gallo Pinto (Costa Rica/Nicaragua) - PRIORITY MEDIUM
+- Casado (Costa Rica) - PRIORITY LOW
+- Sancocho (Panama) - PRIORITY MEDIUM
+- Jerk Chicken (Jamaica) - PRIORITY HIGH
+- Ropa Vieja (Cuba) - PRIORITY MEDIUM
+- Ackee and Saltfish (Jamaica) - PRIORITY MEDIUM
+
+========================================
+SOUTH AMERICA - Missing Recipes
+========================================
+
+Northern South America:
+- Arepa (Venezuela/Colombia) - PRIORITY HIGH
+- Pabellón (Venezuela) - PRIORITY MEDIUM
+- Pepperpot (Guyana) - PRIORITY LOW
+
+Brazil:
+- Feijoada (Brazil) - PRIORITY HIGH
+- Açaí Bowl (Brazil) - PRIORITY HIGH
+- Coxinha (Brazil) - PRIORITY MEDIUM
+- Brigadeiro (Brazil) - PRIORITY LOW
+- Moqueca (Brazil) - PRIORITY MEDIUM
+- Churrasco (Brazil) - PRIORITY MEDIUM
+
+Andean Region:
+- Ceviche (Peru) - PRIORITY HIGH
+- Lomo Saltado (Peru) - PRIORITY HIGH
+- Locro (Ecuador/Argentina) - PRIORITY MEDIUM
+- Salteñas (Bolivia) - PRIORITY MEDIUM
+- Empanadas (South America) - PRIORITY HIGH
+- Anticuchos (Peru) - PRIORITY MEDIUM
+
+Southern Cone:
+- Asado (Argentina) - PRIORITY HIGH
+- Chimichurri (Argentina) - PRIORITY MEDIUM
+- Choripán (Argentina) - PRIORITY MEDIUM
+- Chivito (Uruguay) - PRIORITY MEDIUM
+- Sopa Paraguaya (Paraguay) - PRIORITY LOW
+- Milanesa (Argentina) - PRIORITY MEDIUM
+
+========================================
+OCEANIA - Missing Recipes
+========================================
+
+Australia:
+- Meat Pie (Australia) - PRIORITY MEDIUM
+- Lamington (Australia) - PRIORITY LOW
+- Pavlova (Australia/New Zealand) - PRIORITY MEDIUM
+- Barramundi (Australia) - PRIORITY LOW
+- Damper (Australia) - PRIORITY LOW
+- Anzac Biscuits (Australia) - PRIORITY LOW
+- Vegemite Toast (Australia) - PRIORITY LOW
+- Fairy Bread (Australia) - PRIORITY LOW
+
+New Zealand:
+- Hangi (New Zealand) - PRIORITY MEDIUM
+- Green-lipped Mussels (New Zealand) - PRIORITY LOW
+- Lamb Roast (New Zealand) - PRIORITY MEDIUM
+- Hokey Pokey (New Zealand) - PRIORITY LOW
+- Paua Fritters (New Zealand) - PRIORITY LOW
+- Kumara (New Zealand) - PRIORITY LOW
+
+Pacific Islands:
+- Kokoda (Fiji) - PRIORITY MEDIUM
+- Palusami (Samoa) - PRIORITY MEDIUM
+- Lu Pulu (Tonga) - PRIORITY LOW
+- Lap Lap (Vanuatu) - PRIORITY LOW
+- Poi (Pacific) - PRIORITY LOW
+- Mumu (Papua New Guinea) - PRIORITY LOW
+- Ika Mata (Cook Islands) - PRIORITY LOW
+- Poisson Cru (Tahiti) - PRIORITY MEDIUM
+
+Micronesia:
+- Kelaguen (Guam) - PRIORITY LOW
+- Coconut Crab (Palau) - PRIORITY LOW
+
+====================================================================
+SUMMARY STATISTICS (UPDATED)
+====================================================================
+
+Total Dishes Referenced: ~245
+Recipes with Complete Data: ~37 (15%)
+Missing Recipes: ~208 (85%)
+
+By Continent:
+- Africa: ~17 missing (down from ~30)
+- Asia: ~18 missing (down from ~25) 
+- Europe: ~30 missing
+- North America: ~35 missing
+- South America: ~20 missing
+- Oceania: ~25 missing
+
+====================================================================
+PRIORITY RECOMMENDATIONS FOR DATA ENTRY
+====================================================================
+
+HIGH PRIORITY (Popular/Featured Dishes):
+1. Suya (Nigeria)
+2. Thieboudienne (Senegal)
+3. Ugali (Kenya/Tanzania)
+4. Nyama Choma (Kenya)
+5. Moambe Chicken (Central Africa)
+6. Ndolé (Cameroon)
+7. Ramen (Japan)
+8. Peking Duck (China)
+9. Bulgogi (South Korea)
+10. Bibimbap (South Korea)
+11. Masala Dosa (India)
+12. Samosa (India)
+13. Tom Yum (Thailand)
+14. Green Curry (Thailand)
+15. Banh Mi (Vietnam)
+16. Risotto (Italy)
+17. BBQ Ribs (USA)
+18. Tex-Mex Tacos (USA)
+19. Poutine (Canada)
+20. Mole (Mexico)
+21. Pupusas (El Salvador)
+22. Jerk Chicken (Jamaica)
+23. Arepa (Venezuela/Colombia)
+24. Feijoada (Brazil)
+25. Açaí Bowl (Brazil)
+26. Ceviche (Peru)
+27. Lomo Saltado (Peru)
+28. Asado (Argentina)
+29. Empanadas (South America)
+
+MEDIUM PRIORITY (Regional Specialties):
+30-70+ dishes across all continents
+
+LOW PRIORITY (Less Popular/Specific Items):
+70-208 regional and specialty items
+
+====================================================================
+DATA QUALITY NOTES
+====================================================================
+
+PROGRESS MADE:
+- 37 recipes now have complete data (up from initial state)
+- African recipes significantly improved
+- Asian popular dishes now available
+- European classics partially covered
+
+ISSUES REMAINING:
+1. Many continent map components still reference non-existent recipes
+2. No standardized country name format (e.g., "NG" vs "Nigeria")
+3. Some recipes duplicated with different slugs
+4. No images for most recipes
+5. Ingredient quantities need standardization
+
+====================================================================
+RECOMMENDED DATA FIELDS FOR EACH MISSING RECIPE
+====================================================================
+
+Required Fields:
+- name: string
+- country: string (standardized)
+- continent: string (Africa, Asia, Europe, North America, South America, Oceania)
+- slug: string (lowercase-hyphenated)
+- ingredients: jsonb array of {name, quantity, unit}
+- steps: jsonb array of {instruction}
+- prep_time: integer (minutes)
+- cook_time: integer (minutes)
+- servings: integer
+- difficulty: string (easy, medium, hard)
+- tags: array of strings
+- is_african: boolean (for African recipes)
+
+Optional but Recommended:
+- summary: text (brief description)
+- image_url: text (recipe photo URL)
+- history: text (cultural context)
+
+====================================================================
+UPLOAD TEMPLATE FORMAT
+====================================================================
+
+Use the RecipeUploader page at /recipe-uploader with this JSON format:
+
+[
+  {
+    "name": "Recipe Name",
+    "country": "Country",
+    "continent": "Continent",
+    "slug": "recipe-name-country",
+    "summary": "Brief description of the dish",
+    "ingredients": [
+      {"name": "ingredient 1", "quantity": "2", "unit": "cups"},
+      {"name": "ingredient 2", "quantity": "1", "unit": "tbsp"}
+    ],
+    "steps": [
+      {"instruction": "Step 1 instructions"},
+      {"instruction": "Step 2 instructions"}
+    ],
+    "prep_time": 15,
+    "cook_time": 30,
+    "servings": 4,
+    "difficulty": "medium",
+    "tags": ["tag1", "tag2"],
+    "is_african": false,
+    "image_url": "https://example.com/image.jpg"
+  }
+]
+
+====================================================================
+NEXT STEPS
+====================================================================
+
+1. Use /recipe-uploader page to bulk upload missing recipes
+2. Prioritize HIGH PRIORITY dishes first
+3. Ensure data quality and standardization
+4. Add images where possible
+5. Test recipes in continent explorers after upload
+
+====================================================================
+END OF REPORT
+====================================================================

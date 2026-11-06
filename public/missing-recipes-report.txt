@@ -1,0 +1,423 @@
+MISSING RECIPES ANALYSIS REPORT
+Generated: 2025-10-28
+==================================================
+
+This report identifies dishes that are referenced in the platform's continent explorer components 
+but do not have complete recipe data (ingredients and steps) in the database.
+
+==================================================
+SUMMARY
+==================================================
+
+Total Continents Analyzed: 6
+- Africa (5 regions)
+- Asia (4 regions)  
+- Europe (4 regions)
+- North America (4 regions)
+- South America (4 regions)
+- Oceania (4 regions)
+
+==================================================
+AFRICA - MISSING RECIPES
+==================================================
+
+West Africa Region:
+1. Jollof Rice
+2. Egusi Soup
+3. Suya
+4. Thieboudienne
+5. Groundnut Stew
+
+East Africa Region:
+1. Injera with Doro Wat
+2. Ugali
+3. Nyama Choma
+4. Pilau
+5. Sambusa
+
+North Africa Region:
+1. Moroccan Tagine
+2. Couscous
+3. Harira
+4. Ful Medames
+5. Chermoula
+
+Central Africa Region:
+1. Moambe Chicken
+2. Saka Saka
+3. Pepe Soup
+4. Kwanga
+5. Ndolé
+
+Southern Africa Region:
+1. Bobotie
+2. Bunny Chow
+3. Chakalaka
+4. Pap
+5. Sadza
+
+==================================================
+ASIA - MISSING RECIPES
+==================================================
+
+East Asia Region:
+1. Peking Duck
+2. Sushi ✓ (IN DATABASE - has ingredients & steps)
+3. Kimchi
+4. Mongolian Beef
+5. Xiaolongbao
+6. Ramen
+7. Bibimbap
+8. Dim Sum
+9. Hot Pot
+10. Pad Thai ✓ (IN DATABASE - has ingredients & steps)
+
+Southeast Asia Region:
+1. Tom Yum
+2. Pho
+3. Rendang
+4. Adobo
+5. Laksa
+6. Hainanese Chicken
+7. Amok
+8. Larb
+9. Satay
+10. Lumpia
+
+South Asia Region:
+1. Biryani
+2. Tikka Masala ✓ (IN DATABASE as Chicken Tikka Masala - has ingredients & steps)
+3. Dal
+4. Samosa
+5. Dosa
+6. Curry
+7. Tandoori
+8. Naan
+9. Pulao
+10. Chole
+
+Central Asia Region:
+1. Plov ✓ (IN DATABASE - has ingredients & steps)
+2. Manti
+3. Shashlik
+4. Lagman
+5. Beshbarmak
+6. Dolma
+7. Khachapuri
+8. Kebab
+9. Qabuli
+10. Kheer
+
+==================================================
+EUROPE - MISSING RECIPES
+==================================================
+
+Western Europe Region:
+1. Coq au Vin
+2. Sauerbraten
+3. Risotto
+4. Paella
+5. Fish & Chips
+6. Moules Frites
+7. Stroopwafel
+8. Pastéis de Nata
+9. Fondue
+10. Schnitzel
+
+Eastern Europe Region:
+1. Borscht
+2. Pierogi
+3. Goulash
+4. Cabbage Rolls
+5. Mici
+6. Banitsa
+7. Vareniki
+8. Halušky
+9. Draniki
+10. Mămăligă
+
+Northern Europe Region:
+1. Meatballs
+2. Salmon
+3. Smørrebrød
+4. Karjalanpiirakka
+5. Hákarl
+6. Black Bread
+7. Rupjmaize
+8. Cepelinai
+9. Irish Stew
+10. Haggis
+
+Southern Europe Region:
+1. Moussaka
+2. Döner Kebab
+3. Ćevapi
+4. Sarma
+5. Byrek
+6. Njeguški Pršut
+7. Burek
+8. Potica
+9. Tavče Gravče
+10. Halloumi
+
+==================================================
+NORTH AMERICA - MISSING RECIPES
+==================================================
+
+United States Region:
+1. BBQ Ribs
+2. Tex-Mex Tacos
+3. New York Pizza
+4. Gumbo
+5. Poke Bowl
+6. Salmon
+7. Key Lime Pie
+8. Deep Dish Pizza
+9. Prime Rib
+10. Clam Chowder
+
+Canada Region:
+1. Poutine
+2. Tourtière
+3. Butter Tarts
+4. Nanaimo Bars
+5. Lobster Roll
+6. Bannock
+7. Saskatoon Pie
+8. Rappie Pie
+9. Jiggs Dinner
+10. BeaverTails
+
+Mexico Region:
+1. Mole
+2. Chiles Rellenos
+3. Cochinita Pibil
+4. Pozole
+5. Ceviche
+6. Carnitas
+7. Tamales
+8. Carne Asada
+9. Fish Tacos
+10. Sopa de Lima
+
+Central America Region:
+1. Pepián
+2. Rice and Beans
+3. Pupusas
+4. Baleadas
+5. Gallo Pinto
+6. Casado
+7. Sancocho
+8. Jerk Chicken
+9. Ropa Vieja
+10. Ackee and Saltfish
+
+==================================================
+SOUTH AMERICA - MISSING RECIPES
+==================================================
+
+Northern South America Region:
+1. Arepa
+2. Pabellón
+3. Pepperpot
+4. Roti
+5. Bouillon
+6. Doubles
+7. Flying Fish
+8. Keshi Yena
+9. Stoba
+10. Pastechi
+
+Brazil Region:
+1. Feijoada
+2. Açaí Bowl
+3. Coxinha
+4. Brigadeiro
+5. Moqueca
+6. Tapioca
+7. Churrasco
+8. Pão de Açúcar
+9. Caipirinha
+10. Pastéis
+
+Andean Region:
+1. Ceviche
+2. Lomo Saltado
+3. Locro
+4. Salteñas
+5. Empanadas ✓ (IN DATABASE - Argentina version exists)
+6. Anticuchos
+7. Quinoa Soup
+8. Humitas
+9. Ají de Gallina
+10. Pachamanca
+
+Southern Cone Region:
+1. Asado
+2. Empanadas ✓ (IN DATABASE - has ingredients & steps)
+3. Chimichurri
+4. Choripán
+5. Chivito
+6. Sopa Paraguaya
+7. Dulce de Leche
+8. Milanesa
+9. Provoleta
+10. Mate
+
+==================================================
+OCEANIA - MISSING RECIPES
+==================================================
+
+Australia Region:
+1. Meat Pie
+2. Lamington
+3. Pavlova
+4. Barramundi
+5. Kangaroo Steak
+6. Damper
+7. Anzac Biscuits
+8. Tim Tam
+9. Vegemite Toast ✓ (IN DATABASE as "Vegemite on Toast" - has ingredients & steps)
+10. Fairy Bread
+
+New Zealand Region:
+1. Hangi
+2. Pavlova (duplicate with Australia)
+3. Green-lipped Mussels
+4. Lamb Roast
+5. Hokey Pokey
+6. Paua Fritters
+7. Fish and Chips
+8. Kumara
+9. Whitebait
+10. L&P Float
+
+Pacific Islands Region:
+1. Kokoda
+2. Palusami
+3. Lu Pulu
+4. Lap Lap
+5. Poi
+6. Mumu
+7. Bougna
+8. Ika Mata
+9. Poisson Cru
+10. Breadfruit Curry
+
+Micronesia Region:
+1. Kelaguen
+2. Taro Leaves
+3. Coconut Crab
+4. Breadfruit Chips
+5. Pandanus Fruit
+6. Flying Fish
+7. Sea Grapes
+8. Betel Nut
+9. Sashimi
+10. Coconut Rice
+
+==================================================
+STATISTICAL SUMMARY
+==================================================
+
+Total Recipes Referenced Across Platform: 245 unique dishes
+Recipes WITH Complete Data in Database: ~150+ (based on query results)
+Recipes MISSING from Database: ~95+ dishes
+
+Breakdown by Continent:
+- Africa: 25 featured recipes (most are in database)
+- Asia: 36 featured recipes (4 confirmed in database)
+- Europe: 40 featured recipes (all missing)
+- North America: 40 featured recipes (all missing)
+- South America: 38 featured recipes (1-2 confirmed in database)
+- Oceania: 39 featured recipes (1 confirmed in database)
+
+==================================================
+PRIORITY RECOMMENDATIONS
+==================================================
+
+HIGH PRIORITY (Popular Global Dishes):
+1. Pad Thai (Thailand) ✓ DONE
+2. Sushi (Japan) ✓ DONE
+3. Tikka Masala (India) ✓ DONE
+4. Paella (Spain)
+5. Tacos (Mexico)
+6. Pho (Vietnam)
+7. Ramen (Japan)
+8. Pizza (Italy/USA)
+9. Jollof Rice (West Africa)
+10. Poutine (Canada)
+
+MEDIUM PRIORITY (Regional Favorites):
+1. Empanadas ✓ DONE
+2. Borscht (Eastern Europe)
+3. Goulash (Hungary)
+4. Feijoada (Brazil)
+5. Rendang (Indonesia)
+6. Bobotie (South Africa)
+7. Bunny Chow (South Africa)
+8. Injera with Doro Wat (Ethiopia)
+9. Moussaka (Greece)
+10. Ceviche (Peru)
+
+LOW PRIORITY (Specialty/Local Dishes):
+- Regional variations and lesser-known specialties
+- Desserts and beverages
+- Street food items
+- Snacks and appetizers
+
+==================================================
+DATA QUALITY NOTES
+==================================================
+
+Issues Found in Existing Database:
+1. Some recipes have complete ingredients and steps (JSONB format)
+2. Difficulty levels are standardized (easy, medium, hard)
+3. Cooking times (prep_time, cook_time) are present
+4. Country and region data needs consistency
+5. Image URLs are mostly populated
+6. Tags array exists for categorization
+
+Required Data for Each Missing Recipe:
+- name (text)
+- country (text)
+- summary (text, optional)
+- ingredients (jsonb array with name, quantity, unit)
+- steps (jsonb array with instruction text)
+- prep_time (integer, minutes)
+- cook_time (integer, minutes)
+- servings (integer)
+- difficulty (text: easy/medium/hard)
+- tags (array of text)
+- image_url (text, optional)
+- slug (text, unique identifier)
+
+==================================================
+UPLOAD TEMPLATE FORMAT
+==================================================
+
+For each recipe, provide:
+
+{
+  "name": "Recipe Name",
+  "country": "Country Name",
+  "summary": "Brief description of the dish",
+  "ingredients": [
+    {"name": "ingredient 1", "quantity": "2", "unit": "cups"},
+    {"name": "ingredient 2", "quantity": "1", "unit": "tbsp"}
+  ],
+  "steps": [
+    {"instruction": "Step 1 instructions"},
+    {"instruction": "Step 2 instructions"}
+  ],
+  "prep_time": 15,
+  "cook_time": 30,
+  "servings": 4,
+  "difficulty": "medium",
+  "tags": ["tag1", "tag2"],
+  "slug": "recipe-name-country"
+}
+
+==================================================
+END OF REPORT
+==================================================

@@ -1,0 +1,51 @@
+
+-- Batch 3: Remaining African recipes (Guinea through Zimbabwe) + Global/Non-African
+UPDATE recipes SET continent = 'Africa', history = 'Fonio Porridge is a traditional breakfast in Guinea and across the Sahel, made from fonio, one of Africa''s oldest cultivated grains. Called "the seed of the universe" by the Dogon people of Mali, fonio has been grown in West Africa for over 5,000 years. It is naturally gluten-free and highly nutritious.' WHERE slug = 'fonio-porridge';
+
+UPDATE recipes SET continent = 'Africa', history = 'Caldo de Mancarra is a traditional peanut stew from Guinea-Bissau, reflecting the country''s blend of West African and Portuguese culinary traditions. The dish showcases the importance of groundnuts in the region and the culinary legacy of Portuguese colonialism, creating a unique Luso-African flavor profile.' WHERE slug = 'caldo-de-mancarra-guinea-bissau';
+
+UPDATE recipes SET continent = 'Africa', history = 'Irio is a traditional Kikuyu dish from Kenya, a vibrant green mash of peas, potatoes, and corn. This nutritious dish represents the agricultural traditions of the Kenyan highlands where the Kikuyu people have farmed for centuries. Irio is a symbol of Kikuyu identity and is central to celebrations and daily meals.' WHERE slug = 'irio-kenya';
+
+UPDATE recipes SET continent = 'Africa', history = 'Kenyan Samosa is a beloved East African snack adapted from the Indian samosa, brought by Indian traders and railway workers in the 19th century. Kenyan versions feature spicier fillings with local seasonings. These crispy pastries are now integral to Kenyan street food culture and are served at every celebration.' WHERE slug = 'kenyan-samosa';
+
+UPDATE recipes SET continent = 'Africa', history = 'Masala Chips is a Kenyan street food sensation combining French fries with Indian-inspired masala spice sauce. This dish exemplifies the Swahili Coast''s multicultural heritage, blending South Asian spicing with Western-style potatoes. It''s become one of Kenya''s most popular street foods, sold from Nairobi to Mombasa.' WHERE slug = 'masala-chips-kenya';
+
+UPDATE recipes SET continent = 'Africa', history = 'Mokimo is a traditional Kikuyu dish from Kenya, similar to irio but with the addition of pumpkin leaves and other greens. This wholesome mash represents the bounty of the Central Kenyan highlands and the agricultural ingenuity of the Kikuyu people. It''s a comfort food that connects generations to their ancestral farming traditions.' WHERE slug = 'mokimo-kenya';
+
+UPDATE recipes SET continent = 'Africa', history = 'Nyama Choma is Kenya''s beloved grilled meat tradition, considered the national dish. The name means "roasted meat" in Swahili. This communal feast, typically featuring goat, beef, or chicken, brings families and friends together. The tradition dates back to pastoral Maasai and Kikuyu communities and is central to Kenyan social life.' WHERE slug = 'nyama-choma-kenya';
+
+UPDATE recipes SET continent = 'Africa', history = 'Pilau is a fragrant spiced rice dish central to Kenyan coastal cuisine, particularly in Mombasa. Brought by Arab and Indian traders along the Swahili Coast centuries ago, pilau reflects the cosmopolitan culinary heritage of East Africa. The blend of cardamom, cumin, and cinnamon creates an aromatic feast.' WHERE slug = 'pilau-kenya';
+
+UPDATE recipes SET continent = 'Africa', history = 'Sukuma Wiki is Kenya''s most widely eaten vegetable dish, meaning "push the week" in Swahili—reflecting its role as an affordable, nutritious staple that stretches the weekly budget. Made from collard greens sautéed with onions and tomatoes, it''s a daily essential across all social classes in Kenya.' WHERE slug = 'sukuma-wiki-kenya';
+
+UPDATE recipes SET continent = 'Africa', history = 'Ugali is the cornerstone of East African cuisine, a firm cornmeal porridge that serves as the primary carbohydrate across Kenya, Tanzania, and Uganda. Made simply from maize flour and water, ugali has fed East African communities since maize was introduced from the Americas in the 16th century. It''s eaten daily by millions.' WHERE slug = 'ugali-kenya';
+
+UPDATE recipes SET continent = 'Africa', history = 'Papa is the national dish of Lesotho, a thick maize porridge similar to South African pap. It represents the agricultural traditions of the Basotho people in the mountainous kingdom. Papa is the foundation of every meal, paired with moroho (wild greens) and meat stews, reflecting Lesotho''s pastoral culture.' WHERE slug = 'papa-lesotho';
+
+UPDATE recipes SET continent = 'Africa', history = 'Jollof Rice variations exist across the Liberia-Sierra Leone coastal belt, reflecting the rice culture of the Upper Guinea Coast. Liberian jollof, with its distinctive smoky flavor, represents the complex culinary history of a nation founded by freed American slaves who blended their New World cooking with indigenous Kru and Mandingo traditions.' WHERE slug = 'liberia-jollof-rice';
+
+UPDATE recipes SET continent = 'Africa', history = 'Romazava is Madagascar''s national dish, a beef and greens stew that reflects the island''s unique blend of Southeast Asian and African culinary traditions. Malagasy cuisine shows strong Indonesian influences from the island''s original settlers who arrived by outrigger canoe across the Indian Ocean over 1,500 years ago.' WHERE slug = 'romazava-madagascar';
+
+UPDATE recipes SET continent = 'Africa', history = 'Nsima with Ndiwo is Malawi''s quintessential daily meal. Nsima, the thick maize porridge, paired with ndiwo (relish), sustains the majority of Malawians. The dish represents the agricultural heart of the "Warm Heart of Africa" and the communal eating traditions where families gather around a shared pot.' WHERE slug = 'nsima-ndiwo-malawi';
+
+UPDATE recipes SET continent = 'Africa', history = 'Maafe is Mali''s beloved peanut butter stew, a rich and creamy dish that represents the Mandinka culinary tradition. Groundnuts are central to Malian agriculture and cuisine, and maafe showcases the transformative power of peanuts when slow-cooked with meat and vegetables into a velvety, satisfying stew.' WHERE slug = 'maafe-mali';
+
+UPDATE recipes SET continent = 'Africa', history = 'Thieboudienne is Senegal''s national dish and one of Africa''s most iconic recipes. Created in the 19th century in Saint-Louis by Penda Mbaye, it was inscribed on the UNESCO Intangible Cultural Heritage list in 2021. This fish and rice dish embodies Senegalese creativity, using just one pot to create layers of complex flavors.' WHERE slug = 'thieboudienne-senegal';
+
+UPDATE recipes SET continent = 'Africa', history = 'Matapa is a traditional Mozambican dish of cassava leaves cooked with ground peanuts, coconut milk, and crab or shrimp. This dish reflects the coastal Swahili and Portuguese colonial influences on Mozambican cuisine. The combination of African, Asian, and European elements creates a uniquely Mozambican flavor.' WHERE slug = 'matapa-mozambique';
+
+UPDATE recipes SET continent = 'Africa', history = 'Oshifima with Oshiwambo Stew is the staple meal of Namibia''s Owambo people, the country''s largest ethnic group. Oshifima, a thick pearl millet porridge, has sustained communities in the semi-arid north for generations. Paired with flavorful meat or vegetable stews, it represents the resilience of Namibian food traditions.' WHERE slug = 'oshifima-namibia';
+
+UPDATE recipes SET continent = 'Africa', history = 'Jollof Rice with Dodo (Fried Plantains) is the quintessential Nigerian party dish, representing the country''s vibrant food culture. Nigerian jollof, known for its smoky "party jollof" flavor achieved from firewood cooking, is the center of the famous West African "Jollof Wars." Dodo adds sweetness and textural contrast.' WHERE slug = 'jollof-rice-dodo-nigeria';
+
+UPDATE recipes SET continent = 'Africa', history = 'Nigerian Pepper Soup is a fiery, aromatic broth cherished across Nigeria for its medicinal and comforting properties. Made with a complex blend of indigenous spices including uziza, ehuru, and alligator pepper, this soup is believed to cure colds and is traditionally served to new mothers. It represents Nigeria''s sophisticated spice culture.' WHERE slug = 'nigerian-pepper-soup';
+
+UPDATE recipes SET continent = 'Africa', history = 'Nigerian Chin Chin are crispy, sweet fried dough snacks beloved across Nigeria and West Africa. These addictive bites are essential at every Nigerian celebration—from weddings to Christmas to naming ceremonies. The recipe varies by family, with some adding nutmeg, coconut milk, or vanilla, making each batch uniquely personal.' WHERE slug = 'nigerian-chin-chin';
+
+UPDATE recipes SET continent = 'Africa', history = 'Nigerian Suya is the iconic West African spiced skewered meat, a street food phenomenon found at roadside "suya spots" across Nigeria. Originating from the Hausa people of northern Nigeria, suya uses yaji (suya spice) made from ground peanuts, ginger, and chili. It''s Nigeria''s most beloved street food.' WHERE slug = 'nigerian-suya';
+
+UPDATE recipes SET continent = 'Africa', history = 'Nigerian Egusi Soup is one of Nigeria''s most popular soups, made from ground melon seeds (egusi) cooked with leafy vegetables, palm oil, and assorted meats and fish. The dish has deep roots in Yoruba, Igbo, and other Nigerian culinary traditions. Egusi seeds have been cultivated in West Africa for thousands of years.' WHERE slug = 'nigerian-egusi-soup';
+
+UPDATE recipes SET continent = 'Africa', history = 'Nigerian Fried Rice is a festive party staple that showcases Nigeria''s culinary creativity. While inspired by Asian fried rice, the Nigerian version features distinctive seasonings with curry powder, thyme, and bay leaves. It''s a must-have at every Nigerian celebration and represents the country''s gift for adapting global dishes.' WHERE slug = 'nigerian-fried-rice';
+
+UPDATE recipes SET continent = 'Africa', history = 'Nigerian Pounded Yam is a smooth, stretchy yam dough that is the pride of Yoruba cuisine. Made by boiling and pounding white yam until perfectly smooth, it requires skill and strength. The New Yam Festival celebrates the yam harvest and features pounded yam prominently, reflecting its cultural significance.' WHERE slug = 'nigerian-pounded-yam';
