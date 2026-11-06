@@ -26,6 +26,7 @@ const Contact = () => {
     email: "",
     subject: "",
     message: "",
+    company: "", // honeypot
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
@@ -42,11 +43,21 @@ const Contact = () => {
     e.preventDefault();
     setErrors({});
 
+    // Bot honeypot — silently accept without writing
+    if (formData.company.trim()) {
+      toast({
+        title: "Message Sent!",
+        description: "Thank you for reaching out. We'll get back to you within 24-48 hours.",
+      });
+      setFormData({ name: "", email: "", subject: "", message: "", company: "" });
+      return;
+    }
+
     // Validate form data
     const result = contactSchema.safeParse(formData);
     if (!result.success) {
       const fieldErrors: Record<string, string> = {};
-      result.error.errors.forEach(err => {
+      result.error.issues.forEach(err => {
         if (err.path[0]) {
           fieldErrors[err.path[0] as string] = err.message;
         }
@@ -74,7 +85,7 @@ const Contact = () => {
         description: "Thank you for reaching out. We'll get back to you within 24-48 hours.",
       });
       
-      setFormData({ name: "", email: "", subject: "", message: "" });
+      setFormData({ name: "", email: "", subject: "", message: "", company: "" });
     } catch (error) {
       toast({
         title: "Error",
@@ -130,8 +141,8 @@ const Contact = () => {
                       <MessageSquare className="h-6 w-6 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-medium text-foreground">Social Media</h3>
-                      <p className="text-muted-foreground">@LadhaQuestRecipes</p>
+                      <h3 className="font-medium text-foreground">Partnerships</h3>
+                      <p className="text-muted-foreground">Email us — social profiles coming soon</p>
                     </div>
                   </div>
 
@@ -175,7 +186,18 @@ const Contact = () => {
             <div className="lg:col-span-2">
               <div className="bg-card border rounded-xl p-8">
                 <h2 className="text-2xl font-semibold text-foreground mb-6">Send Us a Message</h2>
-                <form onSubmit={handleSubmit} className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6 relative">
+                  <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+                    <Label htmlFor="company">Company</Label>
+                    <Input
+                      id="company"
+                      name="company"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={formData.company}
+                      onChange={handleChange}
+                    />
+                  </div>
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="name">Your Name</Label>

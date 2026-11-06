@@ -53,9 +53,18 @@ export const ImageScraperChecklist = () => {
     }
   };
 
-  const searchUnsplashImage = async (dishName: string, country: string): Promise<ImageSource | null> => {
+  const assignedBases = new Set<string>();
+
+  const uniquify = (baseUrl: string, recipeId?: string) => {
+    const base = baseUrl.split("?")[0];
+    const token = (recipeId || Math.random().toString(36).slice(2, 10)).replace(/-/g, "").slice(0, 12);
+    return `${base}?w=1200&q=85&fm=jpg&uq=${token}`;
+  };
+
+  const searchUnsplashImage = async (dishName: string, country: string, recipeId?: string): Promise<ImageSource | null> => {
     try {
       // Curated high-quality dish images from Unsplash - AUTHENTIC & ACCURATE
+      // Prefer scripts/backfill-unique-images.mjs for production uniqueness.
       const dishImageMap: Record<string, string> = {
         // ===== AFRICAN DISHES - WEST AFRICA =====
         'jollof rice': 'https://images.unsplash.com/photo-1604329760661-e71dc83f8f26',
@@ -293,14 +302,18 @@ export const ImageScraperChecklist = () => {
       );
       
       if (dishKey && dishImageMap[dishKey]) {
-        return {
-          url: `${dishImageMap[dishKey]}?w=1200&q=85&fm=jpg`,
-          source: 'unsplash',
-          quality: 'high'
-        };
+        const base = dishImageMap[dishKey];
+        if (!assignedBases.has(base) || recipeId) {
+          assignedBases.add(base);
+          return {
+            url: uniquify(base, recipeId),
+            source: 'unsplash',
+            quality: 'high'
+          };
+        }
       }
       
-      // Fallback to generic food images
+      // Fallback to generic food images — still uniquified per recipe
       const fallbackImages = [
         'https://images.unsplash.com/photo-1555939594-58d7cb561ad1',
         'https://images.unsplash.com/photo-1504674900247-0877df9cc836',
@@ -308,10 +321,11 @@ export const ImageScraperChecklist = () => {
         'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38',
       ];
       
-      const randomImage = fallbackImages[Math.floor(Math.random() * fallbackImages.length)];
+      const randomImage = fallbackImages.find((u) => !assignedBases.has(u)) || fallbackImages[0];
+      assignedBases.add(randomImage);
       
       return {
-        url: `${randomImage}?w=1200&q=85&fm=jpg`,
+        url: uniquify(randomImage, recipeId),
         source: 'unsplash',
         quality: 'high'
       };
@@ -356,7 +370,7 @@ export const ImageScraperChecklist = () => {
 
     for (const recipe of recipesToScrape) {
       try {
-        const imageSource = await searchUnsplashImage(recipe.name, recipe.country);
+        const imageSource = await searchUnsplashImage(recipe.name, recipe.country, recipe.id);
         
         if (imageSource) {
           const success = await updateRecipeImage(recipe.id, imageSource.url);

@@ -13,6 +13,7 @@ interface NewsletterSignupProps {
 export const NewsletterSignup = ({ variant = "default", source = "website" }: NewsletterSignupProps) => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
+  const [website, setWebsite] = useState(""); // honeypot
   const [loading, setLoading] = useState(false);
   const [subscribed, setSubscribed] = useState(false);
   const { toast } = useToast();
@@ -22,6 +23,14 @@ export const NewsletterSignup = ({ variant = "default", source = "website" }: Ne
     setLoading(true);
 
     try {
+      if (website.trim()) {
+        setSubscribed(true);
+        setEmail("");
+        setName("");
+        setWebsite("");
+        return;
+      }
+
       // Check if email already exists
       const { data: existing } = await supabase
         .from("newsletter_subscribers")
@@ -118,6 +127,15 @@ export const NewsletterSignup = ({ variant = "default", source = "website" }: Ne
           </p>
           
           <form onSubmit={handleSubmit} className="space-y-3">
+            <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+              <Input
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                value={website}
+                onChange={(e) => setWebsite(e.target.value)}
+              />
+            </div>
             <div className="flex flex-col sm:flex-row gap-3">
               <Input
                 type="text"

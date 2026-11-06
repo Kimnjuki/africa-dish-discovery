@@ -8,6 +8,7 @@ import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { CookieConsent } from "@/components/CookieConsent";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { AdminGate } from "@/components/AdminGate";
+import { RequireAuth } from "@/components/RequireAuth";
 
 // Eager load only the most critical pages
 import Index from "./pages/Index";
@@ -82,10 +83,12 @@ const App = () => (
               <Route path="/ingredients" element={<Ingredients />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/recipe-uploader" element={<AdminGate><RecipeUploader /></AdminGate>} />
-              <Route path="/meal-planner" element={<MealPlanner />} />
-              <Route path="/meal-planner-calendar" element={<MealPlannerCalendar />} />
-              <Route path="/recipe-comparison" element={<RecipeComparison />} />
-              <Route path="/pantry" element={<Pantry />} />
+              <Route path="/meal-planner" element={<RequireAuth><MealPlanner /></RequireAuth>} />
+              <Route path="/meal-planner-calendar" element={<RequireAuth><MealPlannerCalendar /></RequireAuth>} />
+              <Route path="/recipe-comparison" element={<RequireAuth><RecipeComparison /></RequireAuth>} />
+              <Route path="/pantry" element={<RequireAuth><Pantry /></RequireAuth>} />
+              <Route path="/my-list" element={<RequireAuth><MyList /></RequireAuth>} />
+              <Route path="/submit-recipe" element={<RequireAuth><SubmitRecipe /></RequireAuth>} />
               <Route path="/shared-meal-plan/:shareToken" element={<SharedMealPlan />} />
               <Route path="/install" element={<Install />} />
               <Route path="/offline-recipes" element={<OfflineRecipes />} />
@@ -101,11 +104,9 @@ const App = () => (
               <Route path="/atlas" element={<DishAtlas />} />
               <Route path="/dish/:dishSlug" element={<DishEncyclopedia />} />
               <Route path="/country/:countrySlug" element={<CountryRecipes />} />
-              <Route path="/submit-recipe" element={<SubmitRecipe />} />
               <Route path="/editorial-review" element={<EditorialReview />} />
               <Route path="/admin/dish-qa" element={<AdminGate><AdminDishQA /></AdminGate>} />
               <Route path="/recipe/:slug" element={<RecipeDetail />} />
-              <Route path="/my-list" element={<MyList />} />
               <Route path="/cuisine-map" element={<CuisineMap />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
