@@ -34,7 +34,7 @@ const Hero = () => {
           </h1>
           
           <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-8 leading-relaxed">
-            Explore 50+ iconic African recipes. From Nigerian Jollof to Ethiopian Injera. 
+            Explore iconic African and world recipes. From Nigerian Jollof to Ethiopian Injera. 
             Discover stories, ingredients, and step-by-step guides to cook Africa at home.
           </p>
           
@@ -65,7 +65,7 @@ const Hero = () => {
         {/* Floating Stats */}
         <div className="grid grid-cols-3 gap-8 mt-16 max-w-2xl mx-auto">
           {[
-            { number: "50+", label: "African Recipes", icon: ChefHat },
+            { number: "1,700+", label: "Recipes", icon: ChefHat },
             { number: "5", label: "Regions Covered", icon: MapPin },
             { number: "54", label: "Countries", icon: Globe },
           ].map((stat, index) => (

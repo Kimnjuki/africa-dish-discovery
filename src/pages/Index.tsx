@@ -14,8 +14,6 @@ import { useOnboarding } from "@/hooks/useOnboarding";
 import QuickCategoryCards from "@/components/QuickCategoryCards";
 import TrendingRecipes from "@/components/TrendingRecipes";
 import RecipeCollections from "@/components/RecipeCollections";
-import { PremiumBanner } from "@/components/PremiumBanner";
-
 const Index = () => {
   const { showOnboarding, completeOnboarding, skipOnboarding } = useOnboarding();
 
@@ -29,8 +27,8 @@ const Index = () => {
       )}
     <div className="min-h-screen">
       <PageMeta
-        title="LadhaQuest | 500+ Authentic African & World Recipes | Smart Pantry Matching"
-        description="Discover 500+ authentic recipes from Africa and the world. AI-powered pantry intelligence matches recipes to your ingredients. Meal planning, cultural stories, and step-by-step cooking guides."
+        title="LadhaQuest | Authentic African & World Recipes | Smart Pantry Matching"
+        description="Discover authentic recipes from Africa and around the world. Smart pantry matching, meal planning, cultural stories, and step-by-step cooking guides."
         keywords="african recipes, world recipes, recipe finder, pantry management, meal planning, cooking guide, nigerian recipes, ethiopian food, smart kitchen"
         canonical="https://www.ladhaquest.com/"
       />
@@ -50,7 +48,6 @@ const Index = () => {
           <AfricaMap />
         </div>
         <FeaturedRecipes />
-        <PremiumBanner />
         <section className="py-16">
           <div className="container mx-auto px-6">
             <NewsletterSignup variant="hero" />

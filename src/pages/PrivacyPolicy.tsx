@@ -35,23 +35,26 @@ const PrivacyPolicy = () => {
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-foreground mb-4">2. Google AdSense & Cookies</h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">2. Cookies</h2>
             <p className="text-muted-foreground leading-relaxed">
-              We use Google AdSense to serve ads. Google uses cookies to serve ads based on a user's prior visits to our website or other websites. Google's use of advertising cookies enables it and its partners to serve ads to our users based on their visit to our sites and/or other sites on the Internet.
+              We use essential cookies for authentication and site functionality. Optional analytics cookies are only set if you enable them in Cookie Settings. We do not currently run advertising networks or Google AdSense on LadhaQuest.
             </p>
             <p className="text-muted-foreground leading-relaxed mt-4">
-              Users may opt out of personalized advertising by visiting{" "}
-              <a 
-                href="https://www.google.com/settings/ads" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-primary hover:underline"
-              >
-                Google Ads Settings
-              </a>.
+              You can manage your cookie preferences using the "Cookie Settings" button at the bottom of our site.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="text-2xl font-semibold text-foreground mb-4">2b. Subprocessors & retention</h2>
+            <p className="text-muted-foreground leading-relaxed">
+              We process account and content data with Supabase (database/auth/storage) and may use email providers for transactional or newsletter messages once configured for ladhaquest.com. Account data is retained while your account remains active. Contact submissions and newsletter records are retained until you request deletion or unsubscribe.
             </p>
             <p className="text-muted-foreground leading-relaxed mt-4">
-              Third-party vendors and ad networks may also serve ads on our site. You can manage your cookie preferences using the "Cookie Settings" button at the bottom of our site.
+              To export or delete your data, email{" "}
+              <a href="mailto:privacy@ladhaquest.com" className="text-primary hover:underline">
+                privacy@ladhaquest.com
+              </a>
+              . Company legal entity and registered address will be published here once domain registration and business filings are complete.
             </p>
           </section>
 

@@ -24,7 +24,7 @@ interface CachedRecipe {
   cachedAt: string;
 }
 
-const CACHED_RECIPES_KEY = "tasteafrica_cached_recipes";
+const CACHED_RECIPES_KEY = "ladhaquest_cached_recipes";
 
 const OfflineRecipes = () => {
   const [cachedRecipes, setCachedRecipes] = useState<CachedRecipe[]>([]);

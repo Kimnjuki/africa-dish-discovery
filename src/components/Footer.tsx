@@ -103,20 +103,22 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Affiliate Partners */}
+        {/* Ingredient shopping resources */}
         <div className="border-t border-background/20 pt-8 mb-8">
           <h4 className="font-semibold mb-4 text-primary text-sm uppercase tracking-wide">Where to Buy Ingredients</h4>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
             {[
-              { name: "Amazon African Foods", region: "Global" },
-              { name: "AfricanFoodShop.com", region: "US, UK, EU" },
-              { name: "Jumia", region: "Africa" },
-              { name: "Konga", region: "Nigeria" },
-              { name: "Etsy African Spices", region: "Global" }
+              { name: "Amazon", region: "Global", href: "https://www.amazon.com/s?k=african+food+ingredients" },
+              { name: "AfricanFoodShop", region: "US, UK, EU", href: "https://www.africanfoodshop.com/" },
+              { name: "Jumia", region: "Africa", href: "https://www.jumia.com/" },
+              { name: "Konga", region: "Nigeria", href: "https://www.konga.com/" },
+              { name: "Etsy Spices", region: "Global", href: "https://www.etsy.com/search?q=african%20spices" },
             ].map((partner) => (
               <a 
                 key={partner.name}
-                href="#"
+                href={partner.href}
+                target="_blank"
+                rel="noopener noreferrer sponsored"
                 className="p-3 border border-background/20 rounded-lg hover:border-primary/50 transition-colors text-center"
               >
                 <div className="text-xs font-medium text-background/90 truncate">{partner.name}</div>
@@ -126,7 +128,7 @@ const Footer = () => {
             ))}
           </div>
           <p className="text-xs text-background/60 mt-4">
-            * We may earn a commission from affiliate links at no extra cost to you.
+            * External retailer links may earn a commission at no extra cost to you.
           </p>
         </div>
 
@@ -142,7 +144,7 @@ const Footer = () => {
 
           <div className="flex items-center gap-1 text-sm text-background/80">
             <MapPin className="w-3 h-3" />
-            <span>50+ Recipes • 54 Countries • 5 Regions</span>
+            <span>1,700+ Recipes • 54 African Countries</span>
           </div>
         </div>
       </div>

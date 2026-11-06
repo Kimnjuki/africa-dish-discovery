@@ -18,8 +18,8 @@ interface CookiePreferences {
   personalization: boolean;
 }
 
-const COOKIE_CONSENT_KEY = "tasteafrica_cookie_consent";
-const COOKIE_PREFERENCES_KEY = "tasteafrica_cookie_preferences";
+const COOKIE_CONSENT_KEY = "ladhaquest_cookie_consent";
+const COOKIE_PREFERENCES_KEY = "ladhaquest_cookie_preferences";
 
 export const CookieConsent = () => {
   const [showBanner, setShowBanner] = useState(false);

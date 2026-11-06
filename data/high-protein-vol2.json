@@ -1,0 +1,750 @@
+[
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000131",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Brazilian Grilled Picanha Steaks",
+    "category": "Main Courses",
+    "country_of_origin": "Brazil",
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 20,
+    "servings": 4,
+    "protein_grams": 46.0,
+    "historical_context": "Traditional churrascaria cut of beef seasoned simply with coarse rock salt and grilled over open flames to achieve a succulent crust.",
+    "instructions": [
+      "Cut picanha rump cap steak into thick steaks, curve into C-shapes, and skewer or grill flat.",
+      "Season generously with coarse sea salt on all sides.",
+      "Sear over high heat fat-side down first until golden, then roast to medium-rare.",
+      "Slice thinly against the grain and serve with vinaigrette."
+    ],
+    "ingredients": [
+      {"name": "Picanha Beef Steaks", "amount": 800.0, "unit": "g", "notes": "Rump cap with fat layer"},
+      {"name": "Coarse Sea Salt", "amount": 2.0, "unit": "tbsp", "notes": ""},
+      {"name": "Garlic Cloves", "amount": 3.0, "unit": "cloves", "notes": "Crushed"},
+      {"name": "Olive Oil", "amount": 1.0, "unit": "tbsp", "notes": ""}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000132",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Greek Zucchini & Feta Turkey Fritters",
+    "category": "Appetizers & Mains",
+    "country_of_origin": "Greece",
+    "prep_time_minutes": 20,
+    "cook_time_minutes": 12,
+    "servings": 4,
+    "protein_grams": 33.0,
+    "historical_context": "Crispy pan-fried fritters combining grated zucchini, lean ground turkey, crumbled feta, and fresh dill.",
+    "instructions": [
+      "Grate zucchini and squeeze out all excess moisture using a clean kitchen towel.",
+      "Combine grated zucchini, lean ground turkey, crumbled feta, egg, minced garlic, and dill in a bowl.",
+      "Form into patties and pan-fry in olive oil over medium-high heat for 5-6 minutes per side until golden brown.",
+      "Serve warm with tzatziki sauce."
+    ],
+    "ingredients": [
+      {"name": "Lean Ground Turkey", "amount": 400.0, "unit": "g", "notes": "93% lean"},
+      {"name": "Zucchini", "amount": 2.0, "unit": "medium", "notes": "Grated and drained"},
+      {"name": "Feta Cheese", "amount": 80.0, "unit": "g", "notes": "Crumbled"},
+      {"name": "Egg", "amount": 1.0, "unit": "large", "notes": ""},
+      {"name": "Fresh Dill", "amount": 2.0, "unit": "tbsp", "notes": "Chopped"}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000133",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Mexican Shredded Beef Barbacoa Bowls",
+    "category": "Main Courses",
+    "country_of_origin": "Mexico",
+    "prep_time_minutes": 20,
+    "cook_time_minutes": 120,
+    "servings": 6,
+    "protein_grams": 44.0,
+    "historical_context": "Slow-braised chuck roast infused with chipotle peppers, lime, cumin, and garlic, shredded into a rich high-protein bowl.",
+    "instructions": [
+      "Sear beef chuck roast in a heavy pot until browned on all sides.",
+      "Blend chipotle peppers, lime juice, apple cider vinegar, garlic, oregano, and cumin into a marinade sauce.",
+      "Pour over beef, cover, and simmer low and slow for 2 hours until tender enough to shred.",
+      "Serve in bowls over black beans and cilantro-lime cauliflower rice."
+    ],
+    "ingredients": [
+      {"name": "Beef Chuck Roast", "amount": 1000.0, "unit": "g", "notes": "Trimmed"},
+      {"name": "Chipotle Peppers in Adobo", "amount": 3.0, "unit": "tbsp", "notes": "Chopped"},
+      {"name": "Lime Juice", "amount": 4.0, "unit": "tbsp", "notes": "Fresh"},
+      {"name": "Apple Cider Vinegar", "amount": 2.0, "unit": "tbsp", "notes": ""},
+      {"name": "Garlic Cloves", "amount": 4.0, "unit": "cloves", "notes": "Minced"}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000134",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Vietnamese Lemongrass Grilled Pork Chops (Sườn Nướng Sả)",
+    "category": "Main Courses",
+    "country_of_origin": "Vietnam",
+    "prep_time_minutes": 20,
+    "cook_time_minutes": 15,
+    "servings": 4,
+    "protein_grams": 39.5,
+    "historical_context": "Aromatic grilled pork chops marinated in fresh minced lemongrass, garlic, fish sauce, and a touch of brown sugar.",
+    "instructions": [
+      "In a bowl, mix minced lemongrass, garlic, fish sauce, soy sauce, brown sugar, and vegetable oil.",
+      "Coat pork chops thoroughly and marinate for at least 1 hour.",
+      "Grill over medium-high heat for 6-7 minutes per side until caramelized and cooked through.",
+      "Serve with fresh cucumber slices and lime dipping sauce."
+    ],
+    "ingredients": [
+      {"name": "Pork Chops", "amount": 700.0, "unit": "g", "notes": "Boneless or bone-in center cut"},
+      {"name": "Fresh Lemongrass", "amount": 3.0, "unit": "stalks", "notes": "Minced white parts only"},
+      {"name": "Fish Sauce", "amount": 3.0, "unit": "tbsp", "notes": ""},
+      {"name": "Garlic Cloves", "amount": 4.0, "unit": "cloves", "notes": "Minced"},
+      {"name": "Brown Sugar", "amount": 1.0, "unit": "tbsp", "notes": ""}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000135",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Ethiopian Spiced Beef Tibs",
+    "category": "Main Courses",
+    "country_of_origin": "Ethiopia",
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 15,
+    "servings": 4,
+    "protein_grams": 42.0,
+    "historical_context": "Sizzling sautéed cubes of lean beef simmered with niter kibbeh (spiced clarified butter), onions, garlic, and berbere.",
+    "instructions": [
+      "Cut lean beef tenderloin or sirloin into bite-sized cubes.",
+      "Melt spiced butter in a hot skillet, add sliced onions and bell peppers, and sauté until tender.",
+      "Add beef cubes, berbere spice blend, minced garlic, and ginger, searing quickly over high heat.",
+      "Garnish with fresh rosemary sprigs and serve hot."
+    ],
+    "ingredients": [
+      {"name": "Beef Sirloin", "amount": 700.0, "unit": "g", "notes": "Cubed"},
+      {"name": "Spiced Butter (Niter Kibbeh)", "amount": 2.0, "unit": "tbsp", "notes": "Or ghee"},
+      {"name": "Berbere Spice", "amount": 1.5, "unit": "tbsp", "notes": ""},
+      {"name": "Red Onion", "amount": 1.0, "unit": "large", "notes": "Sliced"},
+      {"name": "Bell Pepper", "amount": 1.0, "unit": "medium", "notes": "Sliced"}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000136",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Mediterranean Baked Cod with Tomatoes & Capers",
+    "category": "Main Courses",
+    "country_of_origin": "Greece",
+    "prep_time_minutes": 10,
+    "cook_time_minutes": 20,
+    "servings": 3,
+    "protein_grams": 36.0,
+    "historical_context": "Flaky white cod baked in a Mediterranean sauce of cherry tomatoes, kalamata olives, capers, garlic, and olive oil.",
+    "instructions": [
+      "Preheat oven to 200°C (400°F). Place cod fillets in a baking dish.",
+      "Scatter halved cherry tomatoes, pitted kalamata olives, capers, and minced garlic around the fish.",
+      "Drizzle generously with extra virgin olive oil and season with oregano, salt, and pepper.",
+      "Bake for 18-20 minutes until fish flakes easily with a fork."
+    ],
+    "ingredients": [
+      {"name": "Cod Fillets", "amount": 600.0, "unit": "g", "notes": "Fresh or thawed"},
+      {"name": "Cherry Tomatoes", "amount": 2.0, "unit": "cups", "notes": "Halved"},
+      {"name": "Kalamata Olives", "amount": 0.5, "unit": "cup", "notes": "Pitted"},
+      {"name": "Capers", "amount": 2.0, "unit": "tbsp", "notes": "Rinsed"},
+      {"name": "Extra Virgin Olive Oil", "amount": 3.0, "unit": "tbsp", "notes": ""}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000137",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Indian Spiced Tofu & Chickpea Curry",
+    "category": "Plant-Based Mains",
+    "country_of_origin": "India",
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 25,
+    "servings": 4,
+    "protein_grams": 24.0,
+    "historical_context": "A double-protein plant curry featuring crisp pan-fried tofu and chickpeas simmered in a rich tomato, ginger, and curry spice gravy.",
+    "instructions": [
+      "Press and cube firm tofu, then pan-fry in coconut oil until golden and crisp.",
+      "Sauté diced onions, minced garlic, and fresh ginger in a pan until fragrant.",
+      "Add curry powder, turmeric, cumin, and crushed tomatoes, simmering for 10 minutes.",
+      "Stir in drained chickpeas and crispy tofu, simmering for 10 more minutes before serving."
+    ],
+    "ingredients": [
+      {"name": "Firm Tofu", "amount": 350.0, "unit": "g", "notes": "Cubed"},
+      {"name": "Chickpeas", "amount": 400.0, "unit": "g", "notes": "Canned, rinsed"},
+      {"name": "Crushed Tomatoes", "amount": 400.0, "unit": "g", "notes": ""},
+      {"name": "Curry Powder", "amount": 2.0, "unit": "tbsp", "notes": ""},
+      {"name": "Coconut Oil", "amount": 1.0, "unit": "tbsp", "notes": ""}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000138",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Italian Chicken Milanese with Arugula",
+    "category": "Main Courses",
+    "country_of_origin": "Italy",
+    "prep_time_minutes": 20,
+    "cook_time_minutes": 15,
+    "servings": 3,
+    "protein_grams": 43.0,
+    "historical_context": "Crispy breaded chicken cutlets topped with fresh peppery arugula, cherry tomatoes, and shaved parmesan cheese.",
+    "instructions": [
+      "Pound chicken breasts to even thickness, dredge in egg whites, then coat in seasoned whole-wheat breadcrumbs and parmesan.",
+      "Pan-fry in olive oil over medium-high heat for 4-5 minutes per side until golden and cooked through.",
+      "Top crispy cutlets immediately with fresh baby arugula and halved cherry tomatoes tossed in lemon juice and olive oil.",
+      "Garnish with shaved parmesan flakes."
+    ],
+    "ingredients": [
+      {"name": "Chicken Breasts", "amount": 600.0, "unit": "g", "notes": "Boneless, skinless"},
+      {"name": "Baby Arugula", "amount": 3.0, "unit": "cups", "notes": "Fresh"},
+      {"name": "Cherry Tomatoes", "amount": 1.0, "unit": "cup", "notes": "Halved"},
+      {"name": "Parmesan Cheese", "amount": 40.0, "unit": "g", "notes": "Shaved"},
+      {"name": "Whole-Wheat Breadcrumbs", "amount": 0.5, "unit": "cup", "notes": ""}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000139",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Japanese Beef & Scallion Rolls (Negimaki)",
+    "category": "Appetizers & Mains",
+    "country_of_origin": "Japan",
+    "prep_time_minutes": 20,
+    "cook_time_minutes": 10,
+    "servings": 3,
+    "protein_grams": 37.0,
+    "historical_context": "Thinly sliced beef flank rolled tightly around crisp scallions, pan-seared and glazed in a savory teriyaki sauce.",
+    "instructions": [
+      "Cut beef flank steak into paper-thin slices.",
+      "Wrap slices tightly around bundles of fresh scallions to form small cylinders.",
+      "Sear rolls in a hot skillet with sesame oil until browned on all sides.",
+      "Pour in soy sauce, mirin, and a touch of honey, simmering until the glaze coats the rolls."
+    ],
+    "ingredients": [
+      {"name": "Beef Flank Steak", "amount": 500.0, "unit": "g", "notes": "Paper-thin slices"},
+      {"name": "Scallions", "amount": 2.0, "unit": "bunches", "notes": "Trimmed"},
+      {"name": "Soy Sauce", "amount": 3.0, "unit": "tbsp", "notes": "Low sodium"},
+      {"name": "Mirin", "amount": 2.0, "unit": "tbsp", "notes": "Japanese rice wine"},
+      {"name": "Sesame Oil", "amount": 1.0, "unit": "tsp", "notes": ""}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000140",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Spanish Garlic Chicken & Chorizo Skewers",
+    "category": "Main Courses",
+    "country_of_origin": "Spain",
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 15,
+    "servings": 4,
+    "protein_grams": 44.5,
+    "historical_context": "Vibrant tapas-style skewers pairing lean chicken breast chunks with smoky Spanish chorizo and bell peppers.",
+    "instructions": [
+      "Cut chicken breast and cured Spanish chorizo sausage into uniform bite-sized pieces.",
+      "Thread alternating pieces of chicken, chorizo, and bell pepper chunks onto skewers.",
+      "Brush with smoked paprika, garlic-infused olive oil, and lemon juice.",
+      "Grill or broil for 12-15 minutes, turning occasionally until chicken is fully cooked."
+    ],
+    "ingredients": [
+      {"name": "Chicken Breast", "amount": 600.0, "unit": "g", "notes": "Cubed"},
+      {"name": "Spanish Chorizo Sausage", "amount": 150.0, "unit": "g", "notes": "Sliced into rounds"},
+      {"name": "Bell Pepper", "amount": 2.0, "unit": "medium", "notes": "Squared"},
+      {"name": "Smoked Paprika", "amount": 1.5, "unit": "tsp", "notes": ""},
+      {"name": "Olive Oil", "amount": 2.0, "unit": "tbsp", "notes": ""}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000141",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Moroccan Roasted Chickpea & Eggplant Salad",
+    "category": "Salads",
+    "country_of_origin": "Morocco",
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 25,
+    "servings": 4,
+    "protein_grams": 16.0,
+    "historical_context": "Warm spiced salad combining roasted eggplant cubes, crispy spiced chickpeas, fresh parsley, and a lemon-tahini dressing.",
+    "instructions": [
+      "Dice eggplant and toss with olive oil, cumin, and salt, then roast at 200°C for 25 minutes.",
+      "Toss drained chickpeas with smoked paprika and roast alongside the eggplant until crispy.",
+      "Combine roasted vegetables in a large bowl with chopped fresh parsley and mint.",
+      "Drizzle with a dressing made of tahini, lemon juice, and minced garlic before serving."
+    ],
+    "ingredients": [
+      {"name": "Eggplant", "amount": 1.0, "unit": "large", "notes": "Diced"},
+      {"name": "Chickpeas", "amount": 400.0, "unit": "g", "notes": "Canned, rinsed"},
+      {"name": "Tahini", "amount": 3.0, "unit": "tbsp", "notes": "Sesame paste"},
+      {"name": "Lemon Juice", "amount": 3.0, "unit": "tbsp", "notes": ""},
+      {"name": "Fresh Parsley", "amount": 1.0, "unit": "cup", "notes": "Chopped"}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000142",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Greek Lemon-Herb Turkey Meatballs with Zucchini",
+    "category": "Main Courses",
+    "country_of_origin": "Greece",
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 20,
+    "servings": 4,
+    "protein_grams": 38.0,
+    "historical_context": "Tender lean turkey meatballs packed with grated zucchini, lemon zest, and dill, baked to golden perfection.",
+    "instructions": [
+      "Mix lean ground turkey, finely grated zucchini, lemon zest, minced garlic, dried dill, and egg in a bowl.",
+      "Roll into meatballs and place on a baking sheet.",
+      "Bake at 200°C (400°F) for 20 minutes until fully cooked.",
+      "Serve warm with a side of homemade tzatziki."
+    ],
+    "ingredients": [
+      {"name": "Lean Ground Turkey", "amount": 600.0, "unit": "g", "notes": ""},
+      {"name": "Zucchini", "amount": 1.0, "unit": "medium", "notes": "Grated"},
+      {"name": "Lemon Zest", "amount": 1.5, "unit": "tsp", "notes": ""},
+      {"name": "Dried Dill", "amount": 1.0, "unit": "tsp", "notes": ""},
+      {"name": "Egg", "amount": 1.0, "unit": "large", "notes": ""}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000143",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Peruvian Lomo Saltado Style Chicken Stir-Fry",
+    "category": "Main Courses",
+    "country_of_origin": "Peru",
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 12,
+    "servings": 3,
+    "protein_grams": 41.0,
+    "historical_context": "Chifa-inspired stir-fry combining sliced chicken breast, red onions, tomatoes, and a savory soy-vinegar reduction.",
+    "instructions": [
+      "Slice chicken breast into strips and marinate briefly in soy sauce and vinegar.",
+      "Sear chicken in a smoking hot wok with oil until browned, then remove.",
+      "Stir-fry thick sliced red onions and tomato wedges quickly to maintain crunch.",
+      "Toss chicken back in with a splash of beef broth and fresh cilantro, serving immediately."
+    ],
+    "ingredients": [
+      {"name": "Chicken Breast", "amount": 600.0, "unit": "g", "notes": "Sliced"},
+      {"name": "Red Onion", "amount": 1.0, "unit": "large", "notes": "Sliced into wedges"},
+      {"name": "Tomatoes", "amount": 2.0, "unit": "medium", "notes": "Cuzco style wedges"},
+      {"name": "Soy Sauce", "amount": 3.0, "unit": "tbsp", "notes": ""},
+      {"name": "Red Wine Vinegar", "amount": 2.0, "unit": "tbsp", "notes": ""}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000144",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Mexican Spiced Turkey & Black Bean Chili",
+    "category": "Soups & Stews",
+    "country_of_origin": "Mexico",
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 35,
+    "servings": 6,
+    "protein_grams": 34.0,
+    "historical_context": "A hearty, high-protein chili featuring lean ground turkey, black beans, fire-roasted tomatoes, and robust Mexican spices.",
+    "instructions": [
+      "Brown lean ground turkey in a large soup pot with diced onions and garlic.",
+      "Add chili powder, cumin, smoked paprika, crushed tomatoes, and rinsed black beans.",
+      "Simmer on low heat for 30 minutes to meld all rich flavors.",
+      "Garnish bowls with chopped cilantro and a dollop of Greek yogurt."
+    ],
+    "ingredients": [
+      {"name": "Lean Ground Turkey", "amount": 700.0, "unit": "g", "notes": ""},
+      {"name": "Black Beans", "amount": 800.0, "unit": "g", "notes": "Canned, rinsed"},
+      {"name": "Fire-Roasted Tomatoes", "amount": 800.0, "unit": "g", "notes": "Canned"},
+      {"name": "Chili Powder", "amount": 2.0, "unit": "tbsp", "notes": ""},
+      {"name": "Ground Cumin", "amount": 1.0, "unit": "tsp", "notes": ""}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000145",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Scandinavian Smoked Trout & Egg Salad",
+    "category": "Salads",
+    "country_of_origin": "Norway",
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 10,
+    "servings": 2,
+    "protein_grams": 35.5,
+    "historical_context": "Nutrient-dense Nordic salad combining cold-smoked trout fillets, hard-boiled pasture eggs, crisp cucumber, and fresh dill.",
+    "instructions": [
+      "Boil eggs for 9 minutes, peel, and quarter.",
+      "Flake smoked trout fillets over a bed of mixed salad greens and diced cucumbers.",
+      "Arrange egg quarters around the salad.",
+      "Whisk Greek yogurt, lemon juice, and fresh dill to create a light dressing, then drizzle over top."
+    ],
+    "ingredients": [
+      {"name": "Smoked Trout Fillets", "amount": 200.0, "unit": "g", "notes": "Flaked"},
+      {"name": "Eggs", "amount": 4.0, "unit": "large", "notes": "Hard-boiled"},
+      {"name": "Cucumber", "amount": 1.0, "unit": "medium", "notes": "Diced"},
+      {"name": "Plain Greek Yogurt", "amount": 0.3, "unit": "cup", "notes": ""},
+      {"name": "Fresh Dill", "amount": 1.0, "unit": "tbsp", "notes": "Chopped"}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000146",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Lebanese Grilled Lemon-Garlic Chicken Skewers (Shish Tawook)",
+    "category": "Main Courses",
+    "country_of_origin": "Lebanon",
+    "prep_time_minutes": 20,
+    "cook_time_minutes": 15,
+    "servings": 4,
+    "protein_grams": 43.5,
+    "historical_context": "Classic Middle Eastern yogurt-marinated chicken skewers infused with garlic, lemon juice, and warm Middle Eastern spices.",
+    "instructions": [
+      "Whisk plain yogurt, lemon juice, minced garlic, olive oil, oregano, and paprika in a bowl.",
+      "Cut chicken breast into cubes and marinate for at least 2 hours.",
+      "Thread onto skewers and grill over high heat for 12-15 minutes until charred and tender.",
+      "Serve with garlic toum or mint yogurt sauce."
+    ],
+    "ingredients": [
+      {"name": "Chicken Breast", "amount": 700.0, "unit": "g", "notes": "Cubed"},
+      {"name": "Plain Yogurt", "amount": 0.5, "unit": "cup", "notes": ""},
+      {"name": "Lemon Juice", "amount": 4.0, "unit": "tbsp", "notes": "Freshly squeezed"},
+      {"name": "Garlic Cloves", "amount": 5.0, "unit": "cloves", "notes": "Minced"},
+      {"name": "Olive Oil", "amount": 2.0, "unit": "tbsp", "notes": ""}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000147",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Thai Red Curry Shrimp & Edamame",
+    "category": "Main Courses",
+    "country_of_origin": "Thailand",
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 15,
+    "servings": 3,
+    "protein_grams": 38.0,
+    "historical_context": "Aromatic Thai red curry featuring succulent shrimp and protein-packed edamame simmered in light coconut milk.",
+    "instructions": [
+      "Sauté Thai red curry paste in a pan with a splash of light coconut milk until fragrant.",
+      "Add remaining coconut milk, fish sauce, and vegetable broth, bringing to a gentle simmer.",
+      "Stir in shelled edamame and peeled shrimp, cooking for 4-5 minutes until shrimp turn pink.",
+      "Garnish with fresh Thai basil and lime wedges."
+    ],
+    "ingredients": [
+      {"name": "Large Shrimp", "amount": 500.0, "unit": "g", "notes": "Peeled and deveined"},
+      {"name": "Shelled Edamame", "amount": 1.0, "unit": "cup", "notes": "Steamed"},
+      {"name": "Thai Red Curry Paste", "amount": 2.0, "unit": "tbsp", "notes": ""},
+      {"name": "Light Coconut Milk", "amount": 1.5, "unit": "cups", "notes": ""},
+      {"name": "Fish Sauce", "amount": 1.5, "unit": "tbsp", "notes": ""}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000148",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Argentinian Grilled Chicken Skewers with Chimichurri",
+    "category": "Main Courses",
+    "country_of_origin": "Argentina",
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 15,
+    "servings": 4,
+    "protein_grams": 42.0,
+    "historical_context": "Tender chicken skewers kissed by the grill and slathered with a vibrant fresh parsley and garlic chimichurri.",
+    "instructions": [
+      "Cut chicken breast into uniform chunks and season with salt, pepper, and oregano.",
+      "Thread onto skewers and grill over high heat for 12-15 minutes until fully cooked.",
+      "Prepare fresh chimichurri by finely chopping parsley, garlic, oregano, and mixing with olive oil and vinegar.",
+      "Drizzle chimichurri generously over hot skewers before serving."
+    ],
+    "ingredients": [
+      {"name": "Chicken Breast", "amount": 700.0, "unit": "g", "notes": "Cubed"},
+      {"name": "Fresh Parsley", "amount": 1.0, "unit": "cup", "notes": "Finely chopped"},
+      {"name": "Garlic Cloves", "amount": 4.0, "unit": "cloves", "notes": "Minced"},
+      {"name": "Olive Oil", "amount": 3.0, "unit": "tbsp", "notes": ""},
+      {"name": "Red Wine Vinegar", "amount": 2.0, "unit": "tbsp", "notes": ""}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000149",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Mexican Lime & Black Bean Stuffed Chicken Breasts",
+    "category": "Main Courses",
+    "country_of_origin": "Mexico",
+    "prep_time_minutes": 20,
+    "cook_time_minutes": 25,
+    "servings": 4,
+    "protein_grams": 46.5,
+    "historical_context": "Juicy chicken breasts stuffed with a seasoned high-protein filling of black beans, corn, and cotija cheese.",
+    "instructions": [
+      "Cut a deep pocket into the side of each chicken breast.",
+      "Mix rinsed black beans, corn kernels, crumbled cotija cheese, lime juice, and cilantro for the filling.",
+      "Stuff the filling into each breast and secure with toothpicks.",
+      "Sear in an oven-safe skillet, then bake at 200°C for 25 minutes until chicken is cooked through."
+    ],
+    "ingredients": [
+      {"name": "Chicken Breasts", "amount": 4.0, "unit": "large", "notes": "Boneless, skinless"},
+      {"name": "Black Beans", "amount": 1.0, "unit": "cup", "notes": "Rinsed"},
+      {"name": "Cotija Cheese", "amount": 60.0, "unit": "g", "notes": "Crumbled"},
+      {"name": "Lime Juice", "amount": 2.0, "unit": "tbsp", "notes": ""},
+      {"name": "Fresh Cilantro", "amount": 2.0, "unit": "tbsp", "notes": "Chopped"}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000150",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Japanese Miso-Glazed Grilled Pork Medallions",
+    "category": "Main Courses",
+    "country_of_origin": "Japan",
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 12,
+    "servings": 4,
+    "protein_grams": 39.0,
+    "historical_context": "Tender lean pork tenderloin medallions glazed in a savory-sweet blend of white miso paste, mirin, and ginger.",
+    "instructions": [
+      "Slice lean pork tenderloin into medallions and pound lightly.",
+      "Whisk white miso paste, mirin, grated ginger, soy sauce, and a touch of honey to form a glaze.",
+      "Grill or pan-sear medallions for 5 minutes per side, brushing generously with the miso glaze during the last 2 minutes.",
+      "Garnish with toasted sesame seeds."
+    ],
+    "ingredients": [
+      {"name": "Pork Tenderloin", "amount": 600.0, "unit": "g", "notes": "Sliced into medallions"},
+      {"name": "White Miso Paste", "amount": 3.0, "unit": "tbsp", "notes": ""},
+      {"name": "Mirin", "amount": 2.0, "unit": "tbsp", "notes": ""},
+      {"name": "Fresh Ginger", "amount": 1.0, "unit": "tbsp", "notes": "Grated"},
+      {"name": "Soy Sauce", "amount": 1.0, "unit": "tbsp", "notes": ""}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000151",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Greek Spiced Beef & Orzo Bake (Giouvetsi)",
+    "category": "Main Courses",
+    "country_of_origin": "Greece",
+    "prep_time_minutes": 20,
+    "cook_time_minutes": 45,
+    "servings": 6,
+    "protein_grams": 37.0,
+    "historical_context": "Traditional comforting Greek casserole featuring lean beef chuck baked with orzo pasta in a spiced tomato and cinnamon sauce.",
+    "instructions": [
+      "Brown cubed lean beef chuck in olive oil with diced onions and garlic.",
+      "Add crushed tomatoes, cinnamon, cloves, beef broth, and bring to a simmer for 20 minutes.",
+      "Stir in uncooked orzo pasta, transfer to a baking dish, and top with grated mizithra or parmesan cheese.",
+      "Bake at 180°C (350°F) for 25 minutes until orzo is tender and sauce is absorbed."
+    ],
+    "ingredients": [
+      {"name": "Beef Chuck", "amount": 700.0, "unit": "g", "notes": "Cubed"},
+      {"name": "Orzo Pasta", "amount": 1.5, "unit": "cups", "notes": "Uncooked"},
+      {"name": "Crushed Tomatoes", "amount": 800.0, "unit": "g", "notes": ""},
+      {"name": "Ground Cinnamon", "amount": 0.5, "unit": "tsp", "notes": ""},
+      {"name": "Parmesan Cheese", "amount": 60.0, "unit": "g", "notes": "Grated"}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000152",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Moroccan Spiced Lamb & Chickpea Stew",
+    "category": "Soups & Stews",
+    "country_of_origin": "Morocco",
+    "prep_time_minutes": 20,
+    "cook_time_minutes": 60,
+    "servings": 6,
+    "protein_grams": 36.5,
+    "historical_context": "Rich North African stew combining tender lamb shoulder, protein-dense chickpeas, tomatoes, and warm ras el hanout spices.",
+    "instructions": [
+      "Brown cubed lamb shoulder in a heavy pot with olive oil, onions, and garlic.",
+      "Stir in ras el hanout spice blend, ginger, and cumin.",
+      "Add crushed tomatoes and rinsed chickpeas, cover with broth, and simmer for 1 hour until lamb is tender.",
+      "Garnish with fresh cilantro before serving."
+    ],
+    "ingredients": [
+      {"name": "Lamb Shoulder", "amount": 800.0, "unit": "g", "notes": "Cubed"},
+      {"name": "Chickpeas", "amount": 400.0, "unit": "g", "notes": "Canned, rinsed"},
+      {"name": "Crushed Tomatoes", "amount": 500.0, "unit": "g", "notes": ""},
+      {"name": "Ras el Hanout", "amount": 2.0, "unit": "tbsp", "notes": "North African spice blend"},
+      {"name": "Olive Oil", "amount": 2.0, "unit": "tbsp", "notes": ""}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000153",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Mexican Chipotle Lime Chicken Skewers",
+    "category": "Main Courses",
+    "country_of_origin": "Mexico",
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 15,
+    "servings": 4,
+    "protein_grams": 44.0,
+    "historical_context": "Smoky and spicy chicken skewers marinated in chipotle adobo sauce, fresh lime juice, and garlic.",
+    "instructions": [
+      "Blend chipotle peppers in adobo, lime juice, olive oil, garlic, and cumin into a smooth marinade.",
+      "Cut chicken breast into chunks and marinate for at least 30 minutes.",
+      "Thread onto skewers and grill over high heat for 12-15 minutes until charred.",
+      "Squeeze fresh lime juice over skewers before serving."
+    ],
+    "ingredients": [
+      {"name": "Chicken Breast", "amount": 700.0, "unit": "g", "notes": "Cubed"},
+      {"name": "Chipotle Peppers in Adobo", "amount": 3.0, "unit": "tbsp", "notes": ""},
+      {"name": "Lime Juice", "amount": 3.0, "unit": "tbsp", "notes": "Fresh"},
+      {"name": "Garlic Cloves", "amount": 3.0, "unit": "cloves", "notes": "Minced"},
+      {"name": "Olive Oil", "amount": 2.0, "unit": "tbsp", "notes": ""}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000154",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Italian White Bean & Rosemary Soup with Chicken",
+    "category": "Soups & Stews",
+    "country_of_origin": "Italy",
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 30,
+    "servings": 6,
+    "protein_grams": 31.0,
+    "historical_context": "Rustic Tuscan soup pairing cannellini beans, shredded chicken breast, garlic, and fresh aromatic rosemary.",
+    "instructions": [
+      "Sauté diced onions, carrots, and celery in olive oil until soft.",
+      "Add minced garlic and fresh chopped rosemary, cooking for 1 minute.",
+      "Stir in cannellini beans, shredded chicken, and low-sodium chicken broth, simmering for 25 minutes.",
+      "Season with sea salt and cracked black pepper."
+    ],
+    "ingredients": [
+      {"name": "Cannellini Beans", "amount": 800.0, "unit": "g", "notes": "Canned, rinsed"},
+      {"name": "Shredded Chicken Breast", "amount": 400.0, "unit": "g", "notes": "Cooked"},
+      {"name": "Chicken Broth", "amount": 6.0, "unit": "cups", "notes": ""},
+      {"name": "Fresh Rosemary", "amount": 1.5, "unit": "tbsp", "notes": "Finely chopped"},
+      {"name": "Olive Oil", "amount": 2.0, "unit": "tbsp", "notes": ""}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000155",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Scandinavian Baked Salmon with Dill & Skyr Sauce",
+    "category": "Main Courses",
+    "country_of_origin": "Norway",
+    "prep_time_minutes": 10,
+    "cook_time_minutes": 15,
+    "servings": 2,
+    "protein_grams": 40.0,
+    "historical_context": "Oven-baked omega-3 rich salmon fillets served with a cool, high-protein skyr and fresh dill sauce.",
+    "instructions": [
+      "Season salmon fillets with sea salt, lemon pepper, and a drizzle of olive oil.",
+      "Bake at 200°C (400°F) for 15 minutes until flaky and tender.",
+      "Mix plain skyr (or thick Greek yogurt) with chopped fresh dill, lemon zest, and minced garlic.",
+      "Serve salmon warm with a generous dollop of the dill skyr sauce."
+    ],
+    "ingredients": [
+      {"name": "Salmon Fillets", "amount": 350.0, "unit": "g", "notes": "Skin-on"},
+      {"name": "Plain Skyr", "amount": 0.3, "unit": "cup", "notes": "High protein yogurt"},
+      {"name": "Fresh Dill", "amount": 2.0, "unit": "tbsp", "notes": "Chopped"},
+      {"name": "Lemon Zest", "amount": 1.0, "unit": "tsp", "notes": ""},
+      {"name": "Olive Oil", "amount": 1.0, "unit": "tbsp", "notes": ""}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000156",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Thai Chicken Satay Skewers with Peanut Sauce",
+    "category": "Main Courses",
+    "country_of_origin": "Thailand",
+    "prep_time_minutes": 20,
+    "cook_time_minutes": 15,
+    "servings": 4,
+    "protein_grams": 42.5,
+    "historical_context": "Popular street-food chicken skewers marinated in turmeric and coconut milk, served with a savory protein-rich peanut sauce.",
+    "instructions": [
+      "Marinate chicken strips in coconut milk, curry powder, turmeric, and garlic for 30 minutes.",
+      "Thread onto skewers and grill over high heat for 12-15 minutes until golden and charred.",
+      "Whisk natural peanut butter, soy sauce, lime juice, chili paste, and warm water for the dipping sauce.",
+      "Serve skewers hot alongside the peanut sauce."
+    ],
+    "ingredients": [
+      {"name": "Chicken Breast", "amount": 700.0, "unit": "g", "notes": "Cut into thin strips"},
+      {"name": "Coconut Milk", "amount": 0.5, "unit": "cup", "notes": ""},
+      {"name": "Ground Turmeric", "amount": 1.0, "unit": "tsp", "notes": ""},
+      {"name": "Natural Peanut Butter", "amount": 0.3, "unit": "cup", "notes": ""},
+      {"name": "Lime Juice", "amount": 2.0, "unit": "tbsp", "notes": ""}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000157",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Greek Chicken & Spinach Stuffed Peppers",
+    "category": "Main Courses",
+    "country_of_origin": "Greece",
+    "prep_time_minutes": 20,
+    "cook_time_minutes": 30,
+    "servings": 4,
+    "protein_grams": 39.0,
+    "historical_context": "Vibrant bell peppers stuffed with ground chicken, fresh spinach, crumbled feta, and oregano.",
+    "instructions": [
+      "Cut bell peppers in half and remove seeds.",
+      "Brown lean ground chicken with minced onions and garlic, then fold in chopped fresh spinach and crumbled feta.",
+      "Stuff the chicken and spinach mixture into the pepper halves.",
+      "Bake at 190°C (375°F) for 30 minutes until peppers are tender and filling is heated through."
+    ],
+    "ingredients": [
+      {"name": "Bell Peppers", "amount": 4.0, "unit": "large", "notes": "Halved and cored"},
+      {"name": "Lean Ground Chicken", "amount": 500.0, "unit": "g", "notes": ""},
+      {"name": "Baby Spinach", "amount": 2.0, "unit": "cups", "notes": "Chopped"},
+      {"name": "Feta Cheese", "amount": 80.0, "unit": "g", "notes": "Crumbled"},
+      {"name": "Dried Oregano", "amount": 1.5, "unit": "tsp", "notes": ""}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000158",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Mexican Shredded Beef Enchilada Bowls",
+    "category": "Main Courses",
+    "country_of_origin": "Mexico",
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 20,
+    "servings": 4,
+    "protein_grams": 43.0,
+    "historical_context": "Deconstructed enchilada bowl featuring tender shredded beef, black beans, enchilada sauce, and melted cotija cheese.",
+    "instructions": [
+      "Warm shredded beef in a pan with rich red enchilada sauce.",
+      "Assemble bowls with a base of black beans and cauliflower rice.",
+      "Top with the saucy shredded beef, crumbled cotija cheese, and fresh cilantro.",
+      "Garnish with diced avocado and lime wedges."
+    ],
+    "ingredients": [
+      {"name": "Shredded Beef", "amount": 600.0, "unit": "g", "notes": "Cooked"},
+      {"name": "Red Enchilada Sauce", "amount": 1.5, "unit": "cups", "notes": ""},
+      {"name": "Black Beans", "amount": 400.0, "unit": "g", "notes": "Canned, rinsed"},
+      {"name": "Cotija Cheese", "amount": 60.0, "unit": "g", "notes": "Crumbled"},
+      {"name": "Avocado", "amount": 1.0, "unit": "medium", "notes": "Sliced"}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000159",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Japanese Tofu & Edamame Salad with Sesame Ginger Dressing",
+    "category": "Salads",
+    "country_of_origin": "Japan",
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 0,
+    "servings": 2,
+    "protein_grams": 28.0,
+    "historical_context": "Crisp plant-based salad combining baked firm tofu cubes, shelled edamame, shredded cabbage, and a sesame-ginger dressing.",
+    "instructions": [
+      "Cube firm tofu, toss with a touch of soy sauce, and bake until crisp.",
+      "Toss shredded cabbage, baby spinach, and steamed shelled edamame in a mixing bowl.",
+      "Top with crispy baked tofu cubes.",
+      "Whisk sesame oil, rice vinegar, soy sauce, and grated ginger for the dressing, then drizzle over the salad."
+    ],
+    "ingredients": [
+      {"name": "Firm Tofu", "amount": 300.0, "unit": "g", "notes": "Baked and cubed"},
+      {"name": "Shelled Edamame", "amount": 1.0, "unit": "cup", "notes": "Steamed"},
+      {"name": "Shredded Cabbage", "amount": 2.0, "unit": "cups", "notes": ""},
+      {"name": "Sesame Oil", "amount": 1.0, "unit": "tbsp", "notes": ""},
+      {"name": "Fresh Ginger", "amount": 1.0, "unit": "tsp", "notes": "Grated"}
+    ]
+  },
+  {
+    "id": "b2c3d4e5-0000-0000-0000-000000000160",
+    "cookbook": "The High Protein Cookbook Vol 2",
+    "title": "Brazilian Grilled Garlic Picanha Steaks",
+    "category": "Main Courses",
+    "country_of_origin": "Brazil",
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 20,
+    "servings": 4,
+    "protein_grams": 47.0,
+    "historical_context": "Prime cut Brazilian rump cap steak rubbed with fresh minced garlic and rock salt, grilled to juicy perfection.",
+    "instructions": [
+      "Rub thick picanha steaks generously with minced garlic and coarse rock salt.",
+      "Grill over hot coals or a grill pan for 5-6 minutes per side until medium-rare.",
+      "Rest for 5 minutes before slicing thinly against the grain.",
+      "Serve hot with traditional sides."
+    ],
+    "ingredients": [
+      {"name": "Picanha Beef Steaks", "amount": 800.0, "unit": "g", "notes": "Rump cap"},
+      {"name": "Garlic Cloves", "amount": 6.0, "unit": "cloves", "notes": "Mashed into paste"},
+      {"name": "Coarse Rock Salt", "amount": 2.0, "unit": "tbsp", "notes": ""},
+      {"name": "Olive Oil", "amount": 1.0, "unit": "tbsp", "notes": ""}
+    ]
+  }
+]

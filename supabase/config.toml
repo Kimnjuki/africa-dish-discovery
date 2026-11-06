@@ -1,20 +1,31 @@
 project_id = "qfctezxqcomhrasrsvjg"
 
 [functions.identify-ingredients]
-verify_jwt = false
-
+verify_jwt = true
 
 [functions.ai-recommendations]
-verify_jwt = false
+verify_jwt = true
 
 [functions.ai-search]
-verify_jwt = false
+verify_jwt = true
 
 [functions.ai-meal-generator]
-verify_jwt = false
+verify_jwt = true
 
 [functions.pantry-intelligence]
-verify_jwt = false
+verify_jwt = true
 
 [functions.pantry-expiry-email]
-verify_jwt = false
+verify_jwt = true
+
+[functions.suggest-substitutions]
+verify_jwt = true
+
+[functions.authenticity-sweep]
+verify_jwt = true
+
+[functions.cultural-context-sweep]
+verify_jwt = true
+
+[functions.citation-backfill]
+verify_jwt = true

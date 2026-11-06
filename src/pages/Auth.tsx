@@ -6,15 +6,17 @@ import { Label } from "@/components/ui/label";
 import { ChefHat, Mail, Lock, User, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Session, User as SupabaseUser } from "@supabase/supabase-js";
 import { readErrorMessage } from "@/lib/errors";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isPasswordReset, setIsPasswordReset] = useState(false);
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const [initializing, setInitializing] = useState(true);
@@ -22,6 +24,7 @@ const Auth = () => {
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   // Memoize profile creation to avoid re-creating on each render
   const createProfileIfNeeded = useCallback(async (authUser: SupabaseUser) => {
@@ -48,6 +51,7 @@ const Auth = () => {
 
   useEffect(() => {
     let mounted = true;
+    const recoveryMode = searchParams.get("mode") === "reset";
 
     // Set up auth state listener FIRST - NO async operations inside!
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -59,10 +63,16 @@ const Auth = () => {
         setUser(currentSession?.user ?? null);
         setInitializing(false);
 
+        if (event === "PASSWORD_RECOVERY" || recoveryMode) {
+          setIsUpdatingPassword(true);
+          setIsPasswordReset(false);
+          return;
+        }
+
         // Defer navigation and Supabase calls with setTimeout to prevent deadlock
-        if (event === 'SIGNED_IN' && currentSession?.user) {
+        if (event === 'SIGNED_IN' && currentSession?.user && !recoveryMode) {
           setTimeout(() => {
-            if (mounted) {
+            if (mounted && !isUpdatingPassword) {
               createProfileIfNeeded(currentSession.user);
               navigate('/', { replace: true });
             }
@@ -78,6 +88,11 @@ const Auth = () => {
       setSession(existingSession);
       setUser(existingSession?.user ?? null);
       setInitializing(false);
+
+      if (recoveryMode) {
+        setIsUpdatingPassword(true);
+        return;
+      }
       
       if (existingSession) {
         navigate('/', { replace: true });
@@ -88,7 +103,52 @@ const Auth = () => {
       mounted = false;
       subscription.unsubscribe();
     };
-  }, [navigate, createProfileIfNeeded]);
+  }, [navigate, createProfileIfNeeded, searchParams, isUpdatingPassword]);
+
+  const handleUpdatePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmedPassword = password.trim();
+
+    if (trimmedPassword.length < 6) {
+      toast({
+        title: "Password too short",
+        description: "Password must be at least 6 characters long.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (trimmedPassword !== confirmPassword.trim()) {
+      toast({
+        title: "Passwords do not match",
+        description: "Please confirm your new password.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.updateUser({ password: trimmedPassword });
+      if (error) throw error;
+      toast({
+        title: "Password updated",
+        description: "You can now use your new password to sign in.",
+      });
+      setIsUpdatingPassword(false);
+      setPassword("");
+      setConfirmPassword("");
+      navigate("/", { replace: true });
+    } catch (error: unknown) {
+      toast({
+        title: "Could not update password",
+        description: readErrorMessage(error) || "Please request a new reset link.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleGoogleSignIn = async () => {
     setLoading(true);
@@ -339,10 +399,16 @@ const Auth = () => {
         <Card className="shadow-warm border-primary/10">
           <CardHeader className="text-center">
             <CardTitle className="text-2xl">
-              {isPasswordReset ? "Reset Password" : (isLogin ? "Welcome Back" : "Create Account")}
+              {isUpdatingPassword
+                ? "Choose a New Password"
+                : isPasswordReset
+                  ? "Reset Password"
+                  : (isLogin ? "Welcome Back" : "Create Account")}
             </CardTitle>
             <CardDescription>
-              {isPasswordReset 
+              {isUpdatingPassword
+                ? "Enter and confirm your new password"
+                : isPasswordReset 
                 ? "Enter your email to receive a password reset link"
                 : (isLogin 
                   ? "Sign in to access your recipes and pantry" 
@@ -353,7 +419,7 @@ const Auth = () => {
           
           <CardContent className="space-y-6">
             {/* Google Sign-In Button */}
-            {!isPasswordReset && (
+            {!isPasswordReset && !isUpdatingPassword && (
               <Button
                 type="button"
                 variant="outline"
@@ -383,7 +449,7 @@ const Auth = () => {
               </Button>
             )}
 
-            {!isPasswordReset && (
+            {!isPasswordReset && !isUpdatingPassword && (
               <div className="relative">
                 <div className="absolute inset-0 flex items-center">
                   <span className="w-full border-t border-border" />
@@ -396,8 +462,17 @@ const Auth = () => {
               </div>
             )}
 
-            <form onSubmit={isPasswordReset ? handlePasswordReset : handleSubmit} className="space-y-4">
-              {!isLogin && !isPasswordReset && (
+            <form
+              onSubmit={
+                isUpdatingPassword
+                  ? handleUpdatePassword
+                  : isPasswordReset
+                    ? handlePasswordReset
+                    : handleSubmit
+              }
+              className="space-y-4"
+            >
+              {!isLogin && !isPasswordReset && !isUpdatingPassword && (
                 <div className="space-y-2">
                   <Label htmlFor="fullName" className="flex items-center gap-2">
                     <User className="w-4 h-4" />
@@ -414,42 +489,62 @@ const Auth = () => {
                 </div>
               )}
               
-              <div className="space-y-2">
-                <Label htmlFor="email" className="flex items-center gap-2">
-                  <Mail className="w-4 h-4" />
-                  Email
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  disabled={loading}
-                  autoComplete="email"
-                />
-              </div>
+              {!isUpdatingPassword && (
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="flex items-center gap-2">
+                    <Mail className="w-4 h-4" />
+                    Email
+                  </Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    disabled={loading}
+                    autoComplete="email"
+                  />
+                </div>
+              )}
               
-              {!isPasswordReset && (
+              {(isUpdatingPassword || !isPasswordReset) && (
                 <div className="space-y-2">
                   <Label htmlFor="password" className="flex items-center gap-2">
                     <Lock className="w-4 h-4" />
-                    Password
+                    {isUpdatingPassword ? "New Password" : "Password"}
                   </Label>
                   <Input
                     id="password"
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter your password"
+                    placeholder={isUpdatingPassword ? "Enter a new password" : "Enter your password"}
                     disabled={loading}
-                    autoComplete={isLogin ? "current-password" : "new-password"}
+                    autoComplete={isUpdatingPassword || !isLogin ? "new-password" : "current-password"}
                   />
-                  {!isLogin && (
+                  {(isUpdatingPassword || !isLogin) && (
                     <p className="text-xs text-muted-foreground">
                       Password must be at least 6 characters long
                     </p>
                   )}
+                </div>
+              )}
+
+              {isUpdatingPassword && (
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword" className="flex items-center gap-2">
+                    <Lock className="w-4 h-4" />
+                    Confirm Password
+                  </Label>
+                  <Input
+                    id="confirmPassword"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="Confirm your new password"
+                    disabled={loading}
+                    autoComplete="new-password"
+                  />
                 </div>
               )}
               
@@ -460,13 +555,17 @@ const Auth = () => {
                 disabled={loading}
               >
                 {loading ? "Please wait..." : (
-                  isPasswordReset ? "Send Reset Link" : (isLogin ? "Sign In" : "Create Account")
+                  isUpdatingPassword
+                    ? "Update Password"
+                    : isPasswordReset
+                      ? "Send Reset Link"
+                      : (isLogin ? "Sign In" : "Create Account")
                 )}
               </Button>
             </form>
             
             <div className="text-center space-y-2">
-              {isPasswordReset ? (
+              {isUpdatingPassword ? null : isPasswordReset ? (
                 <Button
                   variant="link"
                   onClick={() => {
@@ -515,7 +614,10 @@ const Auth = () => {
         </Card>
 
         <p className="text-center text-xs text-muted-foreground mt-4">
-          By continuing, you agree to our Terms of Service and Privacy Policy.
+          By continuing, you agree to our{" "}
+          <Link to="/terms-of-service" className="text-primary hover:underline">Terms of Service</Link>
+          {" "}and{" "}
+          <Link to="/privacy-policy" className="text-primary hover:underline">Privacy Policy</Link>.
         </p>
       </div>
     </div>

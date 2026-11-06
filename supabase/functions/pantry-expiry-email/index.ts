@@ -152,7 +152,7 @@ serve(async (req: Request): Promise<Response> => {
     `;
 
     const emailResponse = await resend.emails.send({
-      from: "LadhaQuest <onboarding@resend.dev>",
+      from: "LadhaQuest <noreply@ladhaquest.com>",
       to: [email],
       subject: `🥘 ${expiringItems.length} pantry item${expiringItems.length > 1 ? 's' : ''} expiring soon`,
       html: html,

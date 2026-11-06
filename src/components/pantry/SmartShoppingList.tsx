@@ -35,24 +35,34 @@ interface PriceComparison {
   logo?: string;
 }
 
-// Mock store data - in production this would come from an API
-const AFRICAN_STORES = [
-  { name: "Jumia Food", region: "West Africa", logo: "🛒" },
-  { name: "Shoprite", region: "Southern Africa", logo: "🏪" },
-  { name: "Carrefour", region: "North Africa", logo: "🏬" },
-  { name: "Local Market", region: "All", logo: "🥬" },
-  { name: "Naivas", region: "East Africa", logo: "🛍️" },
+const STORE_SEARCHES = [
+  { name: "Google Shopping", logo: "🔎" },
+  { name: "Amazon", logo: "📦" },
+  { name: "Jumia", logo: "🛒" },
 ];
 
-const generateMockPrices = (ingredient: string): PriceComparison[] => {
-  // Mock price generation - in production, this would call a real API
-  const basePrice = Math.random() * 10 + 2;
-  return AFRICAN_STORES.slice(0, 3).map(store => ({
-    store: store.name,
-    price: `$${(basePrice * (0.8 + Math.random() * 0.4)).toFixed(2)}`,
-    link: `https://example.com/search?q=${encodeURIComponent(ingredient)}&store=${encodeURIComponent(store.name)}`,
-    logo: store.logo
-  }));
+const generateStoreSearches = (ingredient: string): PriceComparison[] => {
+  const q = encodeURIComponent(ingredient);
+  return [
+    {
+      store: STORE_SEARCHES[0].name,
+      price: "Compare live",
+      link: `https://www.google.com/search?tbm=shop&q=${q}`,
+      logo: STORE_SEARCHES[0].logo,
+    },
+    {
+      store: STORE_SEARCHES[1].name,
+      price: "View listings",
+      link: `https://www.amazon.com/s?k=${q}`,
+      logo: STORE_SEARCHES[1].logo,
+    },
+    {
+      store: STORE_SEARCHES[2].name,
+      price: "View listings",
+      link: `https://www.jumia.com/catalog/?q=${q}`,
+      logo: STORE_SEARCHES[2].logo,
+    },
+  ];
 };
 
 interface SmartShoppingListProps {
@@ -192,11 +202,7 @@ const SmartShoppingList = ({ pantryItems, userId }: SmartShoppingListProps) => {
     }
 
     setLoadingPrices(itemName);
-    
-    // Simulate API call - in production this would call real price APIs
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    const prices = generateMockPrices(itemName);
+    const prices = generateStoreSearches(itemName);
     setPriceComparisons(prev => ({ ...prev, [itemName]: prices }));
     setSelectedItem(itemName);
     setLoadingPrices(null);

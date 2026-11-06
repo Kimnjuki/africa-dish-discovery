@@ -29,7 +29,7 @@ const CallToAction = () => {
           {[
             {
               icon: Users,
-              title: "Join 5,000+ Explorers",
+              title: "Join fellow explorers",
               description: "Connect with fellow food adventurers sharing their cooking journeys",
               color: "text-primary"
             },

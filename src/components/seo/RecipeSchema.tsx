@@ -51,14 +51,10 @@ export const RecipeSchema = ({ recipe }: RecipeSchemaProps) => {
             "@type": "HowToStep",
             "name": `Step ${index + 1}`,
             "text": typeof step === 'string' ? step : step.instruction || step.text || step,
-            "url": `https://www.ladhaquest.com/recipes/${recipe.slug}#step${index + 1}`
+            "url": `https://www.ladhaquest.com/recipe/${recipe.slug}#step${index + 1}`
           }))
         : [],
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "127"
-      }
+      "isAccessibleForFree": true
     };
 
     const scriptTag = document.createElement('script');

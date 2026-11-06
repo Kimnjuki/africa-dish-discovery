@@ -6,6 +6,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
 import { CookieConsent } from "@/components/CookieConsent";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { AdminGate } from "@/components/AdminGate";
 
 // Eager load only the most critical pages
 import Index from "./pages/Index";
@@ -67,47 +69,49 @@ const App = () => (
       <OfflineIndicator />
       <CookieConsent />
       <BrowserRouter>
-        <Suspense fallback={<PageLoader />}>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/continents" element={<Continents />} />
-            <Route path="/recipes" element={<Recipes />} />
-            <Route path="/recipe-index" element={<RecipeIndex />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogArticle />} />
-            <Route path="/meals" element={<Meals />} />
-            <Route path="/ingredients" element={<Ingredients />} />
-            <Route path="/auth" element={<Auth />} />
-            <Route path="/recipe-uploader" element={<RecipeUploader />} />
-            <Route path="/meal-planner" element={<MealPlanner />} />
-            <Route path="/meal-planner-calendar" element={<MealPlannerCalendar />} />
-            <Route path="/recipe-comparison" element={<RecipeComparison />} />
-            <Route path="/pantry" element={<Pantry />} />
-            <Route path="/shared-meal-plan/:shareToken" element={<SharedMealPlan />} />
-            <Route path="/install" element={<Install />} />
-            <Route path="/offline-recipes" element={<OfflineRecipes />} />
-            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-            <Route path="/terms-of-service" element={<TermsOfService />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/recipe-gallery" element={<RecipeGallery />} />
-            <Route path="/image-verification" element={<ImageVerification />} />
-            <Route path="/image-scraper" element={<ImageScraper />} />
-            <Route path="/story/:dishSlug" element={<CulturalStory />} />
-            <Route path="/countries" element={<CountriesIndex />} />
-            <Route path="/atlas" element={<DishAtlas />} />
-            <Route path="/dish/:dishSlug" element={<DishEncyclopedia />} />
-            <Route path="/country/:countrySlug" element={<CountryRecipes />} />
-            <Route path="/submit-recipe" element={<SubmitRecipe />} />
-            <Route path="/editorial-review" element={<EditorialReview />} />
-            <Route path="/admin/dish-qa" element={<AdminDishQA />} />
-            <Route path="/recipe/:slug" element={<RecipeDetail />} />
-            <Route path="/my-list" element={<MyList />} />
-            <Route path="/cuisine-map" element={<CuisineMap />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
+        <ErrorBoundary>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/continents" element={<Continents />} />
+              <Route path="/recipes" element={<Recipes />} />
+              <Route path="/recipe-index" element={<RecipeIndex />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/blog/:slug" element={<BlogArticle />} />
+              <Route path="/meals" element={<Meals />} />
+              <Route path="/ingredients" element={<Ingredients />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/recipe-uploader" element={<AdminGate><RecipeUploader /></AdminGate>} />
+              <Route path="/meal-planner" element={<MealPlanner />} />
+              <Route path="/meal-planner-calendar" element={<MealPlannerCalendar />} />
+              <Route path="/recipe-comparison" element={<RecipeComparison />} />
+              <Route path="/pantry" element={<Pantry />} />
+              <Route path="/shared-meal-plan/:shareToken" element={<SharedMealPlan />} />
+              <Route path="/install" element={<Install />} />
+              <Route path="/offline-recipes" element={<OfflineRecipes />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/recipe-gallery" element={<AdminGate><RecipeGallery /></AdminGate>} />
+              <Route path="/image-verification" element={<AdminGate><ImageVerification /></AdminGate>} />
+              <Route path="/image-scraper" element={<AdminGate><ImageScraper /></AdminGate>} />
+              <Route path="/story/:dishSlug" element={<CulturalStory />} />
+              <Route path="/countries" element={<CountriesIndex />} />
+              <Route path="/atlas" element={<DishAtlas />} />
+              <Route path="/dish/:dishSlug" element={<DishEncyclopedia />} />
+              <Route path="/country/:countrySlug" element={<CountryRecipes />} />
+              <Route path="/submit-recipe" element={<SubmitRecipe />} />
+              <Route path="/editorial-review" element={<EditorialReview />} />
+              <Route path="/admin/dish-qa" element={<AdminGate><AdminDishQA /></AdminGate>} />
+              <Route path="/recipe/:slug" element={<RecipeDetail />} />
+              <Route path="/my-list" element={<MyList />} />
+              <Route path="/cuisine-map" element={<CuisineMap />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </ErrorBoundary>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

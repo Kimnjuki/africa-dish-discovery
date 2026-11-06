@@ -19,6 +19,7 @@ import { withParsedRecipeFields, type IngredientValue } from "@/types/content";
 interface Recipe {
   id: string;
   name: string;
+  slug?: string;
   country: string;
   summary: string;
   prep_time: number;
@@ -40,19 +41,26 @@ interface Recipe {
   carbon_footprint_score?: number;
 }
 
-// Simulated flavor profiles based on dish characteristics
+const hashScore = (seed: string, min: number, max: number) => {
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
+  return min + (h % (max - min + 1));
+};
+
+// Deterministic flavor estimates from recipe metadata (not lab-measured)
 const generateFlavorProfile = (recipe: Recipe) => {
   const tags = recipe.tags || [];
   const name = recipe.name.toLowerCase();
-  const country = recipe.country.toLowerCase();
-  
+  const country = (recipe.country || "").toLowerCase();
+  const seed = `${recipe.id || recipe.slug || recipe.name}`;
+
   return {
-    smoky: tags.includes('grilled') || tags.includes('smoked') || name.includes('suya') ? 8 : Math.floor(Math.random() * 4) + 2,
-    umami: tags.includes('stew') || tags.includes('meat') ? 7 : Math.floor(Math.random() * 4) + 3,
-    fermented: tags.includes('fermented') || name.includes('injera') || name.includes('ogi') ? 9 : Math.floor(Math.random() * 3) + 1,
-    citrus: tags.includes('citrus') || country.includes('morocco') ? 6 : Math.floor(Math.random() * 4) + 2,
-    spicy: tags.includes('spicy') || name.includes('peri') || name.includes('berbere') ? 8 : Math.floor(Math.random() * 5) + 3,
-    earthy: tags.includes('legumes') || tags.includes('vegetables') ? 7 : Math.floor(Math.random() * 4) + 3,
+    smoky: tags.includes('grilled') || tags.includes('smoked') || name.includes('suya') ? 8 : hashScore(seed + "smoky", 2, 5),
+    umami: tags.includes('stew') || tags.includes('meat') ? 7 : hashScore(seed + "umami", 3, 6),
+    fermented: tags.includes('fermented') || name.includes('injera') || name.includes('ogi') ? 9 : hashScore(seed + "ferm", 1, 3),
+    citrus: tags.includes('citrus') || country.includes('morocco') ? 6 : hashScore(seed + "citrus", 2, 5),
+    spicy: tags.includes('spicy') || name.includes('peri') || name.includes('berbere') ? 8 : hashScore(seed + "spicy", 3, 7),
+    earthy: tags.includes('legumes') || tags.includes('vegetables') ? 7 : hashScore(seed + "earthy", 3, 6),
   };
 };
 
@@ -250,7 +258,7 @@ const RecipeComparison = () => {
     if (recipe.global_rank_taste_atlas) {
       return recipe.global_rank_taste_atlas;
     }
-    return Math.floor(Math.random() * 80) + 20;
+    return hashScore(`${recipe.id || recipe.slug}-rank`, 20, 99);
   };
 
   const getHeritageStatus = (recipe: Recipe): "UNESCO" | "Regional Heritage" | "Emerging" | "None" => {
@@ -535,19 +543,19 @@ const RecipeComparison = () => {
                           comparison={{
                             africanDish: {
                               name: recipe.name,
-                              antioxidants: 70 + Math.floor(Math.random() * 20),
-                              fiber: 60 + Math.floor(Math.random() * 25),
-                              vitamins: 65 + Math.floor(Math.random() * 20),
-                              minerals: 70 + Math.floor(Math.random() * 20),
-                              processedLevel: 10 + Math.floor(Math.random() * 15),
+                              antioxidants: hashScore(`${recipe.id}-aox`, 70, 89),
+                              fiber: hashScore(`${recipe.id}-fiber`, 60, 84),
+                              vitamins: hashScore(`${recipe.id}-vit`, 65, 84),
+                              minerals: hashScore(`${recipe.id}-min`, 70, 89),
+                              processedLevel: hashScore(`${recipe.id}-proc`, 10, 24),
                             },
                             westernCounterpart: {
                               name: "Fast Food Equivalent",
-                              antioxidants: 20 + Math.floor(Math.random() * 20),
-                              fiber: 15 + Math.floor(Math.random() * 15),
-                              vitamins: 25 + Math.floor(Math.random() * 15),
-                              minerals: 30 + Math.floor(Math.random() * 15),
-                              processedLevel: 60 + Math.floor(Math.random() * 25),
+                              antioxidants: hashScore(`${recipe.id}-waox`, 20, 39),
+                              fiber: hashScore(`${recipe.id}-wfiber`, 15, 29),
+                              vitamins: hashScore(`${recipe.id}-wvit`, 25, 39),
+                              minerals: hashScore(`${recipe.id}-wmin`, 30, 44),
+                              processedLevel: hashScore(`${recipe.id}-wproc`, 60, 84),
                             }
                           }}
                         />

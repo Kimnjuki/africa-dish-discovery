@@ -55,18 +55,18 @@ const About = () => {
                 </div>
                 <div className="bg-card p-6 rounded-xl border shadow-sm">
                   <BookOpen className="h-10 w-10 text-primary mb-4" />
-                  <h3 className="font-semibold text-foreground mb-2">50+ Recipes</h3>
-                  <p className="text-sm text-muted-foreground">Growing collection of authentic dishes</p>
+                  <h3 className="font-semibold text-foreground mb-2">1,700+ Recipes</h3>
+                  <p className="text-sm text-muted-foreground">Growing collection of dishes from Africa and beyond</p>
                 </div>
                 <div className="bg-card p-6 rounded-xl border shadow-sm">
                   <Users className="h-10 w-10 text-primary mb-4" />
-                  <h3 className="font-semibold text-foreground mb-2">10,000+ Cooks</h3>
-                  <p className="text-sm text-muted-foreground">Active community members</p>
+                  <h3 className="font-semibold text-foreground mb-2">Early Community</h3>
+                  <p className="text-sm text-muted-foreground">Home cooks discovering recipes and pantry matching</p>
                 </div>
                 <div className="bg-card p-6 rounded-xl border shadow-sm">
                   <ChefHat className="h-10 w-10 text-primary mb-4" />
-                  <h3 className="font-semibold text-foreground mb-2">Expert Verified</h3>
-                  <p className="text-sm text-muted-foreground">Recipes tested for authenticity</p>
+                  <h3 className="font-semibold text-foreground mb-2">Authenticity Focus</h3>
+                  <p className="text-sm text-muted-foreground">Recipes researched with cultural context and sources</p>
                 </div>
               </div>
             </div>
@@ -114,35 +114,16 @@ const About = () => {
 
         {/* Team Section */}
         <section className="py-16">
-          <div className="container mx-auto px-6">
-            <h2 className="text-3xl font-bold text-foreground text-center mb-6">Meet Our Team</h2>
-            <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-12">
-              LadhaQuest is built by a passionate team of food lovers, technologists, and 
-              cultural enthusiasts dedicated to sharing Africa's rich culinary heritage.
+          <div className="container mx-auto px-6 max-w-3xl text-center">
+            <h2 className="text-3xl font-bold text-foreground mb-6">Who builds LadhaQuest</h2>
+            <p className="text-muted-foreground leading-relaxed">
+              LadhaQuest is an independent recipe discovery project focused on African and world cuisines,
+              pantry intelligence, and cultural cooking stories. We are expanding the team as the platform grows.
+              For partnerships or press, reach us at{" "}
+              <a href="mailto:hello@ladhaquest.com" className="text-primary hover:underline">
+                hello@ladhaquest.com
+              </a>.
             </p>
-            <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-              <div className="text-center">
-                <div className="w-24 h-24 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <span className="text-3xl font-bold text-white">AO</span>
-                </div>
-                <h3 className="font-semibold text-foreground">Amara Okonkwo</h3>
-                <p className="text-sm text-muted-foreground">Founder & Head Chef</p>
-              </div>
-              <div className="text-center">
-                <div className="w-24 h-24 bg-gradient-to-br from-emerald-400 to-teal-500 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <span className="text-3xl font-bold text-white">KM</span>
-                </div>
-                <h3 className="font-semibold text-foreground">Kwame Mensah</h3>
-                <p className="text-sm text-muted-foreground">Food Historian</p>
-              </div>
-              <div className="text-center">
-                <div className="w-24 h-24 bg-gradient-to-br from-violet-400 to-purple-500 rounded-full mx-auto mb-4 flex items-center justify-center">
-                  <span className="text-3xl font-bold text-white">FH</span>
-                </div>
-                <h3 className="font-semibold text-foreground">Fatima Hassan</h3>
-                <p className="text-sm text-muted-foreground">Recipe Developer</p>
-              </div>
-            </div>
           </div>
         </section>
 

@@ -93,10 +93,13 @@ const PantryAnalytics = ({ items, cookingHistory = [] }: PantryAnalyticsProps) =
     count: value
   })).sort((a, b) => b.count - a.count);
 
-  // Most used ingredients (mock data for now - would come from cooking history)
-  const mostUsedIngredients = cookingHistory.length > 0 
-    ? cookingHistory.slice(0, 5) 
-    : items.slice(0, 5).map(i => ({ ingredient: i.ingredient_name, count: Math.floor(Math.random() * 10) + 1 }));
+  // Prefer cooking history; otherwise show pantry stock counts only
+  const mostUsedIngredients = cookingHistory.length > 0
+    ? cookingHistory.slice(0, 5)
+    : items.slice(0, 5).map((i) => ({
+        ingredient: i.ingredient_name,
+        count: Number(i.quantity) > 0 ? Number(i.quantity) : 1,
+      }));
 
   // Cooking insights
   const getInsights = () => {

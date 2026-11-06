@@ -106,7 +106,7 @@ export const NewsletterSignup = ({ variant = "default", source = "website" }: Ne
         <div className="relative z-10 max-w-xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
             <Sparkles className="w-4 h-4 text-primary-foreground" />
-            <span className="text-sm font-medium text-primary-foreground">Join 10,000+ Food Lovers</span>
+            <span className="text-sm font-medium text-primary-foreground">Join the LadhaQuest newsletter</span>
           </div>
           
           <h3 className="text-2xl md:text-3xl font-bold text-primary-foreground mb-3">
@@ -166,7 +166,7 @@ export const NewsletterSignup = ({ variant = "default", source = "website" }: Ne
             Get Weekly African Recipes
           </h3>
           <p className="text-primary-foreground/90 mb-6">
-            Join 10,000+ home cooks receiving authentic recipes, cooking tips, and ingredient guides every week.
+            Get authentic recipes, cooking tips, and ingredient guides delivered weekly.
           </p>
           <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <Input
@@ -257,7 +257,7 @@ export const NewsletterSignup = ({ variant = "default", source = "website" }: Ne
         </div>
         <div>
           <h4 className="font-semibold text-foreground">Weekly Recipes</h4>
-          <p className="text-sm text-muted-foreground">Join 10,000+ subscribers</p>
+          <p className="text-sm text-muted-foreground">Join our cooking newsletter</p>
         </div>
       </div>
       <form onSubmit={handleSubmit} className="space-y-3">

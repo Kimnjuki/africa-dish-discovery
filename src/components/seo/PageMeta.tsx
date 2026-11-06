@@ -13,13 +13,16 @@ export const PageMeta = ({
   title,
   description,
   keywords,
-  ogImage = '/placeholder.svg',
+  ogImage = 'https://www.ladhaquest.com/placeholder.svg',
   canonical,
   type = 'website'
 }: PageMetaProps) => {
   useEffect(() => {
     // Set title
     document.title = title;
+    const absoluteOg = ogImage.startsWith('http')
+      ? ogImage
+      : `https://www.ladhaquest.com${ogImage.startsWith('/') ? '' : '/'}${ogImage}`;
 
     // Update or create meta tags
     const updateMeta = (name: string, content: string, isProperty = false) => {
@@ -44,14 +47,14 @@ export const PageMeta = ({
     updateMeta('og:type', type, true);
     updateMeta('og:title', title, true);
     updateMeta('og:description', description, true);
-    updateMeta('og:image', ogImage, true);
+    updateMeta('og:image', absoluteOg, true);
     updateMeta('og:site_name', 'LadhaQuest', true);
 
     // Twitter tags
     updateMeta('twitter:card', 'summary_large_image');
     updateMeta('twitter:title', title);
     updateMeta('twitter:description', description);
-    updateMeta('twitter:image', ogImage);
+    updateMeta('twitter:image', absoluteOg);
 
     // Canonical URL
     if (canonical) {

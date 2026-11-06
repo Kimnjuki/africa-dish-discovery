@@ -122,7 +122,11 @@ const TermsOfService = () => {
           <section>
             <h2 className="text-2xl font-semibold text-foreground mb-4">10. Governing Law</h2>
             <p className="text-muted-foreground leading-relaxed">
-              These Terms shall be governed by and construed in accordance with applicable laws, without regard to conflict of law principles.
+              These Terms shall be governed by and construed in accordance with applicable laws of the operator's jurisdiction once the LadhaQuest business entity and registered address are published. Until then, disputes will be handled in good faith via{" "}
+              <a href="mailto:legal@ladhaquest.com" className="text-primary hover:underline">
+                legal@ladhaquest.com
+              </a>
+              .
             </p>
           </section>
 
@@ -133,6 +137,7 @@ const TermsOfService = () => {
               <a href="mailto:legal@ladhaquest.com" className="text-primary hover:underline">
                 legal@ladhaquest.com
               </a>
+              . Company legal entity and postal address will be added after domain registration and business filing are complete.
             </p>
           </section>
         </div>

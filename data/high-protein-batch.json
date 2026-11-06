@@ -1,0 +1,122 @@
+[
+  {
+    "title": "Nordic Smoked Salmon & Cottage Cheese Bowl",
+    "category": "Breakfast & Brunch",
+    "country": "Sweden",
+    "prep_time_minutes": 10,
+    "cook_time_minutes": 0,
+    "servings": 2,
+    "protein_grams": 34,
+    "difficulty": "Easy",
+    "historical_context": "A refreshing high-protein Nordic breakfast combining high-protein curd cottage cheese with cold-smoked salmon and fresh dill.",
+    "instructions": [
+      "Spoon high-protein low-fat cottage cheese into serving bowls.",
+      "Arrange folded cold-smoked salmon slices alongside the cottage cheese.",
+      "Top with sliced cucumber, capers, and a generous sprinkle of fresh dill and cracked black pepper.",
+      "Serve with a slice of dark rye crispbread."
+    ],
+    "ingredients": [
+      {"name": "Cottage Cheese", "amount": 300, "unit": "g", "notes": "Low-fat high protein"},
+      {"name": "Cold-Smoked Salmon", "amount": 150, "unit": "g", "notes": "Sliced"},
+      {"name": "Cucumber", "amount": 0.5, "unit": "medium", "notes": "Diced"},
+      {"name": "Capers", "amount": 1, "unit": "tbsp", "notes": ""},
+      {"name": "Fresh Dill", "amount": 1, "unit": "tbsp", "notes": "Chopped"}
+    ]
+  },
+  {
+    "title": "Moroccan Spiced Ground Beef Tagine",
+    "category": "Main Courses",
+    "country": "Morocco",
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 25,
+    "servings": 4,
+    "protein_grams": 37.5,
+    "difficulty": "Medium",
+    "historical_context": "Kefta tagine featuring spiced beef meatballs simmered in a rich tomato and bell pepper sauce, traditionally topped with poached eggs.",
+    "instructions": [
+      "Mix ground beef with cumin, paprika, coriander, minced garlic, and chopped parsley, then roll into small meatballs.",
+      "Sauté diced onions and sliced bell peppers in olive oil in a skillet, then add crushed tomatoes and spices.",
+      "Simmer meatballs in the tomato sauce for 20 minutes until cooked through.",
+      "Crack eggs directly into the sauce during the last 5 minutes, cover, and let poach."
+    ],
+    "ingredients": [
+      {"name": "Ground Beef", "amount": 600, "unit": "g", "notes": "90% lean"},
+      {"name": "Crushed Tomatoes", "amount": 500, "unit": "g", "notes": ""},
+      {"name": "Bell Pepper", "amount": 2, "unit": "medium", "notes": "Sliced"},
+      {"name": "Eggs", "amount": 4, "unit": "large", "notes": "For poaching"},
+      {"name": "Ground Cumin", "amount": 1, "unit": "tsp", "notes": ""}
+    ]
+  },
+  {
+    "title": "Greek Chicken Souvlaki Wraps",
+    "category": "Main Courses",
+    "country": "Greece",
+    "prep_time_minutes": 20,
+    "cook_time_minutes": 15,
+    "servings": 4,
+    "protein_grams": 43,
+    "difficulty": "Easy",
+    "historical_context": "Iconic Greek street food featuring marinated chicken skewers wrapped in flatbread with homemade tzatziki and tomatoes.",
+    "instructions": [
+      "Marinate cubed chicken breast in olive oil, lemon juice, garlic, oregano, salt, and pepper for 30 minutes.",
+      "Thread onto skewers and grill over high heat for 12-15 minutes until fully cooked.",
+      "Warm high-protein flatbreads or pita pockets.",
+      "Assemble wraps with chicken, sliced tomatoes, red onions, and a generous dollop of tzatziki."
+    ],
+    "ingredients": [
+      {"name": "Chicken Breast", "amount": 700, "unit": "g", "notes": "Cubed"},
+      {"name": "Olive Oil", "amount": 2, "unit": "tbsp", "notes": ""},
+      {"name": "Lemon Juice", "amount": 2, "unit": "tbsp", "notes": ""},
+      {"name": "Dried Oregano", "amount": 2, "unit": "tsp", "notes": ""},
+      {"name": "Tzatziki Sauce", "amount": 0.5, "unit": "cup", "notes": ""}
+    ]
+  },
+  {
+    "title": "Argentinian Grilled Flank Steak (Churrasco)",
+    "category": "Main Courses",
+    "country": "Argentina",
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 15,
+    "servings": 4,
+    "protein_grams": 48,
+    "difficulty": "Easy",
+    "historical_context": "Lean, nutrient-dense flank steak grilled over high heat and paired with a vibrant herbaceous chimichurri sauce.",
+    "instructions": [
+      "Season flank steak liberally with coarse sea salt and black pepper.",
+      "Grill over high heat for 4-6 minutes per side for medium-rare, ensuring a perfect sear.",
+      "Finely chop fresh parsley, cilantro, oregano, garlic, red pepper flakes, and mix with olive oil and red wine vinegar for chimichurri.",
+      "Slice steak thinly against the grain and top with chimichurri sauce."
+    ],
+    "ingredients": [
+      {"name": "Flank Steak", "amount": 700, "unit": "g", "notes": "Trimmed of excess fat"},
+      {"name": "Fresh Parsley", "amount": 1, "unit": "cup", "notes": "Finely chopped"},
+      {"name": "Garlic", "amount": 4, "unit": "cloves", "notes": "Minced"},
+      {"name": "Olive Oil", "amount": 4, "unit": "tbsp", "notes": ""},
+      {"name": "Red Wine Vinegar", "amount": 2, "unit": "tbsp", "notes": ""}
+    ]
+  },
+  {
+    "title": "Thai Chicken & Basil Stir-Fry (Pad Krapow Gai)",
+    "category": "Main Courses",
+    "country": "Thailand",
+    "prep_time_minutes": 10,
+    "cook_time_minutes": 10,
+    "servings": 3,
+    "protein_grams": 40.5,
+    "difficulty": "Easy",
+    "historical_context": "A fiery, protein-packed street food favorite featuring minced chicken tossed with garlic, bird's eye chilies, and holy basil.",
+    "instructions": [
+      "Mince garlic and bird's eye chilies together in a mortar and pestle.",
+      "Heat oil in a wok and stir-fry the garlic-chili paste until aromatic.",
+      "Add ground chicken and break apart, cooking until browned.",
+      "Stir in fish sauce, soy sauce, oyster sauce, and a pinch of sugar, then toss in fresh basil leaves until wilted."
+    ],
+    "ingredients": [
+      {"name": "Ground Chicken", "amount": 600, "unit": "g", "notes": "Lean breast or thigh grind"},
+      {"name": "Garlic Cloves", "amount": 5, "unit": "cloves", "notes": "Minced"},
+      {"name": "Bird's Eye Chilies", "amount": 3, "unit": "whole", "notes": "Sliced"},
+      {"name": "Fish Sauce", "amount": 2, "unit": "tbsp", "notes": ""},
+      {"name": "Fresh Holy Basil", "amount": 1.5, "unit": "cups", "notes": "Packed leaves"}
+    ]
+  }
+]

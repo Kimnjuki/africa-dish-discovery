@@ -597,7 +597,7 @@ const WorldMapRecipes = () => {
               <div className="text-sm text-muted-foreground">Countries</div>
             </div>
             <div className="space-y-2">
-              <div className="text-3xl font-bold text-primary">500+</div>
+              <div className="text-3xl font-bold text-primary">1,700+</div>
               <div className="text-sm text-muted-foreground">Recipes</div>
             </div>
           </div>
