@@ -1,0 +1,12 @@
+{
+  "egyptRecipes": 95,
+  "soupRecipes": 315,
+  "egyptImages": 143,
+  "soupImages": 5,
+  "b0dcUploaded": 81,
+  "upsert": {
+    "inserted": 410,
+    "updated": 0
+  },
+  "patchedByName": 95
+}

@@ -35,15 +35,24 @@ serve(async (req) => {
   try {
     const { pantryItems, recipes, mode, ingredient } = await req.json();
 
+    // Mode: 'match' for recipe matching, 'substitute' for substitution suggestions
+    // Soft-fail when AI key is missing so the client local matcher remains primary.
     if (!LOVABLE_API_KEY) {
-      console.error("LOVABLE_API_KEY not configured");
-      return new Response(
-        JSON.stringify({ error: "AI service not configured" }),
-        { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+      console.warn("LOVABLE_API_KEY not configured — returning empty AI enrichment");
+      if (mode === 'match') {
+        return new Response(
+          JSON.stringify({ matches: [], insights: "", aiAvailable: false }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      if (mode === 'substitute') {
+        return new Response(
+          JSON.stringify({ substitutes: [], ingredient, aiAvailable: false }),
+          { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
     }
 
-    // Mode: 'match' for recipe matching, 'substitute' for substitution suggestions
     if (mode === 'substitute' && ingredient) {
       return await handleSubstitution(ingredient);
     }

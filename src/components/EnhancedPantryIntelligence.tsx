@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import CookingPopup from "./CookingPopup";
 import { withParsedRecipeFields, type IngredientValue, type CookableRecipe } from "@/types/content";
+import { findMatchingRecipes as rankPantryMatches } from "@/utils/recipeMatching";
 
 interface PantryItem {
   id: string;
@@ -178,103 +179,43 @@ const EnhancedPantryIntelligence = () => {
   const findMatchingRecipes = async () => {
     setLoading(true);
     try {
-      // Get all recipes with better filtering  
-      const { data: recipes, error } = await supabase
-        .from('recipes')
-        .select('*')
-        .not('ingredients', 'is', null)
-        .limit(100); // Increased limit for better matching
+      const pageSize = 1000;
+      let recipes: any[] = [];
+      let from = 0;
+      while (from < 4000) {
+        const { data, error } = await supabase
+          .from("recipes")
+          .select(
+            "id,name,country,summary,ingredients,prep_time,cook_time,servings,difficulty,tags,image_url,cuisine_type,category"
+          )
+          .not("ingredients", "is", null)
+          .range(from, from + pageSize - 1);
+        if (error) throw error;
+        if (!data?.length) break;
+        recipes = recipes.concat(data);
+        if (data.length < pageSize) break;
+        from += pageSize;
+      }
 
-      if (error) throw error;
+      const ranked = rankPantryMatches(
+        pantryItems.map((item) => ({
+          id: item.id,
+          name: item.ingredient_name,
+          ingredient_name: item.ingredient_name,
+          expires_at: item.expires_at,
+        })),
+        recipes,
+        35
+      ).slice(0, 12);
 
-      // Enhanced matching algorithm with better ingredient parsing
-      const pantryIngredients = pantryItems.map(item => 
-        item.ingredient_name.toLowerCase().trim()
-      );
-
-      const recipesWithMatches = recipes.map(recipe => {
-        let recipeIngredients: string[] = [];
-        
-        // Extract ingredients from recipe.ingredients with better parsing
-        if (Array.isArray(recipe.ingredients)) {
-          recipeIngredients = recipe.ingredients.map(ing => {
-            if (typeof ing === 'string') {
-              // Extract just the ingredient name, removing quantities and measurements
-              return ing.toLowerCase().replace(/^\d+\s*(cups?|tbsp?|tsp?|oz|lbs?|g|kg|ml|l)\s+/i, '').trim();
-            }
-            if (typeof ing === 'object' && ing !== null && 'name' in ing) {
-              return String(ing.name).toLowerCase().trim();
-            }
-            return String(ing).toLowerCase().trim();
-          });
-        } else if (recipe.ingredients && typeof recipe.ingredients === 'object') {
-          recipeIngredients = Object.values(recipe.ingredients).map(ing => {
-            if (typeof ing === 'string') {
-              return ing.toLowerCase().replace(/^\d+\s*(cups?|tbsp?|tsp?|oz|lbs?|g|kg|ml|l)\s+/i, '').trim();
-            }
-            if (typeof ing === 'object' && ing !== null && 'name' in ing) {
-              return String(ing.name).toLowerCase().trim();
-            }
-            return String(ing).toLowerCase().trim();
-          });
-        }
-
-        // Improved matching logic with fuzzy matching
-        const matches = recipeIngredients.filter(ingredient => {
-          const cleanIngredient = ingredient.replace(/[^a-z\s]/g, '').trim();
-          return pantryIngredients.some(pantryIng => {
-            const cleanPantryIng = pantryIng.replace(/[^a-z\s]/g, '').trim();
-            // Direct match or partial match
-            return cleanPantryIng.includes(cleanIngredient) || 
-                   cleanIngredient.includes(cleanPantryIng) ||
-                   // Word-level matching for compound ingredients
-                   cleanIngredient.split(' ').some(word => 
-                     word.length > 2 && cleanPantryIng.includes(word)
-                   );
-          });
-        });
-
-        const matchPercentage = recipeIngredients.length > 0 
-          ? Math.round((matches.length / recipeIngredients.length) * 100) 
-          : 0;
-
-        // Find missing ingredients with better categorization
-        const missingIngredients = recipeIngredients.filter(ingredient => {
-          const cleanIngredient = ingredient.replace(/[^a-z\s]/g, '').trim();
-          return !pantryIngredients.some(pantryIng => {
-            const cleanPantryIng = pantryIng.replace(/[^a-z\s]/g, '').trim();
-            return cleanPantryIng.includes(cleanIngredient) || 
-                   cleanIngredient.includes(cleanPantryIng) ||
-                   cleanIngredient.split(' ').some(word => 
-                     word.length > 2 && cleanPantryIng.includes(word)
-                   );
-          });
-        });
-
-        // Calculate cookability score (considers both match % and missing ingredient count)
-        const cookabilityScore = matchPercentage - (missingIngredients.length * 5);
-
-        return {
-          ...recipe,
-          match_percentage: matchPercentage,
-          missing_ingredients: missingIngredients,
-          total_ingredients: recipeIngredients.length,
-          cookability_score: cookabilityScore,
-          can_cook_now: matchPercentage >= 80 && missingIngredients.length <= 2
-        };
-      });
-
-      // Sort by cookability score and filter recipes with meaningful matches
-      const sortedRecipes = recipesWithMatches
-        .filter(recipe => recipe.match_percentage >= 25 || recipe.can_cook_now)
-        .sort((a, b) => {
-          // Prioritize recipes that can be cooked now
-          if (a.can_cook_now && !b.can_cook_now) return -1;
-          if (!a.can_cook_now && b.can_cook_now) return 1;
-          // Then sort by cookability score
-          return b.cookability_score - a.cookability_score;
-        })
-        .slice(0, 8);
+      const sortedRecipes = ranked.map((match) => ({
+        ...match.recipe,
+        match_percentage: match.matchPercentage,
+        missing_ingredients: match.missingIngredients,
+        total_ingredients: match.totalIngredients,
+        cookability_score: match.matchPercentage + match.urgencyBoost - match.missingIngredients.length * 3,
+        can_cook_now: match.canMakeNow,
+      }));
 
       setSuggestedRecipes(sortedRecipes.map(withParsedRecipeFields));
     } catch (error) {

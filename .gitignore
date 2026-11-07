@@ -15,6 +15,13 @@ dist-ssr
 .env.*
 supabase/.temp/
 
+# Local cookbook DOCX extracts (images live in Supabase recipe-uploads)
+data/cookbooks/**/unzipped/
+data/cookbooks/**/source.docx
+data/cookbooks/**/source.docx.zip
+data/cookbooks/**/*.docx
+data/cookbooks/**/*.zip
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

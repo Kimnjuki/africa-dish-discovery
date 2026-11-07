@@ -1,0 +1,543 @@
+[
+  {
+    "name": "Basic Beef Broth",
+    "slug": "basic-beef-broth-soup",
+    "country": "Global",
+    "continent": "Global",
+    "is_african": false,
+    "cuisine_type": "Soup",
+    "category": "soup",
+    "summary": "Yields 10",
+    "servings": 10,
+    "prep_time": 15,
+    "cook_time": 45,
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 45,
+    "difficulty": "Easy",
+    "protein": null,
+    "is_verified_authentic": null,
+    "ingredients": [
+      {
+        "name": "1 medium potato",
+        "amount": null,
+        "unit": null,
+        "text": "1 medium potato"
+      },
+      {
+        "name": "3 large carrots",
+        "amount": null,
+        "unit": null,
+        "text": "3 large carrots"
+      },
+      {
+        "name": "1 large onion",
+        "amount": null,
+        "unit": null,
+        "text": "1 large onion"
+      },
+      {
+        "name": "2 stalks celery, including leaves",
+        "amount": null,
+        "unit": null,
+        "text": "2 stalks celery, including leaves"
+      },
+      {
+        "name": "1 large tomato (optional)",
+        "amount": null,
+        "unit": null,
+        "text": "1 large tomato (optional)"
+      },
+      {
+        "name": "½ pound lean beef trimmings",
+        "amount": null,
+        "unit": null,
+        "text": "½ pound lean beef trimmings"
+      },
+      {
+        "name": "4 pounds beef soup bones",
+        "amount": null,
+        "unit": null,
+        "text": "4 pounds beef soup bones"
+      },
+      {
+        "name": "8–10 whole black peppercorns",
+        "amount": null,
+        "unit": null,
+        "text": "8–10 whole black peppercorns"
+      },
+      {
+        "name": "5 sprigs fresh parsley",
+        "amount": null,
+        "unit": null,
+        "text": "5 sprigs fresh parsley"
+      },
+      {
+        "name": "1 bay leaf",
+        "amount": null,
+        "unit": null,
+        "text": "1 bay leaf"
+      },
+      {
+        "name": "1 tablespoon salt",
+        "amount": null,
+        "unit": null,
+        "text": "1 tablespoon salt"
+      },
+      {
+        "name": "3 cloves garlic",
+        "amount": null,
+        "unit": null,
+        "text": "3 cloves garlic"
+      },
+      {
+        "name": "13 cups cold water",
+        "amount": null,
+        "unit": null,
+        "text": "13 cups cold water"
+      }
+    ],
+    "steps": [
+      {
+        "instruction": "cups Before freezing or refrigerating the broth, cool it to room temperature by immersing it in a bath of cold water.",
+        "text": "cups Before freezing or refrigerating the broth, cool it to room temperature by immersing it in a bath of cold water."
+      },
+      {
+        "instruction": "Preheat oven to 450 degrees. Clean the potato and carrots thoroughly (do not peel). Chop the potato, carrots, onion, celery, tomato. Cut the beef into medium-sized chunks (around the size of a golf ball).",
+        "text": "Preheat oven to 450 degrees. Clean the potato and carrots thoroughly (do not peel). Chop the potato, carrots, onion, celery, tomato. Cut the beef into medium-sized chunks (around the size of a golf ball)."
+      },
+      {
+        "instruction": "Place the beef bones, onion, and carrots on a baking sheet and bake for 30 minutes or until bones begin to brown. In the meantime, place all the other ingredients except ½ cup water into a soup pot. Put the pot on medium heat; do not let the broth boil.",
+        "text": "Place the beef bones, onion, and carrots on a baking sheet and bake for 30 minutes or until bones begin to brown. In the meantime, place all the other ingredients except ½ cup water into a soup pot. Put the pot on medium heat; do not let the broth boil."
+      },
+      {
+        "instruction": "Remove the baking sheet and allow it to cool. Place the bones and vegetables in the soup pot and turn the heat up to high. Pour the remaining ½ cup water onto the baking sheet and swish it around for a few seconds; drain the water into the soup pot.",
+        "text": "Remove the baking sheet and allow it to cool. Place the bones and vegetables in the soup pot and turn the heat up to high. Pour the remaining ½ cup water onto the baking sheet and swish it around for a few seconds; drain the water into the soup pot."
+      },
+      {
+        "instruction": "Bring to a boil and then simmer for 4 hours, covered. Strain the mixture through a cheesecloth-lined colander into another pot. Freezes well.",
+        "text": "Bring to a boil and then simmer for 4 hours, covered. Strain the mixture through a cheesecloth-lined colander into another pot. Freezes well."
+      },
+      {
+        "instruction": "Safe Handling of Broth",
+        "text": "Safe Handling of Broth"
+      },
+      {
+        "instruction": "Bacteria can begin to grow on broth quickly, so it is important to handle it with care. Strain the broth and discard all solids as soon as the stock is done cooking. If the broth is not going to be used immediately, chill it to room temperature by immersing it in a bath of ice water; then refrigerate or freeze it promptly. Always cool broths to room temperature before refrigerating or freezing them. Hot broth can take up to a day to cool in the refrigerator, allowing bacteria to form.",
+        "text": "Bacteria can begin to grow on broth quickly, so it is important to handle it with care. Strain the broth and discard all solids as soon as the stock is done cooking. If the broth is not going to be used immediately, chill it to room temperature by immersing it in a bath of ice water; then refrigerate or freeze it promptly. Always cool broths to room temperature before refrigerating or freezing them. Hot broth can take up to a day to cool in the refrigerator, allowing bacteria to form."
+      }
+    ],
+    "tags": [
+      "Soup",
+      "Everything Soup Cookbook",
+      "B.J. Hanson"
+    ],
+    "item_type": "recipe",
+    "history": "Source: The Everything Soup Cookbook by B.J. Hanson"
+  },
+  {
+    "name": "Basic Chicken Broth",
+    "slug": "basic-chicken-broth-soup",
+    "country": "Global",
+    "continent": "Global",
+    "is_african": false,
+    "cuisine_type": "Soup",
+    "category": "soup",
+    "summary": "Yields 12 cups",
+    "servings": 12,
+    "prep_time": 15,
+    "cook_time": 45,
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 45,
+    "difficulty": "Easy",
+    "protein": null,
+    "is_verified_authentic": null,
+    "ingredients": [
+      {
+        "name": "3 pounds chicken (whole or parts)",
+        "amount": null,
+        "unit": null,
+        "text": "3 pounds chicken (whole or parts)"
+      },
+      {
+        "name": "16 cups (1 gallon) cold water",
+        "amount": null,
+        "unit": null,
+        "text": "16 cups (1 gallon) cold water"
+      },
+      {
+        "name": "1 teaspoon salt",
+        "amount": null,
+        "unit": null,
+        "text": "1 teaspoon salt"
+      },
+      {
+        "name": "1 pound onions, coarsely chopped",
+        "amount": null,
+        "unit": null,
+        "text": "1 pound onions, coarsely chopped"
+      },
+      {
+        "name": "½ pound celery, coarsely chopped",
+        "amount": null,
+        "unit": null,
+        "text": "½ pound celery, coarsely chopped"
+      },
+      {
+        "name": "2 whole cloves",
+        "amount": null,
+        "unit": null,
+        "text": "2 whole cloves"
+      },
+      {
+        "name": "½ pound carrots, coarsely chopped (cleaned but not peeled)",
+        "amount": null,
+        "unit": null,
+        "text": "½ pound carrots, coarsely chopped (cleaned but not peeled)"
+      },
+      {
+        "name": "2 cloves garlic, sliced in half",
+        "amount": null,
+        "unit": null,
+        "text": "2 cloves garlic, sliced in half"
+      },
+      {
+        "name": "1 bay leaf",
+        "amount": null,
+        "unit": null,
+        "text": "1 bay leaf"
+      },
+      {
+        "name": "½ teaspoon black peppercorns",
+        "amount": null,
+        "unit": null,
+        "text": "½ teaspoon black peppercorns"
+      },
+      {
+        "name": "½ teaspoon fresh thyme",
+        "amount": null,
+        "unit": null,
+        "text": "½ teaspoon fresh thyme"
+      },
+      {
+        "name": "3–4 sprigs of parsley",
+        "amount": null,
+        "unit": null,
+        "text": "3–4 sprigs of parsley"
+      },
+      {
+        "name": "This broth can be kept in the fridge for 2 to 3 days and will be ready for immediate use.",
+        "amount": null,
+        "unit": null,
+        "text": "This broth can be kept in the fridge for 2 to 3 days and will be ready for immediate use."
+      }
+    ],
+    "steps": [
+      {
+        "instruction": "Wash the chicken under cold running water. Place it in a soup pot with the water and bring to a gentle boil. Simmer for 1 hour, frequently skimming off the fat that rises to the top.",
+        "text": "Wash the chicken under cold running water. Place it in a soup pot with the water and bring to a gentle boil. Simmer for 1 hour, frequently skimming off the fat that rises to the top."
+      },
+      {
+        "instruction": "Add salt, onions, carrots, and celery and continue to simmer for an additional 1½ hours.",
+        "text": "Add salt, onions, carrots, and celery and continue to simmer for an additional 1½ hours."
+      },
+      {
+        "instruction": "Add the remaining ingredients and simmer for another 30 minutes. When finished, remove the pot from the heat and cool immediately. Chicken stock is highly susceptible to spoilage, so the temperature needs to be reduced quickly. This can be done by setting the pot in the sink in 5 to 6 inches of cool water.",
+        "text": "Add the remaining ingredients and simmer for another 30 minutes. When finished, remove the pot from the heat and cool immediately. Chicken stock is highly susceptible to spoilage, so the temperature needs to be reduced quickly. This can be done by setting the pot in the sink in 5 to 6 inches of cool water."
+      },
+      {
+        "instruction": "When cool enough to handle, strain the soup through a sieve or colander into another pot or large container. Straining a second time through cheesecloth will get you a much clearer broth.",
+        "text": "When cool enough to handle, strain the soup through a sieve or colander into another pot or large container. Straining a second time through cheesecloth will get you a much clearer broth."
+      }
+    ],
+    "tags": [
+      "Soup",
+      "Everything Soup Cookbook",
+      "B.J. Hanson"
+    ],
+    "item_type": "recipe",
+    "history": "Source: The Everything Soup Cookbook by B.J. Hanson"
+  },
+  {
+    "name": "Dashi",
+    "slug": "dashi-soup",
+    "country": "Global",
+    "continent": "Global",
+    "is_african": false,
+    "cuisine_type": "Soup",
+    "category": "soup",
+    "summary": "Yields 4 cups",
+    "servings": 4,
+    "prep_time": 15,
+    "cook_time": 45,
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 45,
+    "difficulty": "Easy",
+    "protein": null,
+    "is_verified_authentic": null,
+    "ingredients": [
+      {
+        "name": "1 piece kelp (kombu), about 5 inches square",
+        "amount": null,
+        "unit": null,
+        "text": "1 piece kelp (kombu), about 5 inches square"
+      },
+      {
+        "name": "5 cups cold water",
+        "amount": null,
+        "unit": null,
+        "text": "5 cups cold water"
+      },
+      {
+        "name": "cup dried bonito flakes (also called smoked fish flakes)",
+        "amount": null,
+        "unit": null,
+        "text": "cup dried bonito flakes (also called smoked fish flakes)"
+      }
+    ],
+    "steps": [
+      {
+        "instruction": "This traditional Japanese clear broth is used extensively for soups, sauces, and as a delicate seasoning.",
+        "text": "This traditional Japanese clear broth is used extensively for soups, sauces, and as a delicate seasoning."
+      },
+      {
+        "instruction": "Place the kelp and cold water in a soup pot; bring to a boil. Remove from heat and stir in the bonito flakes. Let it stand for 2 to 3 minutes.",
+        "text": "Place the kelp and cold water in a soup pot; bring to a boil. Remove from heat and stir in the bonito flakes. Let it stand for 2 to 3 minutes."
+      },
+      {
+        "instruction": "Using a slotted spoon or tongs, remove the kelp and discard. Strain the broth into a new container. Use it now, in any Japanese-inspired soup, or cool it to room temperature by immersing it in a bath of cold water, then refrigerate immediately. (This broth does not freeze well.)",
+        "text": "Using a slotted spoon or tongs, remove the kelp and discard. Strain the broth into a new container. Use it now, in any Japanese-inspired soup, or cool it to room temperature by immersing it in a bath of cold water, then refrigerate immediately. (This broth does not freeze well.)"
+      }
+    ],
+    "tags": [
+      "Soup",
+      "Everything Soup Cookbook",
+      "B.J. Hanson"
+    ],
+    "item_type": "recipe",
+    "history": "Source: The Everything Soup Cookbook by B.J. Hanson"
+  },
+  {
+    "name": "Basic Vegetable Broth",
+    "slug": "basic-vegetable-broth-soup",
+    "country": "Global",
+    "continent": "Global",
+    "is_african": false,
+    "cuisine_type": "Soup",
+    "category": "soup",
+    "summary": "Yields 5–6 cups",
+    "servings": 5,
+    "prep_time": 15,
+    "cook_time": 45,
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 45,
+    "difficulty": "Easy",
+    "protein": null,
+    "is_verified_authentic": null,
+    "ingredients": [
+      {
+        "name": "4 large onions, peeled and quartered",
+        "amount": null,
+        "unit": null,
+        "text": "4 large onions, peeled and quartered"
+      },
+      {
+        "name": "6 large carrots, peeled and quartered",
+        "amount": null,
+        "unit": null,
+        "text": "6 large carrots, peeled and quartered"
+      },
+      {
+        "name": "3 large stalks celery, peeled and quartered",
+        "amount": null,
+        "unit": null,
+        "text": "3 large stalks celery, peeled and quartered"
+      },
+      {
+        "name": "1 medium potato, peeled",
+        "amount": null,
+        "unit": null,
+        "text": "1 medium potato, peeled"
+      },
+      {
+        "name": "1 cup cabbage, cut into eighths",
+        "amount": null,
+        "unit": null,
+        "text": "1 cup cabbage, cut into eighths"
+      },
+      {
+        "name": "5–6 peppercorns",
+        "amount": null,
+        "unit": null,
+        "text": "5–6 peppercorns"
+      },
+      {
+        "name": "1 bay leaf",
+        "amount": null,
+        "unit": null,
+        "text": "1 bay leaf"
+      },
+      {
+        "name": "3 sprigs of thyme",
+        "amount": null,
+        "unit": null,
+        "text": "3 sprigs of thyme"
+      },
+      {
+        "name": "3 sprigs of parsley",
+        "amount": null,
+        "unit": null,
+        "text": "3 sprigs of parsley"
+      },
+      {
+        "name": "cups cold water",
+        "amount": null,
+        "unit": null,
+        "text": "cups cold water"
+      },
+      {
+        "name": "Salt",
+        "amount": null,
+        "unit": null,
+        "text": "Salt"
+      }
+    ],
+    "steps": [
+      {
+        "instruction": "Feel free to make additions, subtractions, and substitutions in your vegetable broth. Leeks, spinach, turnips, mushrooms, and tomatoes are all good choices.",
+        "text": "Feel free to make additions, subtractions, and substitutions in your vegetable broth. Leeks, spinach, turnips, mushrooms, and tomatoes are all good choices."
+      },
+      {
+        "instruction": "Place all the ingredients in a large soup pot. Bring to a boil, then immediately reduce to a simmer. Cook for 1 hour.",
+        "text": "Place all the ingredients in a large soup pot. Bring to a boil, then immediately reduce to a simmer. Cook for 1 hour."
+      },
+      {
+        "instruction": "Allow the pot to cool, uncovered, off the heat for an hour or so. Strain the soup through a sieve or colander; then squeeze the solid ingredients so that the extra broth is collected (squeezing inside a cheesecloth works really well). Strain again through cheesecloth for clearer broth. Salt to taste. Freezes well.",
+        "text": "Allow the pot to cool, uncovered, off the heat for an hour or so. Strain the soup through a sieve or colander; then squeeze the solid ingredients so that the extra broth is collected (squeezing inside a cheesecloth works really well). Strain again through cheesecloth for clearer broth. Salt to taste. Freezes well."
+      }
+    ],
+    "tags": [
+      "Soup",
+      "Everything Soup Cookbook",
+      "B.J. Hanson"
+    ],
+    "item_type": "recipe",
+    "history": "Source: The Everything Soup Cookbook by B.J. Hanson"
+  },
+  {
+    "name": "Potato and Vegetable Broth",
+    "slug": "potato-and-vegetable-broth-soup",
+    "country": "Global",
+    "continent": "Global",
+    "is_african": false,
+    "cuisine_type": "Soup",
+    "category": "soup",
+    "summary": "Yields 8 cups",
+    "servings": 8,
+    "prep_time": 15,
+    "cook_time": 45,
+    "prep_time_minutes": 15,
+    "cook_time_minutes": 45,
+    "difficulty": "Easy",
+    "protein": null,
+    "is_verified_authentic": null,
+    "ingredients": [
+      {
+        "name": "3 baking potatoes",
+        "amount": null,
+        "unit": null,
+        "text": "3 baking potatoes"
+      },
+      {
+        "name": "1 large leek",
+        "amount": null,
+        "unit": null,
+        "text": "1 large leek"
+      },
+      {
+        "name": "6 carrots",
+        "amount": null,
+        "unit": null,
+        "text": "6 carrots"
+      },
+      {
+        "name": "6 stalks of celery",
+        "amount": null,
+        "unit": null,
+        "text": "6 stalks of celery"
+      },
+      {
+        "name": "3 medium zucchini",
+        "amount": null,
+        "unit": null,
+        "text": "3 medium zucchini"
+      },
+      {
+        "name": "4 large onions",
+        "amount": null,
+        "unit": null,
+        "text": "4 large onions"
+      },
+      {
+        "name": "½ pound fresh mushrooms (any kind)",
+        "amount": null,
+        "unit": null,
+        "text": "½ pound fresh mushrooms (any kind)"
+      },
+      {
+        "name": "1 whole head of garlic",
+        "amount": null,
+        "unit": null,
+        "text": "1 whole head of garlic"
+      },
+      {
+        "name": "10 peppercorns",
+        "amount": null,
+        "unit": null,
+        "text": "10 peppercorns"
+      },
+      {
+        "name": "8 sprigs fresh thyme (or 1 tablespoon dried)",
+        "amount": null,
+        "unit": null,
+        "text": "8 sprigs fresh thyme (or 1 tablespoon dried)"
+      },
+      {
+        "name": "8 sprigs fresh flat-leaf parsley",
+        "amount": null,
+        "unit": null,
+        "text": "8 sprigs fresh flat-leaf parsley"
+      },
+      {
+        "name": "3 bay leaves",
+        "amount": null,
+        "unit": null,
+        "text": "3 bay leaves"
+      }
+    ],
+    "steps": [
+      {
+        "instruction": "If broth is not going to be used immediately, cool it to room temperature by immersing the pot in a bath of cold water; refrigerate or freeze promptly.",
+        "text": "If broth is not going to be used immediately, cool it to room temperature by immersing the pot in a bath of cold water; refrigerate or freeze promptly."
+      },
+      {
+        "instruction": "Without peeling them, clean, then chop the potatoes, leek (white light green parts only), carrots, celery, and zucchini. Quarter the onions and mushrooms; do not discard any parts. Slice off the very top of the garlic head, just enough to expose the tops of the cloves.",
+        "text": "Without peeling them, clean, then chop the potatoes, leek (white light green parts only), carrots, celery, and zucchini. Quarter the onions and mushrooms; do not discard any parts. Slice off the very top of the garlic head, just enough to expose the tops of the cloves."
+      },
+      {
+        "instruction": "Place all the ingredients in a soup pot. Add enough cold water to cover the vegetables; then add more water until its level is about 6 inches higher.",
+        "text": "Place all the ingredients in a soup pot. Add enough cold water to cover the vegetables; then add more water until its level is about 6 inches higher."
+      },
+      {
+        "instruction": "Bring to a boil, then reduce to a simmer. Cook for about 1¾ hours. Squeeze the liquid out of the vegetables, adding the liquid to the broth. Strain.",
+        "text": "Bring to a boil, then reduce to a simmer. Cook for about 1¾ hours. Squeeze the liquid out of the vegetables, adding the liquid to the broth. Strain."
+      }
+    ],
+    "tags": [
+      "Soup",
+      "Everything Soup Cookbook",
+      "B.J. Hanson"
+    ],
+    "item_type": "recipe",
+    "history": "Source: The Everything Soup Cookbook by B.J. Hanson"
+  }
+]

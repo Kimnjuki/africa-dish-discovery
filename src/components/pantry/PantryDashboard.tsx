@@ -35,6 +35,10 @@ import VoiceInput from "./VoiceInput";
 import PhotoRecognition from "./PhotoRecognition";
 import SmartShoppingList from "./SmartShoppingList";
 import { PantryItemWithExpiry, getFreshnessStatus } from "./ExpirationTracker";
+import {
+  findMatchingRecipes,
+  buildPantryInsights,
+} from "@/utils/recipeMatching";
 import type { CookableRecipe } from "@/types/content";
 import type { User } from "@supabase/supabase-js";
 
@@ -210,61 +214,119 @@ const PantryDashboard = () => {
     setMatchLoading(true);
 
     try {
-      // Fetch recipes for matching
-      const { data: recipes, error } = await supabase
-        .from('recipes')
-        .select('*')
-        .not('ingredients', 'is', null)
-        .limit(50);
-
-      if (error) throw error;
-
-      // Call AI matching function with expiration-prioritized items
       const prioritizedItems = getItemsForMatching();
-      const { data, error: fnError } = await supabase.functions.invoke('pantry-intelligence', {
-        body: {
-          mode: 'match',
-          pantryItems: prioritizedItems.map(item => ({
-            ...item,
-            freshness: getFreshnessStatus(item.expires_at)
-          })),
-          recipes: recipes || []
-        }
-      });
 
-      if (fnError) throw fnError;
-
-      if (data.error) {
-        toast.error(data.error);
-        return;
+      // Local matching over a large recipe corpus (core pantry intelligence)
+      const pageSize = 1000;
+      let recipes: any[] = [];
+      let from = 0;
+      while (from < 4000) {
+        const { data, error } = await supabase
+          .from("recipes")
+          .select(
+            "id,name,country,summary,prep_time,cook_time,servings,difficulty,image_url,tags,ingredients,cuisine_type,category"
+          )
+          .not("ingredients", "is", null)
+          .range(from, from + pageSize - 1);
+        if (error) throw error;
+        if (!data?.length) break;
+        recipes = recipes.concat(data);
+        if (data.length < pageSize) break;
+        from += pageSize;
       }
 
-      // Merge AI results with full recipe data
-      const enrichedMatches = (data.matches || []).map((match) => {
-        const fullRecipe = recipes?.find(r => r.id === match.recipeId);
-        if (fullRecipe) {
-          return {
-            ...fullRecipe,
-            matchScore: match.matchScore || 0,
-            matchedIngredients: match.matchedIngredients || [],
-            missingIngredients: match.missingIngredients || [],
-            substitutionSuggestions: match.substitutionSuggestions || [],
-            canCookNow: match.canCookNow || false,
-            priority: match.priority || 'medium',
-            priorityReason: match.priorityReason
-          };
-        }
-        return null;
-      }).filter(Boolean);
+      const localMatches = findMatchingRecipes(
+        prioritizedItems.map((item) => ({
+          id: item.id,
+          name: item.ingredient_name,
+          ingredient_name: item.ingredient_name,
+          expires_at: item.expires_at || undefined,
+        })),
+        recipes,
+        40
+      ).slice(0, 40);
+
+      const enrichedMatches: RecipeMatch[] = localMatches.map((match) => ({
+        ...match.recipe,
+        matchScore: match.matchPercentage,
+        matchedIngredients: match.matchedIngredients,
+        missingIngredients: match.missingIngredients,
+        substitutionSuggestions: match.substitutableIngredients.map((s) => ({
+          missing: s.original,
+          substitute: s.substitute,
+          note: "Pantry substitute",
+        })),
+        canCookNow: match.canMakeNow,
+        priority: match.priority,
+        priorityReason: match.priorityReason,
+      }));
 
       setRecipeMatches(enrichedMatches);
-      setAiInsights(data.insights || "");
+      setAiInsights(buildPantryInsights(localMatches, pantryItems.length));
+      setActiveTab("matches");
+
+      // Optional AI narrative on top of local ranking (never blocks results)
+      try {
+        const topForAi = localMatches.slice(0, 25).map((m) => ({
+          id: m.recipe.id,
+          name: m.recipe.name,
+          ingredients: m.recipe.ingredients,
+          difficulty: m.recipe.difficulty,
+          prep_time: m.recipe.prep_time,
+          cook_time: m.recipe.cook_time,
+        }));
+        const { data } = await supabase.functions.invoke("pantry-intelligence", {
+          body: {
+            mode: "match",
+            pantryItems: prioritizedItems.map((item) => ({
+              ...item,
+              freshness: getFreshnessStatus(item.expires_at),
+            })),
+            recipes: topForAi,
+          },
+        });
+        if (data?.insights && !data?.error) {
+          setAiInsights(data.insights);
+        }
+        if (Array.isArray(data?.matches) && data.matches.length) {
+          const byId = new Map(enrichedMatches.map((m) => [m.id, m]));
+          const merged = data.matches
+            .map((ai: any) => {
+              const base = byId.get(ai.recipeId);
+              if (!base) return null;
+              return {
+                ...base,
+                matchScore: Math.max(base.matchScore, ai.matchScore || 0),
+                substitutionSuggestions:
+                  ai.substitutionSuggestions?.length
+                    ? ai.substitutionSuggestions
+                    : base.substitutionSuggestions,
+                priority: ai.priority || base.priority,
+                priorityReason: ai.priorityReason || base.priorityReason,
+                canCookNow: ai.canCookNow ?? base.canCookNow,
+              } as RecipeMatch;
+            })
+            .filter(Boolean) as RecipeMatch[];
+          if (merged.length) {
+            const leftover = enrichedMatches.filter(
+              (m) => !merged.some((x) => x.id === m.id)
+            );
+            setRecipeMatches([...merged, ...leftover].slice(0, 40));
+          }
+        }
+      } catch {
+        // Local matches already set — AI is additive only
+      }
 
       if (enrichedMatches.length === 0) {
         toast.info("No strong matches found. Try adding more ingredients.");
+      } else {
+        toast.success(
+          `Found ${enrichedMatches.length} pantry match${enrichedMatches.length === 1 ? "" : "es"}`
+        );
       }
     } catch (error) {
-      console.error('AI matching error:', error);
+      console.error("Pantry matching error:", error);
       toast.error("Failed to find recipe matches");
     } finally {
       setMatchLoading(false);
