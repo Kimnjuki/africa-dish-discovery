@@ -484,7 +484,7 @@ export const EnhancedRecipePreparation = ({ recipe, onBack }: RecipePreparationP
 
   if (phase === 'complete') {
     return (
-      <div className="min-h-screen bg-gradient-earth flex items-center justify-center">
+      <div className="flex min-h-dvh items-center justify-center bg-gradient-earth px-4">
         <Card className="max-w-md mx-auto text-center shadow-glow">
           <CardContent className="p-8">
             <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
@@ -515,38 +515,46 @@ export const EnhancedRecipePreparation = ({ recipe, onBack }: RecipePreparationP
   }
 
   return (
-    <div className="min-h-screen bg-gradient-earth">
-      <div className="container mx-auto px-6 py-8">
+    <div className="min-h-screen bg-gradient-earth pb-28 md:pb-8">
+      <div className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
         {/* Enhanced Header */}
-        <div className="flex items-center gap-4 mb-8">
-          <Button variant="outline" onClick={onBack}>
+        <div className="mb-6 flex flex-col gap-4 sm:mb-8">
+          <div className="flex items-start gap-3">
+          <Button variant="outline" className="h-11 shrink-0" onClick={onBack}>
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back
           </Button>
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold text-gradient">{recipe.name}</h1>
-            <p className="text-muted-foreground">{recipe.country} • {recipe.difficulty}</p>
+          <div className="min-w-0 flex-1">
+            <h1 className="text-2xl font-bold text-gradient sm:text-3xl">{recipe.name}</h1>
+            <p className="text-sm text-muted-foreground">{recipe.country} • {recipe.difficulty}</p>
+          </div>
           </div>
           
           {/* Control Panel */}
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <Button
               variant={isVoiceEnabled ? "default" : "outline"}
-              size="sm"
+              size="icon"
+              className="h-11 w-11"
+              aria-label={isVoiceEnabled ? "Turn voice commands off" : "Turn voice commands on"}
               onClick={toggleVoiceControl}
             >
               {isVoiceEnabled ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
             </Button>
             <Button
               variant={isSoundEnabled ? "default" : "outline"}
-              size="sm"
+              size="icon"
+              className="h-11 w-11"
+              aria-label={isSoundEnabled ? "Mute timer sounds" : "Unmute timer sounds"}
               onClick={() => setIsSoundEnabled(!isSoundEnabled)}
             >
               {isSoundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
             </Button>
             <Button
               variant={isHandsFreeMode ? "default" : "outline"}
-              size="sm"
+              size="icon"
+              className="h-11 w-11"
+              aria-label={isHandsFreeMode ? "Turn hands-free mode off" : "Turn hands-free mode on"}
               onClick={() => setIsHandsFreeMode(!isHandsFreeMode)}
             >
               <PlayCircle className="w-4 h-4" />
@@ -574,6 +582,15 @@ export const EnhancedRecipePreparation = ({ recipe, onBack }: RecipePreparationP
           </Button>
           <PrintRecipeButton recipe={recipe} servingMultiplier={servingMultiplier} />
         </nav>
+
+        <Button
+          variant="hero"
+          className="mb-6 h-12 w-full hover:scale-100 md:hidden"
+          onClick={() => setCookModeOpen(true)}
+        >
+          <PlayCircle className="mr-2 h-5 w-5" />
+          Open cook mode
+        </Button>
 
         <RecipeTrustNotice
           verificationStatus={(recipe).verification_status}
@@ -640,7 +657,7 @@ export const EnhancedRecipePreparation = ({ recipe, onBack }: RecipePreparationP
             {/* Current Step */}
             <Card id="recipe-steps" className="shadow-warm scroll-mt-24">
               <CardHeader>
-                <div className="flex items-center justify-between">
+                <div className="flex flex-wrap items-center justify-between gap-2">
                   <CardTitle className="flex items-center gap-2">
                     <ChefHat className="w-5 h-5 text-primary" />
                     Step {currentStep + 1}
@@ -650,7 +667,7 @@ export const EnhancedRecipePreparation = ({ recipe, onBack }: RecipePreparationP
                   </CardTitle>
                   
                   {/* Active Timers */}
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     {timers.filter(timer => timer.active && timer.remaining > 0).map(timer => (
                       <div key={timer.id} className="flex items-center gap-2 bg-primary/10 px-3 py-1 rounded-full">
                         <Timer className="w-4 h-4 text-primary" />
@@ -669,7 +686,7 @@ export const EnhancedRecipePreparation = ({ recipe, onBack }: RecipePreparationP
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-lg mb-6 leading-relaxed">
+                <div className="mb-6 text-xl leading-relaxed sm:text-lg">
                   {typeof recipe.steps?.[currentStep] === 'string' 
                     ? recipe.steps[currentStep]
                     : recipe.steps?.[currentStep]?.instruction || recipe.steps?.[currentStep]?.step || "No steps available"}
@@ -740,7 +757,7 @@ export const EnhancedRecipePreparation = ({ recipe, onBack }: RecipePreparationP
                 </div>
 
                 {/* Navigation Controls */}
-                <div className="flex items-center justify-between">
+                <div className="hidden items-center justify-between md:flex">
                   <Button 
                     variant="outline" 
                     onClick={prevStep}
@@ -888,6 +905,28 @@ export const EnhancedRecipePreparation = ({ recipe, onBack }: RecipePreparationP
             <RecipeReviews recipeId={recipe.id} />
           </div>
         </div>
+      </div>
+      <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-3 gap-2 border-t bg-background/95 px-3 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur md:hidden">
+        <Button variant="outline" className="h-12 px-2" onClick={prevStep} disabled={currentStep === 0}>
+          <SkipBack className="h-4 w-4" />
+          Prev
+        </Button>
+        <Button
+          variant={completedSteps.includes(currentStep) ? "default" : "outline"}
+          className="h-12 px-2"
+          onClick={() => toggleStepCompletion(currentStep)}
+        >
+          {completedSteps.includes(currentStep) ? "Done" : "Mark"}
+        </Button>
+        <Button
+          variant="hero"
+          className="h-12 px-2 hover:scale-100"
+          onClick={nextStep}
+          disabled={currentStep === (recipe.steps?.length || 1) - 1}
+        >
+          Next
+          <SkipForward className="h-4 w-4" />
+        </Button>
       </div>
     </div>
   );

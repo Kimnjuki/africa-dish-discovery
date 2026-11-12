@@ -9,7 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
-import { EnhancedRecipePreparation } from "@/components/enhanced/EnhancedRecipePreparation";
+import { CookMode } from "@/components/recipe/CookMode";
 import RecipeImagePlaceholder from "@/components/RecipeImagePlaceholder";
 import { getCountryFlag } from "@/utils/countryFlags";
 import { MapPin, Volume2, ChefHat, Globe2, Utensils } from "lucide-react";
@@ -130,7 +130,14 @@ const DishEncyclopedia = () => {
   }, [title, country, dish, recipe]);
 
   if (cooking && recipe) {
-    return <EnhancedRecipePreparation recipe={recipe} onBack={() => setCooking(false)} />;
+    return (
+      <CookMode
+        recipeName={recipe.name}
+        steps={recipe.steps}
+        ingredients={recipe.ingredients}
+        onClose={() => setCooking(false)}
+      />
+    );
   }
 
   return (

@@ -82,7 +82,7 @@ const Navigation = () => {
             </div>
             <div>
               <div className="font-bold text-lg text-gradient">LadhaQuest</div>
-              <div className="text-xs text-muted-foreground">Recipe Discovery</div>
+              <div className="hidden text-xs text-muted-foreground sm:block">Recipe Discovery</div>
             </div>
           </Link>
 

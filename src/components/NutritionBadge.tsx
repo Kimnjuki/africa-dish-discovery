@@ -47,24 +47,21 @@ export const NutritionBadge = ({ calories, protein, carbs, fats, compact = true 
   }
 
   return (
-    <div className="flex items-center gap-4 p-3 bg-muted/50 rounded-lg">
-      <div className="text-center">
-        <div className="text-lg font-bold text-orange-500">{calories}</div>
+    <div className="grid grid-cols-4 gap-2 rounded-lg bg-muted/50 p-3 text-center">
+      <div>
+        <div className="text-base font-bold text-orange-500 sm:text-lg">{calories}</div>
         <div className="text-xs text-muted-foreground">Calories</div>
       </div>
-      <div className="h-8 w-px bg-border" />
-      <div className="text-center">
-        <div className="text-lg font-bold text-blue-500">{protein || 0}g</div>
+      <div>
+        <div className="text-base font-bold text-blue-500 sm:text-lg">{protein || 0}g</div>
         <div className="text-xs text-muted-foreground">Protein</div>
       </div>
-      <div className="h-8 w-px bg-border" />
-      <div className="text-center">
-        <div className="text-lg font-bold text-green-500">{carbs || 0}g</div>
+      <div>
+        <div className="text-base font-bold text-green-500 sm:text-lg">{carbs || 0}g</div>
         <div className="text-xs text-muted-foreground">Carbs</div>
       </div>
-      <div className="h-8 w-px bg-border" />
-      <div className="text-center">
-        <div className="text-lg font-bold text-yellow-500">{fats || 0}g</div>
+      <div>
+        <div className="text-base font-bold text-yellow-500 sm:text-lg">{fats || 0}g</div>
         <div className="text-xs text-muted-foreground">Fat</div>
       </div>
     </div>

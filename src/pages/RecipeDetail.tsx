@@ -14,6 +14,7 @@ import RecipeImagePlaceholder from "@/components/RecipeImagePlaceholder";
 import { IngredientChecklist } from "@/components/recipe/IngredientChecklist";
 import { NutritionBadge } from "@/components/NutritionBadge";
 import { PrintRecipeButton } from "@/components/PrintRecipeButton";
+import { CookMode } from "@/components/recipe/CookMode";
 import { RecipeTrustNotice } from "@/components/recipe/RecipeTrustNotice";
 import { SourceCitations } from "@/components/cultural/SourceCitations";
 import { SaveButton } from "@/components/SaveButton";
@@ -29,6 +30,7 @@ const RecipeDetail = () => {
   const [related, setRelated] = useState<CookableRecipe[]>([]);
   const [servings, setServings] = useState(4);
   const [cooking, setCooking] = useState(false);
+  const [cookMode, setCookMode] = useState(false);
 
   useEffect(() => {
     if (!slug) return;
@@ -89,6 +91,18 @@ const RecipeDetail = () => {
     };
   }, [recipe, steps, base]);
 
+  if (cookMode && recipe) {
+    return (
+      <CookMode
+        recipeName={recipe.name}
+        steps={recipe.steps}
+        ingredients={recipe.ingredients}
+        multiplier={mult}
+        onClose={() => setCookMode(false)}
+      />
+    );
+  }
+
   if (cooking && recipe) return <EnhancedRecipePreparation recipe={recipe} onBack={() => setCooking(false)} />;
 
   const title = recipe?.name || "Recipe";
@@ -105,8 +119,8 @@ const RecipeDetail = () => {
       />
       {jsonLd && <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>}
       <Navigation />
-      <main className="pt-20 pb-16">
-        <div className="container mx-auto px-6">
+      <main className="pt-20 pb-28 md:pb-16">
+        <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
           <Breadcrumbs
             items={[
               { label: "Home", href: "/" },
@@ -134,7 +148,7 @@ const RecipeDetail = () => {
                   )}
                 </div>
                 <div className="lg:col-span-2">
-                  <h1 className="text-4xl font-bold mb-3">{title}</h1>
+                  <h1 className="mb-3 text-3xl font-bold leading-tight sm:text-4xl">{title}</h1>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {country && <Badge variant="secondary">{getCountryFlag(country)} {country}</Badge>}
                     {recipe.continent && <Badge variant="outline">{recipe.continent}</Badge>}
@@ -142,13 +156,14 @@ const RecipeDetail = () => {
                     <NutritionBadge calories={recipe.calories} protein={recipe.protein} carbs={recipe.carbs} fats={recipe.fats} />
                   </div>
                   <p className="text-muted-foreground mb-4">{recipe.summary || recipe.brief_description}</p>
-                  <div className="grid grid-cols-3 gap-3 text-sm mb-5">
-                    <div className="rounded-md border p-3"><Clock className="w-4 h-4 text-primary mb-1" />Prep {recipe.prep_time || recipe.prep_time_minutes || "—"} min</div>
-                    <div className="rounded-md border p-3"><Clock className="w-4 h-4 text-primary mb-1" />Cook {recipe.cook_time || recipe.cook_time_minutes || "—"} min</div>
-                    <div className="rounded-md border p-3"><ChefHat className="w-4 h-4 text-primary mb-1" />{recipe.difficulty || "—"}</div>
+                  <div className="mb-5 grid grid-cols-3 gap-2 text-xs sm:gap-3 sm:text-sm">
+                    <div className="rounded-md border p-2 sm:p-3"><Clock className="mb-1 h-4 w-4 text-primary" />Prep {recipe.prep_time || recipe.prep_time_minutes || "—"} min</div>
+                    <div className="rounded-md border p-2 sm:p-3"><Clock className="mb-1 h-4 w-4 text-primary" />Cook {recipe.cook_time || recipe.cook_time_minutes || "—"} min</div>
+                    <div className="rounded-md border p-2 sm:p-3"><ChefHat className="mb-1 h-4 w-4 text-primary" />{recipe.difficulty || "—"}</div>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    <Button variant="hero" onClick={() => setCooking(true)}><Utensils className="w-4 h-4 mr-2" />Start cooking</Button>
+                    <Button variant="hero" className="h-12 hover:scale-100" onClick={() => setCookMode(true)}><Utensils className="mr-2 h-4 w-4" />Start cooking</Button>
+                    <Button variant="outline" className="h-12" onClick={() => setCooking(true)}>Full guide</Button>
                     <SaveButton type="recipe" slug={recipe.slug} id={recipe.id} label={recipe.name} />
                     <PrintRecipeButton recipe={recipe} servingMultiplier={mult} />
                   </div>
@@ -231,6 +246,14 @@ const RecipeDetail = () => {
           )}
         </div>
       </main>
+      {recipe && !loading && (
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur md:hidden">
+          <Button variant="hero" className="h-12 w-full hover:scale-100" onClick={() => setCookMode(true)}>
+            <Utensils className="mr-2 h-4 w-4" />
+            Start cooking
+          </Button>
+        </div>
+      )}
       <Footer />
     </div>
   );
