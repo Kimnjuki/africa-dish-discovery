@@ -80,21 +80,21 @@ const SmartRecipeMatch = ({
     );
   };
 
-  if (loading) {
+  if (loading && matches.length === 0) {
     return (
       <Card className="border-primary/10">
         <CardContent className="p-8 text-center">
           <div className="animate-spin w-10 h-10 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4" />
           <p className="text-muted-foreground">
             <Sparkles className="inline w-4 h-4 mr-2" />
-            AI is analyzing your pantry...
+            Matching dishes to your pantry...
           </p>
         </CardContent>
       </Card>
     );
   }
 
-  if (matches.length === 0) {
+  if (!loading && matches.length === 0) {
     return (
       <Card className="border-primary/10">
         <CardContent className="p-8 text-center">

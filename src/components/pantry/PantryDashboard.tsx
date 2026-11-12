@@ -38,6 +38,7 @@ import { PantryItemWithExpiry, getFreshnessStatus } from "./ExpirationTracker";
 import {
   findMatchingRecipes,
   buildPantryInsights,
+  splitPantryInput,
 } from "@/utils/recipeMatching";
 import type { CookableRecipe } from "@/types/content";
 import type { User } from "@supabase/supabase-js";
@@ -95,21 +96,27 @@ const PantryDashboard = () => {
     const ingredientName = name || newIngredient.trim();
     if (!ingredientName || !user) return;
 
+    const parts = splitPantryInput(ingredientName);
     try {
-      const { error } = await supabase
-        .from('pantry_items')
-        .insert({
-          ingredient_name: ingredientName,
-          user_id: user.id,
-          quantity: quantity || 1,
-          unit: unit || 'piece'
-        });
+      const rows = parts.map((part) => ({
+        ingredient_name: part,
+        user_id: user.id,
+        quantity: quantity || 1,
+        unit: unit || "piece",
+      }));
+      const { error } = await supabase.from("pantry_items").insert(rows);
 
       if (error) throw error;
 
       if (!name) setNewIngredient("");
       loadPantryItems();
-      if (!name) toast.success(`Added ${ingredientName} to pantry`);
+      if (!name) {
+        toast.success(
+          parts.length > 1
+            ? `Added ${parts.length} ingredients to pantry`
+            : `Added ${parts[0]} to pantry`
+        );
+      }
     } catch (error) {
       console.error('Error adding ingredient:', error);
       toast.error("Failed to add ingredient");
@@ -205,9 +212,12 @@ const PantryDashboard = () => {
     });
   };
 
-  const findAIMatches = useCallback(async () => {
+  const findAIMatches = useCallback(async (opts?: { silent?: boolean; jumpToResults?: boolean }) => {
+    const silent = opts?.silent === true;
+    const jumpToResults = opts?.jumpToResults !== false && !silent;
+
     if (pantryItems.length === 0) {
-      toast.info("Add ingredients to your pantry first");
+      if (!silent) toast.info("Add ingredients to your pantry first");
       return;
     }
 
@@ -220,13 +230,14 @@ const PantryDashboard = () => {
       const pageSize = 1000;
       let recipes: any[] = [];
       let from = 0;
-      while (from < 4000) {
+      while (from < 3000) {
         const { data, error } = await supabase
           .from("recipes")
           .select(
             "id,name,country,summary,prep_time,cook_time,servings,difficulty,image_url,tags,ingredients,cuisine_type,category"
           )
           .not("ingredients", "is", null)
+          .order("name")
           .range(from, from + pageSize - 1);
         if (error) throw error;
         if (!data?.length) break;
@@ -243,7 +254,7 @@ const PantryDashboard = () => {
           expires_at: item.expires_at || undefined,
         })),
         recipes,
-        40
+        18
       ).slice(0, 40);
 
       const enrichedMatches: RecipeMatch[] = localMatches.map((match) => ({
@@ -263,72 +274,89 @@ const PantryDashboard = () => {
 
       setRecipeMatches(enrichedMatches);
       setAiInsights(buildPantryInsights(localMatches, pantryItems.length));
-      setActiveTab("matches");
+      // Local results are enough — stop the spinner before optional AI enrichment
+      setMatchLoading(false);
 
-      // Optional AI narrative on top of local ranking (never blocks results)
-      try {
-        const topForAi = localMatches.slice(0, 25).map((m) => ({
-          id: m.recipe.id,
-          name: m.recipe.name,
-          ingredients: m.recipe.ingredients,
-          difficulty: m.recipe.difficulty,
-          prep_time: m.recipe.prep_time,
-          cook_time: m.recipe.cook_time,
-        }));
-        const { data } = await supabase.functions.invoke("pantry-intelligence", {
-          body: {
-            mode: "match",
-            pantryItems: prioritizedItems.map((item) => ({
-              ...item,
-              freshness: getFreshnessStatus(item.expires_at),
-            })),
-            recipes: topForAi,
-          },
-        });
-        if (data?.insights && !data?.error) {
-          setAiInsights(data.insights);
-        }
-        if (Array.isArray(data?.matches) && data.matches.length) {
-          const byId = new Map(enrichedMatches.map((m) => [m.id, m]));
-          const merged = data.matches
-            .map((ai: any) => {
-              const base = byId.get(ai.recipeId);
-              if (!base) return null;
-              return {
-                ...base,
-                matchScore: Math.max(base.matchScore, ai.matchScore || 0),
-                substitutionSuggestions:
-                  ai.substitutionSuggestions?.length
-                    ? ai.substitutionSuggestions
-                    : base.substitutionSuggestions,
-                priority: ai.priority || base.priority,
-                priorityReason: ai.priorityReason || base.priorityReason,
-                canCookNow: ai.canCookNow ?? base.canCookNow,
-              } as RecipeMatch;
-            })
-            .filter(Boolean) as RecipeMatch[];
-          if (merged.length) {
-            const leftover = enrichedMatches.filter(
-              (m) => !merged.some((x) => x.id === m.id)
-            );
-            setRecipeMatches([...merged, ...leftover].slice(0, 40));
-          }
-        }
-      } catch {
-        // Local matches already set — AI is additive only
+      if (jumpToResults) {
+        setActiveTab("recipes");
       }
 
-      if (enrichedMatches.length === 0) {
-        toast.info("No strong matches found. Try adding more ingredients.");
-      } else {
-        toast.success(
-          `Found ${enrichedMatches.length} pantry match${enrichedMatches.length === 1 ? "" : "es"}`
-        );
+      if (!silent) {
+        if (enrichedMatches.length === 0) {
+          toast.info("No strong matches found. Try adding more ingredients.");
+        } else {
+          toast.success(
+            `Found ${enrichedMatches.length} pantry match${enrichedMatches.length === 1 ? "" : "es"}`
+          );
+        }
+      }
+
+      // Optional AI narrative — never blocks or re-enters the loading spinner
+      if (!silent && localMatches.length > 0) {
+        void (async () => {
+          try {
+            const topForAi = localMatches.slice(0, 20).map((m) => ({
+              id: m.recipe.id,
+              name: m.recipe.name,
+              ingredients: m.recipe.ingredients,
+              difficulty: m.recipe.difficulty,
+              prep_time: m.recipe.prep_time,
+              cook_time: m.recipe.cook_time,
+            }));
+            const invoke = supabase.functions.invoke("pantry-intelligence", {
+              body: {
+                mode: "match",
+                pantryItems: prioritizedItems.map((item) => ({
+                  ...item,
+                  freshness: getFreshnessStatus(item.expires_at),
+                })),
+                recipes: topForAi,
+              },
+            });
+            const timed = await Promise.race([
+              invoke,
+              new Promise<{ data: null }>((resolve) =>
+                setTimeout(() => resolve({ data: null }), 8000)
+              ),
+            ]);
+            const data = timed && "data" in timed ? timed.data : null;
+            if (data?.insights && !data?.error) {
+              setAiInsights(data.insights);
+            }
+            if (Array.isArray(data?.matches) && data.matches.length) {
+              const byId = new Map(enrichedMatches.map((m) => [m.id, m]));
+              const merged = data.matches
+                .map((ai: any) => {
+                  const base = byId.get(ai.recipeId);
+                  if (!base) return null;
+                  return {
+                    ...base,
+                    matchScore: Math.max(base.matchScore, ai.matchScore || 0),
+                    substitutionSuggestions:
+                      ai.substitutionSuggestions?.length
+                        ? ai.substitutionSuggestions
+                        : base.substitutionSuggestions,
+                    priority: ai.priority || base.priority,
+                    priorityReason: ai.priorityReason || base.priorityReason,
+                    canCookNow: ai.canCookNow ?? base.canCookNow,
+                  } as RecipeMatch;
+                })
+                .filter(Boolean) as RecipeMatch[];
+              if (merged.length) {
+                const leftover = enrichedMatches.filter(
+                  (m) => !merged.some((x) => x.id === m.id)
+                );
+                setRecipeMatches([...merged, ...leftover].slice(0, 40));
+              }
+            }
+          } catch {
+            // Local matches already shown
+          }
+        })();
       }
     } catch (error) {
       console.error("Pantry matching error:", error);
-      toast.error("Failed to find recipe matches");
-    } finally {
+      if (!silent) toast.error("Failed to find recipe matches");
       setMatchLoading(false);
     }
   }, [pantryItems]);
@@ -426,7 +454,11 @@ const PantryDashboard = () => {
                 </span>
                 <div className="flex gap-2">
                   {pantryItems.length > 0 && (
-                    <Button size="sm" onClick={findAIMatches} disabled={matchLoading}>
+                    <Button
+                      size="sm"
+                      onClick={() => findAIMatches({ jumpToResults: true })}
+                      disabled={matchLoading}
+                    >
                       <Sparkles className="w-4 h-4 mr-2" />
                       Find Recipes
                     </Button>
@@ -471,7 +503,7 @@ const PantryDashboard = () => {
           <SmartRecipeMatch
             matches={recipeMatches}
             loading={matchLoading}
-            onRefresh={findAIMatches}
+            onRefresh={() => findAIMatches({ jumpToResults: true })}
             onStartCooking={startCooking}
             onAddToShoppingList={addToShoppingList}
             insights={aiInsights}

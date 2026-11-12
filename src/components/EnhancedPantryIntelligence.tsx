@@ -8,7 +8,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import CookingPopup from "./CookingPopup";
 import { withParsedRecipeFields, type IngredientValue, type CookableRecipe } from "@/types/content";
-import { findMatchingRecipes as rankPantryMatches } from "@/utils/recipeMatching";
+import {
+  findMatchingRecipes as rankPantryMatches,
+  splitPantryInput,
+} from "@/utils/recipeMatching";
 
 interface PantryItem {
   id: string;
@@ -122,25 +125,30 @@ const EnhancedPantryIntelligence = () => {
 
   const addIngredient = async () => {
     if (!newIngredient.trim() || !user) return;
-    
+    const parts = splitPantryInput(newIngredient.trim());
+
     try {
-      const { error } = await supabase
-        .from('pantry_items')
-        .insert({
-          ingredient_name: newIngredient.trim(),
+      const { error } = await supabase.from("pantry_items").insert(
+        parts.map((part) => ({
+          ingredient_name: part,
           user_id: user.id,
           quantity: 1,
-          unit: 'piece'
-        });
+          unit: "piece",
+        }))
+      );
 
       if (error) throw error;
 
+      const typed = newIngredient.trim();
       setNewIngredient("");
       loadPantryItems();
       
       toast({
         title: "Added to pantry",
-        description: `${newIngredient} has been added to your pantry`,
+        description:
+          parts.length > 1
+            ? `Split into ${parts.length} ingredients: ${parts.join(", ")}`
+            : `${typed} has been added to your pantry`,
       });
     } catch (error) {
       console.error('Error adding ingredient:', error);
@@ -182,13 +190,14 @@ const EnhancedPantryIntelligence = () => {
       const pageSize = 1000;
       let recipes: any[] = [];
       let from = 0;
-      while (from < 4000) {
+      while (from < 3000) {
         const { data, error } = await supabase
           .from("recipes")
           .select(
             "id,name,country,summary,ingredients,prep_time,cook_time,servings,difficulty,tags,image_url,cuisine_type,category"
           )
           .not("ingredients", "is", null)
+          .order("name")
           .range(from, from + pageSize - 1);
         if (error) throw error;
         if (!data?.length) break;
@@ -205,8 +214,8 @@ const EnhancedPantryIntelligence = () => {
           expires_at: item.expires_at,
         })),
         recipes,
-        35
-      ).slice(0, 12);
+        18
+      ).slice(0, 16);
 
       const sortedRecipes = ranked.map((match) => ({
         ...match.recipe,
@@ -218,6 +227,9 @@ const EnhancedPantryIntelligence = () => {
       }));
 
       setSuggestedRecipes(sortedRecipes.map(withParsedRecipeFields));
+      if (sortedRecipes.length > 0) {
+        setActiveTab("recipes");
+      }
     } catch (error) {
       console.error('Error finding matching recipes:', error);
       toast({
