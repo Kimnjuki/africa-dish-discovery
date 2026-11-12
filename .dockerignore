@@ -1,0 +1,12 @@
+node_modules
+dist
+dist-ssr
+.git
+.env
+.env.*
+*.log
+supabase/.temp
+data/cookbooks
+.vscode
+.idea
+.DS_Store
