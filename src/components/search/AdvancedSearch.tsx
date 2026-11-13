@@ -32,6 +32,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { readErrorMessage } from "@/lib/errors";
 import type { CookableRecipe } from "@/types/content";
+import { expandSearchQuery, searchRecipes } from "@/lib/recipeSearch";
 
 interface SearchFilters {
   country?: string;
@@ -85,29 +86,45 @@ export const AdvancedSearch = ({ onSearchResults, onLoading }: AdvancedSearchPro
         ingredients: ingredients.length > 0 ? ingredients : undefined,
       };
 
-      // Build the query string for natural language search
+      // Expand African dish aliases / light typos for edge fallback + local re-rank
+      const expansion = expandSearchQuery(query);
       let searchQuery = query;
-      if (ingredients.length > 0 && !query.toLowerCase().includes('ingredient')) {
-        searchQuery = `${query} with ingredients: ${ingredients.join(', ')}`.trim();
+      if (ingredients.length > 0 && !query.toLowerCase().includes("ingredient")) {
+        searchQuery = `${query} with ingredients: ${ingredients.join(", ")}`.trim();
       }
 
-      const { data, error } = await supabase.functions.invoke('ai-search', {
-        body: { query: searchQuery || null, filters: searchFilters }
+      const { data, error } = await supabase.functions.invoke("ai-search", {
+        body: {
+          query: searchQuery || null,
+          filters: searchFilters,
+          search_terms: expansion.terms.length ? expansion.terms : undefined,
+          suggestion: expansion.suggestion || undefined,
+        },
       });
 
       if (error) throw error;
 
-      onSearchResults(data.recipes || [], data.ai_enhanced || false);
-      
+      let recipes = (data.recipes || []) as CookableRecipe[];
+      // When AI is off, re-rank with local synonym-aware scoring
+      if (!data.ai_enhanced && query.trim()) {
+        recipes = searchRecipes(recipes, query);
+      }
+
+      onSearchResults(recipes, data.ai_enhanced || false);
+
       if (data.ai_enhanced) {
         toast.success("AI-powered search complete", {
-          description: data.query_interpretation
+          description: data.query_interpretation,
+        });
+      } else if (expansion.suggestion && expansion.suggestion !== expansion.normalized) {
+        toast.message(`Including matches for “${expansion.suggestion}”`, {
+          description: "Typo-tolerant search with African dish aliases",
         });
       }
     } catch (error: unknown) {
-      console.error('Search error:', error);
+      console.error("Search error:", error);
       toast.error("Search failed", {
-        description: readErrorMessage(error) || "Please try again"
+        description: readErrorMessage(error) || "Please try again",
       });
       onSearchResults([], false);
     } finally {

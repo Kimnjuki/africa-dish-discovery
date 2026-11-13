@@ -16,6 +16,12 @@ import RecipeImagePlaceholder from "@/components/RecipeImagePlaceholder";
 import { NutritionBadge } from "@/components/NutritionBadge";
 import { Clock, Users, ChefHat, Filter, X, Search } from "lucide-react";
 import type { IngredientValue, StepValue } from "@/types/content";
+import {
+  expandSearchQuery,
+  ingredientMatchesQuery,
+  recipeMatchesExpanded,
+  scoreRecipeMatch,
+} from "@/lib/recipeSearch";
 
 interface IndexRecipe {
   id: string;
@@ -108,9 +114,10 @@ const RecipeIndex = () => {
     };
   }, [recipes]);
 
+  const queryExpansion = useMemo(() => expandSearchQuery(get("q")), [params]);
+
   const results = useMemo(() => {
-    const q = get("q").toLowerCase().trim();
-    const ingredient = get("ingredient").toLowerCase().trim();
+    const ingredient = get("ingredient").trim();
     const country = get("country");
     const continent = get("continent");
     const category = get("category");
@@ -118,24 +125,28 @@ const RecipeIndex = () => {
     const difficulty = get("difficulty");
     const time = parseInt(get("time") || "0", 10);
 
-    return recipes.filter((r) => {
+    const filtered = recipes.filter((r) => {
       if (country && r.country !== country) return false;
       if (continent && r.continent !== continent) return false;
       if (category && r.category !== category) return false;
       if (difficulty && r.difficulty !== difficulty) return false;
       if (diet && !(r.dietary_tags || []).includes(diet)) return false;
       if (time > 0 && (r.prep_time || 0) + (r.cook_time || 0) > time) return false;
-      if (q) {
-        const haystack = `${r.name} ${r.country} ${r.summary || ""} ${(r.tags || []).join(" ")}`.toLowerCase();
-        if (!haystack.includes(q)) return false;
-      }
+      if (queryExpansion.normalized && !recipeMatchesExpanded(r, queryExpansion)) return false;
       if (ingredient) {
-        const raw = Array.isArray(r.ingredients) ? JSON.stringify(r.ingredients).toLowerCase() : "";
-        if (!raw.includes(ingredient)) return false;
+        const raw = Array.isArray(r.ingredients) ? JSON.stringify(r.ingredients) : "";
+        if (!ingredientMatchesQuery(raw, ingredient)) return false;
       }
       return true;
     });
-  }, [recipes, params]);
+
+    if (!queryExpansion.normalized) return filtered;
+    return [...filtered].sort(
+      (a, b) =>
+        scoreRecipeMatch(b, queryExpansion) - scoreRecipeMatch(a, queryExpansion) ||
+        a.name.localeCompare(b.name)
+    );
+  }, [recipes, params, queryExpansion]);
 
   const activeFacets = FACET_KEYS.filter((k) => get(k));
 
@@ -225,6 +236,20 @@ const RecipeIndex = () => {
                         onChange={(e) => setFacet("q", e.target.value)}
                       />
                     </div>
+                    {queryExpansion.suggestion &&
+                      queryExpansion.suggestion !== queryExpansion.normalized && (
+                        <p className="text-xs text-muted-foreground">
+                          Showing results for{" "}
+                          <button
+                            type="button"
+                            className="font-medium text-primary underline-offset-2 hover:underline"
+                            onClick={() => setFacet("q", queryExpansion.suggestion!)}
+                          >
+                            {queryExpansion.suggestion}
+                          </button>
+                          {queryExpansion.expanded ? " (aliases & close spellings included)" : ""}
+                        </p>
+                      )}
                   </div>
 
                   <div className="space-y-2">

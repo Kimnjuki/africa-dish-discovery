@@ -490,7 +490,7 @@
                                                 {
                                                     "priority":  "P0",
                                                     "status":  "partial",
-                                                    "evidence":  "AdvancedSearch, recipe-index, maps, dietary filters; missing budget/skill/one-pot filters",
+                                                    "evidence":  "AdvancedSearch, recipe-index, maps, dietary filters; recipeSearch synonym/typo expansion (jolof→jollof, ugali aliases); missing Meilisearch + budget/skill/one-pot filters",
                                                     "name":  "Recipe discovery",
                                                     "id":  "F01"
                                                 },
@@ -518,7 +518,7 @@
                                                 {
                                                     "priority":  "P0",
                                                     "status":  "partial",
-                                                    "evidence":  "shopping_list_items + naive name merge; no unit convert/aisle groups/share",
+                                                    "evidence":  "groceryEngine + GroceryListPanel on meal planners (unit merge, aisle groups, copy/share); persisted household lists still missing",
                                                     "name":  "Smart grocery list",
                                                     "id":  "F05"
                                                 },

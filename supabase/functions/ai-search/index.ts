@@ -6,13 +6,64 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+function normalize(value: string): string {
+  return String(value || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/['']/g, "")
+    .replace(/[^\w\s-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function haystackContainsTerm(haystack: string, term: string): boolean {
+  if (!term || term.length < 2) return false;
+  if (term.length >= 5) return haystack.includes(term);
+  if (haystack === term) return true;
+  const padded = ` ${haystack} `;
+  if (padded.includes(` ${term} `)) return true;
+  if (term.length >= 4) {
+    return padded.split(/\s+/).some((w) => w === term || w.startsWith(term));
+  }
+  return false;
+}
+
+function recipeHaystack(recipe: Record<string, unknown>): string {
+  const ingredients = recipe.ingredients;
+  let ingText = "";
+  if (Array.isArray(ingredients)) {
+    ingText = ingredients
+      .map((ing) => {
+        if (typeof ing === "string") return ing;
+        if (ing && typeof ing === "object") {
+          const o = ing as Record<string, unknown>;
+          return String(o.name || o.ingredient || o.item || o.text || "");
+        }
+        return "";
+      })
+      .join(" ");
+  }
+  const tags = Array.isArray(recipe.tags) ? (recipe.tags as string[]).join(" ") : "";
+  return normalize(
+    [recipe.name, recipe.country, recipe.summary, recipe.category, tags, ingText]
+      .filter(Boolean)
+      .join(" ")
+  );
+}
+
+function matchesAnyTerm(recipe: Record<string, unknown>, terms: string[]): boolean {
+  const haystack = recipeHaystack(recipe);
+  return terms.some((term) => haystackContainsTerm(haystack, normalize(term)));
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { query, filters } = await req.json();
+    const { query, filters, search_terms, suggestion } = await req.json();
     
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -43,6 +94,11 @@ serve(async (req) => {
       console.error('Database error:', dbError);
       throw dbError;
     }
+
+    const aliasHint =
+      Array.isArray(search_terms) && search_terms.length > 0
+        ? ` Also treat these African dish aliases / spellings as equivalent: ${search_terms.slice(0, 12).join(", ")}.`
+        : "";
 
     // If there's a natural language query, use AI to rank and filter results
     if (query && lovableApiKey && recipes && recipes.length > 0) {
@@ -79,6 +135,7 @@ serve(async (req) => {
 - Time constraints
 - Cooking skill level
 - Flavor preferences
+- Common African dish spelling variants and local names (e.g. jolof→jollof, ugali≈nsima/sadza/pap)${aliasHint}
 
 Return ONLY a JSON array of recipe IDs, nothing else. Example: ["id1", "id2", "id3"]`
             },
@@ -115,7 +172,10 @@ Return the most relevant recipe IDs as a JSON array.`
             return new Response(JSON.stringify({
               recipes: [...rankedRecipes, ...remainingRecipes],
               ai_enhanced: true,
-              query_interpretation: `Searched for: ${query}`
+              query_interpretation: suggestion
+                ? `Searched for: ${query} (including “${suggestion}”)`
+                : `Searched for: ${query}`,
+              suggestion: suggestion || null,
             }), {
               headers: { ...corsHeaders, 'Content-Type': 'application/json' },
             });
@@ -126,26 +186,22 @@ Return the most relevant recipe IDs as a JSON array.`
       }
     }
 
-    // Fallback: return recipes with basic text matching
+    // Fallback: synonym/typo-aware text matching (search_terms from client expansion)
     let filteredRecipes = recipes || [];
     
-    if (query) {
-      const searchTerm = query.toLowerCase();
-      filteredRecipes = filteredRecipes.filter(recipe => {
-        const nameMatch = recipe.name?.toLowerCase().includes(searchTerm);
-        const summaryMatch = recipe.summary?.toLowerCase().includes(searchTerm);
-        const tagMatch = recipe.tags?.some((tag: string) => tag?.toLowerCase().includes(searchTerm));
-        const ingredientMatch = Array.isArray(recipe.ingredients) && recipe.ingredients.some((ing) => {
-          const ingName = typeof ing === 'string' ? ing : ing.name || ing.item || '';
-          return ingName.toLowerCase().includes(searchTerm);
-        });
-        return nameMatch || summaryMatch || tagMatch || ingredientMatch;
-      });
+    if (query || (Array.isArray(search_terms) && search_terms.length > 0)) {
+      const terms: string[] =
+        Array.isArray(search_terms) && search_terms.length > 0
+          ? search_terms.map((t: string) => normalize(String(t))).filter(Boolean)
+          : [normalize(String(query || ""))].filter(Boolean);
+
+      filteredRecipes = filteredRecipes.filter((recipe) => matchesAnyTerm(recipe, terms));
     }
 
     return new Response(JSON.stringify({
       recipes: filteredRecipes,
-      ai_enhanced: false
+      ai_enhanced: false,
+      suggestion: suggestion || null,
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

@@ -101,7 +101,7 @@ Statuses: **present** | **partial** | **missing** | **unknown** — based on **c
 
 | ID | Feature | Priority | Status | Evidence summary | Gaps vs strategy detail |
 |----|---------|----------|--------|------------------|-------------------------|
-| F01 | Recipe discovery | P0 | **partial** | `/recipes`, `/recipe-index`, `AdvancedSearch` (country, difficulty, time, dietary, ingredients + AI search), maps, categories, homepage trending/seasonal | No first-class budget/skill/kid-friendly/one-pot/low-cost filters; feeds are UI tabs more than ranked personalization |
+| F01 | Recipe discovery | P0 | **partial** | `/recipes`, `/recipe-index`, `AdvancedSearch` (country, difficulty, time, dietary, ingredients + AI search), maps, categories, homepage trending/seasonal; **`recipeSearch` synonym/typo expansion** (jolof→jollof, ugali aliases) on index + AI-search fallback | No Meilisearch; no first-class budget/skill/kid-friendly/one-pot/low-cost filters; feeds are UI tabs more than ranked personalization |
 | F02 | Structured recipe pages | P0 | **partial** | `/recipe/:slug` + encyclopedia; ingredients/steps JSON; prep/cook/servings/difficulty; macros; allergens; cook mode; timers; serving scale; photos; notes | No video player; no recipe version history; equipment not a first-class structured field; offline is localStorage list not full page cache |
 | F03 | Save and organize | P0 | **partial** | `favorites`, `saved_items` → `/my-list`; `RecipeNotes` | No cookbooks/folders; limited meal-history UX; collection sharing weak |
 | F04 | Meal planner | P0 | **partial** | `/meal-planner`, `/meal-planner-calendar` with `@dnd-kit`; planned meal servings; AI generator; share link | No household entity/size prefs; dietary prefs not a durable household profile |
@@ -211,6 +211,13 @@ Do **not** start with Next.js migration or F16/F17.
 
 ## Progress
 
+**2026-11-14 — Phase 1 F01 search synonyms / typo tolerance (chunk 2)**
+
+- Added `src/lib/recipeSearch.ts`: African dish alias groups, ingredient aliases, Levenshtein typo correction, word-boundary-safe matching, relevance scoring.
+- Wired into `/recipe-index` (facet search + “showing results for …” suggestion) and `AdvancedSearch` (`search_terms` to edge function + local re-rank when AI off).
+- Updated `supabase/functions/ai-search` fallback to match any expanded term (not raw `includes` on full query).
+- Acceptance: `scripts/test-recipe-search.ts` — 17/17 pass (`jolof`→jollof, `ugalii`→ugali, `nshima`/`sadza`, no `pap`/`paprika` false positive).
+
 **2026-11-13 — Homepage fixes + Phase 1 F05 grocery engine (chunk 1)**
 
 - Fixed homepage “Try Pantry Intelligence” (`PantryShowcase`): React Router `Link` to `/#pantry-intelligence` did not scroll when already on `/`. Now uses explicit scroll with fixed-nav offset + hash sync; Index also handles deep-link hash on load.
@@ -225,6 +232,8 @@ Do **not** start with Next.js migration or F16/F17.
 | axe / full a11y audit | Same |
 | Service-role / `.env` secrets | Intentionally unused; anon key only |
 | Full F05 share persistence / aisle DB | Deferred — client merge + copy/share shipped first |
+| Meilisearch / dedicated search service | Deferred — client + edge synonym/typo layer shipped first |
+| Full F06 substitution graph seed | Next high-impact P0 candidate after search chunk |
 
 ---
 

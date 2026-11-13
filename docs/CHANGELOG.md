@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-11-14
+
+### Added
+- Typo-tolerant / synonym-aware recipe search (`src/lib/recipeSearch.ts`): African dish aliases (e.g. jolof→jollof, nsima/sadza→ugali), light Levenshtein correction, ingredient alias expansion, and relevance ranking.
+- Recipe Index (`/recipe-index`) uses expanded matching + “showing results for …” suggestion; ingredient facet uses aliases.
+- Advanced Search passes `search_terms` to `ai-search`; edge fallback filters with synonym terms; client re-ranks when AI is off.
+- Acceptance script: `node --experimental-strip-types scripts/test-recipe-search.ts`.
+
 ## 2026-11-13
 
 ### Fixed
