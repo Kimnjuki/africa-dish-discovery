@@ -1,7 +1,11 @@
-import { Download, Smartphone, Wifi, WifiOff, Check, ChefHat } from "lucide-react";
+import { Download, Smartphone, Wifi, WifiOff, Check, ChefHat, Gauge } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { usePWA } from "@/hooks/usePWA";
+import { useDataSaver } from "@/hooks/useDataSaver";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { PageMeta } from "@/components/seo/PageMeta";
@@ -9,6 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 
 const Install = () => {
   const { isInstallable, isInstalled, isOffline, installApp } = usePWA();
+  const { dataSaver, setDataSaver } = useDataSaver();
   const { toast } = useToast();
 
   const handleInstall = async () => {
@@ -25,7 +30,12 @@ const Install = () => {
     {
       icon: WifiOff,
       title: "Works Offline",
-      description: "Access saved recipes even without internet connection"
+      description: "Saved recipes, last pantry snapshot, and last meal plan"
+    },
+    {
+      icon: Gauge,
+      title: "Data Saver",
+      description: "Lighter images and no video autoplay on mobile data"
     },
     {
       icon: Smartphone,
@@ -106,8 +116,29 @@ const Install = () => {
             </Card>
           )}
 
+          {/* Data saver */}
+          <Card className="mb-8 bg-card/50 border-border text-left">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Gauge className="h-5 w-5 text-primary" />
+                Data saver
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="flex items-center justify-between gap-4">
+              <Label htmlFor="install-data-saver" className="text-sm text-muted-foreground font-normal cursor-pointer">
+                Prefer lighter images and skip cultural video autoplay.
+              </Label>
+              <Switch
+                id="install-data-saver"
+                checked={dataSaver}
+                onCheckedChange={setDataSaver}
+                aria-label="Enable data saver"
+              />
+            </CardContent>
+          </Card>
+
           {/* Features grid */}
-          <div className="grid md:grid-cols-3 gap-6 mt-12">
+          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 mt-12">
             {features.map((feature, index) => (
               <Card key={index} className="bg-card/50 border-border">
                 <CardHeader>
@@ -126,25 +157,28 @@ const Install = () => {
             <CardHeader>
               <CardTitle>What works offline?</CardTitle>
             </CardHeader>
-            <CardContent className="text-left">
+            <CardContent className="text-left space-y-4">
               <ul className="space-y-2 text-muted-foreground">
                 <li className="flex items-center gap-2">
                   <Check className="h-4 w-4 text-green-400" />
-                  Recently viewed recipes
+                  Recently opened recipes (cached on view, capped)
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="h-4 w-4 text-green-400" />
-                  Saved favorites and meal plans
+                  Last meal plan snapshot
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="h-4 w-4 text-green-400" />
-                  Your pantry ingredients list
+                  Last pantry snapshot + queued edits
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="h-4 w-4 text-green-400" />
-                  Shopping lists
+                  Installable PWA shell and static assets
                 </li>
               </ul>
+              <Button asChild variant="outline" size="sm">
+                <Link to="/offline-recipes">Open offline mode</Link>
+              </Button>
             </CardContent>
           </Card>
         </div>

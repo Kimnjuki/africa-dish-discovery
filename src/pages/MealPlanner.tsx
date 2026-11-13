@@ -22,6 +22,12 @@ import { MealPlanShare } from "@/components/meal-planner/MealPlanShare";
 import GroceryListPanel from "@/components/meal-planner/GroceryListPanel";
 import { withParsedRecipeFields, type IngredientValue } from "@/types/content";
 import type { User } from "@supabase/supabase-js";
+import {
+  getMealPlanSnapshot,
+  isBrowserOffline,
+  saveMealPlanSnapshot,
+} from "@/lib/offlineStore";
+import { usePWA } from "@/hooks/usePWA";
 
 interface Recipe {
   id: string;
@@ -32,6 +38,7 @@ interface Recipe {
   servings: number;
   ingredients: IngredientValue[] | null;
   image_url?: string;
+  slug?: string;
 }
 
 interface MealPlan {
@@ -71,6 +78,8 @@ const MealPlanner = () => {
   const [selectedRecipe, setSelectedRecipe] = useState<string>("");
   const [servings, setServings] = useState<number>(2);
   const [notes, setNotes] = useState<string>("");
+  const [usingOfflinePlan, setUsingOfflinePlan] = useState(false);
+  const { isOffline } = usePWA();
 
   useEffect(() => {
     checkUser();
@@ -88,6 +97,37 @@ const MealPlanner = () => {
       fetchPlannedMeals();
     }
   }, [currentPlan]);
+
+  useEffect(() => {
+    if (!user || !currentPlan || usingOfflinePlan) return;
+    if (plannedMeals.length === 0 && !currentPlan) return;
+    saveMealPlanSnapshot(
+      user.id,
+      {
+        id: currentPlan.id,
+        name: currentPlan.name,
+        week_start_date: currentPlan.week_start_date,
+      },
+      plannedMeals.map((m) => ({
+        id: m.id,
+        day_of_week: m.day_of_week,
+        meal_type: m.meal_type,
+        servings: m.servings,
+        notes: m.notes,
+        recipe: m.recipe
+          ? {
+              id: m.recipe.id,
+              name: m.recipe.name,
+              country: m.recipe.country,
+              image_url: m.recipe.image_url ?? null,
+              slug: m.recipe.slug ?? null,
+              prep_time: m.recipe.prep_time,
+              cook_time: m.recipe.cook_time,
+            }
+          : null,
+      }))
+    );
+  }, [user, currentPlan, plannedMeals, usingOfflinePlan]);
 
   const checkUser = async () => {
     const { data: { user } } = await supabase.auth.getUser();
@@ -115,7 +155,49 @@ const MealPlanner = () => {
     }
   };
 
+  const loadOfflineMealPlan = (userId: string) => {
+    const snap = getMealPlanSnapshot(userId);
+    if (!snap) {
+      toast.error("No offline meal plan snapshot available");
+      return;
+    }
+    setMealPlans([snap.plan]);
+    setCurrentPlan(snap.plan);
+    setPlannedMeals(
+      snap.meals.map((m) => ({
+        id: m.id,
+        meal_plan_id: snap.plan.id,
+        recipe_id: m.recipe?.id || "",
+        day_of_week: m.day_of_week,
+        meal_type: m.meal_type,
+        servings: m.servings,
+        notes: m.notes || undefined,
+        recipe: m.recipe
+          ? {
+              id: m.recipe.id,
+              name: m.recipe.name,
+              country: m.recipe.country || "",
+              prep_time: m.recipe.prep_time || 0,
+              cook_time: m.recipe.cook_time || 0,
+              servings: m.servings,
+              ingredients: null,
+              image_url: m.recipe.image_url || undefined,
+            }
+          : undefined,
+      }))
+    );
+    setUsingOfflinePlan(true);
+    toast.info("Showing offline meal plan snapshot");
+  };
+
   const fetchMealPlans = async () => {
+    if (!user) return;
+
+    if (isBrowserOffline()) {
+      loadOfflineMealPlan(user.id);
+      return;
+    }
+
     try {
       const { data, error } = await supabase
         .from('meal_plans')
@@ -123,18 +205,22 @@ const MealPlanner = () => {
         .order('week_start_date', { ascending: false });
 
       if (error) throw error;
+      setUsingOfflinePlan(false);
       setMealPlans(data || []);
       if (data && data.length > 0 && !currentPlan) {
         setCurrentPlan(data[0]);
       }
     } catch (error) {
       console.error('Error fetching meal plans:', error);
-      toast.error('Failed to load meal plans');
+      loadOfflineMealPlan(user.id);
+      if (!getMealPlanSnapshot(user.id)) {
+        toast.error('Failed to load meal plans');
+      }
     }
   };
 
   const fetchPlannedMeals = async () => {
-    if (!currentPlan) return;
+    if (!currentPlan || usingOfflinePlan) return;
 
     try {
       const { data, error } = await supabase
@@ -288,6 +374,16 @@ const MealPlanner = () => {
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 Plan your weekly African cuisine meals and generate shopping lists automatically
               </p>
+              {(isOffline || usingOfflinePlan) && (
+                <p className="mt-4 text-sm text-amber-700 dark:text-amber-300 max-w-xl mx-auto">
+                  {isOffline
+                    ? "You're offline — viewing your last cached meal plan. Changes need a connection."
+                    : "Showing a cached meal plan after a network issue."}{" "}
+                  <a href="/offline-recipes" className="underline font-medium">
+                    Offline mode
+                  </a>
+                </p>
+              )}
             </div>
 
             <div className="flex justify-between items-center mb-6 flex-wrap gap-4">

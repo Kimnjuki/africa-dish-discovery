@@ -22,6 +22,9 @@ import { getCountryFlag } from "@/utils/countryFlags";
 import { itemText, toList, toSlug } from "@/lib/recipeText";
 import { Clock, Users, ChefHat, Utensils, Lightbulb, Globe2, Minus, Plus, BookOpen } from "lucide-react";
 import { withParsedRecipeFields, type CookableRecipe } from "@/types/content";
+import { cacheRecipe, getCachedRecipes, isBrowserOffline } from "@/lib/offlineStore";
+import { useDataSaver } from "@/hooks/useDataSaver";
+import { DataSaverImage } from "@/components/DataSaverImage";
 
 const RecipeDetail = () => {
   const { slug } = useParams();
@@ -31,11 +34,30 @@ const RecipeDetail = () => {
   const [servings, setServings] = useState(4);
   const [cooking, setCooking] = useState(false);
   const [cookMode, setCookMode] = useState(false);
+  const { dataSaver } = useDataSaver();
 
   useEffect(() => {
     if (!slug) return;
     (async () => {
       setLoading(true);
+
+      if (isBrowserOffline()) {
+        const cached = getCachedRecipes().find((r) => r.slug === slug);
+        if (cached) {
+          setRecipe(
+            withParsedRecipeFields({
+              ...cached,
+              ingredients: cached.ingredients ?? null,
+              steps: cached.steps ?? null,
+            } as CookableRecipe)
+          );
+          setServings(cached.servings || 4);
+          setRelated([]);
+          setLoading(false);
+          return;
+        }
+      }
+
       let { data: rec } = await supabase.from("recipes").select("*").eq("slug", slug).maybeSingle();
       if (!rec) {
         const { data: d } = await supabase.from("dishes").select("id,name").eq("slug", slug).maybeSingle();
@@ -44,8 +66,25 @@ const RecipeDetail = () => {
           rec = data?.[0] ?? null;
         }
       }
-      setRecipe(rec ? withParsedRecipeFields(rec) : null);
+      const parsed = rec ? withParsedRecipeFields(rec) : null;
+      setRecipe(parsed);
       setServings(rec?.servings || 4);
+      if (parsed) {
+        cacheRecipe({
+          id: parsed.id,
+          name: parsed.name,
+          country: parsed.country || "",
+          image_url: parsed.image_url ?? null,
+          prep_time: parsed.prep_time ?? null,
+          cook_time: parsed.cook_time ?? null,
+          servings: parsed.servings ?? null,
+          difficulty: parsed.difficulty ?? null,
+          summary: parsed.summary ?? null,
+          slug: parsed.slug || slug,
+          ingredients: parsed.ingredients,
+          steps: parsed.steps,
+        });
+      }
       if (rec?.country) {
         const { data } = await supabase
           .from("recipes")
@@ -53,11 +92,13 @@ const RecipeDetail = () => {
           .eq("country", rec.country)
           .neq("id", rec.id)
           .limit(6);
-        setRelated(data || []);
+        setRelated(dataSaver ? (data || []).map((r) => ({ ...r, image_url: null })) : data || []);
+      } else {
+        setRelated([]);
       }
       setLoading(false);
     })();
-  }, [slug]);
+  }, [slug, dataSaver]);
 
   const base = recipe?.servings || 4;
   const mult = servings / base;
@@ -142,7 +183,12 @@ const RecipeDetail = () => {
               <header className="grid lg:grid-cols-5 gap-8 mb-10">
                 <div className="lg:col-span-3 rounded-lg overflow-hidden h-64 lg:h-96">
                   {recipe.image_url ? (
-                    <img src={recipe.image_url} alt={`${title} from ${country}`} className="w-full h-full object-cover" />
+                    <DataSaverImage
+                      src={recipe.image_url}
+                      alt={`${title} from ${country}`}
+                      className="w-full h-full object-cover"
+                      loading="eager"
+                    />
                   ) : (
                     <RecipeImagePlaceholder name={title} country={country} className="h-full min-h-64" />
                   )}

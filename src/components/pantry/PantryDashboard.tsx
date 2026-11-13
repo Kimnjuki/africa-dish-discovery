@@ -50,6 +50,14 @@ import {
 } from "@/utils/recipeMatching";
 import type { CookableRecipe } from "@/types/content";
 import type { User } from "@supabase/supabase-js";
+import {
+  enqueuePantryOp,
+  getPantrySnapshot,
+  isBrowserOffline,
+  savePantrySnapshot,
+} from "@/lib/offlineStore";
+import { useOfflinePantrySync } from "@/hooks/useOfflinePantrySync";
+import { usePWA } from "@/hooks/usePWA";
 
 const PantryDashboard = () => {
   const [pantryItems, setPantryItems] = useState<PantryItemWithExpiry[]>([]);
@@ -67,6 +75,10 @@ const PantryDashboard = () => {
   const [editForm, setEditForm] = useState({ name: '', quantity: '', unit: '', expires_at: '' });
   const [householdName, setHouseholdName] = useState<string | null>(null);
   const [sharedHouseholdItems, setSharedHouseholdItems] = useState<SharedPantryItem[]>([]);
+  const [usingOfflineSnapshot, setUsingOfflineSnapshot] = useState(false);
+  const { isOffline } = usePWA();
+
+  useOfflinePantrySync(user?.id);
 
   useEffect(() => {
     checkAuth();
@@ -85,8 +97,24 @@ const PantryDashboard = () => {
     setLoading(false);
   };
 
+  const persistSnapshot = (items: PantryItemWithExpiry[], userId: string) => {
+    savePantrySnapshot(userId, items);
+  };
+
   const loadPantryItems = async () => {
     if (!user) return;
+
+    if (isBrowserOffline()) {
+      const snap = getPantrySnapshot(user.id);
+      if (snap) {
+        setPantryItems(snap.items as PantryItemWithExpiry[]);
+        setUsingOfflineSnapshot(true);
+        toast.info("Showing offline pantry snapshot");
+        return;
+      }
+      toast.error("No offline pantry snapshot available");
+      return;
+    }
 
     try {
       const { data, error } = await supabase
@@ -96,10 +124,20 @@ const PantryDashboard = () => {
         .order('added_at', { ascending: false });
 
       if (error) throw error;
-      setPantryItems(data || []);
+      const items = data || [];
+      setPantryItems(items);
+      setUsingOfflineSnapshot(false);
+      persistSnapshot(items, user.id);
     } catch (error) {
       console.error('Error loading pantry:', error);
-      toast.error("Failed to load pantry items");
+      const snap = getPantrySnapshot(user.id);
+      if (snap) {
+        setPantryItems(snap.items as PantryItemWithExpiry[]);
+        setUsingOfflineSnapshot(true);
+        toast.info("Using cached pantry (network error)");
+      } else {
+        toast.error("Failed to load pantry items");
+      }
     }
   };
 
@@ -127,6 +165,38 @@ const PantryDashboard = () => {
     if (!ingredientName || !user) return;
 
     const parts = splitPantryInput(ingredientName);
+
+    if (isBrowserOffline()) {
+      const localItems: PantryItemWithExpiry[] = parts.map((part, i) => {
+        const localId = `local_${Date.now()}_${i}_${Math.random().toString(36).slice(2, 6)}`;
+        enqueuePantryOp({
+          type: "insert",
+          localId,
+          payload: {
+            ingredient_name: part,
+            quantity: quantity || 1,
+            unit: unit || "piece",
+          },
+        });
+        return {
+          id: localId,
+          ingredient_name: part,
+          quantity: quantity || 1,
+          unit: unit || "piece",
+        };
+      });
+      const next = [...localItems, ...pantryItems];
+      setPantryItems(next);
+      persistSnapshot(next, user.id);
+      if (!name) setNewIngredient("");
+      toast.success(
+        parts.length > 1
+          ? `Queued ${parts.length} ingredients (offline)`
+          : `Queued ${parts[0]} (offline)`
+      );
+      return;
+    }
+
     try {
       const rows = parts.map((part) => ({
         ingredient_name: part,
@@ -165,6 +235,17 @@ const PantryDashboard = () => {
   };
 
   const removeIngredient = async (id: string) => {
+    if (!user) return;
+
+    if (isBrowserOffline()) {
+      enqueuePantryOp({ type: "delete", payload: { id } });
+      const next = pantryItems.filter((item) => item.id !== id);
+      setPantryItems(next);
+      persistSnapshot(next, user.id);
+      toast.success("Removed offline — will sync later");
+      return;
+    }
+
     try {
       const { error } = await supabase
         .from('pantry_items')
@@ -181,6 +262,22 @@ const PantryDashboard = () => {
   };
 
   const updateExpiry = async (id: string, expiresAt: string) => {
+    if (!user) return;
+
+    if (isBrowserOffline()) {
+      enqueuePantryOp({
+        type: "update",
+        payload: { id, expires_at: expiresAt },
+      });
+      const next = pantryItems.map((item) =>
+        item.id === id ? { ...item, expires_at: expiresAt } : item
+      );
+      setPantryItems(next);
+      persistSnapshot(next, user.id);
+      toast.success("Expiry queued offline");
+      return;
+    }
+
     try {
       const { error } = await supabase
         .from('pantry_items')
@@ -207,17 +304,34 @@ const PantryDashboard = () => {
   };
 
   const saveItemEdit = async () => {
-    if (!editingItem) return;
+    if (!editingItem || !user) return;
+
+    const patch = {
+      ingredient_name: editForm.name,
+      quantity: editForm.quantity ? parseFloat(editForm.quantity) : null,
+      unit: editForm.unit || null,
+      expires_at: editForm.expires_at || null,
+    };
+
+    if (isBrowserOffline()) {
+      enqueuePantryOp({
+        type: "update",
+        payload: { id: editingItem.id, ...patch },
+      });
+      const next = pantryItems.map((item) =>
+        item.id === editingItem.id ? { ...item, ...patch } : item
+      );
+      setPantryItems(next);
+      persistSnapshot(next, user.id);
+      setEditingItem(null);
+      toast.success("Update queued offline");
+      return;
+    }
     
     try {
       const { error } = await supabase
         .from('pantry_items')
-        .update({
-          ingredient_name: editForm.name,
-          quantity: editForm.quantity ? parseFloat(editForm.quantity) : null,
-          unit: editForm.unit || null,
-          expires_at: editForm.expires_at || null
-        })
+        .update(patch)
         .eq('id', editingItem.id);
 
       if (error) throw error;
@@ -445,6 +559,16 @@ const PantryDashboard = () => {
 
   return (
     <div className="space-y-6">
+      {(isOffline || usingOfflineSnapshot) && (
+        <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-900 dark:text-amber-100">
+          {isOffline
+            ? "You're offline. Showing your last pantry snapshot — edits queue and sync when you reconnect."
+            : "Showing a cached pantry snapshot after a network issue."}{" "}
+          <Link to="/offline-recipes" className="underline font-medium">
+            Offline mode
+          </Link>
+        </div>
+      )}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid w-full max-w-3xl mx-auto grid-cols-6">
           <TabsTrigger value="pantry" className="flex items-center gap-1">

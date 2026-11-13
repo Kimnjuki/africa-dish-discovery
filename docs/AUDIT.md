@@ -109,7 +109,7 @@ Statuses: **present** | **partial** | **missing** | **unknown** — based on **c
 | F06 | Local substitution engine | P0 | **partial** | `substitutionGraph` client seed (aliases + flavor/region notes); wired into popover, pantry modal, `recipeMatching`; SQL seed migration for `ingredient_substitutions`; AI fallback retained | Country/price/diet ranking not productized; DB seed applies only after migration deploy; graph is curated bootstrap not full market graph |
 | F07 | Creator publishing | P1 | **partial** | `/submit-recipe` → `uploads`; `/editorial-review`; admin uploader | No creator profiles/analytics/payouts; limited moderation workflow |
 | F08 | Community proof | P1 | **partial** | `RecipeReviews` + `recipe_ratings_summary` | Only **1** review row via anon API; no cooked-photo uploads or Q&A threads |
-| F09 | Offline / low-data | P0 | **partial** | PWA + Workbox recipe API cache; `/offline-recipes` (localStorage); `/install` | No IndexedDB; no offline meal plans/lists sync; no explicit low-data image mode |
+| F09 | Offline / low-data | P0 | **partial** | PWA + Workbox (detail cache capped); `/offline-recipes` hub; localStorage snapshots for pantry + last meal plan + opened recipes; pantry mutation queue + reconnect flush; data-saver toggle | No IndexedDB; no full Background Sync API; meal-plan edits still online-only; grocery list snapshot not yet cached |
 | F10 | Accounts & household sharing | P0 | **partial** | Email/password + Google OAuth; profiles; meal-plan share token; **`households` + `household_members`** (invite code, share-pantry RLS); `/household` create/join/members | **No phone auth**; **no email invites**; no shared shopping-list write-sync; one household per user MVP |
 | F11 | Pantry-aware recommendations | P1 | **present** | `/pantry`, `SmartRecipeMatch`, `pantry-intelligence`, barcode + voice add | Waste/expiry UX exists; depth of ranking can improve |
 | F12 | Budget meal planner | P1 | **partial** | `BudgetTracker`, AI meal gen `budgetPerDay` | Hardcoded/demo budgets; no live local prices or promo optimization |
@@ -135,8 +135,9 @@ Code-based notes:
 
 - Route-level `React.lazy` + `Suspense` for most pages (`App.tsx`) — good code-splitting.
 - Eager load only `Index` + `NotFound`.
-- PWA caches static assets + Supabase recipes REST (`StaleWhileRevalidate`, max 100 entries).
-- Image cache for Unsplash only — many recipe images may miss SW optimization.
+- PWA caches static assets + Supabase recipes REST (`StaleWhileRevalidate`, max 40 entries) + navigateFallback.
+- App snapshots (pantry/meal plan/opened recipes) live in localStorage via `offlineStore`, not SW precache.
+- Image cache for Unsplash only — many recipe images may miss SW optimization; data-saver shrinks Unsplash URLs.
 - Client-injected meta/JSON-LD (`PageMeta`, `RecipeSchema`) means crawlers that do not execute JS see mainly `index.html` defaults — SPA SEO risk.
 - Homepage live content shows non-African “Featured African Recipes” soup titles — content quality / curation issue impacting perceived performance of discovery.
 
@@ -197,19 +198,28 @@ Highlights: **1477** Africa-continent recipes; **54/54** named African countries
 
 ---
 
-## Recommended first implementation prompt (not already done)
+## Recommended next implementation prompt
 
-Strategy `ai_implementation_prompts_for_cursor.build_grocery_engine` is the best next Cursor prompt:
+After F05 grocery engine, F01 search, F06 subs, F10 household MVP, and F09 offline snapshots, prefer **provenance / SEO / social proof**:
 
-> Implement a grocery-list service that merges ingredients across selected recipes, converts units, de-duplicates by normalized ingredient ID, groups items by aisle or market section, supports manual edits, and exports a shareable list.
+> Add recipe provenance (source + trust notice consistency), JSON-LD coverage on recipe/dish pages, and ratings/review UX depth (F08) so crawlers and cooks see credible structured data.
 
-**Why first:** F04 meal planner already exists and naively merges by display name; F05 is the clearest P0 gap that unlocks shopping conversion. Closely follow with **household sharing** (F10 — no household model) and **`build_substitution_engine`** (F06 — schema present, data thin).
+Alternates: phone auth / email household invites (F10 remaining), offline grocery-list snapshot, IndexedDB migration for larger caches.
 
 Do **not** start with Next.js migration or F16/F17.
 
 ---
 
 ## Progress
+
+**2026-11-14 — Phase 1 F09 offline / low-data (chunk 5)**
+
+- `src/lib/offlineStore.ts`: capped recipe cache, pantry + meal-plan snapshots, pantry op queue, data-saver preference.
+- Pantry loads/edits offline via snapshot + queue; `OfflinePantrySyncHost` flushes on reconnect.
+- Meal planner pages cache last plan for offline open; `/offline-recipes` shows pantry/plan/recipes + data-saver.
+- Data-saver: lighter Unsplash URLs, `DataSaverImage`, cultural video CTA hidden; Install page toggle.
+- Workbox: navigateFallback; recipe runtime cache narrowed (max 40 detail entries); no full catalog precache.
+- Remaining: IndexedDB, Background Sync registration, offline grocery-list snapshot, meal-plan write queue.
 
 **2026-11-14 — Phase 1 F10 household sharing MVP (chunk 4)**
 
@@ -252,6 +262,8 @@ Do **not** start with Next.js migration or F16/F17.
 | Household email invites / shared grocery write-sync (F10 remaining) | After F10 schema+code join MVP |
 | Phone auth (F10) | Deferred — email/Google + household code invite first |
 | F05 aisle DB / persisted shared lists | Still open after client grocery engine |
+| IndexedDB + Background Sync API (F09 remaining) | Deferred — localStorage snapshots + pantry queue shipped first |
+| Offline grocery-list / meal-plan write queue | Deferred — read snapshots + pantry queue first |
 
 ---
 

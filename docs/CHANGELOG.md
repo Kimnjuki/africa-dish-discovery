@@ -3,6 +3,8 @@
 ## 2026-11-14
 
 ### Added
+- F09 offline / low-data chunk: `offlineStore` snapshots for pantry + last meal plan + capped saved recipes; offline pantry edit queue with reconnect flush; data-saver toggle (lighter images, no cultural video CTA); `/offline-recipes` hub; leaner Workbox recipe detail cache.
+- Acceptance: `npm run test:offline`.
 - F10 household sharing MVP: `households` + `household_members` (owner/member), invite-code create/join, share-pantry toggle, RLS so co-members can read shared pantry; UI at `/household` + pantry household strip.
 - Migration `supabase/migrations/20261114020000_f10_household_sharing.sql` (RPCs: `create_household`, `join_household_by_code`, `leave_household`, `regenerate_household_invite_code`).
 - F06 substitution graph bootstrap (`src/lib/substitutionGraph.ts`): Africa-first aliases + directed swaps with flavor/region notes (ugwu↔spinach/kale, sukuma wiki↔collard/kale, egusi↔pumpkin seeds, palm oil alternatives, scotch bonnet↔habanero, and more).

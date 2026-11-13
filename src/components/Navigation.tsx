@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ChefHat, Menu, X, Search, User, LogOut, Package, Calendar, LayoutGrid, Heart, Home } from "lucide-react";
+import { ChefHat, Menu, X, Search, User, LogOut, Package, Calendar, LayoutGrid, Heart, Home, WifiOff } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -142,6 +142,10 @@ const Navigation = () => {
                     <Calendar className="w-4 h-4 mr-2" />
                     Meal Planner
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/offline-recipes')}>
+                    <WifiOff className="w-4 h-4 mr-2" />
+                    Offline Mode
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}>
                     <LogOut className="w-4 h-4 mr-2" />
@@ -197,6 +201,15 @@ const Navigation = () => {
                   {!user && <span className="text-xs opacity-50">🔒</span>}
                 </button>
               ))}
+
+              <Link
+                to="/offline-recipes"
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors py-2 flex items-center gap-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <WifiOff className="w-4 h-4" />
+                Offline Mode
+              </Link>
               
               <div className="flex items-center gap-3 pt-4 border-t border-primary/10">
                 <Button 

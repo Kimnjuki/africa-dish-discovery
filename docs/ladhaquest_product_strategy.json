@@ -546,7 +546,7 @@
                                                 {
                                                     "priority":  "P0",
                                                     "status":  "partial",
-                                                    "evidence":  "PWA Workbox + localStorage offline-recipes; no IndexedDB sync",
+                                                    "evidence":  "PWA Workbox + offlineStore pantry/meal-plan/recipe snapshots + pantry queue + data-saver; no IndexedDB/Background Sync yet",
                                                     "name":  "Offline and low-data mode",
                                                     "id":  "F09"
                                                 },

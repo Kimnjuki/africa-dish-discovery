@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { OfflineIndicator } from "@/components/OfflineIndicator";
+import { OfflinePantrySyncHost } from "@/components/OfflinePantrySyncHost";
 import { CookieConsent } from "@/components/CookieConsent";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { AdminGate } from "@/components/AdminGate";
@@ -71,6 +72,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <OfflineIndicator />
+      <OfflinePantrySyncHost />
       <CookieConsent />
       <BrowserRouter>
         <AuthUrlErrorRedirect />

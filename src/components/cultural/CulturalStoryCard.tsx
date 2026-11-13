@@ -12,6 +12,8 @@ import {
   Eye
 } from "lucide-react";
 import { SourceCitations } from "./SourceCitations";
+import { useDataSaver } from "@/hooks/useDataSaver";
+import { DataSaverImage } from "@/components/DataSaverImage";
 
 interface CulturalStory {
   id: string;
@@ -45,17 +47,18 @@ const storyTypeConfig = {
 export function CulturalStoryCard({ story, onPlay }: CulturalStoryCardProps) {
   const config = storyTypeConfig[story.story_type];
   const Icon = config.icon;
+  const { dataSaver } = useDataSaver();
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow">
       {story.images && story.images.length > 0 && (
         <div className="relative h-48 overflow-hidden">
-          <img 
-            src={story.images[0]} 
+          <DataSaverImage
+            src={story.images[0]}
             alt={story.title}
             className="w-full h-full object-cover"
           />
-          {story.video_url && (
+          {story.video_url && !dataSaver && (
             <Button 
               size="icon" 
               variant="secondary"

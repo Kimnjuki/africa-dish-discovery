@@ -47,17 +47,22 @@ export default defineConfig(({ mode }) => ({
         ]
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,jpg,jpeg,svg,webp}'],
+        // App shell only — recipe catalog stays out of the precache
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp}'],
         maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5 MB limit
+        navigateFallback: '/index.html',
+        navigateFallbackDenylist: [/^\/api/, /^\/auth/],
         runtimeCaching: [
           {
-            urlPattern: /^https:\/\/.*\.supabase\.co\/rest\/v1\/recipes/,
+            // Recipe REST (capped). App-level offlineStore holds pantry/plan snapshots —
+            // do not precache the full catalog.
+            urlPattern: /^https:\/\/.*\.supabase\.co\/rest\/v1\/recipes.*/,
             handler: 'StaleWhileRevalidate',
             options: {
-              cacheName: 'recipes-cache',
+              cacheName: 'recipes-detail-cache',
               expiration: {
-                maxEntries: 100,
-                maxAgeSeconds: 60 * 60 * 24 // 24 hours
+                maxEntries: 40,
+                maxAgeSeconds: 60 * 60 * 24 * 3 // 3 days
               },
               cacheableResponse: {
                 statuses: [0, 200]
@@ -70,7 +75,7 @@ export default defineConfig(({ mode }) => ({
             options: {
               cacheName: 'image-cache',
               expiration: {
-                maxEntries: 50,
+                maxEntries: 40,
                 maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
               },
               cacheableResponse: {
