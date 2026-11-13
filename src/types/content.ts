@@ -37,6 +37,9 @@ export interface CookableRecipe {
   brief_description?: string | null;
   description?: string | null;
   history?: string | null;
+  local_names?: string[] | null;
+  ethnic_group?: string | null;
+  occasion_tags?: string[] | null;
   image_url?: string | null;
   ingredients?: IngredientValue[] | null;
   steps?: StepValue[] | null;

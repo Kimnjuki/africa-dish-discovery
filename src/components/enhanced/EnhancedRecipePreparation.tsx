@@ -902,7 +902,7 @@ export const EnhancedRecipePreparation = ({ recipe, onBack }: RecipePreparationP
             />
 
             {/* Recipe Reviews */}
-            <RecipeReviews recipeId={recipe.id} />
+            <RecipeReviews recipeId={recipe.id} recipeName={recipe.name} />
           </div>
         </div>
       </div>

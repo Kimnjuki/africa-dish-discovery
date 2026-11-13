@@ -57,8 +57,8 @@ Legend: `[ ]` to do · `[~]` partial in platform · `[x]` done
 
 ## 6. Trust, SEO & performance
 - [x] Recipe JSON-LD schema
-- [ ] JSON-LD: HowTo, VideoObject, ItemList (for ranked lists), Breadcrumb, Person (author)
-- [ ] Per-dish authenticity provenance ("verified by", sources cited)
+- [~] JSON-LD: HowTo steps + nutrition + aggregateRating on recipe pages; VideoObject, ItemList, Person still open
+- [~] Per-dish authenticity provenance (country/region/local names/ethnic group/history + correction UX; “verified by” person still open)
 - [ ] Image licence/attribution line on every photo
 - [ ] Core Web Vitals pass: responsive srcset, lazy-load, LCP hero preload
 - [~] Legal pages + CMP for AdSense

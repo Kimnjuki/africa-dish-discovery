@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { PageMeta } from "@/components/seo/PageMeta";
@@ -20,6 +21,7 @@ const contactSchema = z.object({
 
 const Contact = () => {
   const { toast } = useToast();
+  const [searchParams] = useSearchParams();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -29,6 +31,18 @@ const Contact = () => {
     company: "", // honeypot
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Prefill from provenance “suggest a correction” and other deep links
+  useEffect(() => {
+    const subject = searchParams.get("subject");
+    const message = searchParams.get("message");
+    if (!subject && !message) return;
+    setFormData((prev) => ({
+      ...prev,
+      subject: subject?.slice(0, 200) || prev.subject,
+      message: message?.slice(0, 2000) || prev.message,
+    }));
+  }, [searchParams]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;

@@ -3,6 +3,9 @@
 ## 2026-11-14
 
 ### Added
+- F08 provenance / Recipe JSON-LD / ratings depth: stronger schema.org `Recipe` on detail pages (nutrition, cuisine, keywords, image, `aggregateRating` only when real reviews exist); `RecipeProvenance` block (country/region, also-known-as, ethnic group, occasions, history teaser, suggest-a-correction → Contact); recipe detail “I made this” reviews with honest empty state (no fake ratings).
+- Nullable columns `recipes.local_names` (text[]) + `recipes.ethnic_group` with soft backfill from linked dishes (`supabase/migrations/20261114030000_f08_recipe_provenance_columns.sql`).
+- Contact form prefills `subject` / `message` query params for correction deep links.
 - F09 offline / low-data chunk: `offlineStore` snapshots for pantry + last meal plan + capped saved recipes; offline pantry edit queue with reconnect flush; data-saver toggle (lighter images, no cultural video CTA); `/offline-recipes` hub; leaner Workbox recipe detail cache.
 - Acceptance: `npm run test:offline`.
 - F10 household sharing MVP: `households` + `household_members` (owner/member), invite-code create/join, share-pantry toggle, RLS so co-members can read shared pantry; UI at `/household` + pantry household strip.

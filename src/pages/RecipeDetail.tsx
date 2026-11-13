@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { Link, useParams } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { PageMeta } from "@/components/seo/PageMeta";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
+import { RecipeSchema } from "@/components/seo/RecipeSchema";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,7 +17,9 @@ import { NutritionBadge } from "@/components/NutritionBadge";
 import { PrintRecipeButton } from "@/components/PrintRecipeButton";
 import { CookMode } from "@/components/recipe/CookMode";
 import { RecipeTrustNotice } from "@/components/recipe/RecipeTrustNotice";
+import { RecipeProvenance } from "@/components/recipe/RecipeProvenance";
 import { SourceCitations } from "@/components/cultural/SourceCitations";
+import { RecipeReviews } from "@/components/RecipeReviews";
 import { SaveButton } from "@/components/SaveButton";
 import { getCountryFlag } from "@/utils/countryFlags";
 import { itemText, toList, toSlug } from "@/lib/recipeText";
@@ -26,15 +29,46 @@ import { cacheRecipe, getCachedRecipes, isBrowserOffline } from "@/lib/offlineSt
 import { useDataSaver } from "@/hooks/useDataSaver";
 import { DataSaverImage } from "@/components/DataSaverImage";
 
+type DishProvenance = {
+  original_name_native: string | null;
+  primary_tribe_ethnicity: string | null;
+  region: string | null;
+  phonetic_spelling: string | null;
+};
+
+type RegionJoin = { name: string } | null;
+
+type RecipeRow = CookableRecipe & {
+  dish_id?: string | null;
+  region_id?: string | null;
+  local_names?: string[] | null;
+  ethnic_group?: string | null;
+  occasion_tags?: string[] | null;
+  dishes?: DishProvenance | DishProvenance[] | null;
+  regions?: RegionJoin | RegionJoin[] | null;
+};
+
+function firstJoin<T>(value: T | T[] | null | undefined): T | null {
+  if (!value) return null;
+  return Array.isArray(value) ? value[0] ?? null : value;
+}
+
 const RecipeDetail = () => {
   const { slug } = useParams();
   const [loading, setLoading] = useState(true);
-  const [recipe, setRecipe] = useState<CookableRecipe | null>(null);
+  const [recipe, setRecipe] = useState<RecipeRow | null>(null);
   const [related, setRelated] = useState<CookableRecipe[]>([]);
   const [servings, setServings] = useState(4);
   const [cooking, setCooking] = useState(false);
   const [cookMode, setCookMode] = useState(false);
+  const [ratingSummary, setRatingSummary] = useState<{ average: number; count: number } | null>(
+    null
+  );
   const { dataSaver } = useDataSaver();
+
+  const onSummaryChange = useCallback((summary: { average: number; count: number } | null) => {
+    setRatingSummary(summary);
+  }, []);
 
   useEffect(() => {
     if (!slug) return;
@@ -49,7 +83,7 @@ const RecipeDetail = () => {
               ...cached,
               ingredients: cached.ingredients ?? null,
               steps: cached.steps ?? null,
-            } as CookableRecipe)
+            } as RecipeRow)
           );
           setServings(cached.servings || 4);
           setRelated([]);
@@ -58,20 +92,46 @@ const RecipeDetail = () => {
         }
       }
 
-      let { data: rec } = await supabase.from("recipes").select("*").eq("slug", slug).maybeSingle();
+      const selectCols =
+        "*, dishes(original_name_native, primary_tribe_ethnicity, region, phonetic_spelling), regions(name)";
+
+      let { data: rec } = await supabase.from("recipes").select(selectCols).eq("slug", slug).maybeSingle();
       if (!rec) {
         const { data: d } = await supabase.from("dishes").select("id,name").eq("slug", slug).maybeSingle();
         if (d) {
-          const { data } = await supabase.from("recipes").select("*").or(`dish_id.eq.${d.id},name.eq.${d.name}`).limit(1);
+          const { data } = await supabase
+            .from("recipes")
+            .select(selectCols)
+            .or(`dish_id.eq.${d.id},name.eq.${d.name}`)
+            .limit(1);
           rec = data?.[0] ?? null;
         }
       }
-      const parsed = rec ? withParsedRecipeFields(rec) : null;
+      const parsed = rec ? (withParsedRecipeFields(rec) as RecipeRow) : null;
       setRecipe(parsed);
       setServings(rec?.servings || 4);
+
+      if (parsed?.id) {
+        const { data: summary } = await supabase
+          .from("recipe_ratings_summary")
+          .select("average_rating, total_reviews")
+          .eq("recipe_id", parsed.id)
+          .maybeSingle();
+        if (summary?.total_reviews && summary.total_reviews > 0) {
+          setRatingSummary({
+            average: Number(summary.average_rating) || 0,
+            count: Number(summary.total_reviews) || 0,
+          });
+        } else {
+          setRatingSummary(null);
+        }
+      } else {
+        setRatingSummary(null);
+      }
+
       if (parsed) {
         cacheRecipe({
-          id: parsed.id,
+          id: parsed.id!,
           name: parsed.name,
           country: parsed.country || "",
           image_url: parsed.image_url ?? null,
@@ -114,23 +174,15 @@ const RecipeDetail = () => {
     return t;
   }, [recipe]);
 
-  const jsonLd = useMemo(() => {
-    if (!recipe) return null;
-    return {
-      "@context": "https://schema.org",
-      "@type": "Recipe",
-      name: recipe.name,
-      description: recipe.summary || recipe.brief_description,
-      image: recipe.image_url ? [recipe.image_url] : undefined,
-      recipeCuisine: recipe.country,
-      recipeYield: `${base} servings`,
-      prepTime: recipe.prep_time ? `PT${recipe.prep_time}M` : undefined,
-      cookTime: recipe.cook_time ? `PT${recipe.cook_time}M` : undefined,
-      recipeIngredient: toList(recipe.ingredients).map(itemText),
-      recipeInstructions: steps.map((s) => ({ "@type": "HowToStep", text: s })),
-      nutrition: recipe.calories ? { "@type": "NutritionInformation", calories: `${recipe.calories} calories` } : undefined,
-    };
-  }, [recipe, steps, base]);
+  const dish = firstJoin(recipe?.dishes);
+  const regionJoin = firstJoin(recipe?.regions);
+  const regionName = regionJoin?.name || dish?.region || null;
+  const localNames = useMemo(() => {
+    const fromRecipe = recipe?.local_names?.filter(Boolean) || [];
+    const fromDish = dish?.original_name_native ? [dish.original_name_native] : [];
+    return [...new Set([...fromRecipe, ...fromDish])];
+  }, [recipe?.local_names, dish?.original_name_native]);
+  const ethnicGroup = recipe?.ethnic_group || dish?.primary_tribe_ethnicity || null;
 
   if (cookMode && recipe) {
     return (
@@ -158,7 +210,37 @@ const RecipeDetail = () => {
         ogImage={recipe?.image_url || undefined}
         type="article"
       />
-      {jsonLd && <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>}
+      {recipe && (
+        <RecipeSchema
+          recipe={{
+            name: recipe.name,
+            image_url: recipe.image_url,
+            summary: recipe.summary,
+            brief_description: recipe.brief_description,
+            country: recipe.country,
+            cuisine_type: recipe.cuisine_type,
+            category: recipe.category,
+            prep_time: recipe.prep_time ?? recipe.prep_time_minutes,
+            cook_time: recipe.cook_time ?? recipe.cook_time_minutes,
+            servings: recipe.servings,
+            difficulty: recipe.difficulty,
+            ingredients: recipe.ingredients,
+            steps: recipe.steps,
+            tags: recipe.tags,
+            dietary_tags: recipe.dietary_tags,
+            occasion_tags: recipe.occasion_tags,
+            local_names: localNames,
+            ethnic_group: ethnicGroup,
+            created_at: recipe.created_at,
+            slug: recipe.slug || slug,
+            calories: recipe.calories,
+            protein: recipe.protein,
+            carbs: recipe.carbs,
+            fats: recipe.fats,
+          }}
+          rating={ratingSummary}
+        />
+      )}
       <Navigation />
       <main className="pt-20 pb-28 md:pb-16">
         <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
@@ -195,10 +277,19 @@ const RecipeDetail = () => {
                 </div>
                 <div className="lg:col-span-2">
                   <h1 className="mb-3 text-3xl font-bold leading-tight sm:text-4xl">{title}</h1>
+                  {localNames.length > 0 && (
+                    <p className="mb-2 text-muted-foreground italic">{localNames.join(" · ")}</p>
+                  )}
                   <div className="flex flex-wrap gap-2 mb-4">
                     {country && <Badge variant="secondary">{getCountryFlag(country)} {country}</Badge>}
+                    {regionName && <Badge variant="outline">{regionName}</Badge>}
                     {recipe.continent && <Badge variant="outline">{recipe.continent}</Badge>}
                     {recipe.category && <Badge variant="outline">{recipe.category}</Badge>}
+                    {ratingSummary && ratingSummary.count > 0 && (
+                      <Badge variant="outline">
+                        ★ {ratingSummary.average.toFixed(1)} ({ratingSummary.count})
+                      </Badge>
+                    )}
                     <NutritionBadge calories={recipe.calories} protein={recipe.protein} carbs={recipe.carbs} fats={recipe.fats} />
                   </div>
                   <p className="text-muted-foreground mb-4">{recipe.summary || recipe.brief_description}</p>
@@ -210,6 +301,9 @@ const RecipeDetail = () => {
                   <div className="flex flex-wrap gap-2">
                     <Button variant="hero" className="h-12 hover:scale-100" onClick={() => setCookMode(true)}><Utensils className="mr-2 h-4 w-4" />Start cooking</Button>
                     <Button variant="outline" className="h-12" onClick={() => setCooking(true)}>Full guide</Button>
+                    <Button asChild variant="outline" className="h-12">
+                      <a href="#reviews">I made this</a>
+                    </Button>
                     <SaveButton type="recipe" slug={recipe.slug} id={recipe.id} label={recipe.name} />
                     <PrintRecipeButton recipe={recipe} servingMultiplier={mult} />
                   </div>
@@ -230,6 +324,17 @@ const RecipeDetail = () => {
                     </CardContent>
                   </Card>
                   <IngredientChecklist ingredients={recipe.ingredients} multiplier={mult} country={country} dishName={title} />
+                  <RecipeProvenance
+                    recipeName={recipe.name}
+                    recipeSlug={recipe.slug || slug}
+                    country={country}
+                    region={regionName}
+                    localNames={localNames}
+                    ethnicGroup={ethnicGroup}
+                    occasionTags={recipe.occasion_tags}
+                    history={recipe.history}
+                    historySources={recipe.history_sources}
+                  />
                 </div>
 
                 <div className="lg:col-span-2 space-y-6">
@@ -239,7 +344,7 @@ const RecipeDetail = () => {
                       {steps.length ? (
                         <ol className="space-y-4">
                           {steps.map((s, i) => (
-                            <li key={i} className="flex gap-4">
+                            <li key={i} className="flex gap-4" id={`step${i + 1}`}>
                               <span className="shrink-0 w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-bold">{i + 1}</span>
                               <p className="pt-1">{s}</p>
                             </li>
@@ -269,6 +374,14 @@ const RecipeDetail = () => {
                         </Button>
                       </CardContent>
                     </Card>
+                  )}
+
+                  {recipe.id && (
+                    <RecipeReviews
+                      recipeId={recipe.id}
+                      recipeName={recipe.name}
+                      onSummaryChange={onSummaryChange}
+                    />
                   )}
 
                   {related.length > 0 && (

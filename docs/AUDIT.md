@@ -108,7 +108,7 @@ Statuses: **present** | **partial** | **missing** | **unknown** — based on **c
 | F05 | Smart grocery list | P0 | **partial** | `shopping_list_items`; pantry + recipe add; **`groceryEngine` + `GroceryListPanel`** on meal planners (unit merge, aisle groups, copy/share, manual edit); store/affiliate fields; Jumia/Amazon links | Persisted shared lists / household sync still missing; aisle heuristics are keyword-based not DB-backed |
 | F06 | Local substitution engine | P0 | **partial** | `substitutionGraph` client seed (aliases + flavor/region notes); wired into popover, pantry modal, `recipeMatching`; SQL seed migration for `ingredient_substitutions`; AI fallback retained | Country/price/diet ranking not productized; DB seed applies only after migration deploy; graph is curated bootstrap not full market graph |
 | F07 | Creator publishing | P1 | **partial** | `/submit-recipe` → `uploads`; `/editorial-review`; admin uploader | No creator profiles/analytics/payouts; limited moderation workflow |
-| F08 | Community proof | P1 | **partial** | `RecipeReviews` + `recipe_ratings_summary` | Only **1** review row via anon API; no cooked-photo uploads or Q&A threads |
+| F08 | Community proof | P1 | **partial** | Detail-page `RecipeReviews` (“I made this”), honest empty state, `recipe_ratings_summary` → JSON-LD `aggregateRating` only when count &gt; 0; `RecipeProvenance` + correction deep-link | Still few real reviews; no cooked-photo uploads or Q&A threads |
 | F09 | Offline / low-data | P0 | **partial** | PWA + Workbox (detail cache capped); `/offline-recipes` hub; localStorage snapshots for pantry + last meal plan + opened recipes; pantry mutation queue + reconnect flush; data-saver toggle | No IndexedDB; no full Background Sync API; meal-plan edits still online-only; grocery list snapshot not yet cached |
 | F10 | Accounts & household sharing | P0 | **partial** | Email/password + Google OAuth; profiles; meal-plan share token; **`households` + `household_members`** (invite code, share-pantry RLS); `/household` create/join/members | **No phone auth**; **no email invites**; no shared shopping-list write-sync; one household per user MVP |
 | F11 | Pantry-aware recommendations | P1 | **present** | `/pantry`, `SmartRecipeMatch`, `pantry-intelligence`, barcode + voice add | Waste/expiry UX exists; depth of ranking can improve |
@@ -152,7 +152,7 @@ Code-based notes:
 | `sitemap-recipes.xml` | Live | **3136** `<loc>` recipe URLs (larger than DB recipe count 2103 — possible duplicates/legacy slugs) |
 | Canonical | `index.html` + `PageMeta` | Homepage canonical set; per-route via client JS |
 | Open Graph / Twitter | `index.html` + `PageMeta` | Present; default OG image is `placeholder.svg` (weak social preview) |
-| Recipe JSON-LD | `RecipeSchema.tsx` | schema.org `Recipe` injected client-side on detail |
+| Recipe JSON-LD | `RecipeSchema.tsx` + `/recipe/:slug` | Stronger `Recipe` (nutrition, cuisine, keywords, image, real `aggregateRating`); still client-injected SPA |
 | WebSite JSON-LD | `index.html` | Present; SearchAction → `/recipe-index?q=` |
 | Copy drift | Live + `index.html` | Meta still says “50+ recipes” while product claims 1,700+ / DB has 2103 |
 
@@ -200,17 +200,25 @@ Highlights: **1477** Africa-continent recipes; **54/54** named African countries
 
 ## Recommended next implementation prompt
 
-After F05 grocery engine, F01 search, F06 subs, F10 household MVP, and F09 offline snapshots, prefer **provenance / SEO / social proof**:
+After F08 provenance + Recipe JSON-LD + ratings depth, prefer one of:
 
-> Add recipe provenance (source + trust notice consistency), JSON-LD coverage on recipe/dish pages, and ratings/review UX depth (F08) so crawlers and cooks see credible structured data.
+> Wire phone auth or email household invites (F10 remaining) so multi-cook households can share pantry without invite-code-only friction.
 
-Alternates: phone auth / email household invites (F10 remaining), offline grocery-list snapshot, IndexedDB migration for larger caches.
+Alternates: offline grocery-list snapshot / IndexedDB (F09 remaining); dish-page JSON-LD + ItemList for atlas rankings; cooked-photo “I made this” uploads (F08 depth).
 
 Do **not** start with Next.js migration or F16/F17.
 
 ---
 
 ## Progress
+
+**2026-11-14 — Phase 1 F08 provenance / JSON-LD / ratings (chunk 6)**
+
+- `RecipeSchema`: nutrition, cuisine, keywords, image, `suitableForDiet`; `aggregateRating` only when real reviews exist.
+- `RecipeProvenance` on recipe detail: country/region, also-known-as, ethnic group, occasions, history teaser, suggest-a-correction → Contact prefill.
+- Recipe detail hosts reviews + “I made this” CTA; empty state does not invent ratings.
+- Migration `20261114030000_f08_recipe_provenance_columns.sql`: nullable `local_names` + `ethnic_group` (+ soft dish backfill).
+- Remaining: cooked-photo uploads, Q&A, dish/atlas ItemList JSON-LD, SSR/prerender for crawlers.
 
 **2026-11-14 — Phase 1 F09 offline / low-data (chunk 5)**
 

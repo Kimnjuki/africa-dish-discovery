@@ -1368,8 +1368,10 @@ export type Database = {
           is_african: boolean | null
           is_verified_authentic: boolean | null
           item_type: string | null
+          local_names: string[] | null
           name: string
           occasion_tags: string[] | null
+          ethnic_group: string | null
           prep_time: number | null
           prep_time_minutes: number | null
           protein: number | null
@@ -1406,6 +1408,7 @@ export type Database = {
           dietary_tags?: string[] | null
           difficulty?: string | null
           dish_id?: string | null
+          ethnic_group?: string | null
           fats?: number | null
           global_rank_taste_atlas?: number | null
           heat_level?: number | null
@@ -1418,6 +1421,7 @@ export type Database = {
           is_african?: boolean | null
           is_verified_authentic?: boolean | null
           item_type?: string | null
+          local_names?: string[] | null
           name: string
           occasion_tags?: string[] | null
           prep_time?: number | null
@@ -1456,6 +1460,7 @@ export type Database = {
           dietary_tags?: string[] | null
           difficulty?: string | null
           dish_id?: string | null
+          ethnic_group?: string | null
           fats?: number | null
           global_rank_taste_atlas?: number | null
           heat_level?: number | null
@@ -1468,6 +1473,7 @@ export type Database = {
           is_african?: boolean | null
           is_verified_authentic?: boolean | null
           item_type?: string | null
+          local_names?: string[] | null
           name?: string
           occasion_tags?: string[] | null
           prep_time?: number | null
