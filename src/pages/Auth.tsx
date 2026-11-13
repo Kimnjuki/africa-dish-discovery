@@ -9,6 +9,11 @@ import { useToast } from "@/hooks/use-toast";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Session, User as SupabaseUser } from "@supabase/supabase-js";
 import { readErrorMessage } from "@/lib/errors";
+import {
+  friendlyAuthErrorMessage,
+  getAuthRedirectUrl,
+  parseAuthUrlError,
+} from "@/lib/authRedirect";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -48,6 +53,22 @@ const Auth = () => {
       console.error('Error creating profile:', error);
     }
   }, []);
+
+  useEffect(() => {
+    const authError = parseAuthUrlError(
+      window.location.search,
+      window.location.hash,
+    );
+    if (authError) {
+      toast({
+        title: "Email link expired or invalid",
+        description: friendlyAuthErrorMessage(authError),
+        variant: "destructive",
+      });
+      // Clear error hash/query so refresh doesn't re-toast
+      window.history.replaceState({}, document.title, "/auth");
+    }
+  }, [toast]);
 
   useEffect(() => {
     let mounted = true;
@@ -156,7 +177,7 @@ const Auth = () => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${window.location.origin}/`,
+          redirectTo: getAuthRedirectUrl("/auth/callback"),
         },
       });
 
@@ -200,7 +221,9 @@ const Auth = () => {
 
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(trimmedEmail, {
-        redirectTo: `${window.location.origin}/auth?mode=reset`,
+        redirectTo: getAuthRedirectUrl(
+          `/auth/callback?next=${encodeURIComponent("/auth?mode=reset")}`,
+        ),
       });
 
       if (error) throw error;
@@ -299,13 +322,11 @@ const Auth = () => {
         });
         // Navigation handled by onAuthStateChange
       } else {
-        const redirectUrl = `${window.location.origin}/`;
-        
         const { data, error } = await supabase.auth.signUp({
           email: trimmedEmail,
           password: trimmedPassword,
           options: {
-            emailRedirectTo: redirectUrl,
+            emailRedirectTo: getAuthRedirectUrl("/auth/callback"),
             data: {
               full_name: trimmedFullName,
             }

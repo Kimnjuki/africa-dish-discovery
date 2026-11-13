@@ -9,6 +9,7 @@ import { CookieConsent } from "@/components/CookieConsent";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { AdminGate } from "@/components/AdminGate";
 import { RequireAuth } from "@/components/RequireAuth";
+import { AuthUrlErrorRedirect } from "@/components/AuthUrlErrorRedirect";
 
 // Eager load only the most critical pages
 import Index from "./pages/Index";
@@ -21,6 +22,7 @@ const RecipeIndex = lazy(() => import("./pages/RecipeIndex"));
 const Meals = lazy(() => import("./pages/Meals"));
 const Ingredients = lazy(() => import("./pages/Ingredients"));
 const Auth = lazy(() => import("./pages/Auth"));
+const AuthCallback = lazy(() => import("./pages/AuthCallback"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogArticle = lazy(() => import("./pages/BlogArticle"));
 const RecipeUploader = lazy(() => import("./pages/RecipeUploader"));
@@ -70,6 +72,7 @@ const App = () => (
       <OfflineIndicator />
       <CookieConsent />
       <BrowserRouter>
+        <AuthUrlErrorRedirect />
         <ErrorBoundary>
           <Suspense fallback={<PageLoader />}>
             <Routes>
@@ -82,6 +85,7 @@ const App = () => (
               <Route path="/meals" element={<Meals />} />
               <Route path="/ingredients" element={<Ingredients />} />
               <Route path="/auth" element={<Auth />} />
+              <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="/recipe-uploader" element={<AdminGate><RecipeUploader /></AdminGate>} />
               <Route path="/meal-planner" element={<RequireAuth><MealPlanner /></RequireAuth>} />
               <Route path="/meal-planner-calendar" element={<RequireAuth><MealPlannerCalendar /></RequireAuth>} />
