@@ -1,0 +1,59 @@
+{
+  "total": 2103,
+  "missing": 0,
+  "soupMissing": 0,
+  "cucumber": [
+    {
+      "id": "a278e903-e646-416d-9620-8f8b8fb49463",
+      "name": "Chilled Cucumber-Mint Soup",
+      "slug": "chilled-cucumber-mint-soup-soup",
+      "country": "Global",
+      "tags": [
+        "Soup",
+        "Everything Soup Cookbook",
+        "B.J. Hanson"
+      ],
+      "image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/recipe-images/backfill/chilled-cucumber-mint-soup-soup.jpg"
+    },
+    {
+      "id": "45a8c763-ce5d-46da-a933-aba7238544b2",
+      "name": "Chilled Shrimp and Cucumber Soup",
+      "slug": "chilled-shrimp-and-cucumber-soup-soup",
+      "country": "Global",
+      "tags": [
+        "Soup",
+        "Everything Soup Cookbook",
+        "B.J. Hanson"
+      ],
+      "image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/recipe-images/backfill/chilled-shrimp-and-cucumber-soup-soup.jpg"
+    },
+    {
+      "id": "fb505a92-fad5-4e07-a274-37d76413ac20",
+      "name": "Cucumber and Buttermilk Soup",
+      "slug": "cucumber-and-buttermilk-soup-soup",
+      "country": "Global",
+      "tags": [
+        "Soup",
+        "Everything Soup Cookbook",
+        "B.J. Hanson"
+      ],
+      "image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/recipe-images/backfill/cucumber-and-buttermilk-soup-soup.jpg"
+    },
+    {
+      "id": "89959d16-4876-4dbb-a880-f866318a914d",
+      "name": "Cucumber Soup",
+      "slug": "cucumber-soup-soup",
+      "country": "Global",
+      "tags": [
+        "Soup",
+        "Everything Soup Cookbook",
+        "B.J. Hanson"
+      ],
+      "image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/recipe-images/backfill/cucumber-soup-soup.jpg"
+    }
+  ],
+  "buckets": [
+    "recipe-uploads"
+  ],
+  "samples": []
+}

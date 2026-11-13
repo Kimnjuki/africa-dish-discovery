@@ -1,10 +1,15 @@
 /**
- * Assign unique licensed images for missing/duplicate recipe images.
+ * Backfill null/empty recipe images from licensed sources, upload to Supabase
+ * storage (recipe-uploads/recipe-images/backfill/{slug}.ext), then PATCH image_url.
+ *
  * Sources: Openverse (CC) -> Wikimedia Commons -> Wikipedia thumbs.
  *
  * node scripts/backfill-unique-images.mjs
- * node scripts/backfill-unique-images.mjs --limit=100
- * node scripts/backfill-unique-images.mjs --concurrency=6
+ * node scripts/backfill-unique-images.mjs --limit=50
+ * node scripts/backfill-unique-images.mjs --concurrency=4
+ * node scripts/backfill-unique-images.mjs --nulls-only
+ * node scripts/backfill-unique-images.mjs --dry-run
+ * node scripts/backfill-unique-images.mjs --slug=cucumber-soup-soup
  */
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
 
@@ -15,8 +20,11 @@ const args = Object.fromEntries(
   })
 );
 const LIMIT = args.limit ? Number(args.limit) : Infinity;
-const CONCURRENCY = Math.max(1, Number(args.concurrency || 5));
+const CONCURRENCY = Math.max(1, Number(args.concurrency || 4));
 const DRY = Boolean(args["dry-run"]);
+const NULLS_ONLY = args["nulls-only"] !== "false"; // default true
+const ONLY_SLUG = args.slug ? String(args.slug) : null;
+const MIN_BYTES = Number(args["min-bytes"] || 30 * 1024);
 
 const env = Object.fromEntries(
   readFileSync(".env", "utf8")
@@ -42,18 +50,22 @@ const headers = {
   Prefer: "return=minimal",
 };
 
-const UA = "LadhaQuestImageBackfill/1.1 (www.ladhaquest.com; hello@ladhaquest.com)";
+const BUCKET = "recipe-uploads";
+const UA = "LadhaQuestImageBackfill/2.0 (www.ladhaquest.com; hello@ladhaquest.com)";
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const progressPath = "data/image-backfill-progress.json";
 const progress = existsSync(progressPath)
   ? JSON.parse(readFileSync(progressPath, "utf8"))
-  : { doneIds: [], usedUrls: [], failed: [] };
+  : { doneIds: [], usedUrls: [], failed: [], filled: [] };
 
 const usedUrls = new Set(progress.usedUrls || []);
 const doneIds = new Set(progress.doneIds || []);
+const filled = Array.isArray(progress.filled) ? progress.filled : [];
 const queryCache = new Map();
-const countryPool = new Map();
 let saveQueued = false;
+
+const BAD_TITLE_RE =
+  /cover|logo|ornament|glyph|icon|diagram|map|chart|svg|book\b|cookbook|title page|frontispiece|decoration|clipart|clip art|symbol|badge|seal|flag|portrait of|signature|handwriting|text only|wordmark/i;
 
 function saveProgress() {
   writeFileSync(
@@ -62,7 +74,8 @@ function saveProgress() {
       {
         doneIds: [...doneIds],
         usedUrls: [...usedUrls],
-        failed: progress.failed.slice(-500),
+        failed: (progress.failed || []).slice(-800),
+        filled: filled.slice(-2000),
         updatedAt: new Date().toISOString(),
       },
       null,
@@ -77,39 +90,118 @@ function queueSave() {
   setTimeout(() => {
     saveProgress();
     saveQueued = false;
-  }, 2000);
+  }, 1500);
 }
 
 function cleanDishName(name) {
   return String(name || "")
     .replace(/\([^)]*\)/g, " ")
-    .replace(/[^\p{L}\p{N}\s-]/gu, " ")
+    .replace(/[^\p{L}\p{N}\s'-]/gu, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
 
-function claimUnused(urls, seed) {
+function sniffImage(buf) {
+  if (!buf || buf.length < 12) return null;
+  if (buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff) {
+    return { ext: "jpg", mime: "image/jpeg" };
+  }
+  if (buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4e && buf[3] === 0x47) {
+    return { ext: "png", mime: "image/png" };
+  }
+  if (
+    buf[0] === 0x52 &&
+    buf[1] === 0x49 &&
+    buf[2] === 0x46 &&
+    buf[3] === 0x46 &&
+    buf[8] === 0x57 &&
+    buf[9] === 0x45 &&
+    buf[10] === 0x42 &&
+    buf[11] === 0x50
+  ) {
+    return { ext: "webp", mime: "image/webp" };
+  }
+  return null;
+}
+
+function readJpegSize(buf) {
+  let i = 2;
+  while (i + 9 < buf.length) {
+    if (buf[i] !== 0xff) break;
+    const marker = buf[i + 1];
+    const len = (buf[i + 2] << 8) + buf[i + 3];
+    if (marker >= 0xc0 && marker <= 0xcf && marker !== 0xc4 && marker !== 0xc8 && marker !== 0xcc) {
+      const height = (buf[i + 5] << 8) + buf[i + 6];
+      const width = (buf[i + 7] << 8) + buf[i + 8];
+      return { width, height };
+    }
+    i += 2 + len;
+  }
+  return null;
+}
+
+function readPngSize(buf) {
+  if (buf.length < 24) return null;
+  const width = buf.readUInt32BE(16);
+  const height = buf.readUInt32BE(20);
+  return { width, height };
+}
+
+function readWebpSize(buf) {
+  if (buf.length < 30) return null;
+  const chunk = buf.toString("ascii", 12, 16);
+  if (chunk === "VP8X" && buf.length >= 30) {
+    const width = 1 + buf[24] + (buf[25] << 8) + (buf[26] << 16);
+    const height = 1 + buf[27] + (buf[28] << 8) + (buf[29] << 16);
+    return { width, height };
+  }
+  if (chunk === "VP8 " && buf.length >= 30) {
+    const width = buf[26] + (buf[27] << 8);
+    const height = buf[28] + (buf[29] << 8);
+    return { width: width & 0x3fff, height: height & 0x3fff };
+  }
+  return null;
+}
+
+function dimensionsOk(kind, buf) {
+  let dim = null;
+  if (kind.ext === "jpg") dim = readJpegSize(buf);
+  else if (kind.ext === "png") dim = readPngSize(buf);
+  else if (kind.ext === "webp") dim = readWebpSize(buf);
+  if (!dim) return true; // allow if unreadable
+  return dim.width >= 400 && dim.height >= 300;
+}
+
+function isBadCandidate(urlOrTitle) {
+  const s = String(urlOrTitle || "");
+  if (BAD_TITLE_RE.test(s)) return true;
+  if (/Cover\.jpe?g/i.test(s)) return true;
+  if (/cookbooks\/soup/i.test(s)) return true;
+  return false;
+}
+
+function claimUnused(candidates, seed) {
   const unique = [];
   const seen = new Set();
-  for (const u of urls) {
-    if (!u || typeof u !== "string") continue;
+  for (const c of candidates) {
+    const u = typeof c === "string" ? c : c?.url;
+    if (!u || typeof u !== "string" || !/^https?:/.test(u)) continue;
+    if (isBadCandidate(u) || isBadCandidate(c?.title)) continue;
     const base = u.split("?")[0];
     if (seen.has(base) || usedUrls.has(base) || usedUrls.has(u)) continue;
     seen.add(base);
-    unique.push(u);
+    unique.push({ url: u, title: c?.title || "" });
   }
   if (!unique.length) return null;
   let h = 0;
   const s = String(seed || "");
   for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
-  const picked = unique[h % unique.length];
-  usedUrls.add(picked.split("?")[0]);
-  usedUrls.add(picked);
-  return picked;
+  return unique[h % unique.length];
 }
 
 async function searchOpenverse(query) {
-  if (queryCache.has(`ov:${query}`)) return queryCache.get(`ov:${query}`);
+  const keyCache = `ov:${query}`;
+  if (queryCache.has(keyCache)) return queryCache.get(keyCache);
   const qs = new URLSearchParams({
     q: query,
     page_size: "20",
@@ -122,15 +214,21 @@ async function searchOpenverse(query) {
   if (res.ok) {
     const data = await res.json();
     urls = (data.results || [])
-      .map((r) => r.url || r.thumbnail)
-      .filter((u) => typeof u === "string" && /^https?:/.test(u));
+      .map((r) => ({
+        url: r.url || r.thumbnail,
+        title: `${r.title || ""} ${r.foreign_landing_url || ""}`,
+      }))
+      .filter((x) => x.url);
+  } else if (res.status === 429) {
+    await sleep(2000);
   }
-  queryCache.set(`ov:${query}`, urls);
+  queryCache.set(keyCache, urls);
   return urls;
 }
 
 async function searchCommons(query) {
-  if (queryCache.has(`cm:${query}`)) return queryCache.get(`cm:${query}`);
+  const keyCache = `cm:${query}`;
+  if (queryCache.has(keyCache)) return queryCache.get(keyCache);
   const qs = new URLSearchParams({
     action: "query",
     format: "json",
@@ -140,7 +238,7 @@ async function searchCommons(query) {
     gsrlimit: "20",
     gsrsearch: `${query} filetype:bitmap`,
     prop: "imageinfo",
-    iiprop: "url|mime|extmetadata",
+    iiprop: "url|mime|extmetadata|size",
     iiurlwidth: "1200",
     origin: "*",
   });
@@ -157,16 +255,21 @@ async function searchCommons(query) {
       const mime = info.mime || "";
       if (!mime.startsWith("image/") || mime.includes("svg")) continue;
       const license = String(info.extmetadata?.LicenseShortName?.value || "").toLowerCase();
-      if (license.includes("fair use") || license.includes("nc-") || license.includes("noncommercial")) continue;
-      urls.push(info.thumburl || info.url);
+      if (license.includes("fair use") || license.includes("nc-") || license.includes("noncommercial")) {
+        continue;
+      }
+      const title = p.title || info.extmetadata?.ObjectName?.value || "";
+      if (isBadCandidate(title)) continue;
+      urls.push({ url: info.thumburl || info.url, title });
     }
   }
-  queryCache.set(`cm:${query}`, urls);
+  queryCache.set(keyCache, urls);
   return urls;
 }
 
 async function searchWikipediaThumb(title) {
-  if (queryCache.has(`wp:${title}`)) return queryCache.get(`wp:${title}`);
+  const keyCache = `wp:${title}`;
+  if (queryCache.has(keyCache)) return queryCache.get(keyCache);
   const res = await fetch(
     `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`,
     { headers: { "User-Agent": UA, Accept: "application/json" } }
@@ -175,49 +278,103 @@ async function searchWikipediaThumb(title) {
   if (res.ok) {
     const data = await res.json();
     const u = data?.originalimage?.source || data?.thumbnail?.source;
-    if (u) urls = [u];
+    const t = data?.title || title;
+    if (u && !isBadCandidate(u) && !isBadCandidate(t)) urls = [{ url: u, title: t }];
   }
-  queryCache.set(`wp:${title}`, urls);
+  queryCache.set(keyCache, urls);
   return urls;
 }
 
-async function countryFoodPool(country) {
-  const c = (country || "African").trim();
-  if (countryPool.has(c)) return countryPool.get(c);
-  const urls = [
-    ...(await searchOpenverse(`${c} traditional food`)),
-    ...(await searchCommons(`${c} cuisine`)),
-    ...(await searchOpenverse(`${c} dish`)),
-  ];
-  countryPool.set(c, urls);
-  return urls;
-}
-
-async function findUniqueImage(name, country, recipeId) {
+function searchQueries(name) {
   const dish = cleanDishName(name);
-  const first = dish.split(/\s+/)[0] || dish;
+  const words = dish.split(/\s+/).filter(Boolean);
+  const firstTwo = words.slice(0, 2).join(" ");
+  const first = words[0] || dish;
+  const isSoupish = /soup|chowder|stew|broth|bisque|goulash|chili|vichyssoise|borscht/i.test(dish);
+  const q = [];
+  q.push(dish);
+  if (isSoupish) {
+    q.push(`${dish} soup`);
+    q.push(`${dish} bowl`);
+  } else {
+    q.push(`${dish} food dish`);
+    q.push(`${dish} soup`);
+  }
+  if (firstTwo && firstTwo !== dish) q.push(`${firstTwo} soup`);
+  if (first && first !== dish) q.push(`${first} soup`);
+  // generic edible fallbacks for broths/spice bags etc.
+  if (/broth/i.test(dish)) q.push("clear broth soup bowl");
+  if (/bag o/i.test(dish) || /spice/i.test(dish)) q.push("spice soup ingredients");
+  return [...new Set(q.filter(Boolean))];
+}
 
-  const attempts = [
-    () => searchWikipediaThumb(dish),
-    () => searchOpenverse(`${dish} food`),
-    () => searchOpenverse(`${dish} ${country || ""}`.trim()),
-    () => searchCommons(`${dish} food`),
-    () => searchOpenverse(`${first} ${country || ""} food`.trim()),
-    () => searchWikipediaThumb(first),
-    () => countryFoodPool(country),
-  ];
+async function findImageCandidates(name, recipeId) {
+  const queries = searchQueries(name);
+  const attempts = [];
+  for (const q of queries) {
+    attempts.push(() => searchWikipediaThumb(q));
+    attempts.push(() => searchOpenverse(`${q} food`));
+    attempts.push(() => searchCommons(`${q} food`));
+    attempts.push(() => searchOpenverse(q));
+    attempts.push(() => searchCommons(q));
+  }
+  // broader licensed food photos as last resort (still unique via claimUnused)
+  attempts.push(() => searchOpenverse("homemade soup bowl food"));
+  attempts.push(() => searchCommons("soup bowl"));
+  attempts.push(() => searchOpenverse("vegetable soup"));
 
   for (const attempt of attempts) {
     try {
       const urls = await attempt();
-      const picked = claimUnused(urls, recipeId || dish);
+      const picked = claimUnused(urls, recipeId || name);
       if (picked) return picked;
     } catch {
       /* continue */
     }
-    await sleep(80);
+    await sleep(60);
   }
   return null;
+}
+
+async function downloadValidate(imageUrl) {
+  const res = await fetch(imageUrl, {
+    headers: { "User-Agent": UA, Accept: "image/*,*/*" },
+    redirect: "follow",
+  });
+  if (!res.ok) return null;
+  const ab = await res.arrayBuffer();
+  const buf = Buffer.from(ab);
+  if (buf.length < MIN_BYTES) return null;
+  const kind = sniffImage(buf);
+  if (!kind) return null;
+  if (!dimensionsOk(kind, buf)) return null;
+  return { buf, ...kind, sourceUrl: imageUrl };
+}
+
+async function uploadToStorage(slug, file) {
+  const safe = String(slug || "recipe")
+    .toLowerCase()
+    .replace(/[^a-z0-9-_]+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 120);
+  const path = `recipe-images/backfill/${safe}.${file.ext}`;
+  const uploadUrl = `${url}/storage/v1/object/${BUCKET}/${path}`;
+  const put = await fetch(uploadUrl, {
+    method: "POST",
+    headers: {
+      apikey: key,
+      Authorization: `Bearer ${key}`,
+      "Content-Type": file.mime,
+      "x-upsert": "true",
+    },
+    body: file.buf,
+  });
+  if (!put.ok) {
+    const text = await put.text();
+    throw new Error(`upload ${put.status}: ${text.slice(0, 200)}`);
+  }
+  return `${url}/storage/v1/object/public/${BUCKET}/${path}`;
 }
 
 async function fetchAllRecipes() {
@@ -226,7 +383,7 @@ async function fetchAllRecipes() {
   const rows = [];
   while (true) {
     const res = await fetch(
-      `${url}/rest/v1/recipes?select=id,name,slug,country,image_url&order=name.asc&offset=${from}&limit=${pageSize}`,
+      `${url}/rest/v1/recipes?select=id,name,slug,country,image_url,tags&order=name.asc&offset=${from}&limit=${pageSize}`,
       { headers: { ...headers, Range: `${from}-${from + pageSize - 1}` } }
     );
     const batch = await res.json();
@@ -249,24 +406,38 @@ async function updateImage(id, imageUrl) {
 }
 
 const recipes = await fetchAllRecipes();
-const byUrl = new Map();
+
+// Seed usedUrls with current DB image urls so we don't re-pick hotlinks already in use
 for (const r of recipes) {
   if (!r.image_url) continue;
-  if (!byUrl.has(r.image_url)) byUrl.set(r.image_url, []);
-  byUrl.get(r.image_url).push(r);
-}
-for (const [imageUrl] of byUrl) {
-  usedUrls.add(imageUrl.split("?")[0]);
-  usedUrls.add(imageUrl);
+  usedUrls.add(r.image_url.split("?")[0]);
+  usedUrls.add(r.image_url);
 }
 
-const needs = [];
-for (const r of recipes) {
-  if (!r.image_url) needs.push(r);
-  else {
+const missing = recipes.filter((r) => !r.image_url || String(r.image_url).trim() === "");
+// Allow retry: recipes still missing should not be blocked by old doneIds
+for (const r of missing) doneIds.delete(r.id);
+
+let needs = [];
+if (NULLS_ONLY) {
+  needs = missing;
+} else {
+  const byUrl = new Map();
+  for (const r of recipes) {
+    if (!r.image_url) continue;
+    if (!byUrl.has(r.image_url)) byUrl.set(r.image_url, []);
+    byUrl.get(r.image_url).push(r);
+  }
+  needs = [...missing];
+  for (const r of recipes) {
+    if (!r.image_url) continue;
     const group = byUrl.get(r.image_url) || [r];
     if (group.length > 1 && group[0].id !== r.id) needs.push(r);
   }
+}
+
+if (ONLY_SLUG) {
+  needs = recipes.filter((r) => r.slug === ONLY_SLUG || r.name === ONLY_SLUG);
 }
 
 const queue = needs.filter((r) => !doneIds.has(r.id)).slice(0, LIMIT);
@@ -274,10 +445,14 @@ console.log(
   JSON.stringify(
     {
       totalRecipes: recipes.length,
+      missing: missing.length,
       needUnique: needs.length,
-      alreadyDone: [...doneIds].filter((id) => needs.some((n) => n.id === id)).length,
       queue: queue.length,
       concurrency: CONCURRENCY,
+      nullsOnly: NULLS_ONLY,
+      dry: DRY,
+      minBytes: MIN_BYTES,
+      onlySlug: ONLY_SLUG,
     },
     null,
     2
@@ -288,44 +463,80 @@ let updated = 0;
 let failed = 0;
 let index = 0;
 
+async function processOne(recipe, i) {
+  const label = `[${i + 1}/${queue.length}] ${recipe.slug || recipe.name}`;
+  const maxTries = 8;
+  let lastErr = null;
+
+  for (let tryN = 0; tryN < maxTries; tryN++) {
+    const candidate = await findImageCandidates(recipe.name, `${recipe.id}:${tryN}`);
+    if (!candidate) {
+      lastErr = "NO_IMAGE";
+      break;
+    }
+    usedUrls.add(candidate.url.split("?")[0]);
+    usedUrls.add(candidate.url);
+
+    try {
+      const file = await downloadValidate(candidate.url);
+      if (!file) {
+        lastErr = "VALIDATE_FAIL";
+        continue;
+      }
+      let publicUrl = candidate.url;
+      if (!DRY) {
+        publicUrl = await uploadToStorage(recipe.slug || recipe.id, file);
+      } else {
+        publicUrl = `(dry) ${candidate.url}`;
+      }
+      const ok = await updateImage(recipe.id, DRY ? candidate.url : publicUrl);
+      if (!ok) {
+        lastErr = "PATCH_FAIL";
+        continue;
+      }
+      doneIds.add(recipe.id);
+      updated += 1;
+      filled.push({
+        id: recipe.id,
+        slug: recipe.slug,
+        name: recipe.name,
+        image_url: DRY ? candidate.url : publicUrl,
+        source: candidate.url,
+        at: new Date().toISOString(),
+      });
+      // drop from failed if previously listed
+      progress.failed = (progress.failed || []).filter((f) => f.id !== recipe.id);
+      console.log(`${label} ... OK`);
+      queueSave();
+      return;
+    } catch (err) {
+      lastErr = String(err.message || err);
+      await sleep(200);
+    }
+  }
+
+  failed += 1;
+  console.log(`${label} ... FAIL ${lastErr || "unknown"}`);
+  progress.failed = progress.failed || [];
+  progress.failed.push({
+    id: recipe.id,
+    slug: recipe.slug,
+    name: recipe.name,
+    reason: lastErr || "unknown",
+  });
+  // Do NOT mark doneIds on failure — allow restart retry
+  queueSave();
+}
+
 async function worker() {
   while (true) {
     const i = index++;
     if (i >= queue.length) return;
-    const recipe = queue[i];
-    const label = `[${i + 1}/${queue.length}] ${recipe.slug || recipe.name}`;
-    try {
-      const image = await findUniqueImage(recipe.name, recipe.country, recipe.id);
-      if (!image) {
-        console.log(`${label} ... NO_IMAGE`);
-        failed += 1;
-        progress.failed.push({ id: recipe.id, slug: recipe.slug, name: recipe.name });
-        doneIds.add(recipe.id);
-        queueSave();
-        continue;
-      }
-      const ok = await updateImage(recipe.id, image);
-      if (ok) {
-        doneIds.add(recipe.id);
-        updated += 1;
-        console.log(`${label} ... OK`);
-      } else {
-        usedUrls.delete(image.split("?")[0]);
-        usedUrls.delete(image);
-        failed += 1;
-        console.log(`${label} ... PATCH_FAIL`);
-        progress.failed.push({ id: recipe.id, slug: recipe.slug, reason: "patch" });
-      }
-      queueSave();
-    } catch (err) {
-      failed += 1;
-      console.log(`${label} ... ERR ${err.message || err}`);
-      progress.failed.push({ id: recipe.id, slug: recipe.slug, reason: String(err.message || err) });
-      queueSave();
-    }
+    await processOne(queue[i], i);
+    await sleep(120);
   }
 }
 
 await Promise.all(Array.from({ length: CONCURRENCY }, () => worker()));
 saveProgress();
-console.log(JSON.stringify({ updated, failed, doneIds: doneIds.size }, null, 2));
+console.log(JSON.stringify({ updated, failed, filledTotal: filled.length, doneIds: doneIds.size }, null, 2));

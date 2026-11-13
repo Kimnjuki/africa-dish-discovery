@@ -1,4 +1,117 @@
 {
   "missing": [],
-  "duplicates": []
+  "duplicates": [
+    {
+      "id": "83f865d2-28f7-4bbd-b3c7-b5806b234bc4",
+      "slug": "ful-medames-egypt-mina",
+      "name": "Ful Medames",
+      "country": "Egypt",
+      "shared_with": "ful-medames-egypt",
+      "current_image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P27.jpeg"
+    },
+    {
+      "id": "58255bae-6453-4a66-9062-472db416ac42",
+      "slug": "ful-medames-eritrea",
+      "name": "Ful Medames",
+      "country": "Eritrea",
+      "shared_with": "ful-medames-egypt",
+      "current_image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P27.jpeg"
+    },
+    {
+      "id": "b19dcfc2-d2ef-4255-9bbb-b2808b4eb332",
+      "slug": "ful-medames",
+      "name": "Ful Medames",
+      "country": "Egypt",
+      "shared_with": "ful-medames-egypt",
+      "current_image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P27.jpeg"
+    },
+    {
+      "id": "0f9cb78b-c49c-4cd2-a9ad-19fde0eff335",
+      "slug": "baladi-bread",
+      "name": "Baladi Bread",
+      "country": "Egypt",
+      "shared_with": "baladi-bread-egypt-mina",
+      "current_image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P33.jpeg"
+    },
+    {
+      "id": "7d447aa1-f2af-46d7-a109-fd4267461e00",
+      "slug": "black-tahina",
+      "name": "Black Tahina",
+      "country": "Egypt",
+      "shared_with": "black-tahina-egypt-mina",
+      "current_image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P10.jpeg"
+    },
+    {
+      "id": "71073e0b-c21c-4613-a5c5-e59bc3c9825e",
+      "slug": "crispy-chickpeas",
+      "name": "Crispy Chickpeas",
+      "country": "Egypt",
+      "shared_with": "crispy-chickpeas-egypt-mina",
+      "current_image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P29.jpeg"
+    },
+    {
+      "id": "6bcdfbc0-8b95-4c33-9737-df7f3bce06ec",
+      "slug": "dukkah-flatbread-egypt-mina",
+      "name": "Dukkah Flatbread",
+      "country": "Egypt",
+      "shared_with": "dukkah-flatbread",
+      "current_image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P36.jpeg"
+    },
+    {
+      "id": "c04118e1-0c37-407b-8ab3-6ef816887bac",
+      "slug": "everyday-egyptian-rice",
+      "name": "Everyday Egyptian Rice",
+      "country": "Egypt",
+      "shared_with": "everyday-egyptian-rice-egypt-mina",
+      "current_image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P95.jpeg"
+    },
+    {
+      "id": "87a4b60f-f3c3-4fb3-8765-2e247da6bf30",
+      "slug": "freekeh-tabbouli",
+      "name": "Freekeh Tabbouli",
+      "country": "Egypt",
+      "shared_with": "freekeh-tabbouli-egypt-mina",
+      "current_image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P93.jpeg"
+    },
+    {
+      "id": "a436cb1f-374c-45bc-9caa-5f56384d0331",
+      "slug": "fresh-fava-bean-bessara-egypt-mina",
+      "name": "Fresh Fava Bean Bessara",
+      "country": "Egypt",
+      "shared_with": "fresh-fava-bean-bessara",
+      "current_image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P23.jpeg"
+    },
+    {
+      "id": "ae7bfbf2-0bc6-4db0-a9b2-96fa409162a3",
+      "slug": "hummus",
+      "name": "Hummus",
+      "country": "Lebanon",
+      "shared_with": "hummus-egypt-mina",
+      "current_image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P14.jpeg"
+    },
+    {
+      "id": "6168736a-e6ea-4439-a44e-629791259929",
+      "slug": "koshari",
+      "name": "Koshari",
+      "country": "Egypt",
+      "shared_with": "koshari-egypt-mina",
+      "current_image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P99.jpeg"
+    },
+    {
+      "id": "79167fce-66a2-47f2-9f66-9a417dbde16a",
+      "slug": "sayadeya-rice",
+      "name": "Sayadeya Rice",
+      "country": "Egypt",
+      "shared_with": "sayadeya-rice-egypt-mina",
+      "current_image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P96.jpeg"
+    },
+    {
+      "id": "f2248e10-9be8-42c9-a823-534b2f8fc1fd",
+      "slug": "smoky-baba-ghanoush-egypt-mina",
+      "name": "Smoky Baba Ghanoush",
+      "country": "Egypt",
+      "shared_with": "smoky-baba-ghanoush",
+      "current_image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P24.jpeg"
+    }
+  ]
 }

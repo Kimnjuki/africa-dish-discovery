@@ -1,9 +1,108 @@
 {
-  "total": 1708,
-  "withImage": 1708,
+  "total": 2103,
+  "withImage": 2103,
   "missing": 0,
-  "duplicateUrlGroups": 0,
-  "recipesSharingDuplicateUrls": 0,
-  "topDuplicateUrls": [],
+  "duplicateUrlGroups": 12,
+  "recipesSharingDuplicateUrls": 26,
+  "topDuplicateUrls": [
+    {
+      "image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P27.jpeg",
+      "count": 4,
+      "samples": [
+        "ful-medames-egypt",
+        "ful-medames-egypt-mina",
+        "ful-medames-eritrea",
+        "ful-medames"
+      ]
+    },
+    {
+      "image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P33.jpeg",
+      "count": 2,
+      "samples": [
+        "baladi-bread-egypt-mina",
+        "baladi-bread"
+      ]
+    },
+    {
+      "image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P10.jpeg",
+      "count": 2,
+      "samples": [
+        "black-tahina-egypt-mina",
+        "black-tahina"
+      ]
+    },
+    {
+      "image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P29.jpeg",
+      "count": 2,
+      "samples": [
+        "crispy-chickpeas-egypt-mina",
+        "crispy-chickpeas"
+      ]
+    },
+    {
+      "image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P36.jpeg",
+      "count": 2,
+      "samples": [
+        "dukkah-flatbread",
+        "dukkah-flatbread-egypt-mina"
+      ]
+    },
+    {
+      "image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P95.jpeg",
+      "count": 2,
+      "samples": [
+        "everyday-egyptian-rice-egypt-mina",
+        "everyday-egyptian-rice"
+      ]
+    },
+    {
+      "image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P93.jpeg",
+      "count": 2,
+      "samples": [
+        "freekeh-tabbouli-egypt-mina",
+        "freekeh-tabbouli"
+      ]
+    },
+    {
+      "image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P23.jpeg",
+      "count": 2,
+      "samples": [
+        "fresh-fava-bean-bessara",
+        "fresh-fava-bean-bessara-egypt-mina"
+      ]
+    },
+    {
+      "image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P14.jpeg",
+      "count": 2,
+      "samples": [
+        "hummus-egypt-mina",
+        "hummus"
+      ]
+    },
+    {
+      "image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P99.jpeg",
+      "count": 2,
+      "samples": [
+        "koshari-egypt-mina",
+        "koshari"
+      ]
+    },
+    {
+      "image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P96.jpeg",
+      "count": 2,
+      "samples": [
+        "sayadeya-rice-egypt-mina",
+        "sayadeya-rice"
+      ]
+    },
+    {
+      "image_url": "https://qfctezxqcomhrasrsvjg.supabase.co/storage/v1/object/public/recipe-uploads/cookbooks/egypt/Art_P24.jpeg",
+      "count": 2,
+      "samples": [
+        "smoky-baba-ghanoush",
+        "smoky-baba-ghanoush-egypt-mina"
+      ]
+    }
+  ],
   "missingSamples": []
 }
