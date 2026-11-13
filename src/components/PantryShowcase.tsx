@@ -4,7 +4,20 @@ import { ChefHat, Search, Sparkles, ArrowRight, CheckCircle } from "lucide-react
 import { Link } from "react-router-dom";
 import pantryHero from "@/assets/pantry-hero.jpg";
 
+const NAV_OFFSET_PX = 72;
+
 export const PantryShowcase = () => {
+  const scrollToPantryIntelligence = () => {
+    const target = document.getElementById("pantry-intelligence");
+    if (!target) return;
+    const top = target.getBoundingClientRect().top + window.scrollY - NAV_OFFSET_PX;
+    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    // Keep URL shareable without relying on React Router hash navigation
+    if (window.location.hash !== "#pantry-intelligence") {
+      window.history.replaceState(null, "", "#pantry-intelligence");
+    }
+  };
+
   return (
     <section className="py-20 bg-gradient-to-br from-primary/5 via-background to-secondary/5">
       <div className="container mx-auto px-6">
@@ -59,11 +72,15 @@ export const PantryShowcase = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Button variant="hero" size="lg" asChild>
-                <Link to="/#pantry-intelligence">
-                  Try Pantry Intelligence
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Link>
+              <Button
+                variant="hero"
+                size="lg"
+                type="button"
+                className="touch-manipulation hover:scale-100 active:scale-100"
+                onClick={scrollToPantryIntelligence}
+              >
+                Try Pantry Intelligence
+                <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
               
               <Button variant="outline" size="lg" asChild>
@@ -73,24 +90,6 @@ export const PantryShowcase = () => {
               </Button>
             </div>
 
-            {/* Social Proof */}
-            <div className="pt-6 border-t border-primary/10">
-              <p className="text-sm text-muted-foreground mb-3">Trusted by home cooks worldwide</p>
-              <div className="flex items-center gap-6">
-                <div>
-                  <div className="text-2xl font-bold text-primary">10K+</div>
-                  <div className="text-xs text-muted-foreground">Active Users</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-primary">50K+</div>
-                  <div className="text-xs text-muted-foreground">Recipes Matched</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-primary">30%</div>
-                  <div className="text-xs text-muted-foreground">Food Waste Reduced</div>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Right: Visual Demo */}
@@ -106,7 +105,7 @@ export const PantryShowcase = () => {
             </div>
 
             {/* Floating Cards */}
-            <Card className="absolute -left-6 top-1/4 w-48 shadow-warm animate-float">
+            <Card className="absolute -left-6 top-1/4 hidden w-48 shadow-warm md:block md:animate-float">
               <CardContent className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
@@ -120,7 +119,7 @@ export const PantryShowcase = () => {
               </CardContent>
             </Card>
 
-            <Card className="absolute -right-6 bottom-1/4 w-56 shadow-warm animate-float" style={{ animationDelay: '0.5s' }}>
+            <Card className="absolute -right-6 bottom-1/4 hidden w-56 shadow-warm md:block md:animate-float" style={{ animationDelay: '0.5s' }}>
               <CardContent className="p-4">
                 <div className="flex items-center justify-between mb-2">
                   <div className="font-semibold text-sm">Jollof Rice</div>

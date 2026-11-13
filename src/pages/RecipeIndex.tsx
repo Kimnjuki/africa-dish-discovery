@@ -77,7 +77,7 @@ const RecipeIndex = () => {
           "id,name,slug,country,continent,category,summary,difficulty,prep_time,cook_time,servings,tags,dietary_tags,image_url,ingredients,steps,calories,protein,carbs,fats"
         )
         .order("name", { ascending: true })
-        .limit(2000);
+        .limit(4000);
       if (!error && data) setRecipes(data as unknown as IndexRecipe[]);
       setLoading(false);
     };

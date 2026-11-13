@@ -20,14 +20,14 @@ const Hero = () => {
       </div>
       
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-6 text-center">
+      <div className="relative z-10 container mx-auto px-4 text-center sm:px-6">
         <div className="animate-slide-in-up">
           <div className="inline-flex items-center gap-2 bg-primary/10 backdrop-blur-sm border border-primary/20 rounded-full px-4 py-2 mb-6">
             <Globe className="w-4 h-4 text-primary" />
             <span className="text-sm font-medium text-primary">Discover African Cuisine</span>
           </div>
           
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 leading-tight">
+          <h1 className="mb-6 text-4xl font-bold leading-tight sm:text-5xl md:text-7xl">
             <span className="text-gradient">Taste the</span>
             <br />
             <span className="text-foreground">Continent</span>
@@ -63,27 +63,27 @@ const Hero = () => {
         </div>
         
         {/* Floating Stats */}
-        <div className="grid grid-cols-3 gap-8 mt-16 max-w-2xl mx-auto">
+        <div className="mt-12 grid max-w-2xl grid-cols-3 gap-2 sm:mt-16 sm:gap-8">
           {[
             { number: "1,700+", label: "Recipes", icon: ChefHat },
-            { number: "5", label: "Regions Covered", icon: MapPin },
+            { number: "5", label: "Regions", icon: MapPin },
             { number: "54", label: "Countries", icon: Globe },
           ].map((stat, index) => (
             <div 
               key={index} 
-              className="bg-card/80 backdrop-blur-sm border border-primary/10 rounded-xl p-6 shadow-soft hover:shadow-warm transition-all duration-300 animate-float"
+              className="rounded-xl border border-primary/10 bg-card/95 p-3 shadow-soft sm:p-6 md:animate-float"
               style={{ animationDelay: `${index * 0.2}s` }}
             >
-              <stat.icon className="w-8 h-8 text-primary mx-auto mb-2" />
-              <div className="text-2xl font-bold text-primary">{stat.number}</div>
-              <div className="text-sm text-muted-foreground">{stat.label}</div>
+              <stat.icon className="mx-auto mb-2 h-6 w-6 text-primary sm:h-8 sm:w-8" />
+              <div className="text-lg font-bold text-primary sm:text-2xl">{stat.number}</div>
+              <div className="text-xs leading-tight text-muted-foreground sm:text-sm">{stat.label}</div>
             </div>
           ))}
         </div>
       </div>
       
       {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+      <div className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 sm:block sm:animate-bounce">
         <div className="w-1 h-8 bg-gradient-to-b from-primary to-transparent rounded-full" />
       </div>
     </section>

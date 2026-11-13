@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar, Plus, ShoppingCart, Trash2, ChefHat, Sparkles, Share2 } from "lucide-react";
+import { Calendar, Plus, Trash2, ChefHat, Sparkles, Share2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
@@ -19,6 +19,7 @@ import { AIMealGenerator } from "@/components/meal-planner/AIMealGenerator";
 import { NutritionTracker } from "@/components/meal-planner/NutritionTracker";
 import { BudgetTracker } from "@/components/meal-planner/BudgetTracker";
 import { MealPlanShare } from "@/components/meal-planner/MealPlanShare";
+import GroceryListPanel from "@/components/meal-planner/GroceryListPanel";
 import { withParsedRecipeFields, type IngredientValue } from "@/types/content";
 import type { User } from "@supabase/supabase-js";
 
@@ -238,46 +239,14 @@ const MealPlanner = () => {
     }
   };
 
-  const generateShoppingList = () => {
-    const ingredients = new Map<string, { quantity: string; unit: string }>();
-
-    plannedMeals.forEach(meal => {
-      if (meal.recipe && meal.recipe.ingredients) {
-        const recipeIngredients = meal.recipe.ingredients;
-        
-        if (Array.isArray(recipeIngredients)) {
-          recipeIngredients.forEach((ing: IngredientValue) => {
-            let ingredientName = "";
-            let quantity = "";
-            
-            if (typeof ing === 'string') {
-              ingredientName = ing;
-            } else if (typeof ing === 'object' && ing !== null) {
-              ingredientName = ing.item || ing.ingredient || ing.name || "";
-              quantity = String(ing.quantity || "");
-            }
-            
-            if (ingredientName) {
-              if (ingredients.has(ingredientName)) {
-                const existing = ingredients.get(ingredientName);
-                ingredients.set(ingredientName, {
-                  quantity: `${existing?.quantity || ""}, ${quantity}`.trim(),
-                  unit: existing?.unit || ""
-                });
-              } else {
-                ingredients.set(ingredientName, { quantity, unit: "" });
-              }
-            }
-          });
-        }
-      }
-    });
-
-    return Array.from(ingredients.entries()).map(([name, details]) => ({
-      name,
-      quantity: details.quantity
+  const grocerySources = plannedMeals
+    .filter((meal) => meal.recipe)
+    .map((meal) => ({
+      recipeName: meal.recipe?.name,
+      ingredients: meal.recipe?.ingredients,
+      recipeServings: meal.recipe?.servings,
+      plannedServings: meal.servings,
     }));
-  };
 
   const getMealsForDay = (dayIndex: number) => {
     return plannedMeals.filter(meal => meal.day_of_week === dayIndex);
@@ -548,30 +517,10 @@ const MealPlanner = () => {
                 </TabsContent>
 
                 <TabsContent value="shopping">
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="flex items-center">
-                        <ShoppingCart className="mr-2" />
-                        Shopping List for {currentPlan.name}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      {generateShoppingList().length > 0 ? (
-                        <div className="space-y-2">
-                          {generateShoppingList().map((item, idx) => (
-                            <div key={idx} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
-                              <span className="font-medium">{item.name}</span>
-                              <span className="text-sm text-muted-foreground">{item.quantity}</span>
-                            </div>
-                          ))}
-                        </div>
-                      ) : (
-                        <p className="text-center text-muted-foreground py-8">
-                          Add meals to your plan to generate a shopping list
-                        </p>
-                      )}
-                    </CardContent>
-                  </Card>
+                  <GroceryListPanel
+                    planName={currentPlan.name}
+                    sources={grocerySources}
+                  />
                 </TabsContent>
               </Tabs>
             )}

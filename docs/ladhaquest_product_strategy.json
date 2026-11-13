@@ -1,0 +1,628 @@
+{
+    "project":  "LadhaQuest — Africa-first recipe and cooking platform",
+    "version":  "1.0",
+    "generated_for":  "Cursor AI implementation",
+    "date":  "2026-11-13",
+    "research_status":  {
+                            "ladhaquest_site":  "Direct crawl/fetch of https://www.ladhaquest.com did not return page content and public search results were unavailable; treat the current feature inventory as a proposed baseline to validate against the live product.",
+                            "benchmark":  "Allrecipes is a mature community-led recipe platform with 51K+ original recipes, 7M+ ratings/reviews, 67M home cooks, editorial testing, videos, saved recipes, and strong community feedback loops. [page:1]",
+                            "market_patterns":  "Leading recipe and meal-planning products converge on recipe discovery, saving/import, weekly meal calendars, serving scaling, aisle-sorted grocery lists, household sharing, and grocery delivery integration. [web:2][web:3][web:7][web:10]"
+                        },
+    "positioning":  {
+                        "vision":  "Become Africa\u0027s trusted kitchen operating system: discover, cook, plan, shop for, and share African and global food with locally relevant tools.",
+                        "category":  "African-first food discovery, meal planning, and commerce platform",
+                        "primary_users":  [
+                                              {
+                                                  "segment":  "African home cooks",
+                                                  "need":  "Reliable local recipes, substitutes, budgeting, and family-sized planning"
+                                              },
+                                              {
+                                                  "segment":  "African diaspora",
+                                                  "need":  "Authentic dishes, hard-to-find ingredients, cultural connection, and delivery options"
+                                              },
+                                              {
+                                                  "segment":  "Busy households",
+                                                  "need":  "Fast weekly plans, affordable shopping lists, and low-friction cooking"
+                                              },
+                                              {
+                                                  "segment":  "Creators and chefs",
+                                                  "need":  "Publishing, audience growth, monetization, and recipe analytics"
+                                              },
+                                              {
+                                                  "segment":  "Food businesses",
+                                                  "need":  "Demand insight, local ingredient sourcing, branded recipes, and customer acquisition"
+                                              }
+                                          ],
+                        "core_promise":  "Cook any African dish confidently with ingredients, measurements, substitutions, budgets, and shopping that work in your local market."
+                    },
+    "competitive_landscape":  {
+                                  "allrecipes":  {
+                                                     "strengths":  [
+                                                                       "Massive user-generated library",
+                                                                       "ratings and reviews",
+                                                                       "editorial trust",
+                                                                       "videos",
+                                                                       "community engagement",
+                                                                       "saved recipes"
+                                                                   ],
+                                                     "evidence":  "Allrecipes positions community feedback and home-cook contributions as central differentiators, with 51K+ recipes and 7M+ ratings/reviews. [page:1]",
+                                                     "ladhaquest_counter":  "Build deeper African authenticity, local ingredient intelligence, market-level pricing, and mobile-first planning rather than competing only on recipe volume."
+                                                 },
+                                  "nytimes_cooking":  {
+                                                          "strengths":  [
+                                                                            "High-quality editorial",
+                                                                            "cooking mode",
+                                                                            "recipe box",
+                                                                            "premium curation"
+                                                                        ],
+                                                          "evidence":  "NYT Cooking is frequently regarded as a benchmark for curated discovery and seamless cooking/planning workflows. [web:4]",
+                                                          "ladhaquest_counter":  "Combine credible African culinary curation with free, localized utility and creator-led regional expertise."
+                                                      },
+                                  "mealime_emeads":  {
+                                                         "strengths":  [
+                                                                           "Weekly plans",
+                                                                           "personalization",
+                                                                           "automatic shopping lists",
+                                                                           "grocery integrations"
+                                                                       ],
+                                                         "evidence":  "Meal-planning products commonly turn selected recipes into calendar plans and categorized shopping lists, with some integrating pickup or delivery. [web:3][web:10]",
+                                                         "ladhaquest_counter":  "Localize plans to African staples, seasonal produce, household budgets, market vendors, and mobile-money-friendly checkout."
+                                                     },
+                                  "paprika_plan_to_eat":  {
+                                                              "strengths":  [
+                                                                                "Recipe import",
+                                                                                "organization",
+                                                                                "calendar planning",
+                                                                                "grocery-list generation",
+                                                                                "serving scaling"
+                                                                            ],
+                                                              "evidence":  "These tools emphasize importing recipes, scheduling them, scaling servings, and generating organized lists. [web:3][web:8][web:9]",
+                                                              "ladhaquest_counter":  "Make import, family sharing, and offline cooking accessible on low-bandwidth African mobile networks."
+                                                          },
+                                  "supercook_whisk":  {
+                                                          "strengths":  [
+                                                                            "Pantry-based discovery",
+                                                                            "recipe saving from external sources",
+                                                                            "shopping integration"
+                                                                        ],
+                                                          "evidence":  "Ingredient-based discovery and converting saved recipes into shopping lists are established user expectations. [web:7][web:13]",
+                                                          "ladhaquest_counter":  "Create an Africa-specific pantry model including local grains, spices, leaves, tubers, flours, and market-available substitutions."
+                                                      }
+                              },
+    "differentiation":  {
+                            "african_first_content":  {
+                                                          "description":  "Treat African cuisines as primary, not a niche category.",
+                                                          "must_have":  [
+                                                                            "Country, region, ethnic/community, occasion, and diaspora taxonomy",
+                                                                            "Verified recipes with chef, grandmother, food historian, and community contributor attribution",
+                                                                            "Regional variants and respectful naming conventions",
+                                                                            "Audio/video pronunciation for dish and ingredient names",
+                                                                            "Cultural context, history, serving customs, and dietary adaptations"
+                                                                        ]
+                                                      },
+                            "local_ingredient_intelligence":  {
+                                                                  "description":  "Solve the biggest African cooking friction: finding, naming, and substituting ingredients locally.",
+                                                                  "must_have":  [
+                                                                                    "Ingredient aliases across English, Swahili, Hausa, Yoruba, Igbo, Amharic, French, Portuguese, Arabic, and other priority languages",
+                                                                                    "Local-market and supermarket availability by city/region",
+                                                                                    "Seasonality and price indicators",
+                                                                                    "Substitution engine for unavailable or expensive ingredients",
+                                                                                    "Unit conversion for cups, grams, local measures, bunches, tins, and market portions",
+                                                                                    "Pantry scan through photo, barcode, or manual entry"
+                                                                                ]
+                                                              },
+                            "africa_native_commerce":  {
+                                                           "description":  "Turn recipes into practical shopping outcomes without assuming a single retail model.",
+                                                           "must_have":  [
+                                                                             "Grocery list grouped by market stall, supermarket aisle, and online basket",
+                                                                             "Multi-vendor comparison and delivery/pickup integrations",
+                                                                             "Mobile money, cards, cash-on-delivery, and split-household payment support",
+                                                                             "Budget-aware meal plans with cost ceilings",
+                                                                             "Local seller and farmer marketplace for specialty ingredients"
+                                                                         ]
+                                                       },
+                            "creator_economy":  {
+                                                    "description":  "Make African food creators, home cooks, chefs, and food historians owners of the platform\u0027s content advantage.",
+                                                    "must_have":  [
+                                                                      "Creator profiles, verification, follower graphs, and recipe collections",
+                                                                      "Upload from video, photo, voice notes, URL, or structured form",
+                                                                      "AI-assisted recipe extraction with mandatory human review",
+                                                                      "Revenue share from ads, premium subscriptions, affiliate groceries, branded content, and recipe sales",
+                                                                      "Reputation system based on cooked photos, helpful substitutions, ratings, and repeat saves"
+                                                                  ]
+                                                }
+                        },
+    "product_feature_roadmap":  {
+                                    "mvp":  {
+                                                "goal":  "Prove that African cooks choose LadhaQuest for discovery, planning, and shopping.",
+                                                "features":  [
+                                                                 {
+                                                                     "id":  "F01",
+                                                                     "name":  "Recipe discovery",
+                                                                     "priority":  "P0",
+                                                                     "details":  [
+                                                                                     "Search by dish, ingredient, country, region, meal, diet, time, budget, and skill",
+                                                                                     "Trending, editorial, seasonal, and creator feeds",
+                                                                                     "Filters for vegetarian, halal, gluten-free, low-cost, one-pot, and kid-friendly"
+                                                                                 ]
+                                                                 },
+                                                                 {
+                                                                     "id":  "F02",
+                                                                     "name":  "Structured recipe pages",
+                                                                     "priority":  "P0",
+                                                                     "details":  [
+                                                                                     "Ingredients, steps, equipment, servings, prep/cook time, nutrition estimate, difficulty, cuisine, allergens",
+                                                                                     "Photos, video, timers, offline mode, and step-by-step cooking mode",
+                                                                                     "Version history and community-tested variants"
+                                                                                 ]
+                                                                 },
+                                                                 {
+                                                                     "id":  "F03",
+                                                                     "name":  "Save and organize",
+                                                                     "priority":  "P0",
+                                                                     "details":  [
+                                                                                     "Cookbooks, folders, favorites, meal history, private notes, and sharing"
+                                                                                 ]
+                                                                 },
+                                                                 {
+                                                                     "id":  "F04",
+                                                                     "name":  "Meal planner",
+                                                                     "priority":  "P0",
+                                                                     "details":  [
+                                                                                     "Weekly calendar, drag-and-drop planning, household size, dietary preferences, and serving scaling"
+                                                                                 ]
+                                                                 },
+                                                                 {
+                                                                     "id":  "F05",
+                                                                     "name":  "Smart grocery list",
+                                                                     "priority":  "P0",
+                                                                     "details":  [
+                                                                                     "Merge ingredients across recipes, de-duplicate, group by aisle/market section, edit quantities, and share list"
+                                                                                 ]
+                                                                 },
+                                                                 {
+                                                                     "id":  "F06",
+                                                                     "name":  "Local substitution engine",
+                                                                     "priority":  "P0",
+                                                                     "details":  [
+                                                                                     "Suggest accessible alternatives by country, price, dietary need, and flavor role"
+                                                                                 ]
+                                                                 },
+                                                                 {
+                                                                     "id":  "F07",
+                                                                     "name":  "Creator publishing",
+                                                                     "priority":  "P1",
+                                                                     "details":  [
+                                                                                     "Creator onboarding, recipe upload, moderation, analytics, and attribution"
+                                                                                 ]
+                                                                 },
+                                                                 {
+                                                                     "id":  "F08",
+                                                                     "name":  "Community proof",
+                                                                     "priority":  "P1",
+                                                                     "details":  [
+                                                                                     "Ratings, reviews, cooked-photo uploads, helpful tips, and question-and-answer threads"
+                                                                                 ]
+                                                                 },
+                                                                 {
+                                                                     "id":  "F09",
+                                                                     "name":  "Offline and low-data mode",
+                                                                     "priority":  "P0",
+                                                                     "details":  [
+                                                                                     "Download recipes and plans, compress images, cache shopping lists, and sync when online"
+                                                                                 ]
+                                                                 },
+                                                                 {
+                                                                     "id":  "F10",
+                                                                     "name":  "Accounts and household sharing",
+                                                                     "priority":  "P0",
+                                                                     "details":  [
+                                                                                     "Email/phone sign-in, family members, shared lists, and collaborative plans"
+                                                                                 ]
+                                                                 }
+                                                             ]
+                                            },
+                                    "growth_phase":  {
+                                                         "goal":  "Make LadhaQuest the daily cooking and shopping companion.",
+                                                         "features":  [
+                                                                          {
+                                                                              "id":  "F11",
+                                                                              "name":  "Pantry-aware recommendations",
+                                                                              "priority":  "P1",
+                                                                              "details":  [
+                                                                                              "Use available ingredients to recommend recipes and reduce waste"
+                                                                                          ]
+                                                                          },
+                                                                          {
+                                                                              "id":  "F12",
+                                                                              "name":  "Budget meal planner",
+                                                                              "priority":  "P1",
+                                                                              "details":  [
+                                                                                              "Set weekly budget, optimize recipes around promotions, seasonal produce, and household preferences"
+                                                                                          ]
+                                                                          },
+                                                                          {
+                                                                              "id":  "F13",
+                                                                              "name":  "Grocery integrations",
+                                                                              "priority":  "P1",
+                                                                              "details":  [
+                                                                                              "Connect local supermarkets, delivery partners, and market vendors where available"
+                                                                                          ]
+                                                                          },
+                                                                          {
+                                                                              "id":  "F14",
+                                                                              "name":  "AI cooking assistant",
+                                                                              "priority":  "P1",
+                                                                              "details":  [
+                                                                                              "Answer questions, adjust servings, convert units, suggest substitutions, and troubleshoot cooking issues"
+                                                                                          ]
+                                                                          },
+                                                                          {
+                                                                              "id":  "F15",
+                                                                              "name":  "Voice and multilingual UX",
+                                                                              "priority":  "P1",
+                                                                              "details":  [
+                                                                                              "Voice search, read-aloud recipes, and localized interfaces"
+                                                                                          ]
+                                                                          },
+                                                                          {
+                                                                              "id":  "F16",
+                                                                              "name":  "Live cooking and classes",
+                                                                              "priority":  "P2",
+                                                                              "details":  [
+                                                                                              "Creator livestreams, paid classes, and family recipe preservation"
+                                                                                          ]
+                                                                          },
+                                                                          {
+                                                                              "id":  "F17",
+                                                                              "name":  "Restaurant and packaged-food discovery",
+                                                                              "priority":  "P2",
+                                                                              "details":  [
+                                                                                              "Find dishes nearby, order from vetted vendors, and save restaurant-inspired recipes"
+                                                                                          ]
+                                                                          },
+                                                                          {
+                                                                              "id":  "F18",
+                                                                              "name":  "Nutrition and health modes",
+                                                                              "priority":  "P2",
+                                                                              "details":  [
+                                                                                              "Diabetes-friendly, hypertension-aware, high-protein, pregnancy, and pediatric guidance with clinical review"
+                                                                                          ]
+                                                                          }
+                                                                      ]
+                                                     },
+                                    "scale_phase":  {
+                                                        "goal":  "Build network effects, commerce, and defensibility.",
+                                                        "features":  [
+                                                                         {
+                                                                             "id":  "F19",
+                                                                             "name":  "Ingredient marketplace",
+                                                                             "priority":  "P2",
+                                                                             "details":  [
+                                                                                             "Verified spice, grain, flour, sauce, and specialty ingredient sellers with quality standards"
+                                                                                         ]
+                                                                         },
+                                                                         {
+                                                                             "id":  "F20",
+                                                                             "name":  "B2B food intelligence",
+                                                                             "priority":  "P3",
+                                                                             "details":  [
+                                                                                             "Anonymized demand trends, ingredient popularity, regional preferences, and campaign analytics for brands and retailers"
+                                                                                         ]
+                                                                         },
+                                                                         {
+                                                                             "id":  "F21",
+                                                                             "name":  "White-label meal programs",
+                                                                             "priority":  "P3",
+                                                                             "details":  [
+                                                                                             "Employers, schools, NGOs, and health systems use LadhaQuest planning infrastructure"
+                                                                                         ]
+                                                                         },
+                                                                         {
+                                                                             "id":  "F22",
+                                                                             "name":  "Diaspora import network",
+                                                                             "priority":  "P3",
+                                                                             "details":  [
+                                                                                             "Cross-border ingredient sourcing, gifting, and recipe-to-marketplace bundles"
+                                                                                         ]
+                                                                         }
+                                                                     ]
+                                                    }
+                                },
+    "ux_principles":  [
+                          "Mobile-first and usable on low-end Android devices",
+                          "Minimal data usage with offline-first recipes and lists",
+                          "Large imagery, clear step navigation, and accessible typography",
+                          "Local language and measurement support from day one",
+                          "Never make users guess an unavailable ingredient: always offer a practical substitute",
+                          "Respect cultural ownership and avoid genericizing African cuisines",
+                          "Make the path from discovery to purchased ingredients under three taps"
+                      ],
+    "technical_architecture":  {
+                                   "frontend":  [
+                                                    "Next.js App Router web app",
+                                                    "React Native or Expo mobile app",
+                                                    "PWA for low-end devices",
+                                                    "Design system with accessible components"
+                                                ],
+                                   "backend":  [
+                                                   "NestJS or FastAPI service layer",
+                                                   "PostgreSQL for relational data",
+                                                   "Redis for caching and queues",
+                                                   "Object storage for media",
+                                                   "Search service such as Meilisearch or Elasticsearch"
+                                               ],
+                                   "ai_services":  [
+                                                       "Recipe extraction model",
+                                                       "ingredient normalization and entity matching",
+                                                       "substitution recommendation model",
+                                                       "meal-plan optimizer",
+                                                       "multilingual translation and voice interface"
+                                                   ],
+                                   "integrations":  [
+                                                        "Payment providers including mobile money",
+                                                        "local grocery and delivery APIs",
+                                                        "analytics and attribution",
+                                                        "content moderation",
+                                                        "creator payout systems"
+                                                    ],
+                                   "data_model_entities":  [
+                                                               "User",
+                                                               "Household",
+                                                               "Recipe",
+                                                               "RecipeVersion",
+                                                               "Ingredient",
+                                                               "IngredientAlias",
+                                                               "Measurement",
+                                                               "Substitution",
+                                                               "MealPlan",
+                                                               "MealPlanItem",
+                                                               "GroceryList",
+                                                               "GroceryListItem",
+                                                               "Vendor",
+                                                               "ProductOffer",
+                                                               "Creator",
+                                                               "Review",
+                                                               "CookedPhoto",
+                                                               "Collection",
+                                                               "Follow",
+                                                               "Region",
+                                                               "Cuisine",
+                                                               "Diet",
+                                                               "Allergen"
+                                                           ]
+                               },
+    "ai_implementation_prompts_for_cursor":  {
+                                                 "generate_data_model":  "Create a normalized PostgreSQL schema for the entities listed in technical_architecture.data_model_entities. Include UUID primary keys, soft deletes, audit timestamps, indexes for recipe search, and constraints for ingredient-unit conversions.",
+                                                 "build_recipe_schema":  "Create a TypeScript Zod schema for a recipe with title, slug, description, cuisine, country, region, servings, prepTime, cookTime, difficulty, ingredients, steps, equipment, nutrition, allergens, media, creator, source, license, and localization fields.",
+                                                 "build_grocery_engine":  "Implement a grocery-list service that merges ingredients across selected recipes, converts units, de-duplicates by normalized ingredient ID, groups items by aisle or market section, supports manual edits, and exports a shareable list.",
+                                                 "build_substitution_engine":  "Implement a substitution recommendation service that receives ingredient, country, dietary restrictions, budget, and available pantry items; return ranked alternatives with confidence, price impact, flavor-role match, and recipe adjustment notes.",
+                                                 "build_meal_planner":  "Implement a weekly meal planner API with household preferences, budget ceiling, dietary restrictions, recipe ratings, prep-ahead logic, leftovers reuse, and automatic grocery-list generation.",
+                                                 "build_offline_support":  "Implement offline-first caching for recipe pages, meal plans, and grocery lists using IndexedDB on web and SQLite/AsyncStorage on mobile; queue mutations and reconcile conflicts on reconnect.",
+                                                 "build_creator_portal":  "Create creator onboarding, recipe submission with AI extraction and human review, media upload, moderation queue, analytics dashboard, and payout-ready earnings model.",
+                                                 "build_search":  "Implement multilingual recipe search with typo tolerance, ingredient aliases, filters, semantic fallback, personalized ranking, and analytics events for query-to-recipe-click conversion."
+                                             },
+    "success_metrics":  {
+                            "activation":  [
+                                               "Complete first recipe view within 24 hours",
+                                               "Save at least one recipe",
+                                               "Create or join a household",
+                                               "Generate first grocery list"
+                                           ],
+                            "engagement":  [
+                                               "Weekly active cooks",
+                                               "recipes cooked per user",
+                                               "meal plans created per month",
+                                               "grocery-list completion rate"
+                                           ],
+                            "content_quality":  [
+                                                    "Verified recipe share",
+                                                    "creator retention",
+                                                    "review helpfulness rate",
+                                                    "cooked-photo upload rate"
+                                                ],
+                            "commerce":  [
+                                             "Grocery-list-to-order conversion",
+                                             "average basket value",
+                                             "repeat purchase rate",
+                                             "ingredient-substitution acceptance rate"
+                                         ],
+                            "retention":  [
+                                              "D30 retention",
+                                              "D90 retention",
+                                              "weekly plan continuation rate"
+                                          ],
+                            "trust":  [
+                                          "Recipe accuracy complaints per 1,000 views",
+                                          "moderation resolution time",
+                                          "creator verification coverage"
+                                      ]
+                        },
+    "go_to_market":  {
+                         "launch_markets":  [
+                                                "Start with one or two high-engagement African markets plus a diaspora market; validate ingredient availability and delivery economics before scaling."
+                                            ],
+                         "launch_motion":  [
+                                               "Recruit 100 trusted local creators and home cooks per launch city",
+                                               "Seed 500 high-quality, locally tested recipes across priority cuisines",
+                                               "Partner with market vendors, grocers, and delivery providers for shopping-list conversion",
+                                               "Run family and diaspora recipe-preservation campaigns",
+                                               "Offer creator revenue share and verification to build supply-side loyalty",
+                                               "Use short-form cooking video, WhatsApp sharing, and community challenges for acquisition"
+                                           ]
+                     },
+    "risks_and_mitigations":  {
+                                  "content_authenticity":  {
+                                                               "risk":  "Incorrect or culturally insensitive recipes damage trust",
+                                                               "mitigation":  "Community review, chef verification, source attribution, and correction workflow"
+                                                           },
+                                  "ingredient_availability":  {
+                                                                  "risk":  "Recommended ingredients may be unavailable or costly",
+                                                                  "mitigation":  "Location-aware inventory, substitution engine, and price-aware planning"
+                                                              },
+                                  "low_connectivity":  {
+                                                           "risk":  "Poor connectivity limits usage",
+                                                           "mitigation":  "Offline-first design, compressed media, and low-data mode"
+                                                       },
+                                  "creator_supply":  {
+                                                         "risk":  "Insufficient high-quality local content",
+                                                         "mitigation":  "Creator incentives, easy upload tools, editorial support, and revenue share"
+                                                     },
+                                  "commerce_complexity":  {
+                                                              "risk":  "Fragmented payments and logistics",
+                                                              "mitigation":  "Phase integrations by market and begin with list export, affiliate links, and selected partners"
+                                                          },
+                                  "data_privacy":  {
+                                                       "risk":  "Location, health, and payment data require strong protection",
+                                                       "mitigation":  "Explicit consent, data minimization, encryption, regional compliance review, and granular permissions"
+                                                   }
+                              },
+    "recommended_build_order":  [
+                                    "Validate LadhaQuest\u0027s live feature inventory and user research in one launch market",
+                                    "Build recipe schema, search, recipe page, save, and offline mode",
+                                    "Ship meal planner, grocery list, substitution engine, and household sharing",
+                                    "Launch creator portal and community proof loops",
+                                    "Integrate one grocery or delivery partner and test list-to-order conversion",
+                                    "Add pantry recommendations, AI assistant, budget planning, and marketplace"
+                                ],
+    "feature_gap_matrix":  {
+                               "features":  [
+                                                {
+                                                    "priority":  "P0",
+                                                    "status":  "partial",
+                                                    "evidence":  "AdvancedSearch, recipe-index, maps, dietary filters; missing budget/skill/one-pot filters",
+                                                    "name":  "Recipe discovery",
+                                                    "id":  "F01"
+                                                },
+                                                {
+                                                    "priority":  "P0",
+                                                    "status":  "partial",
+                                                    "evidence":  "RecipeDetail, CookMode, servings scale, nutrition; missing video, version history",
+                                                    "name":  "Structured recipe pages",
+                                                    "id":  "F02"
+                                                },
+                                                {
+                                                    "priority":  "P0",
+                                                    "status":  "partial",
+                                                    "evidence":  "favorites, saved_items/MyList, RecipeNotes; no cookbooks/folders",
+                                                    "name":  "Save and organize",
+                                                    "id":  "F03"
+                                                },
+                                                {
+                                                    "priority":  "P0",
+                                                    "status":  "partial",
+                                                    "evidence":  "MealPlanner + Calendar dnd-kit, share token; no household size model",
+                                                    "name":  "Meal planner",
+                                                    "id":  "F04"
+                                                },
+                                                {
+                                                    "priority":  "P0",
+                                                    "status":  "partial",
+                                                    "evidence":  "shopping_list_items + naive name merge; no unit convert/aisle groups/share",
+                                                    "name":  "Smart grocery list",
+                                                    "id":  "F05"
+                                                },
+                                                {
+                                                    "priority":  "P0",
+                                                    "status":  "partial",
+                                                    "evidence":  "SubstitutionPopover + edge fn; substitutions table empty via anon",
+                                                    "name":  "Local substitution engine",
+                                                    "id":  "F06"
+                                                },
+                                                {
+                                                    "priority":  "P1",
+                                                    "status":  "partial",
+                                                    "evidence":  "SubmitRecipe, EditorialReview; no creator analytics/payouts",
+                                                    "name":  "Creator publishing",
+                                                    "id":  "F07"
+                                                },
+                                                {
+                                                    "priority":  "P1",
+                                                    "status":  "partial",
+                                                    "evidence":  "RecipeReviews UI; only 1 review row in DB",
+                                                    "name":  "Community proof",
+                                                    "id":  "F08"
+                                                },
+                                                {
+                                                    "priority":  "P0",
+                                                    "status":  "partial",
+                                                    "evidence":  "PWA Workbox + localStorage offline-recipes; no IndexedDB sync",
+                                                    "name":  "Offline and low-data mode",
+                                                    "id":  "F09"
+                                                },
+                                                {
+                                                    "priority":  "P0",
+                                                    "status":  "partial",
+                                                    "evidence":  "email/Google auth + meal plan share; no phone or household members",
+                                                    "name":  "Accounts and household sharing",
+                                                    "id":  "F10"
+                                                },
+                                                {
+                                                    "priority":  "P1",
+                                                    "status":  "present",
+                                                    "evidence":  "PantryDashboard, SmartRecipeMatch, pantry-intelligence",
+                                                    "name":  "Pantry-aware recommendations",
+                                                    "id":  "F11"
+                                                },
+                                                {
+                                                    "priority":  "P1",
+                                                    "status":  "partial",
+                                                    "evidence":  "BudgetTracker + AI budgetPerDay; no live prices",
+                                                    "name":  "Budget meal planner",
+                                                    "id":  "F12"
+                                                },
+                                                {
+                                                    "priority":  "P1",
+                                                    "status":  "partial",
+                                                    "evidence":  "Jumia/Amazon/Google link-outs; no partner APIs",
+                                                    "name":  "Grocery integrations",
+                                                    "id":  "F13"
+                                                },
+                                                {
+                                                    "priority":  "P1",
+                                                    "status":  "partial",
+                                                    "evidence":  "ai-search/recs/meal-gen/subs + cook voice; no conversational assistant",
+                                                    "name":  "AI cooking assistant",
+                                                    "id":  "F14"
+                                                },
+                                                {
+                                                    "priority":  "P1",
+                                                    "status":  "partial",
+                                                    "evidence":  "VoiceInput + phonetics tables; no i18n UI",
+                                                    "name":  "Voice and multilingual UX",
+                                                    "id":  "F15"
+                                                },
+                                                {
+                                                    "priority":  "P2",
+                                                    "status":  "missing",
+                                                    "evidence":  "No livestream/class code found",
+                                                    "name":  "Live cooking and classes",
+                                                    "id":  "F16"
+                                                },
+                                                {
+                                                    "priority":  "P2",
+                                                    "status":  "partial",
+                                                    "evidence":  "venues schema + DishEncyclopedia UI; no venue rows via anon",
+                                                    "name":  "Restaurant and packaged-food discovery",
+                                                    "id":  "F17"
+                                                }
+                                            ],
+                               "stack_detected":  "Vite + React 18 + TypeScript + Supabase + vite-plugin-pwa (not Next.js)",
+                               "audit_doc":  "docs/AUDIT.md",
+                               "coverage_doc":  "docs/COVERAGE.md",
+                               "audited_at":  "2026-11-13"
+                           },
+    "phase_0_audit":  {
+                          "status":  "complete",
+                          "completed_at":  "2026-11-13",
+                          "tasks":  {
+                                        "A1":  "done - inventory in docs/AUDIT.md",
+                                        "A2":  "done - F01-F17 statuses filled",
+                                        "A6":  "done - code-pattern a11y/mobile notes",
+                                        "A3":  "skipped_lighthouse - code notes only",
+                                        "A5":  "done - docs/COVERAGE.md",
+                                        "A4":  "done - robots/sitemap/OG/JSON-LD"
+                                    },
+                          "recommended_next_prompt":  "build_grocery_engine"
+                      }
+}

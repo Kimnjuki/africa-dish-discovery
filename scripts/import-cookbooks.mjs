@@ -257,11 +257,11 @@ function parseSoup(paras) {
     if (/^(CHAPTER|CONTENTS|INTRODUCTION|Yields|Safe Handling|THE |Copyright|ISBN|Published|Library|Serves|Salt |Pepper )/i.test(title)) continue;
     if (/^\d|^½|^¼|^¾|^⅓|^⅔/.test(title)) continue;
     if (/cup|tablespoon|teaspoon|pound|clove|chopped|minced|sliced|to taste/i.test(title)) continue;
-    // Real soup titles are Title Case / proper names, not ingredient fragments
     if (!/[A-Za-z]{3,}/.test(title)) continue;
-    if (!/\b(soup|broth|bisque|chowder|stew|chili|consomme|gazpacho|stock|bouillabaisse|gumbo|borscht|pho|ramen|dal|curry)\b/i.test(title) && title.split(/\s+/).length < 2) {
-      // allow multi-word non-soup names (e.g. "Scotch Broth") already covered; single words only if soup-ish
-    }
+    if (/:$/.test(title) || /^[a-z(]/.test(title)) continue;
+    if (/\b(topping|slicing with the mandolin|black pepper|white pepper|paprika|cinnamon|bean sprouts|kidney beans|coarse salt|juice of)\b/i.test(title)) continue;
+    const dishWord = /\b(soup|broth|bisque|chowder|stew|chili|chilli|consomme|gazpacho|stock|bouillabaisse|gumbo|borscht|pho|ramen|dal|curry|goulash|ragout|vichyssoise|cassoulet|minestrone|bourguignon)\b/i;
+    if (!dishWord.test(title) && title.split(/\s+/).length < 3) continue;
     if (/^(of an |bunch |head of |medium |large |small )/i.test(title)) continue;
 
     // Look ahead for ingredient pattern within next 3 lines
@@ -487,7 +487,14 @@ for (let i = 0; i < egyptRecipes.length; i++) {
 console.log(skipUpload ? "reusing soup image URLs" : "uploading soup images");
 const soupMediaDir = "data/cookbooks/soup/unzipped/word/media";
 const soupMedia = existsSync(soupMediaDir)
-  ? readdirSync(soupMediaDir).filter((f) => /\.(jpe?g|png|webp)$/i.test(f) && !/logo|cover|inner|ever/i.test(f))
+  ? readdirSync(soupMediaDir).filter((f) => {
+      if (!/\.(jpe?g|png|webp)$/i.test(f)) return false;
+      // The soup docx only embeds the cover, logos, and tiny fraction/ornament
+      // glyphs. Those glyphs were being stretched as dish photos and looked blurred.
+      if (/logo|cover|inner|ever|beets|serve/i.test(f)) return false;
+      if (/^\d/.test(f) || /\^/.test(f)) return false;
+      return true;
+    })
   : [];
 const soupUrls = [];
 for (const file of soupMedia) {

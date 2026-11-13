@@ -144,7 +144,7 @@ const RecipeDetail = () => {
                   {recipe.image_url ? (
                     <img src={recipe.image_url} alt={`${title} from ${country}`} className="w-full h-full object-cover" />
                   ) : (
-                    <RecipeImagePlaceholder name={title} country={country} />
+                    <RecipeImagePlaceholder name={title} country={country} className="h-full min-h-64" />
                   )}
                 </div>
                 <div className="lg:col-span-2">

@@ -25,8 +25,8 @@ interface PantryItem {
 interface Recipe {
   id: string;
   name: string;
-  country: string;
-  summary: string;
+  country?: string | null;
+  summary?: string | null;
   ingredients: IngredientValue[] | null;
   prep_time?: number;
   cook_time?: number;

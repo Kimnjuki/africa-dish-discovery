@@ -198,3 +198,43 @@ All colors MUST be HSL.
     box-shadow: var(--shadow-soft);
   }
 }
+
+/* Phones keep a sticky hover state, so scale-on-hover reads as a shake.
+   Looping float/bounce and backdrop-filter do the same while scrolling. */
+@media (hover: none), (max-width: 767px) {
+  html,
+  body {
+    overflow-x: clip;
+  }
+
+  .animate-float,
+  .animate-bounce,
+  .animate-pulse-glow {
+    animation: none !important;
+  }
+
+  [class*="hover:scale"]:hover,
+  [class*="hover:scale"]:active,
+  [class*="active:scale"]:active,
+  .group:hover [class*="group-hover:scale"],
+  .category-mood-card,
+  .category-mood-card:hover,
+  .category-mood-card:active,
+  .category-mood-card:focus {
+    transform: none !important;
+  }
+
+  .category-mood-card {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .backdrop-blur,
+  .backdrop-blur-sm,
+  .backdrop-blur-md,
+  .backdrop-blur-lg,
+  .backdrop-blur-xl {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}

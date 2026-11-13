@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { Card } from "@/components/ui/card";
 import { Utensils, Coffee, Wine, Moon, Salad, Globe, Timer, Flame } from "lucide-react";
 
 const categories = [
@@ -22,20 +21,20 @@ const QuickCategoryCards = () => {
         <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
           What are you in the mood for?
         </h2>
-        <div className="grid grid-cols-4 md:grid-cols-8 gap-3">
+        <div className="grid grid-cols-4 gap-2 sm:gap-3 md:grid-cols-8">
           {categories.map((cat) => (
-            <Card
+            <button
               key={cat.label}
-              className={`group cursor-pointer hover:shadow-warm transition-all duration-300 border ${cat.border} bg-gradient-to-br ${cat.color} hover:scale-105`}
+              type="button"
+              className={`category-mood-card flex h-[5.5rem] w-full touch-manipulation flex-col items-center justify-center gap-1.5 overflow-hidden rounded-lg border bg-gradient-to-br px-1 py-2 shadow-sm transition-[box-shadow,colors] duration-200 ${cat.border} ${cat.color} [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-warm [@media(hover:hover)_and_(pointer:fine)]:hover:[&_svg]:text-primary`}
               onClick={() => navigate(`${cat.path}${cat.query}`)}
+              aria-label={`Browse ${cat.label}`}
             >
-              <div className="flex flex-col items-center justify-center p-4 gap-2">
-                <cat.icon className="w-6 h-6 md:w-8 md:h-8 text-foreground/70 group-hover:text-primary transition-colors" />
-                <span className="text-xs md:text-sm font-medium text-center text-foreground/80">
-                  {cat.label}
-                </span>
-              </div>
-            </Card>
+              <cat.icon className="h-6 w-6 shrink-0 text-foreground/70 md:h-7 md:w-7" aria-hidden />
+              <span className="line-clamp-2 min-h-[2rem] text-center text-[11px] font-medium leading-tight text-foreground/80 sm:text-xs">
+                {cat.label}
+              </span>
+            </button>
           ))}
         </div>
       </div>

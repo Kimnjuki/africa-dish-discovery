@@ -59,14 +59,18 @@ const RecipeImagePlaceholder = ({
     return "from-primary/60 via-primary/80 to-primary";
   };
 
+  const frame = `relative flex h-full w-full min-h-[8rem] items-center justify-center overflow-hidden ${className}`;
+
   // If there's a valid image URL, show the image
   if (imageUrl) {
     return (
-      <div className={`relative overflow-hidden ${className}`}>
+      <div className={frame}>
         <img
           src={imageUrl}
           alt={name || "Recipe"}
-          className="w-full h-full object-cover"
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover"
           onError={(e) => {
             // If image fails to load, hide it to show placeholder
             e.currentTarget.style.display = 'none';
@@ -92,7 +96,7 @@ const RecipeImagePlaceholder = ({
 
   // Show placeholder if no image
   return (
-    <div className={`bg-gradient-to-br ${getGradient()} flex items-center justify-center ${className}`}>
+    <div className={`${frame} bg-gradient-to-br ${getGradient()}`}>
       <div className="text-center text-white p-4">
         <ChefHat className="w-10 h-10 mx-auto mb-2 opacity-80" />
         <p className="text-sm font-medium line-clamp-2 opacity-90">{name}</p>

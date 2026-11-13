@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import Navigation from "@/components/Navigation";
 import Hero from "@/components/Hero";
 import AfricaMap from "@/components/AfricaMap";
@@ -14,8 +15,23 @@ import { useOnboarding } from "@/hooks/useOnboarding";
 import QuickCategoryCards from "@/components/QuickCategoryCards";
 import TrendingRecipes from "@/components/TrendingRecipes";
 import RecipeCollections from "@/components/RecipeCollections";
+
+const NAV_OFFSET_PX = 72;
+
 const Index = () => {
   const { showOnboarding, completeOnboarding, skipOnboarding } = useOnboarding();
+
+  useEffect(() => {
+    const hash = window.location.hash.replace(/^#/, "");
+    if (hash !== "pantry-intelligence") return;
+    const scroll = () => {
+      const target = document.getElementById("pantry-intelligence");
+      if (!target) return;
+      const top = target.getBoundingClientRect().top + window.scrollY - NAV_OFFSET_PX;
+      window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+    };
+    requestAnimationFrame(scroll);
+  }, []);
 
   return (
     <>
@@ -41,7 +57,7 @@ const Index = () => {
         <PantryShowcase />
         <PersonalizedRecommendations />
         <RecipeCollections />
-        <div id="pantry-intelligence">
+        <div id="pantry-intelligence" className="scroll-mt-20">
           <EnhancedPantryIntelligence />
         </div>
         <div id="explore-africa">
