@@ -63,20 +63,20 @@ const Hero = () => {
         </div>
         
         {/* Floating Stats */}
-        <div className="mt-12 mx-auto grid max-w-2xl grid-cols-3 gap-2 sm:mt-16 sm:gap-8">
+        <div className="mt-12 grid max-w-2xl grid-cols-3 gap-2 sm:mt-16 sm:gap-8">
           {[
             { number: "1,700+", label: "Recipes", icon: ChefHat },
-            { number: "54", label: "Countries", icon: Globe },
             { number: "5", label: "Regions", icon: MapPin },
+            { number: "54", label: "Countries", icon: Globe },
           ].map((stat, index) => (
             <div 
-              key={stat.label} 
-              className="flex min-w-0 flex-col items-center justify-center rounded-xl border border-primary/10 bg-card/95 px-2 py-3 text-center shadow-soft sm:px-4 sm:py-6 md:animate-float"
+              key={index} 
+              className="rounded-xl border border-primary/10 bg-card/95 p-3 shadow-soft sm:p-6 md:animate-float"
               style={{ animationDelay: `${index * 0.2}s` }}
             >
-              <stat.icon className="mb-2 h-6 w-6 shrink-0 text-primary sm:h-8 sm:w-8" />
-              <div className="w-full truncate text-lg font-bold text-primary sm:text-2xl">{stat.number}</div>
-              <div className="w-full truncate text-xs leading-tight text-muted-foreground sm:text-sm">{stat.label}</div>
+              <stat.icon className="mx-auto mb-2 h-6 w-6 text-primary sm:h-8 sm:w-8" />
+              <div className="text-lg font-bold text-primary sm:text-2xl">{stat.number}</div>
+              <div className="text-xs leading-tight text-muted-foreground sm:text-sm">{stat.label}</div>
             </div>
           ))}
         </div>

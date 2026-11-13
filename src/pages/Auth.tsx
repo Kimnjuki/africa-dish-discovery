@@ -12,7 +12,6 @@ import { readErrorMessage } from "@/lib/errors";
 import {
   friendlyAuthErrorMessage,
   getAuthRedirectUrl,
-  getPostAuthRedirect,
   parseAuthUrlError,
 } from "@/lib/authRedirect";
 
@@ -96,7 +95,7 @@ const Auth = () => {
           setTimeout(() => {
             if (mounted && !isUpdatingPassword) {
               createProfileIfNeeded(currentSession.user);
-              navigate(getPostAuthRedirect(searchParams.toString()), { replace: true });
+              navigate('/', { replace: true });
             }
           }, 0);
         }
@@ -117,7 +116,7 @@ const Auth = () => {
       }
       
       if (existingSession) {
-        navigate(getPostAuthRedirect(searchParams.toString()), { replace: true });
+        navigate('/', { replace: true });
       }
     });
 
