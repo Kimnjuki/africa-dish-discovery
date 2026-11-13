@@ -445,6 +445,75 @@ export type Database = {
           },
         ]
       }
+      household_members: {
+        Row: {
+          household_id: string
+          id: string
+          joined_at: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          household_id: string
+          id?: string
+          joined_at?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          household_id?: string
+          id?: string
+          joined_at?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "household_members_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "household_members_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      households: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: string
+          invite_code: string
+          name: string
+          share_pantry: boolean
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          id?: string
+          invite_code: string
+          name: string
+          share_pantry?: boolean
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          invite_code?: string
+          name?: string
+          share_pantry?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ingredient_substitutions: {
         Row: {
           compatibility_score: number | null
@@ -2260,11 +2329,47 @@ export type Database = {
       }
     }
     Functions: {
+      can_view_household_pantry: {
+        Args: { p_owner_id: string }
+        Returns: boolean
+      }
+      create_household: {
+        Args: { p_name: string }
+        Returns: string
+      }
+      generate_household_invite_code: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
           _user_id: string
         }
+        Returns: boolean
+      }
+      is_household_member: {
+        Args: { p_household_id: string }
+        Returns: boolean
+      }
+      is_household_owner: {
+        Args: { p_household_id: string }
+        Returns: boolean
+      }
+      join_household_by_code: {
+        Args: { p_code: string }
+        Returns: string
+      }
+      leave_household: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      regenerate_household_invite_code: {
+        Args: { p_household_id: string }
+        Returns: string
+      }
+      shares_household_with: {
+        Args: { p_other_user_id: string }
         Returns: boolean
       }
     }

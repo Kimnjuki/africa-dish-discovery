@@ -3,6 +3,8 @@
 ## 2026-11-14
 
 ### Added
+- F10 household sharing MVP: `households` + `household_members` (owner/member), invite-code create/join, share-pantry toggle, RLS so co-members can read shared pantry; UI at `/household` + pantry household strip.
+- Migration `supabase/migrations/20261114020000_f10_household_sharing.sql` (RPCs: `create_household`, `join_household_by_code`, `leave_household`, `regenerate_household_invite_code`).
 - F06 substitution graph bootstrap (`src/lib/substitutionGraph.ts`): Africa-first aliases + directed swaps with flavor/region notes (ugwu↔spinach/kale, sukuma wiki↔collard/kale, egusi↔pumpkin seeds, palm oil alternatives, scotch bonnet↔habanero, and more).
 - Cook popover + pantry substitution modal resolve the local graph before DB/AI; pantry recipe matching uses the same graph.
 - SQL seed migration `supabase/migrations/20261114010000_f06_substitution_graph_seed.sql` for `ingredients` + `ingredient_substitutions`.

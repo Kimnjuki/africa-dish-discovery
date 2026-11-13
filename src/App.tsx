@@ -50,6 +50,7 @@ const EditorialReview = lazy(() => import("./pages/EditorialReview"));
 const AdminDishQA = lazy(() => import("./pages/AdminDishQA"));
 const RecipeDetail = lazy(() => import("./pages/RecipeDetail"));
 const MyList = lazy(() => import("./pages/MyList"));
+const Household = lazy(() => import("./pages/Household"));
 const CuisineMap = lazy(() => import("./pages/CuisineMap"));
 
 // Loading fallback component
@@ -92,6 +93,7 @@ const App = () => (
               <Route path="/recipe-comparison" element={<RequireAuth><RecipeComparison /></RequireAuth>} />
               <Route path="/pantry" element={<RequireAuth><Pantry /></RequireAuth>} />
               <Route path="/my-list" element={<RequireAuth><MyList /></RequireAuth>} />
+              <Route path="/household" element={<RequireAuth><Household /></RequireAuth>} />
               <Route path="/submit-recipe" element={<RequireAuth><SubmitRecipe /></RequireAuth>} />
               <Route path="/shared-meal-plan/:shareToken" element={<SharedMealPlan />} />
               <Route path="/install" element={<Install />} />

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ChefHat, Menu, X, Search, User, LogOut, Package, Calendar, LayoutGrid, Heart } from "lucide-react";
+import { ChefHat, Menu, X, Search, User, LogOut, Package, Calendar, LayoutGrid, Heart, Home } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -133,6 +133,10 @@ const Navigation = () => {
                   <DropdownMenuItem onClick={() => navigate('/pantry')}>
                     <Package className="w-4 h-4 mr-2" />
                     My Pantry
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/household')}>
+                    <Home className="w-4 h-4 mr-2" />
+                    Household
                   </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate('/meal-planner')}>
                     <Calendar className="w-4 h-4 mr-2" />

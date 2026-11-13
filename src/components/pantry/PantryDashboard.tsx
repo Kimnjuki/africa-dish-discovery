@@ -20,10 +20,18 @@ import {
   BarChart3,
   Bell,
   Search,
-  ShoppingCart
+  ShoppingCart,
+  Home,
+  Users,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import {
+  fetchMyHousehold,
+  fetchSharedHouseholdPantry,
+  type SharedPantryItem,
+} from "@/lib/household";
 import SmartRecipeMatch, { type RecipeMatch } from "./SmartRecipeMatch";
 import SubstitutionModal from "./SubstitutionModal";
 import CookingPopup from "@/components/CookingPopup";
@@ -57,6 +65,8 @@ const PantryDashboard = () => {
   const [isCookingPopupOpen, setIsCookingPopupOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<PantryItemWithExpiry | null>(null);
   const [editForm, setEditForm] = useState({ name: '', quantity: '', unit: '', expires_at: '' });
+  const [householdName, setHouseholdName] = useState<string | null>(null);
+  const [sharedHouseholdItems, setSharedHouseholdItems] = useState<SharedPantryItem[]>([]);
 
   useEffect(() => {
     checkAuth();
@@ -65,6 +75,7 @@ const PantryDashboard = () => {
   useEffect(() => {
     if (user) {
       loadPantryItems();
+      loadHouseholdPantry();
     }
   }, [user]);
 
@@ -89,6 +100,25 @@ const PantryDashboard = () => {
     } catch (error) {
       console.error('Error loading pantry:', error);
       toast.error("Failed to load pantry items");
+    }
+  };
+
+  const loadHouseholdPantry = async () => {
+    if (!user) return;
+    try {
+      const { household, members } = await fetchMyHousehold();
+      if (!household?.share_pantry) {
+        setHouseholdName(household?.name ?? null);
+        setSharedHouseholdItems([]);
+        return;
+      }
+      setHouseholdName(household.name);
+      const shared = await fetchSharedHouseholdPantry(user.id, members);
+      setSharedHouseholdItems(shared);
+    } catch (error) {
+      console.error("Error loading household pantry:", error);
+      setHouseholdName(null);
+      setSharedHouseholdItems([]);
     }
   };
 
@@ -494,6 +524,53 @@ const PantryDashboard = () => {
                 onEdit={openEditDialog}
                 onSetExpiry={updateExpiry}
               />
+            </CardContent>
+          </Card>
+
+          <Card className="mt-4">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base flex items-center justify-between gap-2 flex-wrap">
+                <span className="flex items-center gap-2">
+                  <Users className="w-4 h-4" />
+                  Household pantry
+                  {householdName ? (
+                    <span className="font-normal text-muted-foreground">· {householdName}</span>
+                  ) : null}
+                </span>
+                <Button asChild size="sm" variant="outline">
+                  <Link to="/household">
+                    <Home className="w-4 h-4 mr-2" />
+                    Manage
+                  </Link>
+                </Button>
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              {!householdName ? (
+                <p className="text-sm text-muted-foreground">
+                  Create or join a household to see shared ingredients from family members.
+                </p>
+              ) : sharedHouseholdItems.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  No shared items from other members yet (or sharing is off).
+                </p>
+              ) : (
+                <ul className="space-y-2 text-sm">
+                  {sharedHouseholdItems.slice(0, 24).map((item) => (
+                    <li key={item.id} className="flex justify-between gap-3">
+                      <span className="font-medium">{item.ingredient_name}</span>
+                      <span className="text-muted-foreground shrink-0">
+                        {item.owner_name || "Member"}
+                      </span>
+                    </li>
+                  ))}
+                  {sharedHouseholdItems.length > 24 && (
+                    <li className="text-muted-foreground">
+                      +{sharedHouseholdItems.length - 24} more on Household
+                    </li>
+                  )}
+                </ul>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

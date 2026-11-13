@@ -39,7 +39,7 @@
 | `/blog`, `/blog/:slug` | Blog | Public |
 | `/auth` | Email/password + Google OAuth | Public |
 | `/meal-planner`, `/meal-planner-calendar` | Meal planning | RequireAuth |
-| `/pantry`, `/my-list`, `/recipe-comparison` | Pantry, saves, compare | RequireAuth |
+| `/pantry`, `/my-list`, `/household`, `/recipe-comparison` | Pantry, saves, household, compare | RequireAuth |
 | `/submit-recipe` | Creator upload → `uploads` | RequireAuth |
 | `/shared-meal-plan/:shareToken` | Shared plan view | Public token |
 | `/offline-recipes`, `/install` | Offline cache / PWA install | Public |
@@ -110,7 +110,7 @@ Statuses: **present** | **partial** | **missing** | **unknown** — based on **c
 | F07 | Creator publishing | P1 | **partial** | `/submit-recipe` → `uploads`; `/editorial-review`; admin uploader | No creator profiles/analytics/payouts; limited moderation workflow |
 | F08 | Community proof | P1 | **partial** | `RecipeReviews` + `recipe_ratings_summary` | Only **1** review row via anon API; no cooked-photo uploads or Q&A threads |
 | F09 | Offline / low-data | P0 | **partial** | PWA + Workbox recipe API cache; `/offline-recipes` (localStorage); `/install` | No IndexedDB; no offline meal plans/lists sync; no explicit low-data image mode |
-| F10 | Accounts & household sharing | P0 | **partial** | Email/password + Google OAuth; profiles; meal-plan share token | **No phone auth**; **no household members model**; no collaborative shared grocery lists |
+| F10 | Accounts & household sharing | P0 | **partial** | Email/password + Google OAuth; profiles; meal-plan share token; **`households` + `household_members`** (invite code, share-pantry RLS); `/household` create/join/members | **No phone auth**; **no email invites**; no shared shopping-list write-sync; one household per user MVP |
 | F11 | Pantry-aware recommendations | P1 | **present** | `/pantry`, `SmartRecipeMatch`, `pantry-intelligence`, barcode + voice add | Waste/expiry UX exists; depth of ranking can improve |
 | F12 | Budget meal planner | P1 | **partial** | `BudgetTracker`, AI meal gen `budgetPerDay` | Hardcoded/demo budgets; no live local prices or promo optimization |
 | F13 | Grocery integrations | P1 | **partial** | Link-outs + `affiliate_suppliers` table | No partner APIs, cart push, pickup/delivery checkout |
@@ -123,7 +123,7 @@ Statuses: **present** | **partial** | **missing** | **unknown** — based on **c
 
 | Already meaningfully present | Partial / incomplete | Missing |
 |------------------------------|----------------------|---------|
-| Core discovery browse, structured recipe pages with cook mode, meal planner calendar, pantry matching (F11), auth email/Google; F06 client substitution graph bootstrap | F01–F06, F09–F10 (most P0) | Phone auth, households, price/diet-ranked subs, live market inventory |
+| Core discovery browse, structured recipe pages with cook mode, meal planner calendar, pantry matching (F11), auth email/Google; F06 client substitution graph bootstrap; F10 household create/join + shared pantry read | F01–F06, F09–F10 (most P0) | Phone auth, email household invites, shared grocery write-sync, price/diet-ranked subs, live market inventory |
 
 ---
 
@@ -211,6 +211,13 @@ Do **not** start with Next.js migration or F16/F17.
 
 ## Progress
 
+**2026-11-14 — Phase 1 F10 household sharing MVP (chunk 4)**
+
+- Schema: `households`, `household_members` (owner/member), invite codes, `share_pantry`; SECURITY DEFINER RPCs for create/join/leave/regenerate.
+- RLS: members see own household + roster; co-members can SELECT pantry when sharing on; co-member profile read for display names.
+- UI: `/household` (create/join by code, members, share toggle, shared pantry list); nav Account → Household; pantry tab household strip.
+- Remaining: email invites, phone auth, shared shopping-list sync, multi-household, collaborative meal plans.
+
 **2026-11-14 — Phase 1 F06 substitution graph bootstrap (chunk 3)**
 
 - Added `src/lib/substitutionGraph.ts`: curated African ingredient aliases + substitution edges with flavor role, region tags, authenticity, and compatibility scores (ugwu, sukuma wiki, egusi, palm oil, scotch bonnet, ogbono, crayfish, irú, etc.).
@@ -242,7 +249,9 @@ Do **not** start with Next.js migration or F16/F17.
 | Full F05 share persistence / aisle DB | Deferred — client merge + copy/share shipped first |
 | Meilisearch / dedicated search service | Deferred — client + edge synonym/typo layer shipped first |
 | Full F06 country/price/diet ranking | Deferred — curated graph + UI wiring shipped; ranking/productization next |
-| Household sharing (F10) | Next high-impact P0 candidate after F06 bootstrap |
+| Household email invites / shared grocery write-sync (F10 remaining) | After F10 schema+code join MVP |
+| Phone auth (F10) | Deferred — email/Google + household code invite first |
+| F05 aisle DB / persisted shared lists | Still open after client grocery engine |
 
 ---
 
