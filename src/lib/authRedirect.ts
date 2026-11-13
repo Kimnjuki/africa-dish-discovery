@@ -11,6 +11,22 @@ export function getAuthRedirectUrl(path = "/auth/callback"): string {
   return `${window.location.origin}${normalized}`;
 }
 
+/**
+ * Safe in-app path after sign-in (query `redirect` / `next`).
+ * Only relative same-origin paths; blocks open redirects.
+ */
+export function getPostAuthRedirect(
+  search: string = typeof window !== "undefined" ? window.location.search : "",
+  fallback = "/",
+): string {
+  const params = new URLSearchParams(search.startsWith("?") ? search.slice(1) : search);
+  const raw = params.get("redirect") || params.get("next") || fallback;
+  if (!raw.startsWith("/") || raw.startsWith("//") || raw.includes("://")) {
+    return fallback;
+  }
+  return raw;
+}
+
 export type AuthUrlError = {
   error: string;
   errorCode: string | null;

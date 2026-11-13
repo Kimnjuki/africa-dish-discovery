@@ -1,21 +1,27 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChefHat, Search, Sparkles, ArrowRight, CheckCircle } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import useRequireAuth from "@/hooks/useRequireAuth";
 import pantryHero from "@/assets/pantry-hero.jpg";
 
-const NAV_OFFSET_PX = 72;
-
 export const PantryShowcase = () => {
-  const scrollToPantryIntelligence = () => {
-    const target = document.getElementById("pantry-intelligence");
-    if (!target) return;
-    const top = target.getBoundingClientRect().top + window.scrollY - NAV_OFFSET_PX;
-    window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
-    // Keep URL shareable without relying on React Router hash navigation
-    if (window.location.hash !== "#pantry-intelligence") {
-      window.history.replaceState(null, "", "#pantry-intelligence");
+  const navigate = useNavigate();
+  const { user } = useRequireAuth({ showToast: false });
+
+  const openPantryIntelligence = () => {
+    if (user) {
+      navigate("/pantry");
+      return;
     }
+    toast.info("Sign in to access Pantry Intelligence", {
+      action: {
+        label: "Sign In",
+        onClick: () => navigate("/auth?redirect=/pantry"),
+      },
+    });
+    navigate("/auth?redirect=/pantry");
   };
 
   return (
@@ -77,7 +83,7 @@ export const PantryShowcase = () => {
                 size="lg"
                 type="button"
                 className="touch-manipulation hover:scale-100 active:scale-100"
-                onClick={scrollToPantryIntelligence}
+                onClick={openPantryIntelligence}
               >
                 Try Pantry Intelligence
                 <ArrowRight className="w-4 h-4 ml-2" />

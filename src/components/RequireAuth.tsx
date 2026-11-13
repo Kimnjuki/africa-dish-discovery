@@ -1,9 +1,11 @@
 import type { ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 
 export const RequireAuth = ({ children }: { children: ReactNode }) => {
   const { loading, isAuthenticated } = useRequireAuth({ showToast: false });
+  const location = useLocation();
+  const authHref = `/auth?redirect=${encodeURIComponent(location.pathname + location.search)}`;
 
   if (loading) {
     return (
@@ -24,7 +26,7 @@ export const RequireAuth = ({ children }: { children: ReactNode }) => {
           <p className="text-muted-foreground">
             Create a free account to use pantry matching, meal planning, and recipe comparison.
           </p>
-          <Link to="/auth" className="inline-flex px-4 py-2 rounded-md bg-primary text-primary-foreground">
+          <Link to={authHref} className="inline-flex px-4 py-2 rounded-md bg-primary text-primary-foreground">
             Sign in
           </Link>
         </div>
