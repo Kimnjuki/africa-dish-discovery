@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit -p tsconfig.app.json",
     "test:search": "node --experimental-strip-types scripts/test-recipe-search.ts",
+    "test:substitutions": "node --experimental-strip-types scripts/test-substitution-graph.ts",
     "preview": "vite preview"
   },
   "dependencies": {

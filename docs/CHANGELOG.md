@@ -3,6 +3,10 @@
 ## 2026-11-14
 
 ### Added
+- F06 substitution graph bootstrap (`src/lib/substitutionGraph.ts`): Africa-first aliases + directed swaps with flavor/region notes (ugwu↔spinach/kale, sukuma wiki↔collard/kale, egusi↔pumpkin seeds, palm oil alternatives, scotch bonnet↔habanero, and more).
+- Cook popover + pantry substitution modal resolve the local graph before DB/AI; pantry recipe matching uses the same graph.
+- SQL seed migration `supabase/migrations/20261114010000_f06_substitution_graph_seed.sql` for `ingredients` + `ingredient_substitutions`.
+- Acceptance script: `npm run test:substitutions` (`scripts/test-substitution-graph.ts`).
 - Typo-tolerant / synonym-aware recipe search (`src/lib/recipeSearch.ts`): African dish aliases (e.g. jolof→jollof, nsima/sadza→ugali), light Levenshtein correction, ingredient alias expansion, and relevance ranking.
 - Recipe Index (`/recipe-index`) uses expanded matching + “showing results for …” suggestion; ingredient facet uses aliases.
 - Advanced Search passes `search_terms` to `ai-search`; edge fallback filters with synonym terms; client re-ranks when AI is off.

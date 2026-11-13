@@ -106,7 +106,7 @@ Statuses: **present** | **partial** | **missing** | **unknown** — based on **c
 | F03 | Save and organize | P0 | **partial** | `favorites`, `saved_items` → `/my-list`; `RecipeNotes` | No cookbooks/folders; limited meal-history UX; collection sharing weak |
 | F04 | Meal planner | P0 | **partial** | `/meal-planner`, `/meal-planner-calendar` with `@dnd-kit`; planned meal servings; AI generator; share link | No household entity/size prefs; dietary prefs not a durable household profile |
 | F05 | Smart grocery list | P0 | **partial** | `shopping_list_items`; pantry + recipe add; **`groceryEngine` + `GroceryListPanel`** on meal planners (unit merge, aisle groups, copy/share, manual edit); store/affiliate fields; Jumia/Amazon links | Persisted shared lists / household sync still missing; aisle heuristics are keyword-based not DB-backed |
-| F06 | Local substitution engine | P0 | **partial** | `IngredientSubstitutionPopover`; `suggest-substitutions` function; `ingredient_substitutions` schema | Anon count on substitutions table returned empty/`*/0`; country/price/diet ranking not productized |
+| F06 | Local substitution engine | P0 | **partial** | `substitutionGraph` client seed (aliases + flavor/region notes); wired into popover, pantry modal, `recipeMatching`; SQL seed migration for `ingredient_substitutions`; AI fallback retained | Country/price/diet ranking not productized; DB seed applies only after migration deploy; graph is curated bootstrap not full market graph |
 | F07 | Creator publishing | P1 | **partial** | `/submit-recipe` → `uploads`; `/editorial-review`; admin uploader | No creator profiles/analytics/payouts; limited moderation workflow |
 | F08 | Community proof | P1 | **partial** | `RecipeReviews` + `recipe_ratings_summary` | Only **1** review row via anon API; no cooked-photo uploads or Q&A threads |
 | F09 | Offline / low-data | P0 | **partial** | PWA + Workbox recipe API cache; `/offline-recipes` (localStorage); `/install` | No IndexedDB; no offline meal plans/lists sync; no explicit low-data image mode |
@@ -123,7 +123,7 @@ Statuses: **present** | **partial** | **missing** | **unknown** — based on **c
 
 | Already meaningfully present | Partial / incomplete | Missing |
 |------------------------------|----------------------|---------|
-| Core discovery browse, structured recipe pages with cook mode, meal planner calendar, pantry matching (F11), auth email/Google | F01–F06, F09–F10 (most P0) | Phone auth, households, true aisle grocery engine, filled substitution graph |
+| Core discovery browse, structured recipe pages with cook mode, meal planner calendar, pantry matching (F11), auth email/Google; F06 client substitution graph bootstrap | F01–F06, F09–F10 (most P0) | Phone auth, households, price/diet-ranked subs, live market inventory |
 
 ---
 
@@ -211,6 +211,14 @@ Do **not** start with Next.js migration or F16/F17.
 
 ## Progress
 
+**2026-11-14 — Phase 1 F06 substitution graph bootstrap (chunk 3)**
+
+- Added `src/lib/substitutionGraph.ts`: curated African ingredient aliases + substitution edges with flavor role, region tags, authenticity, and compatibility scores (ugwu, sukuma wiki, egusi, palm oil, scotch bonnet, ogbono, crayfish, irú, etc.).
+- Wired into `IngredientSubstitutionPopover` (graph → DB → AI), pantry `SubstitutionModal` (graph → AI), and `recipeMatching` pantry substitute detection.
+- Expanded search ingredient aliases (`ugwu`, `sukuma wiki`, `morogo`, `molokhia`, `piri piri`, `ogbono`).
+- SQL seed: `supabase/migrations/20261114010000_f06_substitution_graph_seed.sql`.
+- Acceptance: `npm run test:substitutions` — 23/23 pass.
+
 **2026-11-14 — Phase 1 F01 search synonyms / typo tolerance (chunk 2)**
 
 - Added `src/lib/recipeSearch.ts`: African dish alias groups, ingredient aliases, Levenshtein typo correction, word-boundary-safe matching, relevance scoring.
@@ -233,7 +241,8 @@ Do **not** start with Next.js migration or F16/F17.
 | Service-role / `.env` secrets | Intentionally unused; anon key only |
 | Full F05 share persistence / aisle DB | Deferred — client merge + copy/share shipped first |
 | Meilisearch / dedicated search service | Deferred — client + edge synonym/typo layer shipped first |
-| Full F06 substitution graph seed | Next high-impact P0 candidate after search chunk |
+| Full F06 country/price/diet ranking | Deferred — curated graph + UI wiring shipped; ranking/productization next |
+| Household sharing (F10) | Next high-impact P0 candidate after F06 bootstrap |
 
 ---
 

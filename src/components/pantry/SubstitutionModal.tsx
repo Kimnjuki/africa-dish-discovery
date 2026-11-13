@@ -13,6 +13,7 @@ import { Sparkles, Search, ArrowRight, Check, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { lookupSubstitutions } from "@/lib/substitutionGraph";
 
 interface Substitute {
   name: string;
@@ -50,6 +51,23 @@ const SubstitutionModal = ({
     setSearched(true);
 
     try {
+      // Prefer local Africa-first graph (instant, offline)
+      const graphHits = lookupSubstitutions(ingredient.trim(), { limit: 6 });
+      if (graphHits.length) {
+        setSubstitutes(
+          graphHits.map((s) => ({
+            name: s.name,
+            ratio: s.ratio,
+            notes: [s.notes, s.flavorRole ? `Role: ${s.flavorRole}` : "", s.regions.length ? `Regions: ${s.regions.join(", ")}` : ""]
+              .filter(Boolean)
+              .join(" · "),
+            compatibilityScore: s.compatibilityScore,
+            availabilityScore: Math.min(95, 55 + Math.round(s.compatibilityScore / 3)),
+          }))
+        );
+        return;
+      }
+
       const { data, error } = await supabase.functions.invoke('pantry-intelligence', {
         body: {
           mode: 'substitute',
@@ -96,7 +114,7 @@ const SubstitutionModal = ({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-primary" />
-            AI Ingredient Substitution
+            Ingredient Substitution
           </DialogTitle>
         </DialogHeader>
 
@@ -123,7 +141,7 @@ const SubstitutionModal = ({
             <div className="text-center py-8">
               <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-primary" />
               <p className="text-muted-foreground">
-                AI is finding the best substitutes for {ingredient}...
+                Finding the best substitutes for {ingredient}...
               </p>
             </div>
           )}
@@ -204,7 +222,7 @@ const SubstitutionModal = ({
           {!searched && !loading && (
             <div className="space-y-4">
               <p className="text-sm text-muted-foreground">
-                Enter an ingredient to find AI-powered substitution suggestions for African cooking.
+                Enter an ingredient to find local-graph substitutions for African cooking (AI fallback when needed).
               </p>
 
               <div className="border rounded-lg p-4 bg-muted/30">

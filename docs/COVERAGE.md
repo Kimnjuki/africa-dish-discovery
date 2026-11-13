@@ -16,7 +16,7 @@ No service-role or `.env` secrets used.
 | Unique `country` labels | **156** (includes codes, fusion labels, duplicates like USA/US) |
 | Ingredients (table) | **542** |
 | Recipe reviews (anon) | **1** |
-| Ingredient substitutions (anon visible) | **0** / blocked |
+| Ingredient substitutions (anon visible) | **0** / blocked (client `substitutionGraph` bootstrap ships offline; SQL seed pending migrate) |
 | Venues (anon visible) | **0** / blocked |
 | Live `sitemap-recipes.xml` URLs | **3136** |
 

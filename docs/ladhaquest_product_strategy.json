@@ -525,7 +525,7 @@
                                                 {
                                                     "priority":  "P0",
                                                     "status":  "partial",
-                                                    "evidence":  "SubstitutionPopover + edge fn; substitutions table empty via anon",
+                                                    "evidence":  "substitutionGraph client seed (aliases + flavor/region notes); popover + pantry modal + recipeMatching wired; SQL seed migration; AI fallback; country/price/diet ranking not productized",
                                                     "name":  "Local substitution engine",
                                                     "id":  "F06"
                                                 },

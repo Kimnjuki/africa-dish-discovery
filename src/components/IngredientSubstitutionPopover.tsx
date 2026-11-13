@@ -4,12 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Repeat, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { lookupSubstitutions, stripIngredientNoise } from "@/lib/substitutionGraph";
 
 interface Suggestion {
   name: string;
   ratio: string;
   notes: string;
   authenticity: "high" | "medium" | "low";
+  regions?: string[];
+  source?: "graph" | "db" | "ai";
 }
 
 interface Props {
@@ -41,40 +44,71 @@ export const IngredientSubstitutionPopover = ({
     setLoading(true);
     setError(null);
     try {
-      // 1) Try DB-backed substitutions first (accurate dish/ingredient match by name)
+      const cleaned = stripIngredientNoise(ingredient);
+      const regionHint = country || region;
+
+      // 1) Local Africa-first substitution graph (offline, instant)
+      const graphHits = lookupSubstitutions(cleaned || ingredient, {
+        regionHint,
+        limit: 5,
+      });
+      if (graphHits.length) {
+        setSuggestions(
+          graphHits.map((s) => ({
+            name: s.name,
+            ratio: s.ratio,
+            notes: [s.notes, s.regions.length ? `(${s.regions.slice(0, 2).join(", ")})` : ""]
+              .filter(Boolean)
+              .join(" "),
+            authenticity: s.authenticity,
+            regions: s.regions,
+            source: "graph",
+          }))
+        );
+        return;
+      }
+
+      // 2) DB-backed substitutions
       const { data: ing } = await supabase
         .from("ingredients")
         .select("id, name")
-        .ilike("name", ingredient.replace(/^\d+[\d/.\s]*\w*\s+/, "").trim())
+        .ilike("name", cleaned || ingredient)
         .limit(1)
         .maybeSingle();
 
       if (ing?.id) {
         const { data: subs } = await supabase
           .from("ingredient_substitutions")
-          .select("substitute_ingredient_id, quantity_ratio, reason, notes, ingredients!ingredient_substitutions_substitute_ingredient_id_fkey(name)")
+          .select(
+            "substitute_ingredient_id, quantity_ratio, reason, notes, ingredients!ingredient_substitutions_substitute_ingredient_id_fkey(name)"
+          )
           .eq("original_ingredient_id", ing.id)
           .limit(5);
 
         if (subs && subs.length) {
           setSuggestions(
             subs.map((s) => ({
-              name: s.ingredients?.name ?? "Unknown",
+              name: (s.ingredients as { name?: string } | null)?.name ?? "Unknown",
               ratio: `${s.quantity_ratio ?? 1}:1`,
               notes: s.notes || s.reason || "",
-              authenticity: "high",
+              authenticity: "high" as const,
+              source: "db" as const,
             }))
           );
           return;
         }
       }
 
-      // 2) Fallback to AI gateway with cultural context
-      const { data, error } = await supabase.functions.invoke("suggest-substitutions", {
+      // 3) Fallback to AI gateway with cultural context
+      const { data, error: fnError } = await supabase.functions.invoke("suggest-substitutions", {
         body: { ingredient, country, region, dish_name: dishName },
       });
-      if (error) throw error;
-      setSuggestions(Array.isArray(data?.suggestions) ? data.suggestions : []);
+      if (fnError) throw fnError;
+      setSuggestions(
+        (Array.isArray(data?.suggestions) ? data.suggestions : []).map(
+          (s: Suggestion) => ({ ...s, source: "ai" as const })
+        )
+      );
     } catch (e) {
       setError((e as Error).message || "Could not load substitutes");
     } finally {
@@ -120,6 +154,7 @@ export const IngredientSubstitutionPopover = ({
                 </div>
                 <div className="mt-1 flex items-center justify-between gap-2 text-xs text-muted-foreground">
                   <span>Ratio: {s.ratio}</span>
+                  {s.source === "graph" && <span>local graph</span>}
                 </div>
                 {s.notes && <p className="mt-1 text-xs text-muted-foreground">{s.notes}</p>}
               </li>

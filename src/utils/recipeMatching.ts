@@ -1,4 +1,5 @@
 import type { IngredientValue } from "@/types/content";
+import { getSubstituteNames } from "@/lib/substitutionGraph";
 
 interface PantryIngredient {
   id: string;
@@ -41,21 +42,12 @@ export interface MatchResult {
   priorityReason?: string;
 }
 
+/** Lightweight extras beyond the Africa-first substitution graph (generic pantry noise). */
 const ingredientSubstitutes: Record<string, string[]> = {
-  "scotch bonnet": ["habanero", "cayenne", "chili", "chilli", "aleppo pepper", "pepper"],
-  habanero: ["scotch bonnet", "cayenne", "chili", "chilli"],
-  "palm oil": ["vegetable oil", "coconut oil", "olive oil", "oil", "ghee"],
   oil: ["vegetable oil", "olive oil", "palm oil", "coconut oil", "canola oil"],
-  "cassava flour": ["all-purpose flour", "tapioca flour", "flour"],
-  plantain: ["banana", "sweet potato"],
-  okra: ["zucchini", "green beans"],
-  "egusi seeds": ["pumpkin seeds", "sunflower seeds", "egusi"],
-  egusi: ["egusi seeds", "pumpkin seeds"],
-  "stock cube": ["bouillon", "stock powder", "broth", "chicken stock", "vegetable stock", "stock"],
   "curry powder": ["turmeric", "cumin", "garam masala"],
   "bell pepper": ["red pepper", "green pepper", "yellow pepper", "capsicum", "pepper"],
   pepper: ["bell pepper", "black pepper", "chili", "chilli", "scotch bonnet", "cayenne"],
-  "tomato paste": ["tomato sauce", "crushed tomatoes", "passata", "tomato"],
   tomato: ["tomatoes", "cherry tomato", "tomato paste", "tomato sauce"],
   onion: ["shallot", "green onion", "leek", "spring onion", "onions"],
   garlic: ["garlic powder", "shallot"],
@@ -65,15 +57,9 @@ const ingredientSubstitutes: Record<string, string[]> = {
   fava: ["broad bean", "lima bean", "chickpea", "fava beans", "broad beans"],
   "fava beans": ["broad beans", "lima beans", "chickpeas", "fava", "beans"],
   beans: ["fava beans", "black beans", "kidney beans", "white beans", "beans"],
-  tahina: ["tahini", "sesame paste"],
-  tahini: ["tahina", "sesame paste"],
   dukkah: ["zaatar", "sesame seeds", "spice mix"],
   freekeh: ["bulgur", "farro", "quinoa", "brown rice"],
   bulgur: ["freekeh", "couscous", "quinoa"],
-  "clarified butter": ["ghee", "butter"],
-  ghee: ["clarified butter", "butter"],
-  cilantro: ["parsley", "coriander", "coriander leaves"],
-  coriander: ["cilantro", "parsley"],
   lime: ["lemon"],
   lemon: ["lime"],
   yogurt: ["greek yogurt", "sour cream", "labneh"],
@@ -345,15 +331,19 @@ export const namesOverlap = (a: string, b: string): boolean => {
 
 const getIngredientSubstitutes = (ingredient: string): string[] => {
   const normalized = normalizeIngredientName(ingredient);
+  const fromGraph = getSubstituteNames(ingredient);
+  const extras = new Set<string>(fromGraph);
+
   const direct = ingredientSubstitutes[normalized];
-  if (direct) return direct;
+  if (direct) direct.forEach((s) => extras.add(s));
   for (const [key, vals] of Object.entries(ingredientSubstitutes)) {
-    if (namesOverlap(normalized, key)) return vals;
+    if (namesOverlap(normalized, key)) vals.forEach((s) => extras.add(s));
   }
-  // also try first meaningful token
   const first = tokensOf(normalized)[0];
-  if (first && ingredientSubstitutes[first]) return ingredientSubstitutes[first];
-  return [];
+  if (first && ingredientSubstitutes[first]) {
+    ingredientSubstitutes[first].forEach((s) => extras.add(s));
+  }
+  return [...extras];
 };
 
 const daysUntilExpiry = (expiresAt?: string | null): number | null => {

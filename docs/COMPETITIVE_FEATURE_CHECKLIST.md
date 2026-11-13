@@ -12,7 +12,7 @@ Legend: `[ ]` to do · `[~]` partial in platform · `[x]` done
 - [x] Ingredient checkboxes + serving scaler that rewrites quantities inline
 - [ ] Step-by-step process photos (numbered, one per key step)
 - [x] Tips & Tricks / Make-Ahead / Storage & Reheating / Freezer notes blocks
-- [~] Ingredient substitutions (AI popover exists — surface as static "swap table" too)
+- [~] Ingredient substitutions (local Africa-first graph + AI/DB fallback; expand coverage + ranking still open)
 - [x] Equipment list with affiliate links
 - [x] Cook mode (screen-awake, large-text stepper)
 - [x] Print-optimised layout
