@@ -71,12 +71,12 @@ const Hero = () => {
           ].map((stat, index) => (
             <div 
               key={stat.label} 
-              className="flex min-w-0 flex-col items-center justify-center rounded-xl border border-primary/10 bg-card/95 px-2 py-3 shadow-soft sm:px-6 sm:py-6 md:animate-float"
+              className="flex min-w-0 flex-col items-center justify-center rounded-xl border border-primary/10 bg-card/95 px-2 py-3 text-center shadow-soft sm:px-4 sm:py-6 md:animate-float"
               style={{ animationDelay: `${index * 0.2}s` }}
             >
-              <stat.icon className="mb-1.5 h-5 w-5 shrink-0 text-primary sm:mb-2 sm:h-8 sm:w-8" />
-              <div className="text-lg font-bold leading-none text-primary sm:text-2xl">{stat.number}</div>
-              <div className="mt-1 text-xs leading-tight text-muted-foreground sm:mt-1.5 sm:text-sm">{stat.label}</div>
+              <stat.icon className="mb-2 h-6 w-6 shrink-0 text-primary sm:h-8 sm:w-8" />
+              <div className="w-full truncate text-lg font-bold text-primary sm:text-2xl">{stat.number}</div>
+              <div className="w-full truncate text-xs leading-tight text-muted-foreground sm:text-sm">{stat.label}</div>
             </div>
           ))}
         </div>
