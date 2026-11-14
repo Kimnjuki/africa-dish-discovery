@@ -12,13 +12,13 @@ Legend: `[ ]` to do · `[~]` partial in platform · `[x]` done
 - [x] Ingredient checkboxes + serving scaler that rewrites quantities inline
 - [ ] Step-by-step process photos (numbered, one per key step)
 - [x] Tips & Tricks / Make-Ahead / Storage & Reheating / Freezer notes blocks
-- [~] Ingredient substitutions (local Africa-first graph + AI/DB fallback; expand coverage + ranking still open)
+- [x] Ingredient substitutions (local Africa-first graph + market price/availability ranking + cook-time prompts; AI/DB fallback)
 - [x] Equipment list with affiliate links
 - [x] Cook mode (screen-awake, large-text stepper)
 - [x] Print-optimised layout
 - [x] Metric ⇄ US customary unit toggle
 - [ ] Reader Q&A thread separate from star ratings
-- [ ] "I made this" photo uploads in reviews
+- [x] "I made this" photo uploads in reviews (compress + storage bucket `cooked-photos`; migration required)
 
 ## 2. World-atlas layer (TasteAtlas standard)
 - [~] Interactive map discovery (continent maps exist — unify into one atlas view)
@@ -48,12 +48,12 @@ Legend: `[ ]` to do · `[~]` partial in platform · `[x]` done
 - [ ] Reader-favourite / most-cooked badges
 
 ## 5. Discovery & personalisation (our differentiator)
-- [~] Smart pantry → recipe matching with % match
-- [~] AI meal planner + shopping list
-- [ ] "Cook from what's expiring" queue
-- [ ] Save-to-collections (cookbooks) with public share URLs
+- [x] Smart pantry → recipe matching with % match
+- [x] AI meal planner + market-aware shopping list (stall groups, local cost estimates, offline snapshot, one-tap swaps)
+- [x] "Cook from what's expiring" queue (pantry match filter + urgency-first sort)
+- [x] Save-to-collections / Recipe Box folders (device-local; DB folders migration included)
 - [ ] Recently viewed + continue cooking
-- [ ] Global search with typo tolerance, ingredient exclusion, and dish-vs-recipe tabs
+- [x] Global search with typo tolerance, ingredient exclusion, and dish-vs-recipe tabs (synonym layer shipped)
 
 ## 6. Trust, SEO & performance
 - [x] Recipe JSON-LD schema

@@ -4,7 +4,23 @@
  * when the DB `ingredient_substitutions` table is thin or unavailable.
  */
 
+import {
+  rankSubstitutesForMarket,
+  type DietTag,
+  type MarketId,
+  type RankedSubstitute,
+} from "./localMarket.ts";
+
 export type Authenticity = "high" | "medium" | "low";
+
+export interface CookAdjustment {
+  /** Extra minutes to add/subtract when using this substitute */
+  timeDeltaMin?: number;
+  /** Liquid / moisture guidance for the cook */
+  liquidNote?: string;
+  /** Short cook-mode prompt shown next to the ingredient */
+  prompt?: string;
+}
 
 export interface SubstitutionSuggestion {
   name: string;
@@ -16,6 +32,9 @@ export interface SubstitutionSuggestion {
   authenticity: Authenticity;
   compatibilityScore: number;
   source: "graph";
+  cookAdjustment?: CookAdjustment;
+  dietTags?: DietTag[];
+  priceTier?: "budget" | "moderate" | "premium" | "specialty";
 }
 
 interface SubstitutionEdgeDef {
@@ -37,6 +56,9 @@ interface SubstitutionEdgeDef {
   compatibilityScore?: number;
   /** When true, also index to→from with the same metadata */
   bidirectional?: boolean;
+  cookAdjustment?: CookAdjustment;
+  dietTags?: DietTag[];
+  priceTier?: "budget" | "moderate" | "premium" | "specialty";
 }
 
 /** Seed edges — African staples + practical diaspora swaps with flavor notes. */
@@ -54,6 +76,13 @@ export const SUBSTITUTION_EDGE_DEFS: SubstitutionEdgeDef[] = [
     authenticity: "medium",
     compatibilityScore: 88,
     bidirectional: true,
+    priceTier: "budget",
+    dietTags: ["vegetarian", "vegan", "halal", "gluten_free", "dairy_free", "nut_free"],
+    cookAdjustment: {
+      timeDeltaMin: -3,
+      liquidNote: "Spinach releases more water — reduce stock slightly.",
+      prompt: "No ugwu? Use spinach; add in the last 2–3 minutes.",
+    },
   },
   {
     from: "ugwu",
@@ -66,6 +95,12 @@ export const SUBSTITUTION_EDGE_DEFS: SubstitutionEdgeDef[] = [
     flavorRole: "leafy green",
     authenticity: "medium",
     compatibilityScore: 82,
+    priceTier: "moderate",
+    dietTags: ["vegetarian", "vegan", "halal", "gluten_free", "dairy_free", "nut_free"],
+    cookAdjustment: {
+      timeDeltaMin: 5,
+      prompt: "No ugwu? Use kale; strip stems and simmer ~5 min longer.",
+    },
   },
   {
     from: "sukuma wiki",
@@ -79,6 +114,12 @@ export const SUBSTITUTION_EDGE_DEFS: SubstitutionEdgeDef[] = [
     authenticity: "high",
     compatibilityScore: 95,
     bidirectional: true,
+    priceTier: "budget",
+    dietTags: ["vegetarian", "vegan", "halal", "gluten_free", "dairy_free", "nut_free"],
+    cookAdjustment: {
+      timeDeltaMin: 3,
+      prompt: "No sukuma? Collards work 1:1 — shred thin and simmer a little longer.",
+    },
   },
   {
     from: "sukuma wiki",
@@ -90,6 +131,12 @@ export const SUBSTITUTION_EDGE_DEFS: SubstitutionEdgeDef[] = [
     flavorRole: "leafy green",
     authenticity: "medium",
     compatibilityScore: 86,
+    priceTier: "moderate",
+    dietTags: ["vegetarian", "vegan", "halal", "gluten_free", "dairy_free", "nut_free"],
+    cookAdjustment: {
+      timeDeltaMin: -2,
+      prompt: "No sukuma? Kale is fine — cook a couple minutes less than mature sukuma.",
+    },
   },
   {
     from: "bitterleaf",
@@ -139,6 +186,11 @@ export const SUBSTITUTION_EDGE_DEFS: SubstitutionEdgeDef[] = [
     authenticity: "medium",
     compatibilityScore: 84,
     bidirectional: true,
+    priceTier: "premium",
+    cookAdjustment: {
+      timeDeltaMin: 0,
+      prompt: "No egusi? Toast and grind pumpkin seeds; soup will taste nuttier.",
+    },
   },
   {
     from: "egusi",
@@ -150,6 +202,10 @@ export const SUBSTITUTION_EDGE_DEFS: SubstitutionEdgeDef[] = [
     flavorRole: "oilseed thickener",
     authenticity: "low",
     compatibilityScore: 70,
+    priceTier: "budget",
+    cookAdjustment: {
+      prompt: "Budget egusi swap: grind sunflower seeds; add palm oil for color.",
+    },
   },
   {
     from: "ogbono",
@@ -176,6 +232,11 @@ export const SUBSTITUTION_EDGE_DEFS: SubstitutionEdgeDef[] = [
     flavorRole: "cooking fat / color",
     authenticity: "low",
     compatibilityScore: 55,
+    priceTier: "budget",
+    cookAdjustment: {
+      prompt: "No palm oil? Use vegetable oil + a pinch of paprika for color.",
+      liquidNote: "Neutral oil will not cloud the same way — taste for richness.",
+    },
   },
   {
     from: "palm oil",
@@ -187,6 +248,10 @@ export const SUBSTITUTION_EDGE_DEFS: SubstitutionEdgeDef[] = [
     flavorRole: "cooking fat",
     authenticity: "low",
     compatibilityScore: 60,
+    priceTier: "premium",
+    cookAdjustment: {
+      prompt: "No palm oil? Coconut oil works — use less; flavor will shift.",
+    },
   },
   {
     from: "palm oil",
@@ -214,6 +279,10 @@ export const SUBSTITUTION_EDGE_DEFS: SubstitutionEdgeDef[] = [
     authenticity: "high",
     compatibilityScore: 96,
     bidirectional: true,
+    priceTier: "moderate",
+    cookAdjustment: {
+      prompt: "No scotch bonnet? Habanero is 1:1 — seed to dial heat.",
+    },
   },
   {
     from: "scotch bonnet",
@@ -227,6 +296,10 @@ export const SUBSTITUTION_EDGE_DEFS: SubstitutionEdgeDef[] = [
     authenticity: "medium",
     compatibilityScore: 74,
     ratio: 0.35,
+    priceTier: "budget",
+    cookAdjustment: {
+      prompt: "No fresh chili? Use ~⅓ the amount of cayenne powder.",
+    },
   },
   {
     from: "piri piri",
@@ -278,6 +351,11 @@ export const SUBSTITUTION_EDGE_DEFS: SubstitutionEdgeDef[] = [
     flavorRole: "starch",
     authenticity: "medium",
     compatibilityScore: 68,
+    priceTier: "budget",
+    cookAdjustment: {
+      timeDeltaMin: -5,
+      prompt: "No green plantain? Sweet potato fries/roasts in less time — season boldly.",
+    },
   },
   {
     from: "yam",
@@ -472,6 +550,9 @@ interface IndexedEdge {
   flavorRole: string;
   authenticity: Authenticity;
   compatibilityScore: number;
+  cookAdjustment?: CookAdjustment;
+  dietTags?: DietTag[];
+  priceTier?: SubstitutionSuggestion["priceTier"];
 }
 
 function buildIndexes(defs: SubstitutionEdgeDef[]) {
@@ -509,6 +590,9 @@ function buildIndexes(defs: SubstitutionEdgeDef[]) {
       flavorRole: def.flavorRole ?? "",
       authenticity: def.authenticity ?? "medium",
       compatibilityScore: def.compatibilityScore ?? 70,
+      cookAdjustment: def.cookAdjustment,
+      dietTags: def.dietTags,
+      priceTier: def.priceTier,
     };
     pushEdge(fromCanon, forward);
     for (const a of def.fromAliases ?? []) pushEdge(a, forward);
@@ -582,12 +666,80 @@ export function lookupSubstitutions(
         authenticity: edge.authenticity,
         compatibilityScore: score,
         source: "graph",
+        cookAdjustment: edge.cookAdjustment,
+        dietTags: edge.dietTags,
+        priceTier: edge.priceTier,
       });
     }
   }
 
   results.sort((a, b) => b.compatibilityScore - a.compatibilityScore);
   return results.slice(0, limit);
+}
+
+export type MarketRankedSubstitute = RankedSubstitute & SubstitutionSuggestion;
+
+/**
+ * Graph hits re-ranked by local market price, availability, and diet.
+ */
+export function lookupRankedSubstitutions(
+  ingredient: string,
+  options?: {
+    regionHint?: string;
+    marketId?: MarketId;
+    diet?: DietTag[];
+    preferCheap?: boolean;
+    limit?: number;
+  }
+): MarketRankedSubstitute[] {
+  const base = lookupSubstitutions(ingredient, {
+    regionHint: options?.regionHint,
+    limit: 12,
+  });
+  const ranked = rankSubstitutesForMarket(base, {
+    marketId: options?.marketId,
+    countryHint: options?.regionHint,
+    diet: options?.diet,
+    preferCheap: options?.preferCheap,
+    originalName: stripIngredientNoise(ingredient),
+    limit: options?.limit ?? 6,
+  });
+
+  return ranked.map((r) => {
+    const match = base.find((b) => normalizeKey(b.name) === normalizeKey(r.name));
+    const authenticity = (match?.authenticity ?? "medium") as Authenticity;
+    return {
+      name: r.name,
+      ratio: match?.ratio ?? "1:1",
+      notes: match?.notes ?? r.notes ?? "",
+      reason: match?.reason ?? r.reason ?? "",
+      regions: match?.regions ?? r.regions ?? [],
+      flavorRole: match?.flavorRole ?? "",
+      authenticity,
+      compatibilityScore: match?.compatibilityScore ?? r.compatibilityScore,
+      source: "graph" as const,
+      cookAdjustment: match?.cookAdjustment,
+      dietTags: match?.dietTags,
+      priceTier: match?.priceTier,
+      rankScore: r.rankScore,
+      market: r.market,
+      savingsVsOriginal: r.savingsVsOriginal,
+      cookHint: r.cookHint,
+    } satisfies MarketRankedSubstitute;
+  });
+}
+
+/** Best single cook-mode prompt for an ingredient in a given market. */
+export function bestCookSubstitutionPrompt(
+  ingredient: string,
+  options?: { regionHint?: string; marketId?: MarketId }
+): MarketRankedSubstitute | null {
+  const hits = lookupRankedSubstitutions(ingredient, {
+    ...options,
+    preferCheap: true,
+    limit: 1,
+  });
+  return hits[0] ?? null;
 }
 
 /**

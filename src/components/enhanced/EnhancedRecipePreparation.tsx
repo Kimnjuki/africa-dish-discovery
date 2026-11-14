@@ -31,6 +31,7 @@ import type { IngredientValue, StepValue } from "@/types/content";
 
 interface Recipe {
   id?: string;
+  slug?: string | null;
   name: string;
   country?: string | null;
   summary?: string | null;
@@ -474,6 +475,7 @@ export const EnhancedRecipePreparation = ({ recipe, onBack }: RecipePreparationP
         ingredients={recipe.ingredients}
         multiplier={servingMultiplier}
         startIndex={currentStep}
+        country={recipe.country}
         onClose={(lastIndex) => {
           setCurrentStep(lastIndex);
           setCookModeOpen(false);
@@ -902,7 +904,12 @@ export const EnhancedRecipePreparation = ({ recipe, onBack }: RecipePreparationP
             />
 
             {/* Recipe Reviews */}
-            <RecipeReviews recipeId={recipe.id} recipeName={recipe.name} />
+            <RecipeReviews
+              recipeId={recipe.id}
+              recipeName={recipe.name}
+              recipeSlug={recipe.slug || undefined}
+              recipeCountry={recipe.country || undefined}
+            />
           </div>
         </div>
       </div>

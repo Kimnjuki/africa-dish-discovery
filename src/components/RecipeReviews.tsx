@@ -1,19 +1,21 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Star, MessageSquare, ChefHat } from "lucide-react";
+import { Star, MessageSquare, ChefHat, Camera, X } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import type { User } from "@supabase/supabase-js";
 import { readErrorMessage } from "@/lib/errors";
+import { markCooked } from "@/lib/recipeBox";
 
 interface Review {
   id: string;
   rating: number;
   review_text: string | null;
+  cooked_photo_url?: string | null;
   created_at: string | null;
   user_id: string;
   profiles: {
@@ -24,11 +26,40 @@ interface Review {
 interface RecipeReviewsProps {
   recipeId: string;
   recipeName?: string;
+  recipeSlug?: string;
+  recipeCountry?: string;
   /** Optional callback when rating summary changes (for JSON-LD). */
   onSummaryChange?: (summary: { average: number; count: number } | null) => void;
 }
 
-export const RecipeReviews = ({ recipeId, recipeName, onSummaryChange }: RecipeReviewsProps) => {
+async function compressImage(file: File, maxEdge = 960, quality = 0.72): Promise<Blob> {
+  const bitmap = await createImageBitmap(file);
+  const scale = Math.min(1, maxEdge / Math.max(bitmap.width, bitmap.height));
+  const w = Math.round(bitmap.width * scale);
+  const h = Math.round(bitmap.height * scale);
+  const canvas = document.createElement("canvas");
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("Could not process photo");
+  ctx.drawImage(bitmap, 0, 0, w, h);
+  bitmap.close();
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(
+      (blob) => (blob ? resolve(blob) : reject(new Error("Could not compress photo"))),
+      "image/jpeg",
+      quality
+    );
+  });
+}
+
+export const RecipeReviews = ({
+  recipeId,
+  recipeName,
+  recipeSlug,
+  recipeCountry,
+  onSummaryChange,
+}: RecipeReviewsProps) => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
@@ -39,6 +70,9 @@ export const RecipeReviews = ({ recipeId, recipeName, onSummaryChange }: RecipeR
   const [averageRating, setAverageRating] = useState(0);
   const [totalReviews, setTotalReviews] = useState(0);
   const [showForm, setShowForm] = useState(false);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   const loadRatingSummary = useCallback(async () => {
     try {
@@ -112,6 +146,7 @@ export const RecipeReviews = ({ recipeId, recipeName, onSummaryChange }: RecipeR
             setUserReview(existingReview);
             setRating(existingReview.rating);
             setReviewText(existingReview.review_text || "");
+            setPhotoPreview(existingReview.cooked_photo_url || null);
             setShowForm(true);
           } else {
             setUserReview(null);
@@ -142,6 +177,42 @@ export const RecipeReviews = ({ recipeId, recipeName, onSummaryChange }: RecipeR
     };
   }, [recipeId, loadReviews, loadRatingSummary]);
 
+  const uploadCookedPhoto = async (uid: string): Promise<string | null> => {
+    if (!photoFile) return photoPreview && photoPreview.startsWith("http") ? photoPreview : null;
+    try {
+      const blob = await compressImage(photoFile);
+      const path = `${uid}/${recipeId}-${Date.now()}.jpg`;
+      const { error: uploadError } = await supabase.storage
+        .from("cooked-photos")
+        .upload(path, blob, { contentType: "image/jpeg", upsert: true });
+      if (uploadError) throw uploadError;
+      const { data } = supabase.storage.from("cooked-photos").getPublicUrl(path);
+      return data.publicUrl;
+    } catch (error) {
+      console.warn("Cooked photo upload failed; keeping local preview", error);
+      // Keep data-URL preview locally so the cook still sees their photo
+      return photoPreview;
+    }
+  };
+
+  const handlePhotoPick = (file: File | null) => {
+    if (!file) {
+      setPhotoFile(null);
+      setPhotoPreview(userReview?.cooked_photo_url || null);
+      return;
+    }
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please choose a photo");
+      return;
+    }
+    if (file.size > 8 * 1024 * 1024) {
+      toast.error("Photo must be under 8MB");
+      return;
+    }
+    setPhotoFile(file);
+    setPhotoPreview(URL.createObjectURL(file));
+  };
+
   const handleSubmitReview = async () => {
     if (!user) {
       toast.error("Please sign in to leave a review");
@@ -156,28 +227,55 @@ export const RecipeReviews = ({ recipeId, recipeName, onSummaryChange }: RecipeR
     setLoading(true);
 
     try {
+      const cookedPhotoUrl = await uploadCookedPhoto(user.id);
+      const payload = {
+        rating,
+        review_text: reviewText || null,
+        made_it: true,
+        cooked_photo_url: cookedPhotoUrl,
+        updated_at: new Date().toISOString(),
+      };
+
       if (userReview) {
         const { error } = await supabase
           .from("recipe_reviews")
-          .update({
-            rating,
-            review_text: reviewText,
-            updated_at: new Date().toISOString(),
-          })
+          .update(payload)
           .eq("id", userReview.id);
 
-        if (error) throw error;
+        if (error) {
+          // Column may not be migrated yet — fall back to text-only update
+          const { error: fallbackError } = await supabase
+            .from("recipe_reviews")
+            .update({
+              rating,
+              review_text: reviewText,
+              updated_at: new Date().toISOString(),
+            })
+            .eq("id", userReview.id);
+          if (fallbackError) throw fallbackError;
+        }
         toast.success("Review updated");
       } else {
         const { error } = await supabase.from("recipe_reviews").insert({
           recipe_id: recipeId,
           user_id: user.id,
-          rating,
-          review_text: reviewText || null,
+          ...payload,
         });
 
-        if (error) throw error;
+        if (error) {
+          const { error: fallbackError } = await supabase.from("recipe_reviews").insert({
+            recipe_id: recipeId,
+            user_id: user.id,
+            rating,
+            review_text: reviewText || null,
+          });
+          if (fallbackError) throw fallbackError;
+        }
         toast.success("Thanks — your “I made this” rating is live");
+      }
+
+      if (recipeSlug && recipeName) {
+        markCooked(recipeId, recipeSlug, recipeName, recipeCountry);
       }
 
       await loadReviews(user);
@@ -303,6 +401,45 @@ export const RecipeReviews = ({ recipeId, recipeName, onSummaryChange }: RecipeR
                     rows={4}
                   />
 
+                  <div className="space-y-2">
+                    <input
+                      ref={fileRef}
+                      type="file"
+                      accept="image/*"
+                      capture="environment"
+                      className="hidden"
+                      onChange={(e) => handlePhotoPick(e.target.files?.[0] || null)}
+                    />
+                    <div className="flex flex-wrap items-center gap-2">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => fileRef.current?.click()}
+                      >
+                        <Camera className="mr-2 h-4 w-4" />
+                        {photoPreview ? "Change cooked photo" : "Add cooked photo"}
+                      </Button>
+                      {photoPreview && (
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handlePhotoPick(null)}
+                        >
+                          <X className="mr-1 h-4 w-4" />
+                          Remove
+                        </Button>
+                      )}
+                    </div>
+                    {photoPreview && (
+                      <img
+                        src={photoPreview}
+                        alt="Your cooked dish"
+                        className="h-40 w-full max-w-sm rounded-md object-cover"
+                      />
+                    )}
+                  </div>
+
                   <div className="flex flex-wrap gap-2">
                     <Button
                       onClick={handleSubmitReview}
@@ -382,6 +519,14 @@ export const RecipeReviews = ({ recipeId, recipeName, onSummaryChange }: RecipeR
 
                     {review.review_text && (
                       <p className="text-muted-foreground mt-2">{review.review_text}</p>
+                    )}
+                    {review.cooked_photo_url && (
+                      <img
+                        src={review.cooked_photo_url}
+                        alt={`Cooked ${recipeName || "dish"}`}
+                        className="mt-3 max-h-64 w-full max-w-md rounded-md object-cover"
+                        loading="lazy"
+                      />
                     )}
                   </div>
                 </div>

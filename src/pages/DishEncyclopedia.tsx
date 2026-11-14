@@ -135,6 +135,7 @@ const DishEncyclopedia = () => {
         recipeName={recipe.name}
         steps={recipe.steps}
         ingredients={recipe.ingredients}
+        country={recipe.country}
         onClose={() => setCooking(false)}
       />
     );

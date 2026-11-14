@@ -1,6 +1,15 @@
 import type { IngredientValue } from "@/types/content";
 import { formatQuantity, parseQuantity } from "@/lib/recipeUnits";
 import { normalizeIngredientName } from "@/utils/recipeMatching";
+import {
+  formatMoney,
+  getIngredientMarketInfo,
+  guessStall,
+  type MarketId,
+  type StallId,
+  STALL_LABELS,
+  STALL_ORDER,
+} from "@/lib/localMarket";
 
 export type AisleId =
   | "produce"
@@ -38,6 +47,19 @@ export const AISLE_LABELS: Record<AisleId, string> = {
   frozen: "Frozen",
   beverages: "Beverages",
   other: "Other",
+};
+
+const STALL_FROM_AISLE: Record<AisleId, StallId> = {
+  produce: "produce_stall",
+  meat_fish: "butcher",
+  dairy: "dairy_eggs",
+  grains: "grain_stall",
+  pantry: "oil_pantry",
+  spices: "spice_stall",
+  bakery: "supermarket",
+  frozen: "supermarket",
+  beverages: "supermarket",
+  other: "other",
 };
 
 type UnitFamily = "volume_ml" | "mass_g" | "count" | "unknown";
@@ -175,6 +197,10 @@ export interface GroceryListItem {
   unitFamily: UnitFamily;
   quantityDisplay: string;
   aisle: AisleId;
+  stall: StallId;
+  estimatedCost: number | null;
+  availability: number | null;
+  substitutedFrom?: string;
   sources: string[];
   notes: string[];
   checked?: boolean;
@@ -184,6 +210,13 @@ export interface GroceryAisleGroup {
   aisle: AisleId;
   label: string;
   items: GroceryListItem[];
+}
+
+export interface GroceryStallGroup {
+  stall: StallId;
+  label: string;
+  items: GroceryListItem[];
+  estimatedTotal: number;
 }
 
 export interface RecipeIngredientSource {
@@ -344,11 +377,19 @@ function mergeKey(line: ParsedGroceryLine): string {
   return `${line.normalizedKey}::${line.unitFamily === "unknown" ? line.unit || "x" : line.unitFamily}`;
 }
 
+export interface BuildGroceryOptions {
+  marketId?: MarketId;
+}
+
 /**
  * Merge ingredients across recipes: normalize names, convert compatible units,
- * sum quantities, and group by market aisle.
+ * sum quantities, and attach stall + local cost estimates.
  */
-export function buildGroceryList(sources: RecipeIngredientSource[]): GroceryListItem[] {
+export function buildGroceryList(
+  sources: RecipeIngredientSource[],
+  options?: BuildGroceryOptions
+): GroceryListItem[] {
+  const marketId = options?.marketId;
   const buckets = new Map<
     string,
     {
@@ -426,6 +467,27 @@ export function buildGroceryList(sources: RecipeIngredientSource[]): GroceryList
         quantityDisplay = `${quantityDisplay} (+ ${[...new Set(bucket.unmatchedParts)].join("; ")})`;
       }
 
+      const qtyForPrice =
+        bucket.unitFamily === "mass_g" && bucket.quantityBase !== null
+          ? bucket.quantityBase
+          : bucket.unitFamily === "volume_ml" && bucket.quantityBase !== null
+            ? bucket.quantityBase
+            : bucket.quantityBase;
+      const unitForPrice =
+        bucket.unitFamily === "mass_g"
+          ? "g"
+          : bucket.unitFamily === "volume_ml"
+            ? "ml"
+            : bucket.displayUnit;
+
+      const market = getIngredientMarketInfo(bucket.name, {
+        marketId,
+        quantity: qtyForPrice,
+        unit: unitForPrice,
+      });
+      const stall =
+        market.stall !== "other" ? market.stall : STALL_FROM_AISLE[bucket.aisle] || guessStall(bucket.name);
+
       return {
         id: `${bucket.normalizedKey}-${index}`,
         name: bucket.name.replace(/\b\w/g, (c) => c.toUpperCase()),
@@ -435,6 +497,9 @@ export function buildGroceryList(sources: RecipeIngredientSource[]): GroceryList
         unitFamily: bucket.unitFamily,
         quantityDisplay,
         aisle: bucket.aisle,
+        stall,
+        estimatedCost: market.estimatedCost,
+        availability: market.availability,
         sources: Array.from(bucket.sources),
         notes: bucket.notes,
         checked: false,
@@ -458,21 +523,126 @@ export function groupGroceryByAisle(items: GroceryListItem[]): GroceryAisleGroup
   }));
 }
 
+export function groupGroceryByStall(items: GroceryListItem[]): GroceryStallGroup[] {
+  const byStall = new Map<StallId, GroceryListItem[]>();
+  items.forEach((item) => {
+    const stall = item.stall || "other";
+    const list = byStall.get(stall) || [];
+    list.push(item);
+    byStall.set(stall, list);
+  });
+
+  return STALL_ORDER.filter((stall) => byStall.has(stall)).map((stall) => {
+    const groupItems = (byStall.get(stall) || []).sort((a, b) => a.name.localeCompare(b.name));
+    const estimatedTotal = groupItems.reduce((sum, i) => sum + (i.estimatedCost || 0), 0);
+    return {
+      stall,
+      label: STALL_LABELS[stall],
+      items: groupItems,
+      estimatedTotal,
+    };
+  });
+}
+
+export function summarizeGroceryCost(
+  items: GroceryListItem[],
+  marketId?: MarketId
+): { total: number; pricedCount: number; unknownCount: number; formatted: string } {
+  let total = 0;
+  let pricedCount = 0;
+  let unknownCount = 0;
+  for (const item of items) {
+    if (item.checked) continue;
+    if (item.estimatedCost !== null && item.estimatedCost !== undefined) {
+      total += item.estimatedCost;
+      pricedCount++;
+    } else {
+      unknownCount++;
+    }
+  }
+  return {
+    total,
+    pricedCount,
+    unknownCount,
+    formatted: formatMoney(total, marketId),
+  };
+}
+
+/** Replace an item with a local substitute and refresh cost/stall. */
+export function applyGrocerySubstitution(
+  items: GroceryListItem[],
+  id: string,
+  substituteName: string,
+  marketId?: MarketId
+): GroceryListItem[] {
+  return items.map((item) => {
+    if (item.id !== id) return item;
+    const market = getIngredientMarketInfo(substituteName, {
+      marketId,
+      quantity: item.quantity,
+      unit: item.unit,
+    });
+    return {
+      ...item,
+      name: substituteName.replace(/\b\w/g, (c) => c.toUpperCase()),
+      normalizedKey: normalizeIngredientName(substituteName),
+      substitutedFrom: item.substitutedFrom || item.name,
+      stall: market.stall,
+      aisle: item.aisle,
+      estimatedCost: market.estimatedCost,
+      availability: market.availability,
+      notes: [
+        ...item.notes.filter((n) => !n.startsWith("Swap:")),
+        `Swap: ${item.substitutedFrom || item.name} → ${substituteName}`,
+      ],
+    };
+  });
+}
+
 /** Plain-text export for copy / WhatsApp / notes apps. */
 export function exportGroceryListText(
   items: GroceryListItem[],
-  title = "LadhaQuest shopping list"
+  title = "LadhaQuest shopping list",
+  options?: { marketId?: MarketId; groupByStall?: boolean }
 ): string {
-  const groups = groupGroceryByAisle(items.filter((i) => !i.checked));
+  const active = items.filter((i) => !i.checked);
   const lines: string[] = [title, ""];
-  groups.forEach((group) => {
-    lines.push(`## ${group.label}`);
-    group.items.forEach((item) => {
-      const qty = item.quantityDisplay ? ` — ${item.quantityDisplay}` : "";
-      lines.push(`- [ ] ${item.name}${qty}`);
-    });
+  const cost = summarizeGroceryCost(active, options?.marketId);
+  if (cost.pricedCount > 0) {
+    lines.push(`Estimated total: ${cost.formatted} (${cost.pricedCount} priced items)`);
     lines.push("");
-  });
+  }
+
+  if (options?.groupByStall !== false) {
+    const groups = groupGroceryByStall(active);
+    groups.forEach((group) => {
+      const sub =
+        group.estimatedTotal > 0
+          ? ` (~${formatMoney(group.estimatedTotal, options?.marketId)})`
+          : "";
+      lines.push(`## ${group.label}${sub}`);
+      group.items.forEach((item) => {
+        const qty = item.quantityDisplay ? ` — ${item.quantityDisplay}` : "";
+        const price =
+          item.estimatedCost != null
+            ? ` · ${formatMoney(item.estimatedCost, options?.marketId)}`
+            : "";
+        const swap = item.substitutedFrom ? ` (was ${item.substitutedFrom})` : "";
+        lines.push(`- [ ] ${item.name}${qty}${price}${swap}`);
+      });
+      lines.push("");
+    });
+  } else {
+    const groups = groupGroceryByAisle(active);
+    groups.forEach((group) => {
+      lines.push(`## ${group.label}`);
+      group.items.forEach((item) => {
+        const qty = item.quantityDisplay ? ` — ${item.quantityDisplay}` : "";
+        lines.push(`- [ ] ${item.name}${qty}`);
+      });
+      lines.push("");
+    });
+  }
   return lines.join("\n").trim();
 }
 
@@ -503,11 +673,14 @@ export function addManualGroceryItem(
   items: GroceryListItem[],
   name: string,
   quantityDisplay = "",
-  aisle: AisleId = "other"
+  aisle: AisleId = "other",
+  marketId?: MarketId
 ): GroceryListItem[] {
   const trimmed = name.trim();
   if (!trimmed) return items;
   const normalizedKey = normalizeIngredientName(trimmed);
+  const resolvedAisle = aisle === "other" ? guessAisle(trimmed) : aisle;
+  const market = getIngredientMarketInfo(trimmed, { marketId });
   return [
     ...items,
     {
@@ -518,7 +691,10 @@ export function addManualGroceryItem(
       unit: "",
       unitFamily: "unknown",
       quantityDisplay,
-      aisle: aisle === "other" ? guessAisle(trimmed) : aisle,
+      aisle: resolvedAisle,
+      stall: market.stall !== "other" ? market.stall : STALL_FROM_AISLE[resolvedAisle],
+      estimatedCost: market.estimatedCost,
+      availability: market.availability,
       sources: ["Manual"],
       notes: [],
       checked: false,

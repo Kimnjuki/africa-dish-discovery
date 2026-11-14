@@ -1,7 +1,9 @@
 /**
  * Offline-first snapshots for LadhaQuest (F09).
- * Uses localStorage (not the full recipe catalog) so the SW stays lean.
+ * Sync reads/writes use localStorage; larger keys are mirrored to IndexedDB.
  */
+
+import { hydrateLocalStorageFromIdb, idbRemove, idbSet } from "./idbBackup.ts";
 
 export const OFFLINE_KEYS = {
   recipes: "ladhaquest_cached_recipes",
@@ -9,7 +11,17 @@ export const OFFLINE_KEYS = {
   mealPlan: "ladhaquest_offline_meal_plan",
   pantryQueue: "ladhaquest_pantry_queue",
   dataSaver: "ladhaquest_data_saver",
+  grocery: "ladhaquest_offline_grocery",
+  cookPacks: "ladhaquest_cook_packs",
 } as const;
+
+const IDB_MIRROR_KEYS: string[] = [
+  OFFLINE_KEYS.recipes,
+  OFFLINE_KEYS.pantry,
+  OFFLINE_KEYS.mealPlan,
+  OFFLINE_KEYS.grocery,
+  OFFLINE_KEYS.cookPacks,
+];
 
 const MAX_CACHED_RECIPES = 40;
 
@@ -122,6 +134,14 @@ function writeJson(key: string, value: unknown): void {
   } catch (error) {
     console.warn("offlineStore write failed", key, error);
   }
+  if (IDB_MIRROR_KEYS.includes(key)) {
+    void idbSet(key, value);
+  }
+}
+
+/** Call once on app boot to recover mirrored offline data after storage eviction. */
+export async function hydrateOfflineFromIndexedDb(): Promise<number> {
+  return hydrateLocalStorageFromIdb(IDB_MIRROR_KEYS);
 }
 
 /** Prefer smaller Unsplash / common CDN URLs when data-saver is on. */
@@ -185,6 +205,7 @@ export function removeCachedRecipe(recipeId: string): OfflineRecipe[] {
 
 export function clearCachedRecipes(): void {
   localStorage.removeItem(OFFLINE_KEYS.recipes);
+  void idbRemove(OFFLINE_KEYS.recipes);
 }
 
 export function savePantrySnapshot(userId: string, items: OfflinePantryItem[]): OfflinePantrySnapshot {
@@ -260,4 +281,104 @@ export function clearPantryQueue(): void {
 
 export function isBrowserOffline(): boolean {
   return typeof navigator !== "undefined" && !navigator.onLine;
+}
+
+export type OfflineGroceryItem = {
+  id: string;
+  name: string;
+  quantityDisplay: string;
+  stall: string;
+  estimatedCost: number | null;
+  checked?: boolean;
+  substitutedFrom?: string;
+};
+
+export type OfflineGrocerySnapshot = {
+  userId: string | null;
+  planName: string;
+  marketId: string;
+  items: OfflineGroceryItem[];
+  estimatedTotal: number;
+  updatedAt: string;
+};
+
+export function saveGrocerySnapshot(snapshot: Omit<OfflineGrocerySnapshot, "updatedAt">): OfflineGrocerySnapshot {
+  const full: OfflineGrocerySnapshot = {
+    ...snapshot,
+    updatedAt: new Date().toISOString(),
+  };
+  writeJson(OFFLINE_KEYS.grocery, full);
+  return full;
+}
+
+export function getGrocerySnapshot(userId?: string | null): OfflineGrocerySnapshot | null {
+  const snap = readJson<OfflineGrocerySnapshot | null>(OFFLINE_KEYS.grocery, null);
+  if (!snap) return null;
+  if (userId && snap.userId && snap.userId !== userId) return null;
+  return snap;
+}
+
+export function clearGrocerySnapshot(): void {
+  localStorage.removeItem(OFFLINE_KEYS.grocery);
+  void idbRemove(OFFLINE_KEYS.grocery);
+}
+
+/** Compact cook pack: recipe essentials for offline cook mode. */
+export type OfflineCookPack = {
+  recipeId: string;
+  slug: string;
+  name: string;
+  country: string;
+  ingredients: unknown;
+  steps: unknown;
+  servings: number | null;
+  prep_time: number | null;
+  cook_time: number | null;
+  substitutionPrompts: { ingredient: string; prompt: string; substitute: string }[];
+  cachedAt: string;
+};
+
+export function getCookPacks(): OfflineCookPack[] {
+  return readJson<OfflineCookPack[]>(OFFLINE_KEYS.cookPacks, []);
+}
+
+export function saveCookPack(pack: Omit<OfflineCookPack, "cachedAt"> & { cachedAt?: string }): OfflineCookPack[] {
+  const list = getCookPacks().filter((p) => p.recipeId !== pack.recipeId);
+  const entry: OfflineCookPack = {
+    ...pack,
+    cachedAt: pack.cachedAt || new Date().toISOString(),
+  };
+  list.unshift(entry);
+  const trimmed = list.slice(0, MAX_CACHED_RECIPES);
+  writeJson(OFFLINE_KEYS.cookPacks, trimmed);
+  // Keep recipe cache in sync for the offline recipes page
+  cacheRecipe({
+    id: pack.recipeId,
+    name: pack.name,
+    country: pack.country,
+    image_url: null,
+    prep_time: pack.prep_time,
+    cook_time: pack.cook_time,
+    servings: pack.servings,
+    difficulty: null,
+    summary: null,
+    slug: pack.slug,
+    ingredients: pack.ingredients,
+    steps: pack.steps,
+  });
+  return trimmed;
+}
+
+export function getCookPack(recipeIdOrSlug: string): OfflineCookPack | null {
+  return (
+    getCookPacks().find(
+      (p) => p.recipeId === recipeIdOrSlug || p.slug === recipeIdOrSlug
+    ) || null
+  );
+}
+
+export function removeCookPack(recipeId: string): OfflineCookPack[] {
+  const updated = getCookPacks().filter((p) => p.recipeId !== recipeId);
+  writeJson(OFFLINE_KEYS.cookPacks, updated);
+  return updated;
 }

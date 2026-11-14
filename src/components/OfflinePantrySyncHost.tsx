@@ -1,10 +1,15 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useOfflinePantrySync } from "@/hooks/useOfflinePantrySync";
+import { hydrateOfflineFromIndexedDb } from "@/lib/offlineStore";
 
 /** Keeps pantry offline queue flush alive app-wide (not only on /pantry). */
 export function OfflinePantrySyncHost() {
   const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    void hydrateOfflineFromIndexedDb();
+  }, []);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {

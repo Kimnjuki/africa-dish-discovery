@@ -21,6 +21,7 @@ import { RecipeProvenance } from "@/components/recipe/RecipeProvenance";
 import { SourceCitations } from "@/components/cultural/SourceCitations";
 import { RecipeReviews } from "@/components/RecipeReviews";
 import { SaveButton } from "@/components/SaveButton";
+import { RecipeBoxSave } from "@/components/recipe/RecipeBoxSave";
 import { getCountryFlag } from "@/utils/countryFlags";
 import { itemText, toList, toSlug } from "@/lib/recipeText";
 import { Clock, Users, ChefHat, Utensils, Lightbulb, Globe2, Minus, Plus, BookOpen } from "lucide-react";
@@ -191,6 +192,7 @@ const RecipeDetail = () => {
         steps={recipe.steps}
         ingredients={recipe.ingredients}
         multiplier={mult}
+        country={recipe.country}
         onClose={() => setCookMode(false)}
       />
     );
@@ -305,6 +307,20 @@ const RecipeDetail = () => {
                       <a href="#reviews">I made this</a>
                     </Button>
                     <SaveButton type="recipe" slug={recipe.slug} id={recipe.id} label={recipe.name} />
+                    {recipe.id && recipe.slug && (
+                      <RecipeBoxSave
+                        recipeId={recipe.id}
+                        slug={recipe.slug}
+                        name={recipe.name}
+                        country={recipe.country}
+                        imageUrl={recipe.image_url}
+                        ingredients={recipe.ingredients}
+                        steps={recipe.steps}
+                        servings={recipe.servings}
+                        prepTime={recipe.prep_time ?? recipe.prep_time_minutes}
+                        cookTime={recipe.cook_time ?? recipe.cook_time_minutes}
+                      />
+                    )}
                     <PrintRecipeButton recipe={recipe} servingMultiplier={mult} />
                   </div>
                   <RecipeTrustNotice verificationStatus={recipe.verification_status} safetyNotes={recipe.safety_notes} itemType={recipe.item_type} className="mt-4" />
@@ -380,6 +396,8 @@ const RecipeDetail = () => {
                     <RecipeReviews
                       recipeId={recipe.id}
                       recipeName={recipe.name}
+                      recipeSlug={recipe.slug}
+                      recipeCountry={recipe.country}
                       onSummaryChange={onSummaryChange}
                     />
                   )}

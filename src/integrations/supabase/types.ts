@@ -1160,8 +1160,10 @@ export type Database = {
       }
       recipe_reviews: {
         Row: {
+          cooked_photo_url: string | null
           created_at: string | null
           id: string
+          made_it: boolean | null
           rating: number
           recipe_id: string
           review_text: string | null
@@ -1169,8 +1171,10 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          cooked_photo_url?: string | null
           created_at?: string | null
           id?: string
+          made_it?: boolean | null
           rating: number
           recipe_id: string
           review_text?: string | null
@@ -1178,8 +1182,10 @@ export type Database = {
           user_id: string
         }
         Update: {
+          cooked_photo_url?: string | null
           created_at?: string | null
           id?: string
+          made_it?: boolean | null
           rating?: number
           recipe_id?: string
           review_text?: string | null

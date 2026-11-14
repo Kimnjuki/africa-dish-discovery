@@ -28,6 +28,11 @@ import {
   saveMealPlanSnapshot,
 } from "@/lib/offlineStore";
 import { usePWA } from "@/hooks/usePWA";
+import {
+  getMarketPreference,
+  getWeeklyBudgetPreference,
+  type MarketId,
+} from "@/lib/localMarket";
 
 interface Recipe {
   id: string;
@@ -79,6 +84,11 @@ const MealPlanner = () => {
   const [servings, setServings] = useState<number>(2);
   const [notes, setNotes] = useState<string>("");
   const [usingOfflinePlan, setUsingOfflinePlan] = useState(false);
+  const [marketId, setMarketId] = useState<MarketId>(() => getMarketPreference());
+  const [weeklyBudget, setWeeklyBudget] = useState(() =>
+    getWeeklyBudgetPreference(getMarketPreference())
+  );
+  const [plannedCost, setPlannedCost] = useState(0);
   const { isOffline } = usePWA();
 
   useEffect(() => {
@@ -605,9 +615,15 @@ const MealPlanner = () => {
                       targets={{ calories: 2000, protein: 100, carbs: 250, fats: 80 }}
                     />
                     <BudgetTracker
-                      weeklyBudget={175}
-                      spent={95}
-                      plannedCost={160}
+                      weeklyBudget={weeklyBudget}
+                      spent={0}
+                      plannedCost={plannedCost}
+                      marketId={marketId}
+                      onBudgetChange={(budget, market) => {
+                        setWeeklyBudget(budget);
+                        setMarketId(market);
+                      }}
+                      onMarketChange={setMarketId}
                     />
                   </div>
                 </TabsContent>
@@ -616,6 +632,10 @@ const MealPlanner = () => {
                   <GroceryListPanel
                     planName={currentPlan.name}
                     sources={grocerySources}
+                    onCostChange={(total, market) => {
+                      setPlannedCost(total);
+                      setMarketId(market);
+                    }}
                   />
                 </TabsContent>
               </Tabs>

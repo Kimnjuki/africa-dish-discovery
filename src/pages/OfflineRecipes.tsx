@@ -26,14 +26,19 @@ import { DataSaverImage } from "@/components/DataSaverImage";
 import {
   clearCachedRecipes,
   getCachedRecipes,
+  getCookPacks,
+  getGrocerySnapshot,
   getMealPlanSnapshot,
   getPantryQueue,
   getPantrySnapshot,
   removeCachedRecipe,
+  type OfflineCookPack,
+  type OfflineGrocerySnapshot,
   type OfflineMealPlanSnapshot,
   type OfflinePantrySnapshot,
   type OfflineRecipe,
 } from "@/lib/offlineStore";
+import { formatMoney, STALL_LABELS, type MarketId, type StallId } from "@/lib/localMarket";
 import { supabase } from "@/integrations/supabase/client";
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -42,6 +47,8 @@ const OfflineRecipes = () => {
   const [cachedRecipes, setCachedRecipes] = useState<OfflineRecipe[]>([]);
   const [pantrySnap, setPantrySnap] = useState<OfflinePantrySnapshot | null>(null);
   const [mealSnap, setMealSnap] = useState<OfflineMealPlanSnapshot | null>(null);
+  const [grocerySnap, setGrocerySnap] = useState<OfflineGrocerySnapshot | null>(null);
+  const [cookPacks, setCookPacks] = useState<OfflineCookPack[]>([]);
   const [pendingOps, setPendingOps] = useState(0);
   const [loading, setLoading] = useState(true);
   const { isOnline } = usePWA();
@@ -55,6 +62,8 @@ const OfflineRecipes = () => {
         setCachedRecipes(getCachedRecipes());
         setPantrySnap(getPantrySnapshot(user?.id));
         setMealSnap(getMealPlanSnapshot(user?.id));
+        setGrocerySnap(getGrocerySnapshot(user?.id));
+        setCookPacks(getCookPacks());
         setPendingOps(getPantryQueue().length);
       } finally {
         setLoading(false);
@@ -288,6 +297,89 @@ const OfflineRecipes = () => {
                 </Card>
               )}
             </section>
+
+            {/* Grocery snapshot */}
+            <section>
+              <div className="flex items-center gap-2 mb-4">
+                <Package className="w-5 h-5 text-primary" />
+                <h2 className="text-xl font-semibold">Shopping list</h2>
+              </div>
+              {!grocerySnap ? (
+                <Card>
+                  <CardContent className="py-8 text-center text-muted-foreground text-sm">
+                    Save a list from Meal Planner → Shopping (Offline button) to use it without data.
+                  </CardContent>
+                </Card>
+              ) : (
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg">{grocerySnap.planName}</CardTitle>
+                    <p className="text-xs text-muted-foreground">
+                      ~{formatMoney(grocerySnap.estimatedTotal, grocerySnap.marketId as MarketId)} ·{" "}
+                      saved {formatCachedDate(grocerySnap.updatedAt)}
+                    </p>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    {grocerySnap.items.map((item) => (
+                      <div
+                        key={item.id}
+                        className={`flex items-center justify-between gap-2 text-sm border-b border-border/50 py-2 last:border-0 ${
+                          item.checked ? "opacity-50 line-through" : ""
+                        }`}
+                      >
+                        <div>
+                          <span className="font-medium">{item.name}</span>
+                          {item.quantityDisplay && (
+                            <span className="text-muted-foreground ml-2">{item.quantityDisplay}</span>
+                          )}
+                          <p className="text-xs text-muted-foreground">
+                            {STALL_LABELS[(item.stall as StallId) || "other"] || item.stall}
+                            {item.substitutedFrom ? ` · was ${item.substitutedFrom}` : ""}
+                          </p>
+                        </div>
+                        {item.estimatedCost != null && (
+                          <span className="text-xs text-muted-foreground shrink-0">
+                            {formatMoney(item.estimatedCost, grocerySnap.marketId as MarketId)}
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+              )}
+            </section>
+
+            {/* Cook packs */}
+            {cookPacks.length > 0 && (
+              <section>
+                <div className="flex items-center gap-2 mb-4">
+                  <ChefHat className="w-5 h-5 text-primary" />
+                  <h2 className="text-xl font-semibold">
+                    Offline cook packs ({cookPacks.length})
+                  </h2>
+                </div>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {cookPacks.map((pack) => (
+                    <Card key={pack.recipeId}>
+                      <CardContent className="p-4 space-y-2">
+                        <Link
+                          to={`/recipe/${pack.slug}`}
+                          className="font-medium hover:text-primary block"
+                        >
+                          {pack.name}
+                        </Link>
+                        <p className="text-xs text-muted-foreground">
+                          {pack.country}
+                          {pack.substitutionPrompts.length
+                            ? ` · ${pack.substitutionPrompts.length} local swap tips`
+                            : ""}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </section>
+            )}
 
             {/* Recipes */}
             <section>

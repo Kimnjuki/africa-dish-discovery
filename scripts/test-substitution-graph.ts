@@ -74,6 +74,15 @@ console.log("palm oil alternatives");
   assert(names.some((n) => n.includes("coconut")), "palm oil → coconut oil");
 }
 
+console.log("cook adjustment prompts");
+{
+  const hits = lookupSubstitutions("ugwu");
+  assert(
+    hits.some((h) => h.cookAdjustment?.prompt || /spinach|kale/i.test(h.notes)),
+    "ugwu suggestions include cook guidance"
+  );
+}
+
 console.log("scotch bonnet ↔ habanero");
 {
   const names = namesOf("scotch bonnet");

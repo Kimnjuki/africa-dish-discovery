@@ -1,9 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { X, ChevronLeft, ChevronRight, CheckCircle2, ListChecks } from "lucide-react";
-import { stepToText, prepareIngredientLine } from "@/lib/recipeUnits";
+import { Badge } from "@/components/ui/badge";
+import { X, ChevronLeft, ChevronRight, CheckCircle2, ListChecks, Repeat } from "lucide-react";
+import { stepToText, prepareIngredientLine, ingredientToText } from "@/lib/recipeUnits";
 import type { IngredientValue, StepValue } from "@/types/content";
+import { bestCookSubstitutionPrompt } from "@/lib/substitutionGraph";
+import { resolveMarketId, type MarketId } from "@/lib/localMarket";
 
 interface CookModeProps {
   recipeName: string;
@@ -11,13 +14,15 @@ interface CookModeProps {
   ingredients?: IngredientValue[] | null;
   multiplier?: number;
   startIndex?: number;
+  country?: string;
+  marketId?: MarketId;
   onClose: (lastIndex: number) => void;
 }
 
 /**
  * Full-screen cooking stepper for a phone on the counter.
- * Large type, thumb-sized controls, swipe between steps, and the screen
- * stays awake where the Wake Lock API is available.
+ * Large type, thumb-sized controls, swipe between steps, local substitution
+ * prompts, and the screen stays awake where the Wake Lock API is available.
  */
 export const CookMode = ({
   recipeName,
@@ -25,14 +30,40 @@ export const CookMode = ({
   ingredients,
   multiplier = 1,
   startIndex = 0,
+  country,
+  marketId: marketProp,
   onClose,
 }: CookModeProps) => {
   const list: string[] = Array.isArray(steps) ? steps.map(stepToText).filter(Boolean) : [];
   const [index, setIndex] = useState(Math.min(startIndex, Math.max(0, list.length - 1)));
   const [done, setDone] = useState<number[]>([]);
   const [showIngredients, setShowIngredients] = useState(false);
+  const [appliedSwaps, setAppliedSwaps] = useState<Record<number, string>>({});
   const wakeLock = useRef<WakeLockSentinel | null>(null);
   const touch = useRef<{ x: number; y: number } | null>(null);
+  const marketId = marketProp || resolveMarketId(country);
+
+  const ingredientMeta = useMemo(() => {
+    if (!Array.isArray(ingredients)) return [] as {
+      display: string;
+      raw: string;
+      prompt: string | null;
+      substitute: string | null;
+    }[];
+    return ingredients.map((ing) => {
+      const raw = ingredientToText(ing);
+      const hit = bestCookSubstitutionPrompt(raw, {
+        regionHint: country,
+        marketId,
+      });
+      return {
+        display: prepareIngredientLine(ing, multiplier, "original"),
+        raw,
+        prompt: hit?.cookAdjustment?.prompt || hit?.cookHint || null,
+        substitute: hit?.name || null,
+      };
+    });
+  }, [ingredients, multiplier, country, marketId]);
 
   useEffect(() => {
     const request = async () => {
@@ -77,12 +108,59 @@ export const CookMode = ({
     return () => window.removeEventListener("keydown", onKey);
   }, [index, list.length, onClose]);
 
-  const ingredientLines: string[] = Array.isArray(ingredients)
-    ? ingredients.map((ing) => prepareIngredientLine(ing, multiplier, "original")).filter(Boolean)
-    : [];
-
   const progress = list.length ? ((index + 1) / list.length) * 100 : 0;
   const atEnd = list.length === 0 || index >= list.length - 1;
+
+  const renderIngredient = (
+    meta: (typeof ingredientMeta)[number],
+    i: number,
+    compact = false
+  ) => {
+    const swapped = appliedSwaps[i];
+    return (
+      <li
+        key={i}
+        className={compact ? "border-b border-border/60 pb-3 text-foreground" : "text-muted-foreground"}
+      >
+        <div className="flex items-start justify-between gap-2">
+          <span className={compact ? "text-base" : "text-base"}>
+            {swapped ? (
+              <>
+                <span className="font-medium text-foreground">{swapped}</span>
+                <span className="ml-1 text-xs line-through opacity-60">{meta.display}</span>
+              </>
+            ) : (
+              meta.display
+            )}
+          </span>
+          {meta.substitute && !swapped && (
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              className="h-8 shrink-0"
+              onClick={() =>
+                setAppliedSwaps((prev) => ({ ...prev, [i]: meta.substitute as string }))
+              }
+            >
+              <Repeat className="mr-1 h-3.5 w-3.5" />
+              Swap
+            </Button>
+          )}
+        </div>
+        {meta.prompt && !swapped && (
+          <p className="mt-1 text-xs text-amber-800 dark:text-amber-300">
+            {meta.prompt}
+          </p>
+        )}
+        {swapped && meta.prompt && (
+          <Badge variant="secondary" className="mt-1 text-[10px]">
+            Using local substitute
+          </Badge>
+        )}
+      </li>
+    );
+  };
 
   return (
     <div className="fixed inset-0 z-[60] flex h-dvh flex-col bg-background">
@@ -140,7 +218,7 @@ export const CookMode = ({
               {done.includes(index) ? "Step done" : "Mark step done"}
             </Button>
 
-            {ingredientLines.length > 0 && (
+            {ingredientMeta.length > 0 && (
               <div className="mt-8 lg:hidden">
                 <Button
                   variant="secondary"
@@ -148,32 +226,26 @@ export const CookMode = ({
                   onClick={() => setShowIngredients((v) => !v)}
                 >
                   <ListChecks className="mr-2 h-5 w-5" />
-                  {showIngredients ? "Hide ingredients" : `Ingredients (${ingredientLines.length})`}
+                  {showIngredients
+                    ? "Hide ingredients"
+                    : `Ingredients (${ingredientMeta.length})`}
                 </Button>
                 {showIngredients && (
                   <ul className="mt-4 space-y-3 text-base">
-                    {ingredientLines.map((line, i) => (
-                      <li key={i} className="border-b border-border/60 pb-3 text-foreground">
-                        {line}
-                      </li>
-                    ))}
+                    {ingredientMeta.map((meta, i) => renderIngredient(meta, i, true))}
                   </ul>
                 )}
               </div>
             )}
           </div>
 
-          {ingredientLines.length > 0 && (
+          {ingredientMeta.length > 0 && (
             <aside className="hidden lg:block">
               <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
                 <ListChecks className="h-4 w-4" /> Ingredients
               </h3>
-              <ul className="space-y-2 text-base">
-                {ingredientLines.map((line, i) => (
-                  <li key={i} className="text-muted-foreground">
-                    {line}
-                  </li>
-                ))}
+              <ul className="space-y-3 text-base">
+                {ingredientMeta.map((meta, i) => renderIngredient(meta, i))}
               </ul>
             </aside>
           )}

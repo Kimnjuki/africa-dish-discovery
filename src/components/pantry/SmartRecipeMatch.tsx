@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { 
   ChefHat, 
   Clock, 
@@ -50,6 +52,10 @@ interface SmartRecipeMatchProps {
   insights?: string;
 }
 
+const isExpiringMatch = (match: RecipeMatch) =>
+  match.priority === "high" &&
+  /expir/i.test(match.priorityReason || "");
+
 const SmartRecipeMatch = ({
   matches,
   loading,
@@ -59,6 +65,18 @@ const SmartRecipeMatch = ({
   insights
 }: SmartRecipeMatchProps) => {
   const [expandedRecipe, setExpandedRecipe] = useState<string | null>(null);
+  const [cookFromExpiring, setCookFromExpiring] = useState(false);
+
+  const expiringCount = useMemo(
+    () => matches.filter(isExpiringMatch).length,
+    [matches]
+  );
+
+  const visibleMatches = useMemo(() => {
+    if (!cookFromExpiring) return matches;
+    const filtered = matches.filter(isExpiringMatch);
+    return filtered.length ? filtered : matches.filter((m) => m.priority === "high");
+  }, [matches, cookFromExpiring]);
 
   const getMatchColor = (score: number) => {
     if (score >= 80) return "text-green-600 bg-green-100 dark:bg-green-900/30";
@@ -74,8 +92,7 @@ const SmartRecipeMatch = ({
     };
     return (
       <Badge className={cn("text-xs", colors[priority as keyof typeof colors] || colors.low)}>
-        {priority === 'high' ? '🔥 ' : priority === 'medium' ? '⚡ ' : '💡 '}
-        {priority} priority
+        {reason || `${priority} priority`}
       </Badge>
     );
   };
@@ -114,6 +131,33 @@ const SmartRecipeMatch = ({
 
   return (
     <div className="space-y-6">
+      <Card className="border-amber-500/20 bg-amber-500/5">
+        <CardContent className="p-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 shrink-0" />
+            <div>
+              <p className="font-medium text-sm">Cook from what’s expiring</p>
+              <p className="text-sm text-muted-foreground">
+                {expiringCount > 0
+                  ? `${expiringCount} match${expiringCount === 1 ? "" : "es"} use pantry items that expire within 3 days.`
+                  : "Add expiry dates on pantry items to unlock waste-saving recipe picks."}
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <Switch
+              id="cook-expiring"
+              checked={cookFromExpiring}
+              onCheckedChange={setCookFromExpiring}
+              disabled={expiringCount === 0 && matches.every((m) => m.priority !== "high")}
+            />
+            <Label htmlFor="cook-expiring" className="text-sm cursor-pointer">
+              Show these first
+            </Label>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* AI Insights */}
       {insights && (
         <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-secondary/5">
@@ -129,7 +173,7 @@ const SmartRecipeMatch = ({
 
       {/* Recipe Matches */}
       <div className="grid gap-4">
-        {matches.map((match) => (
+        {visibleMatches.map((match) => (
           <Card 
             key={match.id} 
             className={cn(

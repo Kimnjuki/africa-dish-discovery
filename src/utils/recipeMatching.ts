@@ -518,16 +518,22 @@ export const findMatchingRecipes = (
       return match.matchPercentage >= minMatchPercentage && match.matchedCount >= 1;
     })
     .sort((a, b) => {
-      // Prefer dishes you can actually cook (coverage), not longest ingredient lists
+      // Waste-first: recipes that burn down expiring pantry items rise first
+      if (b.urgencyBoost !== a.urgencyBoost) return b.urgencyBoost - a.urgencyBoost;
       if (Number(b.canMakeNow) !== Number(a.canMakeNow)) return Number(b.canMakeNow) - Number(a.canMakeNow);
       if (b.matchPercentage !== a.matchPercentage) return b.matchPercentage - a.matchPercentage;
       if (density(b) !== density(a)) return density(b) - density(a);
-      if (b.urgencyBoost !== a.urgencyBoost) return b.urgencyBoost - a.urgencyBoost;
       if (b.matchedCount !== a.matchedCount) return b.matchedCount - a.matchedCount;
       if (b.pantryCoverage !== a.pantryCoverage) return b.pantryCoverage - a.pantryCoverage;
       return a.missingIngredients.length - b.missingIngredients.length;
     });
 };
+
+/** Matches that specifically help clear items expiring within ~3 days. */
+export const filterCookFromExpiring = (matches: MatchResult[]): MatchResult[] =>
+  matches.filter(
+    (m) => m.urgencyBoost > 0 || /expir/i.test(m.priorityReason || "")
+  );
 
 export const buildPantryInsights = (matches: MatchResult[], pantryCount: number): string => {
   if (!matches.length) {

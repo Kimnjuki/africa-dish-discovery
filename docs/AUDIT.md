@@ -212,6 +212,19 @@ Do **not** start with Next.js migration or F16/F17.
 
 ## Progress
 
+**2026-11-14 — Competitive gaps P0/P1 (local execution loop)**
+
+- **F06 productized:** `localMarket.ts` (NG/KE/GH/ZA/EG/TZ prices, stalls, diet/availability); `lookupRankedSubstitutions` + cook-adjustment prompts; popover shows local price + “hard to find”.
+- **F05 market grocery:** stall grouping, cost totals in local currency, one-tap swaps, Offline save → `/offline-recipes`.
+- **F12 budget:** `BudgetTracker` uses market currency + planned cost from the grocery engine (no more hardcoded USD demo).
+- **F09 offline cook packs:** Download for offline on recipe pages; grocery snapshot + cook packs on Offline Mode.
+- **F08 cooked photos:** camera/file upload with client compress; storage bucket + `cooked_photo_url` migration.
+- **F03 Recipe Box:** folders on My List + save menu on recipe detail (localStorage; SQL folders migration ready).
+- Tests: `npm run test:market` (16) + substitutions (24). Apply migration `20261114120000_competitive_gaps_trust_box.sql` for photo column + storage policies.
+- **Cook-from-expiring:** Pantry “Show these first” filter + urgency-first match sort.
+- **IndexedDB mirror:** Offline grocery/cook packs/recipes/pantry mirrored; hydrate on boot if localStorage was evicted.
+- Remaining: live vendor APIs / mobile-money checkout; phone auth; shared grocery write-sync.
+
 **2026-11-14 — Phase 1 F08 provenance / JSON-LD / ratings (chunk 6)**
 
 - `RecipeSchema`: nutrition, cuisine, keywords, image, `suitableForDiet`; `aggregateRating` only when real reviews exist.
