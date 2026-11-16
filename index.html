@@ -71,14 +71,117 @@
             "url": "https://www.ladhaquest.com/pwa-512x512.png"
           },
           "description": "Africa-first recipe discovery and cooking OS for households, diaspora, and creators."
+        },
+        {
+          "@type": "ItemList",
+          "name": "Featured African recipes on LadhaQuest",
+          "itemListOrder": "https://schema.org/ItemListOrderAscending",
+          "numberOfItems": 12,
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "url": "https://www.ladhaquest.com/recipe/egusi-soup-nigeria", "name": "Egusi Soup" },
+            { "@type": "ListItem", "position": 2, "url": "https://www.ladhaquest.com/recipe/doro-wat-ethiopia", "name": "Doro Wat" },
+            { "@type": "ListItem", "position": 3, "url": "https://www.ladhaquest.com/recipe/ethiopian-injera", "name": "Ethiopian Injera" },
+            { "@type": "ListItem", "position": 4, "url": "https://www.ladhaquest.com/recipe/bobotie-south-africa", "name": "Bobotie" },
+            { "@type": "ListItem", "position": 5, "url": "https://www.ladhaquest.com/recipe/banku-and-tilapia-ghana", "name": "Banku and Tilapia" },
+            { "@type": "ListItem", "position": 6, "url": "https://www.ladhaquest.com/recipe/chicken-yassa-senegal", "name": "Chicken Yassa" },
+            { "@type": "ListItem", "position": 7, "url": "https://www.ladhaquest.com/recipe/egyptian-koshari", "name": "Egyptian Koshari" },
+            { "@type": "ListItem", "position": 8, "url": "https://www.ladhaquest.com/recipe/bunny-chow", "name": "Bunny Chow" },
+            { "@type": "ListItem", "position": 9, "url": "https://www.ladhaquest.com/recipe/couscous-morocco", "name": "Couscous" },
+            { "@type": "ListItem", "position": 10, "url": "https://www.ladhaquest.com/recipe/beef-stew-ugali-kenya", "name": "Beef Stew with Ugali" },
+            { "@type": "ListItem", "position": 11, "url": "https://www.ladhaquest.com/recipe/jollof-rice-nigeria", "name": "Jollof Rice" },
+            { "@type": "ListItem", "position": 12, "url": "https://www.ladhaquest.com/recipe/suya-nigeria", "name": "Suya" }
+          ]
         }
       ]
     }
     </script>
+    <style>
+      /* Crawlable shell only — replaced when the React app mounts */
+      #seo-shell { font-family: Georgia, "Times New Roman", serif; max-width: 48rem; margin: 0 auto; padding: 1.5rem; line-height: 1.5; color: #1a1a1a; }
+      #seo-shell nav ul, #seo-shell ul { padding-left: 1.25rem; }
+      #seo-shell a { color: #9a3412; }
+    </style>
   </head>
 
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <!--
+        Critical for non-JS / limited-JS crawlers (Screaming Frog HTML crawl, etc.):
+        H1 + copy + real <a> outlinks must exist in the initial HTML shell.
+        React replaces this tree on mount.
+      -->
+      <div id="seo-shell">
+        <header>
+          <p><a href="/">LadhaQuest</a> — Africa-first recipes</p>
+          <nav aria-label="Primary">
+            <ul>
+              <li><a href="/recipe-index">Recipe index</a></li>
+              <li><a href="/recipes">Browse recipes</a></li>
+              <li><a href="/countries">Recipes by country</a></li>
+              <li><a href="/continents">African regions</a></li>
+              <li><a href="/atlas">Dish atlas</a></li>
+              <li><a href="/cuisine-map">Cuisine map</a></li>
+              <li><a href="/meals">Meals</a></li>
+              <li><a href="/blog">Food blog</a></li>
+              <li><a href="/about">About</a></li>
+              <li><a href="/contact">Contact</a></li>
+            </ul>
+          </nav>
+        </header>
+
+        <main>
+          <h1>LadhaQuest — Authentic African Recipes from 54 Countries</h1>
+          <p>
+            Cook authentic African food at home with 2,100+ recipes across West, East, North,
+            Central, and Southern Africa. Find local ingredient names, market-aware substitutions,
+            meal planning, and offline cook mode.
+          </p>
+          <h2>Featured African recipes</h2>
+          <ul>
+            <li><a href="/recipe/jollof-rice-nigeria">Jollof Rice (Nigeria)</a></li>
+            <li><a href="/recipe/egusi-soup-nigeria">Egusi Soup (Nigeria)</a></li>
+            <li><a href="/recipe/suya-nigeria">Suya (Nigeria)</a></li>
+            <li><a href="/recipe/doro-wat-ethiopia">Doro Wat (Ethiopia)</a></li>
+            <li><a href="/recipe/ethiopian-injera">Injera (Ethiopia)</a></li>
+            <li><a href="/recipe/banku-and-tilapia-ghana">Banku and Tilapia (Ghana)</a></li>
+            <li><a href="/recipe/chicken-yassa-senegal">Chicken Yassa (Senegal)</a></li>
+            <li><a href="/recipe/egyptian-koshari">Koshari (Egypt)</a></li>
+            <li><a href="/recipe/couscous-morocco">Couscous (Morocco)</a></li>
+            <li><a href="/recipe/bobotie-south-africa">Bobotie (South Africa)</a></li>
+            <li><a href="/recipe/bunny-chow">Bunny Chow (South Africa)</a></li>
+            <li><a href="/recipe/beef-stew-ugali-kenya">Beef Stew with Ugali (Kenya)</a></li>
+          </ul>
+          <h2>Explore by country</h2>
+          <ul>
+            <li><a href="/country/nigeria">Nigeria</a></li>
+            <li><a href="/country/ghana">Ghana</a></li>
+            <li><a href="/country/kenya">Kenya</a></li>
+            <li><a href="/country/ethiopia">Ethiopia</a></li>
+            <li><a href="/country/south-africa">South Africa</a></li>
+            <li><a href="/country/egypt">Egypt</a></li>
+            <li><a href="/country/morocco">Morocco</a></li>
+            <li><a href="/country/senegal">Senegal</a></li>
+            <li><a href="/country/tanzania">Tanzania</a></li>
+            <li><a href="/country/uganda">Uganda</a></li>
+          </ul>
+          <h2>From the blog</h2>
+          <ul>
+            <li><a href="/blog/authentic-jollof-rice-recipe">Authentic Jollof Rice recipe guide</a></li>
+            <li><a href="/blog/ethiopian-doro-wat-recipe">Ethiopian Doro Wat recipe guide</a></li>
+            <li><a href="/blog/nigerian-egusi-soup-recipe">Nigerian Egusi Soup recipe guide</a></li>
+            <li><a href="/blog/moroccan-tagine-recipe">Moroccan Tagine recipe guide</a></li>
+          </ul>
+        </main>
+
+        <footer>
+          <p>
+            <a href="/privacy-policy">Privacy Policy</a> ·
+            <a href="/terms-of-service">Terms of Service</a> ·
+            <a href="/sitemap.xml">Sitemap</a>
+          </p>
+        </footer>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

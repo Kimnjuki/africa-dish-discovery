@@ -30,4 +30,10 @@ Disallow: /image-verification
 Disallow: /image-scraper
 Disallow: /recipe-gallery
 
+# Non-content assets (should not appear as Indexable HTML-equivalent URLs)
+Disallow: /assets/
+Disallow: /registerSW.js
+Disallow: /sw.js
+Disallow: /*workbox-*.js$
+
 Sitemap: https://www.ladhaquest.com/sitemap.xml

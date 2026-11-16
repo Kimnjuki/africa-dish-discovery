@@ -213,6 +213,11 @@ Do **not** start with Next.js migration or F16/F17.
 
 ## Progress
 
+**2026-11-16 — Screaming Frog / crawl shell gaps**
+
+- Report: `H1: Missing` (100%), homepage Word Count 0, Outlinks 0, Text Ratio 0 — crawler saw empty SPA shell only. Assets (`registerSW.js`, `/assets/*`) marked Indexable.
+- Fix: crawlable `#seo-shell` inside `#root` with real `<h1>`, hub links, 12 African recipe links, country + blog outlinks, ItemList JSON-LD; `robots.txt` Disallow `/assets/` + SW; nginx `X-Robots-Tag: noindex` on JS/CSS/assets.
+
 **2026-11-16 — GSC SEO rescue (near-zero indexation)**
 
 - Diagnosis from GSC exports: 0 clicks / 1 impression / ~3 indexed pages (last 7 days). Live sitemap still only ~17 hubs.
