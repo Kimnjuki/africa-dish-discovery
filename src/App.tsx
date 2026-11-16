@@ -53,6 +53,7 @@ const RecipeDetail = lazy(() => import("./pages/RecipeDetail"));
 const MyList = lazy(() => import("./pages/MyList"));
 const Household = lazy(() => import("./pages/Household"));
 const CuisineMap = lazy(() => import("./pages/CuisineMap"));
+const ImportRecipe = lazy(() => import("./pages/ImportRecipe"));
 
 // Loading fallback component
 const PageLoader = () => (
@@ -97,6 +98,7 @@ const App = () => (
               <Route path="/my-list" element={<RequireAuth><MyList /></RequireAuth>} />
               <Route path="/household" element={<RequireAuth><Household /></RequireAuth>} />
               <Route path="/submit-recipe" element={<RequireAuth><SubmitRecipe /></RequireAuth>} />
+              <Route path="/import-recipe" element={<RequireAuth><ImportRecipe /></RequireAuth>} />
               <Route path="/shared-meal-plan/:shareToken" element={<SharedMealPlan />} />
               <Route path="/install" element={<Install />} />
               <Route path="/offline-recipes" element={<OfflineRecipes />} />

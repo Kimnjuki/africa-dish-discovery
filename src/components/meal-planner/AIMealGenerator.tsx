@@ -23,6 +23,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import type { CookableRecipe } from "@/types/content";
 import { readErrorMessage } from "@/lib/errors";
+import {
+  canGenerateAiMealPlan,
+  FREE_LIMITS,
+  incrementWeeklyAiPlanCount,
+  isPremiumUnlocked,
+} from "@/lib/premium";
+import { Link } from "react-router-dom";
 
 interface MealPlanDay {
   day: number;
@@ -91,6 +98,19 @@ export const AIMealGenerator = ({ onMealPlanGenerated, userId }: AIMealGenerator
   };
 
   const generateMealPlan = async () => {
+    const gate = canGenerateAiMealPlan();
+    if (!gate.allowed) {
+      toast.error(gate.reason || "Weekly AI plan limit reached", {
+        action: {
+          label: "Premium",
+          onClick: () => {
+            window.location.href = "/install";
+          },
+        },
+      });
+      return;
+    }
+
     setIsGenerating(true);
 
     try {
@@ -132,11 +152,15 @@ export const AIMealGenerator = ({ onMealPlanGenerated, userId }: AIMealGenerator
       setGeneratedPlan(data.mealPlan);
       setTips(data.tips || []);
       onMealPlanGenerated(data.mealPlan, data.tips || []);
+      if (!isPremiumUnlocked()) incrementWeeklyAiPlanCount();
 
+      const left = canGenerateAiMealPlan().remaining;
       toast.success(data.ai_generated ? "AI meal plan generated!" : "Meal plan generated", {
-        description: data.ai_generated 
-          ? "Optimized for your preferences and nutrition goals"
-          : "Basic plan created - AI unavailable"
+        description: data.ai_generated
+          ? Number.isFinite(left)
+            ? `Optimized for your goals · ${left} free AI plans left this week`
+            : "Optimized for your preferences and nutrition goals"
+          : "Basic plan created - AI unavailable",
       });
     } catch (error: unknown) {
       console.error('Generation error:', error);
@@ -175,6 +199,15 @@ export const AIMealGenerator = ({ onMealPlanGenerated, userId }: AIMealGenerator
             <Sparkles className="w-5 h-5 text-primary" />
             AI Meal Plan Generator
           </CardTitle>
+          {!isPremiumUnlocked() && (
+            <p className="text-sm text-muted-foreground">
+              Free: {FREE_LIMITS.weeklyAiMealPlans} AI plans / week.{" "}
+              <Link to="/install" className="text-primary underline-offset-2 hover:underline">
+                Unlock Premium
+              </Link>{" "}
+              for unlimited planning.
+            </p>
+          )}
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Days to Generate */}

@@ -18,8 +18,14 @@ import {
 } from "@/lib/recipeBox";
 import { bestCookSubstitutionPrompt } from "@/lib/substitutionGraph";
 import { saveCookPack } from "@/lib/offlineStore";
+import {
+  canDownloadOfflinePack,
+  incrementOfflinePackCount,
+  isPremiumUnlocked,
+} from "@/lib/premium";
 import type { IngredientValue, StepValue } from "@/types/content";
 import { ingredientToText } from "@/lib/recipeUnits";
+import { Link } from "react-router-dom";
 
 interface RecipeBoxSaveProps {
   recipeId: string;
@@ -69,6 +75,18 @@ export const RecipeBoxSave = ({
   };
 
   const downloadCookPack = () => {
+    const gate = canDownloadOfflinePack();
+    if (!gate.allowed) {
+      toast.error(gate.reason || "Offline pack limit reached", {
+        action: {
+          label: "Premium",
+          onClick: () => {
+            window.location.href = "/install";
+          },
+        },
+      });
+      return;
+    }
     const prompts: { ingredient: string; prompt: string; substitute: string }[] = [];
     if (Array.isArray(ingredients)) {
       for (const ing of ingredients) {
@@ -95,7 +113,13 @@ export const RecipeBoxSave = ({
       cook_time: cookTime ?? null,
       substitutionPrompts: prompts.slice(0, 12),
     });
-    toast.success("Offline cook pack saved — open Offline recipes anytime");
+    if (!isPremiumUnlocked()) incrementOfflinePackCount();
+    const left = canDownloadOfflinePack().remaining;
+    toast.success(
+      Number.isFinite(left)
+        ? `Offline cook pack saved · ${left} free packs left`
+        : "Offline cook pack saved — open Offline recipes anytime"
+    );
   };
 
   return (
@@ -120,6 +144,11 @@ export const RecipeBoxSave = ({
       <Button type="button" variant="secondary" className="h-12" onClick={downloadCookPack}>
         Download for offline
       </Button>
+      {!isPremiumUnlocked() && (
+        <Button type="button" variant="ghost" className="h-12 text-muted-foreground" asChild>
+          <Link to="/install">Premium packs</Link>
+        </Button>
+      )}
     </div>
   );
 };

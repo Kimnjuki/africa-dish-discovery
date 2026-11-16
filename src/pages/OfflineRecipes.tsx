@@ -40,6 +40,11 @@ import {
 } from "@/lib/offlineStore";
 import { formatMoney, STALL_LABELS, type MarketId, type StallId } from "@/lib/localMarket";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  FREE_LIMITS,
+  getOfflinePackCount,
+  isPremiumUnlocked,
+} from "@/lib/premium";
 
 const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
@@ -159,6 +164,17 @@ const OfflineRecipes = () => {
               {pendingOps} offline pantry change{pendingOps === 1 ? "" : "s"} will sync automatically.
             </div>
           )}
+
+          <div className="rounded-lg border border-border p-4 mb-6 text-sm flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-muted-foreground">
+              {isPremiumUnlocked()
+                ? "Premium: unlimited offline cook packs on this device."
+                : `Free tier: ${getOfflinePackCount()} / ${FREE_LIMITS.offlineCookPacks} offline cook packs used.`}
+            </p>
+            <Button asChild variant="outline" size="sm">
+              <Link to="/install">{isPremiumUnlocked() ? "Manage Premium" : "Unlock Premium"}</Link>
+            </Button>
+          </div>
 
           <Card className="mb-8">
             <CardHeader className="pb-3">

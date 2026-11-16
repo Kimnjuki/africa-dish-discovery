@@ -41,6 +41,7 @@
 | `/meal-planner`, `/meal-planner-calendar` | Meal planning | RequireAuth |
 | `/pantry`, `/my-list`, `/household`, `/recipe-comparison` | Pantry, saves, household, compare | RequireAuth |
 | `/submit-recipe` | Creator upload → `uploads` | RequireAuth |
+| `/import-recipe` | URL / photo / voice import → review | RequireAuth |
 | `/shared-meal-plan/:shareToken` | Shared plan view | Public token |
 | `/offline-recipes`, `/install` | Offline cache / PWA install | Public |
 | `/about`, `/contact`, `/privacy-policy`, `/terms-of-service` | Static/legal | Public |
@@ -192,7 +193,7 @@ Highlights: **1477** Africa-continent recipes; **54/54** named African countries
 | Allrecipes community ratings/reviews at scale | Schema + UI exist; **~1 review** in DB |
 | NYT cooking mode / recipe box | Cook mode **strong**; organization **weak** (no cookbooks) |
 | Mealime planning → grocery | Planner **strong**; grocery merge/aisles/commerce **weak** |
-| Paprika import/scale/offline | Serving scale + partial offline; **no URL import** product |
+| Paprika import/scale/offline | Serving scale + offline packs; **URL/photo/voice import shipped** (human review) |
 | SuperCook pantry match | **Strong** differentiator already (F11 present) |
 | Africa-local subs / market pricing | **Core differentiator incomplete** (F06/F12/F13 partial) |
 
@@ -211,6 +212,13 @@ Do **not** start with Next.js migration or F16/F17.
 ---
 
 ## Progress
+
+**2026-11-16 — Competitive matrix: freemium + recipe import**
+
+- **Import MVP:** `/import-recipe` — URL (JSON-LD client + edge fallback), photo AI extract, voice/paste family notes; `recipeImport.ts` adapts ingredients to local market; mandatory attribution; submits to `uploads` for human review. Edge: `supabase/functions/import-recipe`.
+- **Freemium:** `premium.ts` soft-gates offline cook packs (5 free) and weekly AI meal plans (2 free); Install page beta unlock; Offline Mode + Recipe Box + AI generator surfaces.
+- **Positioning:** Keep core African cooking free (vs NYT paywall); own family-recipe import + localization (vs Allrecipes/NYT). Canvas + checklist updated.
+- Tests: `npm run test:import`. Deploy edge function `import-recipe` to Supabase; Coolify needs a new commit SHA to rebuild.
 
 **2026-11-14 — Competitive gaps P0/P1 (local execution loop)**
 

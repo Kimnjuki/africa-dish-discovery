@@ -1,4 +1,5 @@
-import { Download, Smartphone, Wifi, WifiOff, Check, ChefHat, Gauge } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Download, Smartphone, Wifi, WifiOff, Check, ChefHat, Gauge, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,11 +11,36 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { PageMeta } from "@/components/seo/PageMeta";
 import { useToast } from "@/hooks/use-toast";
+import {
+  FREE_LIMITS,
+  isPremiumUnlocked,
+  PREMIUM_COPY,
+  setPremiumUnlocked,
+} from "@/lib/premium";
 
 const Install = () => {
   const { isInstallable, isInstalled, isOffline, installApp } = usePWA();
   const { dataSaver, setDataSaver } = useDataSaver();
   const { toast } = useToast();
+  const [premium, setPremium] = useState(false);
+
+  useEffect(() => {
+    setPremium(isPremiumUnlocked());
+    const onPremium = () => setPremium(isPremiumUnlocked());
+    window.addEventListener("ladhaquest:premium", onPremium);
+    return () => window.removeEventListener("ladhaquest:premium", onPremium);
+  }, []);
+
+  const togglePremium = (enabled: boolean) => {
+    setPremiumUnlocked(enabled);
+    setPremium(enabled);
+    toast({
+      title: enabled ? "Premium unlocked (beta)" : "Back on Free tier",
+      description: enabled
+        ? "Unlimited offline packs and AI meal plans on this device until Stripe ships."
+        : `Free includes ${FREE_LIMITS.offlineCookPacks} offline packs and ${FREE_LIMITS.weeklyAiMealPlans} AI plans/week.`,
+    });
+  };
 
   const handleInstall = async () => {
     const success = await installApp();
@@ -115,6 +141,59 @@ const Install = () => {
               </CardContent>
             </Card>
           )}
+
+          {/* Freemium */}
+          <Card className="mb-8 bg-card/50 border-border text-left">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Sparkles className="h-5 w-5 text-primary" />
+                {PREMIUM_COPY.headline}
+              </CardTitle>
+              <CardDescription>
+                Core African cooking stays free. Premium unlocks automation — not the recipe library.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid sm:grid-cols-2 gap-4 text-sm">
+                <div>
+                  <p className="font-medium mb-2">Free includes</p>
+                  <ul className="space-y-1 text-muted-foreground">
+                    {PREMIUM_COPY.freeIncludes.map((item) => (
+                      <li key={item} className="flex items-start gap-2">
+                        <Check className="h-4 w-4 text-green-400 mt-0.5 shrink-0" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div>
+                  <p className="font-medium mb-2">Premium adds</p>
+                  <ul className="space-y-1 text-muted-foreground">
+                    {PREMIUM_COPY.premiumIncludes.map((item) => (
+                      <li key={item} className="flex items-start gap-2">
+                        <Check className="h-4 w-4 text-primary mt-0.5 shrink-0" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              <div className="flex items-center justify-between gap-4 pt-2 border-t border-border">
+                <Label htmlFor="premium-unlock" className="text-sm font-normal cursor-pointer">
+                  Unlock Premium on this device (beta — billing coming soon)
+                </Label>
+                <Switch
+                  id="premium-unlock"
+                  checked={premium}
+                  onCheckedChange={togglePremium}
+                  aria-label="Unlock Premium"
+                />
+              </div>
+              <Button asChild variant="outline" size="sm">
+                <Link to="/import-recipe">Import a family recipe</Link>
+              </Button>
+            </CardContent>
+          </Card>
 
           {/* Data saver */}
           <Card className="mb-8 bg-card/50 border-border text-left">

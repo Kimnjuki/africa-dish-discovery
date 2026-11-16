@@ -533,7 +533,7 @@ export function stripIngredientNoise(raw: string): string {
   let s = raw.trim();
   s = s.replace(/^\d+([./]\d+)?(\s*-\s*\d+([./]\d+)?)?\s*/, "");
   s = s.replace(
-    /^(cups?|tbsps?|tablespoons?|tsps?|teaspoons?|oz|ounces?|lbs?|pounds?|g|kg|ml|l|cloves?|pieces?|cans?|bunches?|handfuls?)\s+/i,
+    /^(cups?|tbsps?|tablespoons?|tsps?|teaspoons?|oz|ounces?|lbs?|pounds?|g|kg|ml|l|cloves?|pieces?|cans?|bunch(?:es)?|handfuls?|tins?)\s+/i,
     ""
   );
   s = s.replace(/\s*\(.*?\)\s*/g, " ");

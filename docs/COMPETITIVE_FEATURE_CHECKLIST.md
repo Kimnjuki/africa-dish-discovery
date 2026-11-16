@@ -64,10 +64,14 @@ Legend: `[ ]` to do · `[~]` partial in platform · `[x]` done
 - [~] Legal pages + CMP for AdSense
 - [ ] Sitemap segmentation (recipes, dishes, countries, blog) + hreflang if i18n ships
 
-## 7. Monetisation
-- [~] Premium tier gating (banner exists — complete paywall surfaces)
+## 7. Monetisation & import (Allrecipes / NYT matrix)
+- [x] Freemium soft gates: free discovery/save/lists/import; premium offline packs + AI plans (`premium.ts`, Install unlock)
+- [x] Recipe import MVP: URL JSON-LD, photo AI, voice/paste → `/import-recipe` + `import-recipe` edge fn
+- [x] Mandatory source attribution + local market adaptation on import
+- [~] Premium tier gating (device beta unlock — Stripe checkout still open)
 - [ ] In-content ad slots that respect recipe-card readability
 - [ ] Affiliate modules: ingredients, equipment, African grocery boxes
+- [ ] Creator revenue share / paid classes
 - [ ] Printable/downloadable recipe packs for subscribers
 
 ---

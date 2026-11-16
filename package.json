@@ -14,6 +14,7 @@
     "test:market": "node --experimental-strip-types scripts/test-local-market.ts",
     "test:phone": "node --experimental-strip-types scripts/test-phone-auth.ts",
     "test:offline": "node --experimental-strip-types scripts/test-offline-store.ts",
+    "test:import": "node --experimental-strip-types scripts/test-recipe-import.ts",
     "preview": "vite preview"
   },
   "dependencies": {
