@@ -8,6 +8,7 @@ export type Household = {
   invite_code: string;
   created_by: string;
   share_pantry: boolean;
+  share_grocery?: boolean;
   created_at: string;
   updated_at: string;
 };
@@ -136,6 +137,20 @@ export async function setSharePantry(
   const { error } = await supabase
     .from("households")
     .update({ share_pantry: sharePantry })
+    .eq("id", householdId);
+  if (error) throw error;
+}
+
+export async function setShareGrocery(
+  householdId: string,
+  shareGrocery: boolean
+): Promise<void> {
+  const { error } = await supabase
+    .from("households")
+    .update({
+      share_grocery: shareGrocery,
+      updated_at: new Date().toISOString(),
+    } as never)
     .eq("id", householdId);
   if (error) throw error;
 }

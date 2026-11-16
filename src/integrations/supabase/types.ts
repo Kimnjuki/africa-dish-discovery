@@ -484,6 +484,65 @@ export type Database = {
           },
         ]
       }
+      household_grocery_items: {
+        Row: {
+          checked: boolean
+          client_key: string
+          created_at: string
+          estimated_cost: number | null
+          household_id: string
+          id: string
+          ingredient_name: string
+          market_id: string | null
+          notes: string | null
+          quantity_display: string | null
+          stall: string | null
+          substituted_from: string | null
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          checked?: boolean
+          client_key: string
+          created_at?: string
+          estimated_cost?: number | null
+          household_id: string
+          id?: string
+          ingredient_name: string
+          market_id?: string | null
+          notes?: string | null
+          quantity_display?: string | null
+          stall?: string | null
+          substituted_from?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          checked?: boolean
+          client_key?: string
+          created_at?: string
+          estimated_cost?: number | null
+          household_id?: string
+          id?: string
+          ingredient_name?: string
+          market_id?: string | null
+          notes?: string | null
+          quantity_display?: string | null
+          stall?: string | null
+          substituted_from?: string | null
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "household_grocery_items_household_id_fkey"
+            columns: ["household_id"]
+            isOneToOne: false
+            referencedRelation: "households"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       households: {
         Row: {
           created_at: string
@@ -491,6 +550,7 @@ export type Database = {
           id: string
           invite_code: string
           name: string
+          share_grocery: boolean
           share_pantry: boolean
           updated_at: string
         }
@@ -500,6 +560,7 @@ export type Database = {
           id?: string
           invite_code: string
           name: string
+          share_grocery?: boolean
           share_pantry?: boolean
           updated_at?: string
         }
@@ -508,6 +569,7 @@ export type Database = {
           created_by?: string
           id?: string
           invite_code?: string
+          share_grocery?: boolean
           name?: string
           share_pantry?: boolean
           updated_at?: string

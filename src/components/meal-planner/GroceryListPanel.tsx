@@ -20,6 +20,9 @@ import {
   Pencil,
   Download,
   Repeat,
+  Users,
+  ExternalLink,
+  RefreshCw,
 } from "lucide-react";
 import { toast } from "sonner";
 import type { IngredientValue } from "@/types/content";
@@ -45,6 +48,13 @@ import {
 } from "@/lib/localMarket";
 import { lookupRankedSubstitutions } from "@/lib/substitutionGraph";
 import { saveGrocerySnapshot } from "@/lib/offlineStore";
+import { buildCheckoutBundle } from "@/lib/commerceVendors";
+import {
+  getShareableHousehold,
+  loadSharedGrocery,
+  sharedRowsToGroceryItems,
+  syncGroceryToHousehold,
+} from "@/lib/sharedGrocery";
 import { supabase } from "@/integrations/supabase/client";
 
 export interface GroceryRecipeSource {
@@ -86,8 +96,25 @@ const GroceryListPanel = ({ planName, sources, onCostChange }: GroceryListPanelP
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editQty, setEditQty] = useState("");
   const [swapForId, setSwapForId] = useState<string | null>(null);
+  const [householdInfo, setHouseholdInfo] = useState<{
+    householdId: string;
+    name: string;
+    shareGrocery: boolean;
+  } | null>(null);
+  const [syncing, setSyncing] = useState(false);
+  const [skipNextGenerate, setSkipNextGenerate] = useState(false);
 
   useEffect(() => {
+    void getShareableHousehold()
+      .then(setHouseholdInfo)
+      .catch(() => setHouseholdInfo(null));
+  }, []);
+
+  useEffect(() => {
+    if (skipNextGenerate) {
+      setSkipNextGenerate(false);
+      return;
+    }
     setItems(generated);
     setEditingId(null);
     setSwapForId(null);
@@ -96,6 +123,10 @@ const GroceryListPanel = ({ planName, sources, onCostChange }: GroceryListPanelP
   const groups = useMemo(() => groupGroceryByStall(items), [items]);
   const cost = useMemo(() => summarizeGroceryCost(items, marketId), [items, marketId]);
   const remaining = items.filter((i) => !i.checked).length;
+  const checkoutOptions = useMemo(
+    () => buildCheckoutBundle(items, planName, marketId),
+    [items, planName, marketId]
+  );
 
   useEffect(() => {
     onCostChange?.(cost.total, marketId);
@@ -156,6 +187,59 @@ const GroceryListPanel = ({ planName, sources, onCostChange }: GroceryListPanelP
     toast.success("List saved for offline use");
   };
 
+  const handleSyncHousehold = async () => {
+    if (!householdInfo?.shareGrocery) {
+      toast.error("Enable grocery sharing on the Household page first");
+      return;
+    }
+    setSyncing(true);
+    try {
+      const count = await syncGroceryToHousehold(
+        householdInfo.householdId,
+        items,
+        marketId
+      );
+      toast.success(`Synced ${count} items to ${householdInfo.name}`);
+    } catch (error) {
+      console.error(error);
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Could not sync — apply the shared grocery migration if this is first use"
+      );
+    } finally {
+      setSyncing(false);
+    }
+  };
+
+  const handleLoadHousehold = async () => {
+    if (!householdInfo) {
+      toast.error("Join or create a household first");
+      return;
+    }
+    setSyncing(true);
+    try {
+      const rows = await loadSharedGrocery(householdInfo.householdId);
+      if (!rows.length) {
+        toast.info("No shared list yet — sync from a member who has one");
+        return;
+      }
+      setSkipNextGenerate(true);
+      setItems(sharedRowsToGroceryItems(rows));
+      const mid = rows[0]?.market_id as MarketId | undefined;
+      if (mid && MARKETS[mid]) {
+        setMarketId(mid);
+        setMarketPreference(mid);
+      }
+      toast.success(`Loaded ${rows.length} shared items`);
+    } catch (error) {
+      console.error(error);
+      toast.error(error instanceof Error ? error.message : "Could not load shared list");
+    } finally {
+      setSyncing(false);
+    }
+  };
+
   const handleAddManual = () => {
     if (!manualName.trim()) return;
     setItems((prev) => addManualGroceryItem(prev, manualName, manualQty.trim(), "other", marketId));
@@ -205,6 +289,30 @@ const GroceryListPanel = ({ planName, sources, onCostChange }: GroceryListPanelP
               <Download className="mr-1.5 h-4 w-4" />
               Offline
             </Button>
+            {householdInfo && (
+              <>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  disabled={syncing || !householdInfo.shareGrocery}
+                  onClick={handleSyncHousehold}
+                >
+                  <Users className="mr-1.5 h-4 w-4" />
+                  Sync household
+                </Button>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  disabled={syncing}
+                  onClick={handleLoadHousehold}
+                >
+                  <RefreshCw className="mr-1.5 h-4 w-4" />
+                  Load shared
+                </Button>
+              </>
+            )}
             <Button type="button" variant="outline" size="sm" onClick={handleCopy}>
               <Copy className="mr-1.5 h-4 w-4" />
               Copy
@@ -254,6 +362,36 @@ const GroceryListPanel = ({ planName, sources, onCostChange }: GroceryListPanelP
             <Plus className="mr-1.5 h-4 w-4" />
             Add
           </Button>
+        </div>
+
+        <div className="rounded-lg border p-4 space-y-3">
+          <div>
+            <h3 className="text-sm font-semibold">Checkout & mobile money</h3>
+            <p className="text-xs text-muted-foreground">
+              Open a marketplace, send the list on WhatsApp, or follow M-Pesa / MoMo notes.
+              LadhaQuest does not take payment — you settle with the vendor.
+            </p>
+          </div>
+          <div className="grid gap-2 sm:grid-cols-2">
+            {checkoutOptions.map(({ vendor, url }) => (
+              <a
+                key={vendor.id}
+                href={url || "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start justify-between gap-2 rounded-md border p-3 text-sm hover:border-primary/50"
+              >
+                <div className="min-w-0">
+                  <p className="font-medium">{vendor.name}</p>
+                  <p className="text-xs text-muted-foreground line-clamp-2">
+                    {vendor.description}
+                  </p>
+                  <p className="mt-1 text-[11px] text-muted-foreground">{vendor.checkoutHint}</p>
+                </div>
+                <ExternalLink className="h-4 w-4 shrink-0 text-muted-foreground" />
+              </a>
+            ))}
+          </div>
         </div>
 
         {groups.map((group) => (

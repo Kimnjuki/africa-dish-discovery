@@ -32,6 +32,7 @@ import {
   regenerateInviteCode,
   removeMember,
   setSharePantry,
+  setShareGrocery,
   type Household,
   type HouseholdMember,
   type HouseholdRole,
@@ -148,6 +149,21 @@ const HouseholdPage = () => {
       await setSharePantry(household.id, checked);
       toast.success(checked ? "Pantry sharing on" : "Pantry sharing off");
       await refresh();
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Update failed";
+      toast.error(message);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const onToggleGroceryShare = async (checked: boolean) => {
+    if (!household || myRole !== "owner") return;
+    setBusy(true);
+    try {
+      await setShareGrocery(household.id, checked);
+      setHousehold({ ...household, share_grocery: checked });
+      toast.success(checked ? "Grocery list sharing on" : "Grocery list sharing off");
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Update failed";
       toast.error(message);
@@ -344,6 +360,21 @@ const HouseholdPage = () => {
                     onCheckedChange={onToggleShare}
                     disabled={busy || myRole !== "owner"}
                     aria-label="Share pantry with household"
+                  />
+                </div>
+
+                <div className="flex items-center justify-between gap-4">
+                  <div>
+                    <p className="font-medium">Share grocery lists</p>
+                    <p className="text-sm text-muted-foreground">
+                      Meal planner lists can sync so everyone shops the same stall list.
+                    </p>
+                  </div>
+                  <Switch
+                    checked={household.share_grocery !== false}
+                    onCheckedChange={onToggleGroceryShare}
+                    disabled={busy || myRole !== "owner"}
+                    aria-label="Share grocery lists with household"
                   />
                 </div>
               </CardContent>

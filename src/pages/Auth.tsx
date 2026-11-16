@@ -14,6 +14,7 @@ import {
   getAuthRedirectUrl,
   parseAuthUrlError,
 } from "@/lib/authRedirect";
+import { PhoneAuthForm } from "@/components/auth/PhoneAuthForm";
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -468,6 +469,10 @@ const Auth = () => {
                 </svg>
                 Continue with Google
               </Button>
+            )}
+
+            {!isPasswordReset && !isUpdatingPassword && (
+              <PhoneAuthForm disabled={loading} />
             )}
 
             {!isPasswordReset && !isUpdatingPassword && (

@@ -223,7 +223,12 @@ Do **not** start with Next.js migration or F16/F17.
 - Tests: `npm run test:market` (16) + substitutions (24). Apply migration `20261114120000_competitive_gaps_trust_box.sql` for photo column + storage policies.
 - **Cook-from-expiring:** Pantry “Show these first” filter + urgency-first match sort.
 - **IndexedDB mirror:** Offline grocery/cook packs/recipes/pantry mirrored; hydrate on boot if localStorage was evicted.
-- Remaining: live vendor APIs / mobile-money checkout; phone auth; shared grocery write-sync.
+- **F10 shared grocery:** `household_grocery_items` + Sync/Load on meal-planner list; Household `share_grocery` toggle.
+- **F10 phone auth UI:** SMS OTP form on `/auth` (needs Supabase Phone provider + SMS gateway).
+- **F13 mobile-money checkout path:** Jumia/Glovo/WhatsApp/M-Pesa/MoMo deep links on grocery panel (no in-app payment capture).
+- **Recently viewed:** continue-cooking strip on My List.
+- Remaining: email household invites; live partner cart APIs; full in-app mobile-money capture.
+- Migrations to apply: `20261114120000_competitive_gaps_trust_box.sql`, `20261116100000_f10_shared_grocery.sql`.
 
 **2026-11-14 — Phase 1 F08 provenance / JSON-LD / ratings (chunk 6)**
 

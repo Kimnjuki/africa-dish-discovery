@@ -16,6 +16,7 @@ import {
   removeFromFolder,
   type RecipeBoxState,
 } from "@/lib/recipeBox";
+import { getRecentlyViewed, type RecentRecipe } from "@/lib/recentlyViewed";
 import { toast } from "sonner";
 
 const TABS: { id: SavedItemType; label: string; path: (s: string) => string }[] = [
@@ -27,13 +28,19 @@ const TABS: { id: SavedItemType; label: string; path: (s: string) => string }[] 
 const MyList = () => {
   const { user, items, loading, remove } = useSavedItems();
   const [box, setBox] = useState<RecipeBoxState>(() => getRecipeBox());
+  const [recent, setRecent] = useState<RecentRecipe[]>(() => getRecentlyViewed());
   const [newFolder, setNewFolder] = useState("");
   const [activeFolder, setActiveFolder] = useState("favorites");
 
   useEffect(() => {
     const onChange = () => setBox(getRecipeBox());
+    const onRecent = () => setRecent(getRecentlyViewed());
     window.addEventListener("ladhaquest:recipe-box", onChange);
-    return () => window.removeEventListener("ladhaquest:recipe-box", onChange);
+    window.addEventListener("ladhaquest:recently-viewed", onRecent);
+    return () => {
+      window.removeEventListener("ladhaquest:recipe-box", onChange);
+      window.removeEventListener("ladhaquest:recently-viewed", onRecent);
+    };
   }, []);
 
   const folderEntries = box.entries.filter((e) => e.folderId === activeFolder);
@@ -58,6 +65,27 @@ const MyList = () => {
           <Heart className="w-8 h-8 text-primary" />
           My list
         </h1>
+
+        {recent.length > 0 && (
+          <section className="mb-10 space-y-4">
+            <h2 className="text-xl font-semibold">Continue cooking</h2>
+            <p className="text-sm text-muted-foreground">Recently opened recipes on this device.</p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {recent.slice(0, 9).map((r) => (
+                <Card key={r.id}>
+                  <CardContent className="p-4">
+                    <Link to={`/recipe/${r.slug}`} className="font-medium hover:text-primary block truncate">
+                      {r.name}
+                    </Link>
+                    {r.country && (
+                      <p className="text-xs text-muted-foreground">{r.country}</p>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
+        )}
 
         <section className="mb-10 space-y-4">
           <div className="flex items-center gap-2">

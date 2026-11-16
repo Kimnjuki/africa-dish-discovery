@@ -27,6 +27,7 @@ import { itemText, toList, toSlug } from "@/lib/recipeText";
 import { Clock, Users, ChefHat, Utensils, Lightbulb, Globe2, Minus, Plus, BookOpen } from "lucide-react";
 import { withParsedRecipeFields, type CookableRecipe } from "@/types/content";
 import { cacheRecipe, getCachedRecipes, isBrowserOffline } from "@/lib/offlineStore";
+import { trackRecipeView } from "@/lib/recentlyViewed";
 import { useDataSaver } from "@/hooks/useDataSaver";
 import { DataSaverImage } from "@/components/DataSaverImage";
 
@@ -144,6 +145,13 @@ const RecipeDetail = () => {
           slug: parsed.slug || slug,
           ingredients: parsed.ingredients,
           steps: parsed.steps,
+        });
+        trackRecipeView({
+          id: parsed.id!,
+          slug: parsed.slug || slug || "",
+          name: parsed.name,
+          country: parsed.country || undefined,
+          imageUrl: parsed.image_url,
         });
       }
       if (rec?.country) {

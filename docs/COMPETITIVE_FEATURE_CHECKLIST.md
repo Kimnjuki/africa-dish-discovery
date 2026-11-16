@@ -52,7 +52,7 @@ Legend: `[ ]` to do · `[~]` partial in platform · `[x]` done
 - [x] AI meal planner + market-aware shopping list (stall groups, local cost estimates, offline snapshot, one-tap swaps)
 - [x] "Cook from what's expiring" queue (pantry match filter + urgency-first sort)
 - [x] Save-to-collections / Recipe Box folders (device-local; DB folders migration included)
-- [ ] Recently viewed + continue cooking
+- [x] Recently viewed + continue cooking (My List + recipe detail tracking)
 - [x] Global search with typo tolerance, ingredient exclusion, and dish-vs-recipe tabs (synonym layer shipped)
 
 ## 6. Trust, SEO & performance
