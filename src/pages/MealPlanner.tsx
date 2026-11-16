@@ -370,6 +370,7 @@ const MealPlanner = () => {
         description="Plan your weekly African cuisine meals and automatically generate shopping lists. Organize breakfast, lunch, and dinner with authentic African recipes."
         keywords="meal planning, weekly meal plan, african meal prep, shopping list generator, meal organization"
         canonical="https://www.ladhaquest.com/meal-planner"
+        noIndex
       />
       
       <Navigation />

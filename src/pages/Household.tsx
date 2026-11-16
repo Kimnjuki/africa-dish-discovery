@@ -218,6 +218,7 @@ const HouseholdPage = () => {
         title="Household sharing | LadhaQuest"
         description="Create or join a household to share pantry ingredients with family members."
         canonical="https://www.ladhaquest.com/household"
+        noIndex
       />
       <Navigation />
       <main className="pt-24 pb-16 container mx-auto px-6 max-w-3xl">

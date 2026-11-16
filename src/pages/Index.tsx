@@ -43,10 +43,11 @@ const Index = () => {
       )}
     <div className="min-h-screen">
       <PageMeta
-        title="LadhaQuest | Authentic African & World Recipes | Smart Pantry Matching"
-        description="Discover authentic recipes from Africa and around the world. Smart pantry matching, meal planning, cultural stories, and step-by-step cooking guides."
-        keywords="african recipes, world recipes, recipe finder, pantry management, meal planning, cooking guide, nigerian recipes, ethiopian food, smart kitchen"
+        title="LadhaQuest | 2,100+ Authentic African Recipes from 54 Countries"
+        description="Cook authentic African food at home. 2,100+ recipes across West, East, North, Central, and Southern Africa — with local ingredient names, substitutions, meal planning, and offline cook mode."
+        keywords="african recipes, african food, nigerian recipes, jollof rice, egusi soup, ethiopian recipes, kenyan food, ghanaian recipes, moroccan tagine, african cooking"
         canonical="https://www.ladhaquest.com/"
+        ogImage="https://www.ladhaquest.com/og-image.jpg"
       />
       
       <Navigation />

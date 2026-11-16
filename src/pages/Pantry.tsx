@@ -12,6 +12,7 @@ const Pantry = () => {
         description="AI-powered pantry management for African cooking. Get personalized recipe suggestions based on your ingredients, smart substitutions, and reduce food waste."
         keywords="pantry management, recipe matching, ingredient substitution, african cooking, smart kitchen, meal planning, food waste reduction"
         canonical="https://www.ladhaquest.com/pantry"
+        noIndex
       />
 
       <Navigation />

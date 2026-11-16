@@ -126,6 +126,7 @@ const OfflineRecipes = () => {
         title="Offline Mode | LadhaQuest"
         description="Access saved African recipes, your last pantry snapshot, and meal plan offline. Enable data saver for low-bandwidth cooking."
         keywords="offline recipes, cached recipes, data saver, african food offline"
+        noIndex
       />
 
       <Navigation />

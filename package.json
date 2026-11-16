@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "prebuild": "node scripts/generate-sitemaps.mjs",
+    "build": "vite build && node scripts/prerender-seo.mjs",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit -p tsconfig.app.json",
@@ -15,6 +16,8 @@
     "test:phone": "node --experimental-strip-types scripts/test-phone-auth.ts",
     "test:offline": "node --experimental-strip-types scripts/test-offline-store.ts",
     "test:import": "node --experimental-strip-types scripts/test-recipe-import.ts",
+    "sitemap": "node scripts/generate-sitemaps.mjs",
+    "prerender": "node scripts/prerender-seo.mjs",
     "preview": "vite preview"
   },
   "dependencies": {

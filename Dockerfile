@@ -16,6 +16,19 @@ RUN npm config set registry https://registry.npmjs.org \
     || npm ci --no-audit --no-fund
 
 COPY . .
+
+# Sitemap + African recipe prerender need Supabase at build time (Coolify build env).
+ARG SUPABASE_URL
+ARG SUPABASE_SECRET_KEY
+ARG SUPABASE_PUBLISHABLE_KEY
+ARG VITE_SUPABASE_URL
+ARG VITE_SUPABASE_PUBLISHABLE_KEY
+ENV SUPABASE_URL=$SUPABASE_URL \
+    SUPABASE_SECRET_KEY=$SUPABASE_SECRET_KEY \
+    SUPABASE_PUBLISHABLE_KEY=$SUPABASE_PUBLISHABLE_KEY \
+    VITE_SUPABASE_URL=$VITE_SUPABASE_URL \
+    VITE_SUPABASE_PUBLISHABLE_KEY=$VITE_SUPABASE_PUBLISHABLE_KEY
+
 RUN npm run build
 
 FROM nginx:alpine

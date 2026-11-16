@@ -349,6 +349,7 @@ export default function ImportRecipe() {
       <PageMeta
         title="Import a recipe | LadhaQuest"
         description="Import recipes from URLs, photos, voice notes, and family notes — then adapt ingredients for your local market."
+        noIndex
       />
       <Navigation />
       <main className="flex-1 container mx-auto px-4 py-8 max-w-4xl space-y-8">

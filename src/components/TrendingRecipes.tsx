@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import RecipeImagePlaceholder from "./RecipeImagePlaceholder";
 interface TrendingRecipe {
   id: string;
   name: string;
+  slug?: string | null;
   country: string;
   summary?: string;
   prep_time?: number;
@@ -19,6 +20,7 @@ interface TrendingRecipe {
   category?: string;
   continent?: string;
   tags?: string[];
+  is_african?: boolean | null;
 }
 
 type FilterTab = "trending" | "quick" | "seasonal" | "new";
@@ -36,22 +38,32 @@ const TrendingRecipes = () => {
   const fetchRecipes = async (tab: FilterTab) => {
     setLoading(true);
     try {
-      let query = supabase.from('recipes').select('id, name, country, summary, prep_time, cook_time, difficulty, image_url, category, continent, tags');
+      // Africa-first surface: avoid newest Global imports dominating the homepage.
+      // Use a single .or() — PostgREST only keeps one `or` param.
+      const africa = "is_african.eq.true,continent.eq.Africa";
+      let query = supabase
+        .from("recipes")
+        .select(
+          "id, name, slug, country, summary, prep_time, cook_time, difficulty, image_url, category, continent, tags, is_african"
+        );
 
       switch (tab) {
         case "trending":
-          query = query.order('created_at', { ascending: false }).limit(8);
+        case "new":
+          query = query.or(africa).order("created_at", { ascending: false }).limit(8);
           break;
         case "quick":
-          // Under 30 minutes total
-          query = query.or('prep_time.lte.15,cook_time.lte.15').order('prep_time', { ascending: true }).limit(8);
+          query = query
+            .or(africa)
+            .lte("cook_time", 25)
+            .order("cook_time", { ascending: true })
+            .limit(8);
           break;
         case "seasonal":
-          // Summer/spring recipes - light dishes
-          query = query.or('category.ilike.%salad%,category.ilike.%drink%,tags.cs.{light}').limit(8);
-          break;
-        case "new":
-          query = query.order('created_at', { ascending: false }).limit(8);
+          query = query
+            .or(africa)
+            .ilike("category", "%stew%")
+            .limit(8);
           break;
       }
 
@@ -59,7 +71,7 @@ const TrendingRecipes = () => {
       if (error) throw error;
       setRecipes(data || []);
     } catch (error) {
-      console.error('Error fetching trending recipes:', error);
+      console.error("Error fetching trending recipes:", error);
     } finally {
       setLoading(false);
     }
@@ -84,7 +96,7 @@ const TrendingRecipes = () => {
             Discover What's <span className="text-gradient">Cooking</span>
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Explore trending recipes, quick meals, and seasonal favorites from around the world.
+            Explore trending African recipes, quick weeknight meals, and seasonal favorites from across the continent.
           </p>
         </div>
 
@@ -119,53 +131,52 @@ const TrendingRecipes = () => {
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {recipes.slice(0, 8).map((recipe, index) => (
-              <Card
-                key={recipe.id}
-                className="group cursor-pointer hover:shadow-warm transition-all duration-300 overflow-hidden"
-                onClick={() => navigate('/recipes')}
-              >
-                <div className="relative aspect-square overflow-hidden">
-                  <RecipeImagePlaceholder
-                    name={recipe.name}
-                    country={recipe.country}
-                    imageUrl={recipe.image_url}
-                    className="w-full h-full"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                  
-                  {/* Rank badge for trending */}
-                  {activeTab === "trending" && index < 3 && (
-                    <div className="absolute top-2 left-2 w-7 h-7 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center text-xs font-bold">
-                      #{index + 1}
-                    </div>
-                  )}
+            {recipes.slice(0, 8).map((recipe, index) => {
+              const href = recipe.slug ? `/recipe/${recipe.slug}` : "/recipe-index";
+              return (
+                <Link key={recipe.id} to={href} className="block group">
+                  <Card className="hover:shadow-warm transition-all duration-300 overflow-hidden h-full">
+                    <div className="relative aspect-square overflow-hidden">
+                      <RecipeImagePlaceholder
+                        name={recipe.name}
+                        country={recipe.country}
+                        imageUrl={recipe.image_url}
+                        className="w-full h-full"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
 
-                  {/* Quick time badge */}
-                  {(recipe.prep_time || 0) + (recipe.cook_time || 0) <= 30 && (
-                    <Badge className="absolute top-2 right-2 bg-primary/90 text-primary-foreground text-xs gap-1">
-                      <Zap className="w-3 h-3" />
-                      Quick
-                    </Badge>
-                  )}
-
-                  <div className="absolute bottom-0 left-0 right-0 p-3">
-                    <h3 className="text-white font-semibold text-sm line-clamp-2 drop-shadow-lg">
-                      {recipe.name}
-                    </h3>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-white/80 text-xs">{recipe.country}</span>
-                      {(recipe.prep_time || recipe.cook_time) && (
-                        <span className="text-white/80 text-xs flex items-center gap-0.5">
-                          <Clock className="w-3 h-3" />
-                          {(recipe.prep_time || 0) + (recipe.cook_time || 0)}m
-                        </span>
+                      {activeTab === "trending" && index < 3 && (
+                        <div className="absolute top-2 left-2 w-7 h-7 bg-destructive text-destructive-foreground rounded-full flex items-center justify-center text-xs font-bold">
+                          #{index + 1}
+                        </div>
                       )}
+
+                      {(recipe.prep_time || 0) + (recipe.cook_time || 0) <= 30 && (
+                        <Badge className="absolute top-2 right-2 bg-primary/90 text-primary-foreground text-xs gap-1">
+                          <Zap className="w-3 h-3" />
+                          Quick
+                        </Badge>
+                      )}
+
+                      <div className="absolute bottom-0 left-0 right-0 p-3">
+                        <h3 className="text-white font-semibold text-sm line-clamp-2 drop-shadow-lg">
+                          {recipe.name}
+                        </h3>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="text-white/80 text-xs">{recipe.country}</span>
+                          {(recipe.prep_time || recipe.cook_time) && (
+                            <span className="text-white/80 text-xs flex items-center gap-0.5">
+                              <Clock className="w-3 h-3" />
+                              {(recipe.prep_time || 0) + (recipe.cook_time || 0)}m
+                            </span>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </Card>
-            ))}
+                  </Card>
+                </Link>
+              );
+            })}
           </div>
         )}
 

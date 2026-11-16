@@ -65,7 +65,7 @@ const Hero = () => {
         {/* Floating Stats */}
         <div className="mt-12 grid max-w-2xl grid-cols-3 gap-2 sm:mt-16 sm:gap-8">
           {[
-            { number: "1,700+", label: "Recipes", icon: ChefHat },
+            { number: "2,100+", label: "Recipes", icon: ChefHat },
             { number: "5", label: "Regions", icon: MapPin },
             { number: "54", label: "Countries", icon: Globe },
           ].map((stat, index) => (

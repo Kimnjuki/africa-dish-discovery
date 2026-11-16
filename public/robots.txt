@@ -13,5 +13,21 @@ Allow: /
 User-agent: *
 Allow: /
 
+# App-only surfaces (auth / personalization) — avoid crawl budget waste
+Disallow: /auth
+Disallow: /my-list
+Disallow: /household
+Disallow: /pantry
+Disallow: /meal-planner
+Disallow: /meal-planner-calendar
+Disallow: /import-recipe
+Disallow: /submit-recipe
+Disallow: /offline-recipes
+Disallow: /editorial-review
+Disallow: /admin/
+Disallow: /recipe-uploader
+Disallow: /image-verification
+Disallow: /image-scraper
+Disallow: /recipe-gallery
+
 Sitemap: https://www.ladhaquest.com/sitemap.xml
-Sitemap: https://www.ladhaquest.com/sitemap-recipes.xml

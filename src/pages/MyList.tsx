@@ -58,6 +58,7 @@ const MyList = () => {
       <PageMeta
         title="My list | LadhaQuest"
         description="Your saved African dishes, recipes, Recipe Box folders and countries."
+        noIndex
       />
       <Navigation />
       <main className="pt-24 pb-16 container mx-auto px-6">

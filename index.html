@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="google-site-verification" content="dPmFX7u2osDHkceM9ocHpcC81UT8aIxl9vQ-KeBgoMY" />
-    <meta name="google-site-verification" content="C8jlCrqOmuBxww2Q2U2CFY8YOYoZPglzSDhoSZFNRNM" />
     
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#D97706" />
@@ -16,40 +15,64 @@
     <link rel="manifest" href="/manifest.webmanifest" />
     
     <!-- Primary Meta Tags -->
-    <title>LadhaQuest | Authentic African & World Recipes | Smart Pantry Matching</title>
-    <meta name="description" content="Discover authentic African recipes from West, East, North, and Southern Africa. Our smart pantry intelligence helps you cook with ingredients you already have. Join 10,000+ home cooks." />
-    <meta name="keywords" content="african recipes, african food, west african recipes, nigerian recipes, ghanaian food, kenyan cuisine, ethiopian recipes, pantry management, recipe matching, jollof rice, doro wat, bobotie" />
+    <title>LadhaQuest | 2,100+ Authentic African Recipes from 54 Countries</title>
+    <meta name="description" content="Cook authentic African food at home. 2,100+ recipes across West, East, North, Central, and Southern Africa — with local ingredient names, substitutions, meal planning, and offline cook mode." />
+    <meta name="keywords" content="african recipes, african food, nigerian recipes, jollof rice, egusi soup, ethiopian recipes, doro wat, kenyan food, ghanaian recipes, moroccan tagine, african cooking, pantry matching" />
     <meta name="author" content="LadhaQuest" />
-    <meta name="robots" content="index, follow" />
-    <link rel="canonical" href="https://www.ladhaquest.com" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <link rel="canonical" href="https://www.ladhaquest.com/" />
 
     <!-- Open Graph / Facebook -->
-    <meta property="og:title" content="LadhaQuest | Authentic African Recipes with Smart Pantry Matching" />
-    <meta property="og:description" content="Discover authentic African recipes with smart pantry intelligence. Cook with ingredients you already have. 50+ recipes from across Africa." />
+    <meta property="og:title" content="LadhaQuest | 2,100+ Authentic African Recipes" />
+    <meta property="og:description" content="Africa-first recipe platform with local ingredients, substitutions, meal plans, and offline cooking. Explore dishes from all 54 African countries." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.ladhaquest.com" />
-    <meta property="og:image" content="https://www.ladhaquest.com/placeholder.svg" />
+    <meta property="og:url" content="https://www.ladhaquest.com/" />
+    <meta property="og:image" content="https://www.ladhaquest.com/og-image.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:site_name" content="LadhaQuest" />
+    <meta property="og:locale" content="en_US" />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="LadhaQuest | Authentic African Recipes" />
-    <meta name="twitter:description" content="Discover authentic African recipes with smart pantry matching. Cook with ingredients you already have." />
-    <meta name="twitter:image" content="https://www.ladhaquest.com/placeholder.svg" />
+    <meta name="twitter:description" content="2,100+ African recipes with local ingredient names, market substitutions, and offline cook packs." />
+    <meta name="twitter:image" content="https://www.ladhaquest.com/og-image.jpg" />
 
     <!-- JSON-LD Structured Data for SEO -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "LadhaQuest",
-      "description": "Discover 50+ iconic African recipes from across the continent",
-      "url": "https://www.ladhaquest.com",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://www.ladhaquest.com/recipe-index?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://www.ladhaquest.com/#website",
+          "name": "LadhaQuest",
+          "url": "https://www.ladhaquest.com/",
+          "description": "Africa-first cooking platform with 2,100+ authentic recipes, local substitutions, and meal planning.",
+          "publisher": { "@id": "https://www.ladhaquest.com/#organization" },
+          "inLanguage": "en",
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://www.ladhaquest.com/recipe-index?q={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://www.ladhaquest.com/#organization",
+          "name": "LadhaQuest",
+          "url": "https://www.ladhaquest.com/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.ladhaquest.com/pwa-512x512.png"
+          },
+          "description": "Africa-first recipe discovery and cooking OS for households, diaspora, and creators."
+        }
+      ]
     }
     </script>
   </head>

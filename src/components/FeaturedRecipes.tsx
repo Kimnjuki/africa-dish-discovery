@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,7 @@ import { withParsedRecipeFields, type IngredientValue, type StepValue } from "@/
 interface Recipe {
   id: string;
   name: string;
+  slug?: string | null;
   country: string;
   summary?: string;
   prep_time?: number;
@@ -40,16 +41,29 @@ const FeaturedRecipes = () => {
 
   const fetchFeaturedRecipes = async () => {
     try {
+      const africaFilter = "is_african.eq.true,continent.eq.Africa";
       const { data, error } = await supabase
-        .from('recipes')
-        .select('*')
-        .limit(6)
-        .order('created_at', { ascending: false });
+        .from("recipes")
+        .select("*")
+        .or(africaFilter)
+        .not("image_url", "is", null)
+        .order("created_at", { ascending: false })
+        .limit(6);
 
       if (error) throw error;
-      setRecipes((data || []).map(withParsedRecipeFields));
+      let rows = data || [];
+      if (rows.length < 6) {
+        const { data: fallback } = await supabase
+          .from("recipes")
+          .select("*")
+          .or(africaFilter)
+          .order("created_at", { ascending: false })
+          .limit(6);
+        rows = fallback || rows;
+      }
+      setRecipes(rows.map(withParsedRecipeFields));
     } catch (error) {
-      console.error('Error fetching featured recipes:', error);
+      console.error("Error fetching featured recipes:", error);
     } finally {
       setLoading(false);
     }
@@ -128,100 +142,102 @@ const FeaturedRecipes = () => {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {recipes.map((recipe, index) => (
-            <Card 
-              key={recipe.id}
-              className="group border-primary/10 shadow-soft hover:shadow-warm transition-all duration-300 cursor-pointer transform hover:scale-[1.02] animate-slide-in-up overflow-hidden"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              {/* Recipe Image */}
-              <div className="relative h-48 overflow-hidden">
-                <RecipeImagePlaceholder
-                  name={recipe.name}
-                  country={recipe.country}
-                  imageUrl={recipe.image_url}
-                  className="w-full h-full"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
-                <div className="absolute top-3 left-3">
-                  <Badge variant="secondary" className="bg-primary/90 text-primary-foreground text-xs">
-                    {recipe.country}
-                  </Badge>
+          {recipes.map((recipe, index) => {
+            const href = recipe.slug ? `/recipe/${recipe.slug}` : "/recipe-index";
+            return (
+              <Card
+                key={recipe.id}
+                className="group border-primary/10 shadow-soft hover:shadow-warm transition-all duration-300 animate-slide-in-up overflow-hidden"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <div className="relative h-48 overflow-hidden">
+                  <Link to={href} className="block h-full">
+                    <RecipeImagePlaceholder
+                      name={recipe.name}
+                      country={recipe.country}
+                      imageUrl={recipe.image_url}
+                      className="w-full h-full"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-background/60 to-transparent" />
+                    <div className="absolute top-3 left-3">
+                      <Badge variant="secondary" className="bg-primary/90 text-primary-foreground text-xs">
+                        {recipe.country}
+                      </Badge>
+                    </div>
+                  </Link>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute top-3 right-3 z-10 bg-background/80 hover:bg-background"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      addToFavorites(recipe);
+                    }}
+                    title={user ? "Add to favorites" : "Sign in to save"}
+                  >
+                    {user ? <Heart className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
+                  </Button>
                 </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute top-3 right-3 bg-background/80 hover:bg-background"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    addToFavorites(recipe);
-                  }}
-                  title={user ? "Add to favorites" : "Sign in to save"}
-                >
-                  {user ? <Heart className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
-                </Button>
-              </div>
 
-              <CardHeader className="pb-3">
-                <div className="flex items-start justify-between">
-                  <div>
+                <CardHeader className="pb-3">
+                  <Link to={href}>
                     <h3 className="text-lg font-bold text-primary group-hover:text-primary/80 transition-colors line-clamp-1">
                       {recipe.name}
                     </h3>
+                  </Link>
+                </CardHeader>
+
+                <CardContent className="pt-0">
+                  {recipe.summary && (
+                    <p className="text-sm text-muted-foreground mb-4 leading-relaxed line-clamp-2">
+                      {recipe.summary}
+                    </p>
+                  )}
+
+                  <div className="flex flex-wrap gap-3 mb-4 text-xs text-muted-foreground">
+                    {(recipe.prep_time || recipe.cook_time) && (
+                      <div className="flex items-center gap-1">
+                        <Clock className="w-3 h-3 text-primary" />
+                        <span>{(recipe.prep_time || 0) + (recipe.cook_time || 0)} min</span>
+                      </div>
+                    )}
+                    {recipe.servings && (
+                      <div className="flex items-center gap-1">
+                        <Users className="w-3 h-3 text-primary" />
+                        <span>{recipe.servings}</span>
+                      </div>
+                    )}
+                    {recipe.difficulty && (
+                      <div className="flex items-center gap-1">
+                        <ChefHat className="w-3 h-3 text-primary" />
+                        <span>{recipe.difficulty}</span>
+                      </div>
+                    )}
                   </div>
-                </div>
-              </CardHeader>
 
-              <CardContent className="pt-0">
-                {recipe.summary && (
-                  <p className="text-sm text-muted-foreground mb-4 leading-relaxed line-clamp-2">
-                    {recipe.summary}
-                  </p>
-                )}
-
-                {/* Recipe Stats */}
-                <div className="flex flex-wrap gap-3 mb-4 text-xs text-muted-foreground">
-                  {(recipe.prep_time || recipe.cook_time) && (
-                    <div className="flex items-center gap-1">
-                      <Clock className="w-3 h-3 text-primary" />
-                      <span>{(recipe.prep_time || 0) + (recipe.cook_time || 0)} min</span>
+                  {recipe.tags && recipe.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-1 mb-4">
+                      {recipe.tags.slice(0, 3).map((tag) => (
+                        <Badge key={tag} variant="outline" className="text-xs">
+                          {tag}
+                        </Badge>
+                      ))}
                     </div>
                   )}
-                  {recipe.servings && (
-                    <div className="flex items-center gap-1">
-                      <Users className="w-3 h-3 text-primary" />
-                      <span>{recipe.servings}</span>
-                    </div>
-                  )}
-                  {recipe.difficulty && (
-                    <div className="flex items-center gap-1">
-                      <ChefHat className="w-3 h-3 text-primary" />
-                      <span>{recipe.difficulty}</span>
-                    </div>
-                  )}
-                </div>
 
-                {/* Tags */}
-                {recipe.tags && recipe.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mb-4">
-                    {recipe.tags.slice(0, 3).map(tag => (
-                      <Badge key={tag} variant="outline" className="text-xs">
-                        {tag}
-                      </Badge>
-                    ))}
+                  <div className="flex gap-2">
+                    <Button variant="outline" className="flex-1" asChild>
+                      <Link to={href}>View recipe</Link>
+                    </Button>
+                    <Button variant="earth" className="flex-1" onClick={() => startCooking(recipe)}>
+                      {user ? "Cook" : "Sign in"}
+                    </Button>
                   </div>
-                )}
-
-                <Button 
-                  variant="earth" 
-                  className="w-full"
-                  onClick={() => startCooking(recipe)}
-                >
-                  {user ? "Start Cooking" : "Sign in to Cook"}
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            );
+          })}
         </div>
 
         {/* View All Recipes Button */}

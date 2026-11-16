@@ -62,7 +62,7 @@ Legend: `[ ]` to do · `[~]` partial in platform · `[x]` done
 - [ ] Image licence/attribution line on every photo
 - [ ] Core Web Vitals pass: responsive srcset, lazy-load, LCP hero preload
 - [~] Legal pages + CMP for AdSense
-- [ ] Sitemap segmentation (recipes, dishes, countries, blog) + hreflang if i18n ships
+- [x] Sitemap segmentation (pages/recipes/dishes/countries/blog/stories + index) — `npm run sitemap`; hreflang still open if i18n ships
 
 ## 7. Monetisation & import (Allrecipes / NYT matrix)
 - [x] Freemium soft gates: free discovery/save/lists/import; premium offline packs + AI plans (`premium.ts`, Install unlock)

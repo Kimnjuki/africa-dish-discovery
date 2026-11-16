@@ -7,15 +7,18 @@ interface PageMetaProps {
   ogImage?: string;
   canonical?: string;
   type?: 'website' | 'article';
+  /** App-only surfaces that should not compete in organic search. */
+  noIndex?: boolean;
 }
 
 export const PageMeta = ({
   title,
   description,
   keywords,
-  ogImage = 'https://www.ladhaquest.com/placeholder.svg',
+  ogImage = 'https://www.ladhaquest.com/og-image.jpg',
   canonical,
-  type = 'website'
+  type = 'website',
+  noIndex = false,
 }: PageMetaProps) => {
   useEffect(() => {
     // Set title
@@ -42,12 +45,14 @@ export const PageMeta = ({
     updateMeta('title', title);
     updateMeta('description', description);
     if (keywords) updateMeta('keywords', keywords);
+    updateMeta('robots', noIndex ? 'noindex, nofollow' : 'index, follow');
 
     // Open Graph tags
     updateMeta('og:type', type, true);
     updateMeta('og:title', title, true);
     updateMeta('og:description', description, true);
     updateMeta('og:image', absoluteOg, true);
+    updateMeta('og:url', canonical || window.location.href, true);
     updateMeta('og:site_name', 'LadhaQuest', true);
 
     // Twitter tags
@@ -66,7 +71,7 @@ export const PageMeta = ({
       }
       linkElement.href = canonical;
     }
-  }, [title, description, keywords, ogImage, canonical, type]);
+  }, [title, description, keywords, ogImage, canonical, type, noIndex]);
 
   return null;
 };

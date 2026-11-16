@@ -213,6 +213,12 @@ Do **not** start with Next.js migration or F16/F17.
 
 ## Progress
 
+**2026-11-16 — GSC SEO rescue (near-zero indexation)**
+
+- Diagnosis from GSC exports: 0 clicks / 1 impression / ~3 indexed pages (last 7 days). Live sitemap still only ~17 hubs.
+- Shipped: segmented sitemap index (4,597 URLs), Africa-first homepage surfaces + crawlable recipe links, accurate meta/OG/JSON-LD, `noindex` on app pages, robots disallow for auth surfaces, post-build African recipe HTML prerender shells, nginx sitemap wildcard.
+- GSC next: submit `https://www.ladhaquest.com/sitemap.xml`, request indexing on homepage + head African recipes. Ensure Coolify build has Supabase env for prerender.
+
 **2026-11-16 — Competitive matrix: freemium + recipe import**
 
 - **Import MVP:** `/import-recipe` — URL (JSON-LD client + edge fallback), photo AI extract, voice/paste family notes; `recipeImport.ts` adapts ingredients to local market; mandatory attribution; submits to `uploads` for human review. Edge: `supabase/functions/import-recipe`.

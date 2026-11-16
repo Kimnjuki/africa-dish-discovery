@@ -1,29 +1,141 @@
-import { readFileSync, writeFileSync } from "node:fs";
+/**
+ * Generate segmented XML sitemaps for Google Search Console.
+ *
+ * Output (public/):
+ *   sitemap.xml              — sitemap index (submit this URL in GSC)
+ *   sitemap-pages.xml        — public marketing / browse hubs
+ *   sitemap-recipes.xml      — /recipe/:slug
+ *   sitemap-dishes.xml       — /dish/:slug
+ *   sitemap-countries.xml    — /country/:slug
+ *   sitemap-blog.xml         — /blog/:slug
+ *   sitemap-stories.xml      — /story/:slug (dishes with cultural content)
+ *
+ * Run: npm run sitemap
+ */
+import { readFileSync, writeFileSync, unlinkSync, existsSync } from "node:fs";
+import { resolve, dirname } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const env = Object.fromEntries(
-  readFileSync(".env", "utf8")
-    .split(/\r?\n/)
-    .filter((l) => l && !l.startsWith("#"))
-    .map((l) => {
-      const i = l.indexOf("=");
-      return [l.slice(0, i), l.slice(i + 1).replace(/^"|"$/g, "")];
-    })
-);
-
-const url = env.SUPABASE_URL || env.VITE_SUPABASE_URL;
-const key = env.SUPABASE_SECRET_KEY || env.SUPABASE_SERVICE_ROLE_KEY;
-const headers = { apikey: key, Authorization: `Bearer ${key}` };
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const root = resolve(__dirname, "..");
+const publicDir = resolve(root, "public");
 const site = "https://www.ladhaquest.com";
+const today = new Date().toISOString().slice(0, 10);
 
-async function fetchSlugs(table, fields = "slug") {
+function loadEnv() {
+  const envPath = resolve(root, ".env");
+  if (!existsSync(envPath)) return {};
+  return Object.fromEntries(
+    readFileSync(envPath, "utf8")
+      .split(/\r?\n/)
+      .filter((l) => l && !l.startsWith("#") && l.includes("="))
+      .map((l) => {
+        const i = l.indexOf("=");
+        return [l.slice(0, i).trim(), l.slice(i + 1).trim().replace(/^["']|["']$/g, "")];
+      })
+  );
+}
+
+const env = loadEnv();
+const url = env.SUPABASE_URL || env.VITE_SUPABASE_URL;
+const key =
+  env.SUPABASE_SECRET_KEY ||
+  env.SUPABASE_SERVICE_ROLE_KEY ||
+  env.SUPABASE_PUBLISHABLE_KEY ||
+  env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+if (!url || !key) {
+  console.error("Missing SUPABASE_URL / API key in .env");
+  process.exit(1);
+}
+
+const headers = {
+  apikey: key,
+  Authorization: `Bearer ${key}`,
+  Prefer: "count=exact",
+};
+
+function escapeXml(s) {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
+function toCountrySlug(name) {
+  return String(name)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function formatLastmod(value) {
+  if (!value) return today;
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return today;
+  return d.toISOString().slice(0, 10);
+}
+
+function urlEntry({ loc, lastmod, changefreq = "weekly", priority = "0.6" }) {
+  return `  <url>
+    <loc>${escapeXml(loc.startsWith("http") ? loc : `${site}${loc}`)}</loc>
+    <lastmod>${formatLastmod(lastmod)}</lastmod>
+    <changefreq>${changefreq}</changefreq>
+    <priority>${priority}</priority>
+  </url>`;
+}
+
+function writeUrlset(filename, entries) {
+  const body = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${entries.join("\n")}
+</urlset>
+`;
+  writeFileSync(resolve(publicDir, filename), body);
+  return filename;
+}
+
+function writeIndex(children) {
+  const body = `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${children
+  .map(
+    (name) => `  <sitemap>
+    <loc>${site}/${name}</loc>
+    <lastmod>${today}</lastmod>
+  </sitemap>`
+  )
+  .join("\n")}
+</sitemapindex>
+`;
+  writeFileSync(resolve(publicDir, "sitemap.xml"), body);
+}
+
+async function fetchAll(table, select, { filter = "", order = "slug.asc" } = {}) {
   const pageSize = 1000;
   let from = 0;
   const rows = [];
   while (true) {
+    const qs = new URLSearchParams();
+    qs.set("select", select);
+    if (order) qs.set("order", order);
+    // PostgREST: append filters as query params (e.g. slug=not.is.null)
+    const filterPart = filter ? `&${filter}` : "";
     const res = await fetch(
-      `${url}/rest/v1/${table}?select=${fields}&${fields}=not.is.null&order=${fields}.asc&offset=${from}&limit=${pageSize}`,
-      { headers: { ...headers, Range: `${from}-${from + pageSize - 1}` } }
+      `${url}/rest/v1/${table}?${qs.toString()}${filterPart}&offset=${from}&limit=${pageSize}`,
+      {
+        headers: {
+          ...headers,
+          Range: `${from}-${from + pageSize - 1}`,
+        },
+      }
     );
+    if (!res.ok) {
+      const text = await res.text();
+      throw new Error(`Failed ${table}: ${res.status} ${text}`);
+    }
     const batch = await res.json();
     if (!Array.isArray(batch) || batch.length === 0) break;
     rows.push(...batch);
@@ -33,74 +145,207 @@ async function fetchSlugs(table, fields = "slug") {
   return rows;
 }
 
-const recipes = await fetchSlugs("recipes", "slug");
-const dishes = await fetchSlugs("dishes", "slug");
-
-const staticUrls = [
-  "/",
-  "/recipes",
-  "/recipe-index",
-  "/continents",
-  "/countries",
-  "/atlas",
-  "/cuisine-map",
-  "/meals",
-  "/ingredients",
-  "/pantry",
-  "/meal-planner",
-  "/blog",
-  "/about",
-  "/contact",
-  "/privacy-policy",
-  "/terms-of-service",
-  "/install",
-];
-
-const urlXml = (loc, priority = "0.6", changefreq = "weekly") => `  <url>
-    <loc>${site}${loc}</loc>
-    <changefreq>${changefreq}</changefreq>
-    <priority>${priority}</priority>
-  </url>`;
-
-const index = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${staticUrls.map((p) => urlXml(p, p === "/" ? "1.0" : "0.8", "daily")).join("\n")}
-</urlset>
-`;
-
-const recipeChunks = [];
-const chunkSize = 5000;
-for (let i = 0; i < recipes.length; i += chunkSize) {
-  const slice = recipes.slice(i, i + chunkSize);
-  const body = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${slice
-  .filter((r) => r.slug)
-  .map((r) => urlXml(`/recipe/${r.slug}`, "0.7"))
-  .join("\n")}
-${i === 0
-  ? dishes
-      .filter((d) => d.slug)
-      .map((d) => urlXml(`/dish/${d.slug}`, "0.6"))
-      .join("\n")
-  : ""}
-</urlset>
-`;
-  const name = i === 0 ? "sitemap-recipes.xml" : `sitemap-recipes-${i / chunkSize + 1}.xml`;
-  writeFileSync(`public/${name}`, body);
-  recipeChunks.push(name);
+function readStaticBlogSlugs() {
+  const path = resolve(root, "src/data/blogPosts.ts");
+  if (!existsSync(path)) return [];
+  const src = readFileSync(path, "utf8");
+  const slugs = [...src.matchAll(/slug:\s*"([^"]+)"/g)].map((m) => m[1]);
+  const dates = [...src.matchAll(/publishedAt:\s*"([^"]+)"/g)].map((m) => m[1]);
+  return slugs.map((slug, i) => ({
+    slug,
+    published_at: dates[i] || today,
+  }));
 }
 
-writeFileSync("public/sitemap.xml", index);
-console.log(
-  JSON.stringify(
-    {
-      static: staticUrls.length,
-      recipes: recipes.length,
-      dishes: dishes.length,
-      files: ["sitemap.xml", ...recipeChunks],
-    },
-    null,
-    2
+// —— Public hubs only (no auth-gated app surfaces) ——
+const staticPages = [
+  { path: "/", priority: "1.0", changefreq: "daily" },
+  { path: "/recipes", priority: "0.9", changefreq: "daily" },
+  { path: "/recipe-index", priority: "0.9", changefreq: "daily" },
+  { path: "/countries", priority: "0.9", changefreq: "weekly" },
+  { path: "/continents", priority: "0.8", changefreq: "weekly" },
+  { path: "/atlas", priority: "0.8", changefreq: "weekly" },
+  { path: "/cuisine-map", priority: "0.8", changefreq: "weekly" },
+  { path: "/meals", priority: "0.7", changefreq: "weekly" },
+  { path: "/ingredients", priority: "0.7", changefreq: "weekly" },
+  { path: "/blog", priority: "0.8", changefreq: "weekly" },
+  { path: "/about", priority: "0.5", changefreq: "monthly" },
+  { path: "/contact", priority: "0.5", changefreq: "monthly" },
+  { path: "/install", priority: "0.6", changefreq: "monthly" },
+  { path: "/privacy-policy", priority: "0.3", changefreq: "yearly" },
+  { path: "/terms-of-service", priority: "0.3", changefreq: "yearly" },
+];
+
+console.log("Fetching content from Supabase…");
+
+const [recipes, dishes, recipeCountries, dbBlog] = await Promise.all([
+  fetchAll("recipes", "slug,updated_at,created_at", {
+    filter: "slug=not.is.null",
+    order: "slug.asc",
+  }),
+  fetchAll("dishes", "slug,updated_at,created_at,cultural_significance", {
+    filter: "slug=not.is.null",
+    order: "slug.asc",
+  }),
+  fetchAll("recipes", "country,updated_at", {
+    filter: "country=not.is.null",
+    order: "country.asc",
+  }),
+  fetchAll("blog_posts", "slug,published_at,updated_at,is_published", {
+    filter: "is_published=eq.true&slug=not.is.null",
+    order: "slug.asc",
+  }).catch(() => []),
+]);
+
+const uniqueRecipes = new Map();
+for (const r of recipes) {
+  if (!r.slug) continue;
+  uniqueRecipes.set(r.slug, r);
+}
+
+const uniqueDishes = new Map();
+for (const d of dishes) {
+  if (!d.slug) continue;
+  uniqueDishes.set(d.slug, d);
+}
+
+const countryMap = new Map();
+for (const row of recipeCountries) {
+  const name = row.country?.trim();
+  if (!name) continue;
+  const slug = toCountrySlug(name);
+  if (!slug) continue;
+  const prev = countryMap.get(slug);
+  const last = formatLastmod(row.updated_at);
+  if (!prev || last > prev.lastmod) {
+    countryMap.set(slug, { name, slug, lastmod: last });
+  }
+}
+
+const staticBlog = readStaticBlogSlugs();
+const blogMap = new Map();
+for (const p of staticBlog) blogMap.set(p.slug, p);
+for (const p of dbBlog) {
+  if (p.slug) blogMap.set(p.slug, p);
+}
+
+// Only index story URLs when cultural copy is substantial (avoids 1:1 /dish duplicate noise).
+const storyDishes = [...uniqueDishes.values()].filter(
+  (d) => typeof d.cultural_significance === "string" && d.cultural_significance.trim().length >= 200
+);
+
+// Remove legacy flat sitemap if regenerating index layout
+const legacyExtra = ["sitemap-recipes-2.xml"];
+for (const name of legacyExtra) {
+  const p = resolve(publicDir, name);
+  if (existsSync(p)) unlinkSync(p);
+}
+
+const pagesFile = writeUrlset(
+  "sitemap-pages.xml",
+  staticPages.map((p) =>
+    urlEntry({
+      loc: p.path,
+      lastmod: today,
+      changefreq: p.changefreq,
+      priority: p.priority,
+    })
   )
 );
+
+const recipesFile = writeUrlset(
+  "sitemap-recipes.xml",
+  [...uniqueRecipes.values()].map((r) =>
+    urlEntry({
+      loc: `/recipe/${r.slug}`,
+      lastmod: r.updated_at || r.created_at,
+      changefreq: "weekly",
+      priority: "0.8",
+    })
+  )
+);
+
+const dishesFile = writeUrlset(
+  "sitemap-dishes.xml",
+  [...uniqueDishes.values()].map((d) =>
+    urlEntry({
+      loc: `/dish/${d.slug}`,
+      lastmod: d.updated_at || d.created_at,
+      changefreq: "weekly",
+      priority: "0.7",
+    })
+  )
+);
+
+const countriesFile = writeUrlset(
+  "sitemap-countries.xml",
+  [...countryMap.values()]
+    .sort((a, b) => a.slug.localeCompare(b.slug))
+    .map((c) =>
+      urlEntry({
+        loc: `/country/${c.slug}`,
+        lastmod: c.lastmod,
+        changefreq: "weekly",
+        priority: "0.75",
+      })
+    )
+);
+
+const blogFile = writeUrlset(
+  "sitemap-blog.xml",
+  [...blogMap.values()].map((p) =>
+    urlEntry({
+      loc: `/blog/${p.slug}`,
+      lastmod: p.updated_at || p.published_at,
+      changefreq: "monthly",
+      priority: "0.65",
+    })
+  )
+);
+
+const storiesFile = writeUrlset(
+  "sitemap-stories.xml",
+  storyDishes.map((d) =>
+    urlEntry({
+      loc: `/story/${d.slug}`,
+      lastmod: d.updated_at || d.created_at,
+      changefreq: "monthly",
+      priority: "0.55",
+    })
+  )
+);
+
+const children = [pagesFile, recipesFile, dishesFile, countriesFile, blogFile, storiesFile];
+writeIndex(children);
+
+// Point robots.txt at the index only
+const robotsPath = resolve(publicDir, "robots.txt");
+let robots = existsSync(robotsPath) ? readFileSync(robotsPath, "utf8") : "User-agent: *\nAllow: /\n\n";
+robots = robots.replace(/\n?Sitemap:.*\n?/g, "\n");
+if (!robots.endsWith("\n")) robots += "\n";
+robots += `Sitemap: ${site}/sitemap.xml\n`;
+writeFileSync(robotsPath, robots.replace(/\n{3,}/g, "\n\n"));
+
+const summary = {
+  generatedAt: new Date().toISOString(),
+  submitInGsc: `${site}/sitemap.xml`,
+  files: children,
+  counts: {
+    pages: staticPages.length,
+    recipes: uniqueRecipes.size,
+    dishes: uniqueDishes.size,
+    countries: countryMap.size,
+    blog: blogMap.size,
+    stories: storyDishes.length,
+    totalUrls:
+      staticPages.length +
+      uniqueRecipes.size +
+      uniqueDishes.size +
+      countryMap.size +
+      blogMap.size +
+      storyDishes.length,
+  },
+};
+
+writeFileSync(resolve(publicDir, "sitemap-manifest.json"), JSON.stringify(summary, null, 2));
+console.log(JSON.stringify(summary, null, 2));

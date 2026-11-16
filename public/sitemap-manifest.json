@@ -1,0 +1,21 @@
+{
+  "generatedAt": "2026-11-16T19:50:13.306Z",
+  "submitInGsc": "https://www.ladhaquest.com/sitemap.xml",
+  "files": [
+    "sitemap-pages.xml",
+    "sitemap-recipes.xml",
+    "sitemap-dishes.xml",
+    "sitemap-countries.xml",
+    "sitemap-blog.xml",
+    "sitemap-stories.xml"
+  ],
+  "counts": {
+    "pages": 15,
+    "recipes": 2103,
+    "dishes": 1428,
+    "countries": 156,
+    "blog": 12,
+    "stories": 883,
+    "totalUrls": 4597
+  }
+}
