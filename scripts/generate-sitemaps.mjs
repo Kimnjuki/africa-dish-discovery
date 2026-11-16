@@ -36,7 +36,8 @@ function loadEnv() {
   );
 }
 
-const env = loadEnv();
+// Prefer process.env (Docker/Coolify build args) over local .env file.
+const env = { ...loadEnv(), ...process.env };
 const url = env.SUPABASE_URL || env.VITE_SUPABASE_URL;
 const key =
   env.SUPABASE_SECRET_KEY ||
@@ -45,8 +46,11 @@ const key =
   env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 if (!url || !key) {
-  console.error("Missing SUPABASE_URL / API key in .env");
-  process.exit(1);
+  // Do not fail Coolify/Docker builds — committed public/sitemap*.xml still ship.
+  console.warn(
+    "generate-sitemaps: missing SUPABASE_URL / API key — keeping existing public/sitemap*.xml"
+  );
+  process.exit(0);
 }
 
 const headers = {

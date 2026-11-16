@@ -17,7 +17,8 @@ RUN npm config set registry https://registry.npmjs.org \
 
 COPY . .
 
-# Sitemap + African recipe prerender need Supabase at build time (Coolify build env).
+# Optional: pass these as Coolify build-time args to refresh sitemaps/prerender.
+# Build succeeds without them (committed public/sitemap*.xml + skip prerender).
 ARG SUPABASE_URL
 ARG SUPABASE_SECRET_KEY
 ARG SUPABASE_PUBLISHABLE_KEY
@@ -28,6 +29,15 @@ ENV SUPABASE_URL=$SUPABASE_URL \
     SUPABASE_PUBLISHABLE_KEY=$SUPABASE_PUBLISHABLE_KEY \
     VITE_SUPABASE_URL=$VITE_SUPABASE_URL \
     VITE_SUPABASE_PUBLISHABLE_KEY=$VITE_SUPABASE_PUBLISHABLE_KEY
+
+# Materialize .env for scripts that read the file; empty values are fine.
+RUN { \
+      echo "SUPABASE_URL=${SUPABASE_URL}"; \
+      echo "SUPABASE_SECRET_KEY=${SUPABASE_SECRET_KEY}"; \
+      echo "SUPABASE_PUBLISHABLE_KEY=${SUPABASE_PUBLISHABLE_KEY}"; \
+      echo "VITE_SUPABASE_URL=${VITE_SUPABASE_URL}"; \
+      echo "VITE_SUPABASE_PUBLISHABLE_KEY=${VITE_SUPABASE_PUBLISHABLE_KEY}"; \
+    } > .env
 
 RUN npm run build
 
