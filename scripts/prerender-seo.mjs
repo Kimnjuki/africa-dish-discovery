@@ -12,6 +12,7 @@ import { fileURLToPath } from "node:url";
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, "..");
 const distDir = resolve(root, "dist");
+const publicDir = resolve(root, "public");
 const site = "https://www.ladhaquest.com";
 
 function loadEnv() {
@@ -88,10 +89,22 @@ if (existsSync(publicOg) && !existsSync(resolve(distDir, "og-image.jpg"))) {
   copyFileSync(publicOg, resolve(distDir, "og-image.jpg"));
 }
 
-if (!url || !key) {
-  console.warn("prerender-seo: no Supabase credentials — skipping recipe shells");
-  process.exit(0);
-}
+const hubs = [
+  ["recipes", "African Recipes | Authentic Dishes from West, East, North & Southern Africa | LadhaQuest", "Browse 2,100+ authentic African recipes from West, East, North, Central, and Southern Africa, with local ingredient names and substitutions.", "African recipes"],
+  ["recipe-index", "Recipe Index | Browse African & World Recipes by Country, Diet & Time", "Search the LadhaQuest recipe index by country, diet, and time. Find authentic African dishes you can cook at home.", "Recipe index"],
+  ["countries", "Browse Recipes by Country | LadhaQuest", "Browse LadhaQuest recipes by country and open a food guide for each African cuisine.", "Recipes by country"],
+  ["continents", "Explore African Continents | Regional Cuisines | LadhaQuest", "Explore African cooking by region: West, East, North, Central, and Southern Africa.", "African regions"],
+  ["atlas", "African Food Atlas | Top 50 Dishes, Best Stews & 100 Foods to Try", "Explore the LadhaQuest African food atlas: landmark dishes, stews, and foods to try.", "African food atlas"],
+  ["cuisine-map", "Cuisine Map of Africa | LadhaQuest", "Explore African dishes by region and country on a cuisine map, with native names and cultural context.", "Cuisine map of Africa"],
+  ["meals", "African Meals by Time of Day | Breakfast, Lunch & Dinner | LadhaQuest", "Find African breakfast, lunch, and dinner ideas from across the continent.", "African meals"],
+  ["ingredients", "African Cooking Ingredients Guide | Spices, Staples & Produce | LadhaQuest", "A guide to African cooking ingredients: spices, staples, produce, and how they are used.", "African cooking ingredients"],
+  ["blog", "African Food Blog | Authentic Recipes, Guides & Cooking Tips | LadhaQuest", "Guides and cooking stories from LadhaQuest, covering Jollof, Egusi, Doro Wat, tagine, and more.", "African food blog"],
+  ["about", "About LadhaQuest | Our Mission & Story", "Learn about LadhaQuest's mission to share authentic African recipes, local ingredients, and culinary heritage.", "About LadhaQuest"],
+  ["contact", "Contact Us | LadhaQuest", "Contact the LadhaQuest team about recipes, partnerships, or questions.", "Contact LadhaQuest"],
+  ["install", "Install LadhaQuest App | Offline African Recipes", "Install LadhaQuest for offline access to authentic African recipes.", "Install LadhaQuest"],
+  ["privacy-policy", "Privacy Policy | LadhaQuest", "How LadhaQuest collects, uses, and protects personal information.", "Privacy Policy"],
+  ["terms-of-service", "Terms of Service | LadhaQuest", "The terms that apply when you use LadhaQuest.", "Terms of Service"],
+];
 
 async function fetchAfricanRecipes() {
   const pageSize = 1000;
@@ -216,23 +229,132 @@ function injectMeta(html, recipe) {
   return out;
 }
 
-const baseHtml = readFileSync(indexHtmlPath, "utf8");
-const recipes = await fetchAfricanRecipes();
-let written = 0;
+function publishHtml(urlPath, html) {
+  const rel = urlPath.replace(/^\/+|\/+$/g, "");
+  if (!rel || rel.includes("..")) return;
+  for (const rootDir of [distDir, publicDir]) {
+    const dir = resolve(rootDir, rel);
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(resolve(dir, "index.html"), html);
+  }
+}
 
-for (const recipe of recipes) {
-  if (!recipe.slug) continue;
-  const dir = resolve(distDir, "recipe", recipe.slug);
-  mkdirSync(dir, { recursive: true });
-  writeFileSync(resolve(dir, "index.html"), injectMeta(baseHtml, recipe));
-  written++;
+function shellPage(html, { title, description, canonical, h1 }) {
+  let out = html;
+  out = out.replace(/<title>[^<]*<\/title>/i, `<title>${escapeHtml(title)}</title>`);
+  out = out.replace(
+    /<meta\s+name="description"\s+content="[^"]*"\s*\/?>/i,
+    `<meta name="description" content="${escapeHtml(description)}" />`
+  );
+  out = out.replace(
+    /<link\s+rel="canonical"\s+href="[^"]*"\s*\/?>/i,
+    `<link rel="canonical" href="${canonical}" />`
+  );
+  out = out.replace(
+    /<meta\s+property="og:title"\s+content="[^"]*"\s*\/?>/i,
+    `<meta property="og:title" content="${escapeHtml(title)}" />`
+  );
+  out = out.replace(
+    /<meta\s+property="og:description"\s+content="[^"]*"\s*\/?>/i,
+    `<meta property="og:description" content="${escapeHtml(description)}" />`
+  );
+  out = out.replace(
+    /<meta\s+property="og:url"\s+content="[^"]*"\s*\/?>/i,
+    `<meta property="og:url" content="${canonical}" />`
+  );
+  out = out.replace(
+    /<meta\s+name="twitter:title"\s+content="[^"]*"\s*\/?>/i,
+    `<meta name="twitter:title" content="${escapeHtml(title)}" />`
+  );
+  out = out.replace(
+    /<meta\s+name="twitter:description"\s+content="[^"]*"\s*\/?>/i,
+    `<meta name="twitter:description" content="${escapeHtml(description)}" />`
+  );
+  out = out.replace(/<h1>[^<]*<\/h1>/i, `<h1>${escapeHtml(h1)}</h1>`);
+  return out;
+}
+
+function readStaticBlog() {
+  const path = resolve(root, "src/data/blogPosts.ts");
+  if (!existsSync(path)) return [];
+  const src = readFileSync(path, "utf8");
+  const titles = [...src.matchAll(/title:\s*"([^"]+)"/g)].map((m) => m[1]);
+  const slugs = [...src.matchAll(/slug:\s*"([^"]+)"/g)].map((m) => m[1]);
+  const excerpts = [...src.matchAll(/excerpt:\s*"([^"]+)"/g)].map((m) => m[1]);
+  return slugs.map((slug, i) => ({
+    slug,
+    title: titles[i] || slug,
+    excerpt: excerpts[i] || "",
+  }));
+}
+
+const baseHtml = readFileSync(indexHtmlPath, "utf8");
+let hubCount = 0;
+for (const [path, title, description, h1] of hubs) {
+  publishHtml(
+    path,
+    shellPage(baseHtml, {
+      title,
+      description,
+      canonical: `${site}/${path}`,
+      h1,
+    })
+  );
+  hubCount++;
+}
+
+for (const post of readStaticBlog()) {
+  const title = `${post.title} | LadhaQuest Blog`;
+  const description = post.excerpt || post.title;
+  publishHtml(
+    `blog/${post.slug}`,
+    shellPage(baseHtml, {
+      title,
+      description,
+      canonical: `${site}/blog/${post.slug}`,
+      h1: post.title,
+    })
+  );
+  hubCount++;
+}
+
+let written = 0;
+let countryCount = 0;
+if (!url || !key) {
+  console.warn("prerender-seo: no Supabase credentials — skipping recipe and country shells");
+} else {
+  const recipes = await fetchAfricanRecipes();
+  const countries = new Map();
+  for (const recipe of recipes) {
+    if (!recipe.slug) continue;
+    publishHtml(`recipe/${recipe.slug}`, injectMeta(baseHtml, recipe));
+    written++;
+    const name = String(recipe.country || "").trim();
+    if (!name) continue;
+    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+    if (slug && !countries.has(slug)) countries.set(slug, name);
+  }
+  for (const [slug, name] of countries) {
+    publishHtml(
+      `country/${slug}`,
+      shellPage(baseHtml, {
+        title: `${name} Food Guide — Authentic Recipes & Cuisine | LadhaQuest`,
+        description: `Explore authentic ${name} recipes on LadhaQuest, with local dishes, ingredients, and cooking context.`,
+        canonical: `${site}/country/${slug}`,
+        h1: `${name} recipes`,
+      })
+    );
+    countryCount++;
+  }
 }
 
 console.log(
   JSON.stringify(
     {
+      prerenderedHubs: hubCount,
+      prerenderedCountries: countryCount,
       prerenderedRecipes: written,
-      output: "dist/recipe/<slug>/index.html",
+      output: "dist and public HTML shells",
     },
     null,
     2
