@@ -64,13 +64,25 @@ function asList(value) {
   return [];
 }
 
+function publicSupabase() {
+  const path = resolve(root, "src/integrations/supabase/client.ts");
+  if (!existsSync(path)) return {};
+  const src = readFileSync(path, "utf8");
+  return {
+    url: src.match(/SUPABASE_URL = "([^"]+)"/)?.[1] || "",
+    key: src.match(/SUPABASE_PUBLISHABLE_KEY = "([^"]+)"/)?.[1] || "",
+  };
+}
+
 const env = { ...loadEnv(), ...process.env };
-const url = env.SUPABASE_URL || env.VITE_SUPABASE_URL;
+const pub = publicSupabase();
+const url = env.SUPABASE_URL || env.VITE_SUPABASE_URL || pub.url;
 const key =
   env.SUPABASE_SECRET_KEY ||
   env.SUPABASE_SERVICE_ROLE_KEY ||
   env.SUPABASE_PUBLISHABLE_KEY ||
-  env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  pub.key;
 
 if (!existsSync(distDir)) {
   console.warn("prerender-seo: dist/ missing — run vite build first");
