@@ -62,21 +62,20 @@ const Hero = () => {
           </div>
         </div>
         
-        {/* Floating Stats */}
-        <div className="mt-12 grid max-w-2xl grid-cols-3 gap-2 sm:mt-16 sm:gap-8">
+        {/* Stats */}
+        <div className="mx-auto mt-12 grid w-full max-w-2xl grid-cols-3 items-stretch justify-items-stretch gap-2 sm:mt-16 sm:gap-8">
           {[
             { number: "2,100+", label: "Recipes", icon: ChefHat },
             { number: "5", label: "Regions", icon: MapPin },
             { number: "54", label: "Countries", icon: Globe },
-          ].map((stat, index) => (
-            <div 
-              key={index} 
-              className="rounded-xl border border-primary/10 bg-card/95 p-3 shadow-soft sm:p-6 md:animate-float"
-              style={{ animationDelay: `${index * 0.2}s` }}
+          ].map((stat) => (
+            <div
+              key={stat.label}
+              className="flex h-full flex-col items-center justify-center rounded-xl border border-primary/10 bg-card/95 p-3 text-center shadow-soft sm:p-6"
             >
-              <stat.icon className="mx-auto mb-2 h-6 w-6 text-primary sm:h-8 sm:w-8" />
-              <div className="text-lg font-bold text-primary sm:text-2xl">{stat.number}</div>
-              <div className="text-xs leading-tight text-muted-foreground sm:text-sm">{stat.label}</div>
+              <stat.icon className="mb-2 h-6 w-6 text-primary sm:h-8 sm:w-8" aria-hidden="true" />
+              <div className="text-lg font-bold leading-none text-primary sm:text-2xl">{stat.number}</div>
+              <div className="mt-1 text-xs leading-tight text-muted-foreground sm:text-sm">{stat.label}</div>
             </div>
           ))}
         </div>
