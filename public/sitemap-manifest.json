@@ -1,5 +1,7 @@
 {
-  "generatedAt": "2026-11-16T19:50:13.306Z",
+  "generatedAt": "2026-11-17T17:30:53.372Z",
+  "site": "https://www.ladhaquest.com",
+  "submitInBing": "https://www.ladhaquest.com/sitemap.xml",
   "submitInGsc": "https://www.ladhaquest.com/sitemap.xml",
   "files": [
     "sitemap-pages.xml",
@@ -12,6 +14,7 @@
   "counts": {
     "pages": 15,
     "recipes": 2103,
+    "recipeImages": 2103,
     "dishes": 1428,
     "countries": 156,
     "blog": 12,

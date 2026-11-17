@@ -1,13 +1,13 @@
 /**
- * Generate segmented XML sitemaps for Google Search Console.
+ * Generate segmented XML sitemaps for Bing Webmaster Tools and Google Search Console.
  *
  * Output (public/):
- *   sitemap.xml              — sitemap index (submit this URL in GSC)
+ *   sitemap.xml              — sitemap index (submit this URL)
  *   sitemap-pages.xml        — public marketing / browse hubs
- *   sitemap-recipes.xml      — /recipe/:slug
+ *   sitemap-recipes.xml      — /recipe/:slug (+ image title/caption when present)
  *   sitemap-dishes.xml       — /dish/:slug
  *   sitemap-countries.xml    — /country/:slug
- *   sitemap-blog.xml         — /blog/:slug
+ *   sitemap-blog.xml         — /blog/:slug (+ image when present)
  *   sitemap-stories.xml      — /story/:slug (dishes with cultural content)
  *
  * Run: npm run sitemap
@@ -82,18 +82,45 @@ function formatLastmod(value) {
   return d.toISOString().slice(0, 10);
 }
 
-function urlEntry({ loc, lastmod, changefreq = "weekly", priority = "0.6" }) {
+function absoluteUrl(value) {
+  const raw = String(value || "").trim();
+  if (!raw || raw.startsWith("data:")) return "";
+  if (raw.startsWith("http://") || raw.startsWith("https://")) return raw;
+  if (raw.startsWith("//")) return `https:${raw}`;
+  return `${site}${raw.startsWith("/") ? raw : `/${raw}`}`;
+}
+
+function clip(value, max = 200) {
+  const text = String(value || "").replace(/\s+/g, " ").trim();
+  if (text.length <= max) return text;
+  return `${text.slice(0, max - 1).trim()}…`;
+}
+
+function urlEntry({ loc, lastmod, changefreq = "weekly", priority = "0.6", image }) {
+  const imageLoc = image ? absoluteUrl(image.loc) : "";
+  const imageBlock = imageLoc
+    ? `
+    <image:image>
+      <image:loc>${escapeXml(imageLoc)}</image:loc>${image.title ? `
+      <image:title>${escapeXml(clip(image.title, 140))}</image:title>` : ""}${image.caption ? `
+      <image:caption>${escapeXml(clip(image.caption))}</image:caption>` : ""}
+    </image:image>`
+    : "";
   return `  <url>
     <loc>${escapeXml(loc.startsWith("http") ? loc : `${site}${loc}`)}</loc>
     <lastmod>${formatLastmod(lastmod)}</lastmod>
     <changefreq>${changefreq}</changefreq>
-    <priority>${priority}</priority>
+    <priority>${priority}</priority>${imageBlock}
   </url>`;
 }
 
 function writeUrlset(filename, entries) {
+  const hasImages = entries.some((entry) => entry.includes("<image:image>"));
+  const xmlns = hasImages
+    ? `xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"`
+    : `xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"`;
   const body = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset ${xmlns}>
 ${entries.join("\n")}
 </urlset>
 `;
@@ -183,7 +210,7 @@ const staticPages = [
 console.log("Fetching content from Supabase…");
 
 const [recipes, dishes, recipeCountries, dbBlog] = await Promise.all([
-  fetchAll("recipes", "slug,updated_at,created_at", {
+  fetchAll("recipes", "slug,name,summary,country,image_url,updated_at,created_at", {
     filter: "slug=not.is.null",
     order: "slug.asc",
   }),
@@ -195,7 +222,7 @@ const [recipes, dishes, recipeCountries, dbBlog] = await Promise.all([
     filter: "country=not.is.null",
     order: "country.asc",
   }),
-  fetchAll("blog_posts", "slug,published_at,updated_at,is_published", {
+  fetchAll("blog_posts", "slug,title,excerpt,image_url,published_at,updated_at,is_published", {
     filter: "is_published=eq.true&slug=not.is.null",
     order: "slug.asc",
   }).catch(() => []),
@@ -265,6 +292,13 @@ const recipesFile = writeUrlset(
       lastmod: r.updated_at || r.created_at,
       changefreq: "weekly",
       priority: "0.8",
+      image: r.image_url
+        ? {
+            loc: r.image_url,
+            title: r.name,
+            caption: [r.name, r.country, r.summary].filter(Boolean).join(" — "),
+          }
+        : null,
     })
   )
 );
@@ -303,6 +337,13 @@ const blogFile = writeUrlset(
       lastmod: p.updated_at || p.published_at,
       changefreq: "monthly",
       priority: "0.65",
+      image: p.image_url
+        ? {
+            loc: p.image_url,
+            title: p.title || p.slug,
+            caption: p.excerpt || p.title,
+          }
+        : null,
     })
   )
 );
@@ -330,13 +371,17 @@ if (!robots.endsWith("\n")) robots += "\n";
 robots += `Sitemap: ${site}/sitemap.xml\n`;
 writeFileSync(robotsPath, robots.replace(/\n{3,}/g, "\n\n"));
 
+const imageCount = [...uniqueRecipes.values()].filter((r) => absoluteUrl(r.image_url)).length;
 const summary = {
   generatedAt: new Date().toISOString(),
+  site,
+  submitInBing: `${site}/sitemap.xml`,
   submitInGsc: `${site}/sitemap.xml`,
   files: children,
   counts: {
     pages: staticPages.length,
     recipes: uniqueRecipes.size,
+    recipeImages: imageCount,
     dishes: uniqueDishes.size,
     countries: countryMap.size,
     blog: blogMap.size,
