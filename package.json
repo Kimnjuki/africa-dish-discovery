@@ -17,6 +17,7 @@
     "test:offline": "node --experimental-strip-types scripts/test-offline-store.ts",
     "test:import": "node --experimental-strip-types scripts/test-recipe-import.ts",
     "sitemap": "node scripts/generate-sitemaps.mjs",
+    "indexnow": "node scripts/indexnow.mjs",
     "prerender": "node scripts/prerender-seo.mjs",
     "preview": "vite preview"
   },
