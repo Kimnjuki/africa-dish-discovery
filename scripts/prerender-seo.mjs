@@ -181,7 +181,6 @@ function injectMeta(html, recipe) {
 
   const noscript = `<noscript>
   <article>
-    <h1>${escapeHtml(recipe.name)}</h1>
     <p>${escapeHtml(description)}</p>
     <p><strong>Country:</strong> ${escapeHtml(recipe.country || "Africa")}</p>
     <h2>Ingredients</h2>
@@ -231,12 +230,14 @@ function injectMeta(html, recipe) {
     `<meta name="twitter:image" content="${escapeHtml(image)}" />`
   );
 
-  // Drop homepage graph JSON-LD; inject recipe schema before </head>
+  // One visible H1 in the crawl shell. Recipe copy stays in noscript for non-JS crawlers.
+  out = out.replace(/<h1>[^<]*<\/h1>/i, `<h1>${escapeHtml(recipe.name)}</h1>`);
   out = out.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/i, "");
   out = out.replace(
     "</head>",
-    `<script type="application/ld+json">${JSON.stringify(schema)}</script>\n${noscript}\n</head>`
+    `<script type="application/ld+json">${JSON.stringify(schema)}</script>\n</head>`
   );
+  out = out.replace('<div id="seo-shell">', `<div id="seo-shell">\n${noscript}`);
 
   return out;
 }
