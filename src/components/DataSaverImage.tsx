@@ -37,15 +37,35 @@ export function DataSaverImage({
     );
   }
 
+  const srcSet = unsplashSrcSet(resolved);
+
   return (
     <img
       src={resolved}
+      srcSet={srcSet}
+      sizes={srcSet ? "(max-width: 768px) 100vw, 800px" : undefined}
       alt={alt}
       className={className}
       loading={loading}
       decoding="async"
-      // Avoid speculative fetch priority when saving data
       fetchPriority={dataSaver ? "low" : undefined}
     />
   );
+}
+
+function unsplashSrcSet(url: string): string | undefined {
+  if (!url.includes("images.unsplash.com")) return undefined;
+  try {
+    return [480, 800, 1200]
+      .map((width) => {
+        const next = new URL(url);
+        next.searchParams.set("w", String(width));
+        next.searchParams.set("q", "70");
+        next.searchParams.set("auto", "format");
+        return `${next.toString()} ${width}w`;
+      })
+      .join(", ");
+  } catch {
+    return undefined;
+  }
 }

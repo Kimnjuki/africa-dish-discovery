@@ -73,7 +73,7 @@ const Navigation = () => {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-primary/10 bg-background md:bg-background/80 md:backdrop-blur-lg">
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3">
@@ -87,7 +87,7 @@ const Navigation = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden xl:flex items-center gap-6">
             {navItems.map((item) => (
               <Link
                 key={item.label}
@@ -112,7 +112,7 @@ const Navigation = () => {
           </div>
 
           {/* Desktop Actions */}
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden xl:flex items-center gap-3">
             <Button variant="ghost" size="sm" onClick={() => navigate('/recipes')}>
               <Search className="w-4 h-4" />
             </Button>
@@ -174,7 +174,7 @@ const Navigation = () => {
           <Button
             variant="ghost"
             size="sm"
-            className="md:hidden"
+            className="xl:hidden h-11 w-11"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -183,13 +183,13 @@ const Navigation = () => {
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden py-4 border-t border-primary/10 animate-slide-in-up">
+          <div className="xl:hidden py-4 border-t border-primary/10 animate-slide-in-up">
             <div className="flex flex-col gap-2">
               {navItems.map((item) => (
                 <Link
                   key={item.label}
                   to={item.href}
-                  className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors py-2"
+                  className="flex min-h-11 items-center text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.label}
@@ -201,7 +201,7 @@ const Navigation = () => {
                 <button
                   key={item.label}
                   onClick={() => handleProtectedNavigation(item.href, item.featureName)}
-                  className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors py-2 text-left flex items-center gap-2"
+                  className="flex min-h-11 items-center gap-2 text-left text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
                 >
                   <item.icon className="w-4 h-4" />
                   {item.label}
@@ -211,7 +211,7 @@ const Navigation = () => {
 
               <Link
                 to="/import-recipe"
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors py-2 flex items-center gap-2"
+                className="flex min-h-11 items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <FileUp className="w-4 h-4" />
@@ -219,7 +219,7 @@ const Navigation = () => {
               </Link>
               <Link
                 to="/offline-recipes"
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors py-2 flex items-center gap-2"
+                className="flex min-h-11 items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <WifiOff className="w-4 h-4" />

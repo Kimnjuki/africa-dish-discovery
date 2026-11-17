@@ -3,6 +3,7 @@
  * Run: node --experimental-strip-types scripts/test-recipe-search.ts
  */
 import {
+  explainRecipeMatch,
   expandSearchQuery,
   haystackContainsTerm,
   recipeMatchesQuery,
@@ -77,6 +78,18 @@ console.log("searchRecipes — ranking");
   const ranked = searchRecipes(recipes, "jolof");
   assert(ranked.length >= 1, "at least one jollof hit");
   assert(ranked[0].name.includes("Jollof"), "Jollof ranks first for jolof");
+}
+
+console.log("local names — haystack and explanation");
+{
+  const matoke = {
+    name: "Steamed plantain",
+    country: "Uganda",
+    local_names: ["Matooke"],
+  };
+  assert(recipeMatchesQuery(matoke, "matooke"), "matooke matches local name");
+  const expanded = expandSearchQuery("matooke");
+  assert(explainRecipeMatch(matoke, expanded) === "Matched a local name", "explains local-name hit");
 }
 
 console.log("\n" + "=".repeat(40));

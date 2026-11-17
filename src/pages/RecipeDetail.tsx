@@ -17,6 +17,8 @@ import { NutritionBadge } from "@/components/NutritionBadge";
 import { PrintRecipeButton } from "@/components/PrintRecipeButton";
 import { CookMode } from "@/components/recipe/CookMode";
 import { RecipeTrustNotice } from "@/components/recipe/RecipeTrustNotice";
+import { RecipeRecordStatus } from "@/components/recipe/RecipeRecordStatus";
+import { LocalNameToggle, usePreferLocalNames } from "@/components/recipe/LocalNameToggle";
 import { RecipeProvenance } from "@/components/recipe/RecipeProvenance";
 import { SourceCitations } from "@/components/cultural/SourceCitations";
 import { RecipeReviews } from "@/components/RecipeReviews";
@@ -63,6 +65,7 @@ const RecipeDetail = () => {
   const [servings, setServings] = useState(4);
   const [cooking, setCooking] = useState(false);
   const [cookMode, setCookMode] = useState(false);
+  const { preferLocal, toggle: toggleLocalNames } = usePreferLocalNames();
   const [ratingSummary, setRatingSummary] = useState<{ average: number; count: number } | null>(
     null
   );
@@ -210,6 +213,9 @@ const RecipeDetail = () => {
 
   const title = recipe?.name || "Recipe";
   const country = recipe?.country || "";
+  const localHeading = preferLocal && localNames[0] ? localNames[0] : title;
+  const nameGloss =
+    preferLocal && localNames[0] ? title : localNames.length > 0 ? localNames.join(" · ") : "";
 
   return (
     <div className="min-h-screen">
@@ -286,10 +292,15 @@ const RecipeDetail = () => {
                   )}
                 </div>
                 <div className="lg:col-span-2">
-                  <h1 className="mb-3 text-3xl font-bold leading-tight sm:text-4xl">{title}</h1>
-                  {localNames.length > 0 && (
-                    <p className="mb-2 text-muted-foreground italic">{localNames.join(" · ")}</p>
-                  )}
+                  <h1 className="mb-3 text-3xl font-bold leading-tight sm:text-4xl">{localHeading}</h1>
+                  {nameGloss && <p className="mb-2 text-muted-foreground italic">{nameGloss}</p>}
+                  <div className="mb-3">
+                    <LocalNameToggle
+                      preferLocal={preferLocal}
+                      onToggle={toggleLocalNames}
+                      disabled={localNames.length === 0}
+                    />
+                  </div>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {country && <Badge variant="secondary">{getCountryFlag(country)} {country}</Badge>}
                     {regionName && <Badge variant="outline">{regionName}</Badge>}
@@ -332,6 +343,13 @@ const RecipeDetail = () => {
                     <PrintRecipeButton recipe={recipe} servingMultiplier={mult} />
                   </div>
                   <RecipeTrustNotice verificationStatus={recipe.verification_status} safetyNotes={recipe.safety_notes} itemType={recipe.item_type} className="mt-4" />
+                  <RecipeRecordStatus
+                    hasPhoto={Boolean(recipe.image_url)}
+                    localNameCount={localNames.length}
+                    ingredientCount={Array.isArray(recipe.ingredients) ? recipe.ingredients.length : 0}
+                    stepCount={steps.length}
+                    sources={recipe.history_sources}
+                  />
                 </div>
               </header>
 
@@ -341,9 +359,9 @@ const RecipeDetail = () => {
                     <CardContent className="p-4 flex items-center justify-between">
                       <span className="flex items-center gap-2 text-sm"><Users className="w-4 h-4 text-primary" />Servings</span>
                       <div className="flex items-center gap-2">
-                        <Button size="icon" variant="outline" aria-label="Fewer servings" onClick={() => setServings((s) => Math.max(1, s - 1))}><Minus className="w-4 h-4" /></Button>
+                        <Button size="icon" variant="outline" className="h-11 w-11" aria-label="Fewer servings" onClick={() => setServings((s) => Math.max(1, s - 1))}><Minus className="w-4 h-4" /></Button>
                         <span className="w-6 text-center font-semibold">{servings}</span>
-                        <Button size="icon" variant="outline" aria-label="More servings" onClick={() => setServings((s) => s + 1)}><Plus className="w-4 h-4" /></Button>
+                        <Button size="icon" variant="outline" className="h-11 w-11" aria-label="More servings" onClick={() => setServings((s) => s + 1)}><Plus className="w-4 h-4" /></Button>
                       </div>
                     </CardContent>
                   </Card>

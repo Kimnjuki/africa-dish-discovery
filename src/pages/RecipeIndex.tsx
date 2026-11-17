@@ -20,8 +20,10 @@ import {
   expandSearchQuery,
   ingredientMatchesQuery,
   recipeMatchesExpanded,
+  explainRecipeMatch,
   scoreRecipeMatch,
 } from "@/lib/recipeSearch";
+import { LocalNameToggle, usePreferLocalNames } from "@/components/recipe/LocalNameToggle";
 
 interface IndexRecipe {
   id: string;
@@ -38,6 +40,7 @@ interface IndexRecipe {
   tags?: string[] | null;
   dietary_tags?: string[] | null;
   image_url?: string | null;
+  local_names?: string[] | null;
   ingredients: IngredientValue[] | null;
   steps: StepValue[] | null;
   calories?: number | null;
@@ -58,6 +61,7 @@ const RecipeIndex = () => {
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(PAGE_SIZE);
   const [selected, setSelected] = useState<IndexRecipe | null>(null);
+  const { preferLocal, toggle: toggleLocalNames } = usePreferLocalNames();
 
   const get = (key: FacetKey) => params.get(key) || "";
 
@@ -80,11 +84,24 @@ const RecipeIndex = () => {
       const { data, error } = await supabase
         .from("recipes")
         .select(
-          "id,name,slug,country,continent,category,summary,difficulty,prep_time,cook_time,servings,tags,dietary_tags,image_url,ingredients,steps,calories,protein,carbs,fats"
+          "id,name,slug,country,continent,category,summary,difficulty,prep_time,cook_time,servings,tags,dietary_tags,image_url,ingredients,steps,calories,protein,carbs,fats,dishes(original_name_native)"
         )
         .order("name", { ascending: true })
         .limit(4000);
-      if (!error && data) setRecipes(data as unknown as IndexRecipe[]);
+      if (!error && data) {
+        setRecipes(
+          (data as unknown as Array<IndexRecipe & { dishes?: { original_name_native?: string | null } | { original_name_native?: string | null }[] | null }>).map(
+            (row) => {
+              const dish = Array.isArray(row.dishes) ? row.dishes[0] : row.dishes;
+              const native = dish?.original_name_native?.trim();
+              return {
+                ...row,
+                local_names: native ? [native] : row.local_names || null,
+              };
+            }
+          )
+        );
+      }
       setLoading(false);
     };
     load();
@@ -173,7 +190,7 @@ const RecipeIndex = () => {
               key={value}
               size="sm"
               variant={active ? "default" : "outline"}
-              className="h-7 text-xs"
+              className="h-11 text-xs sm:h-8"
               onClick={() => setFacet(facetKey, active ? "" : value)}
             >
               {value}
@@ -231,7 +248,7 @@ const RecipeIndex = () => {
                       <Input
                         id="q"
                         className="pl-8"
-                        placeholder="Jollof, tagine, injera…"
+                        placeholder="Jollof, nyama choma, egusi…"
                         value={get("q")}
                         onChange={(e) => setFacet("q", e.target.value)}
                       />
@@ -247,7 +264,7 @@ const RecipeIndex = () => {
                           >
                             {queryExpansion.suggestion}
                           </button>
-                          {queryExpansion.expanded ? " (aliases & close spellings included)" : ""}
+                          {queryExpansion.expanded ? " (local names, aliases, and close spellings included)" : ""}
                         </p>
                       )}
                   </div>
@@ -305,10 +322,11 @@ const RecipeIndex = () => {
             </aside>
 
             <section className="lg:col-span-3">
-              <div className="flex items-center justify-between mb-4">
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
                 <p className="text-sm text-muted-foreground">
                   {loading ? "Loading recipes…" : `${results.length} recipes`}
                 </p>
+                <LocalNameToggle preferLocal={preferLocal} onToggle={toggleLocalNames} />
                 <div className="flex flex-wrap gap-2">
                   {activeFacets.map((k) => (
                     <Badge key={k} variant="secondary" className="capitalize">
@@ -349,6 +367,10 @@ const RecipeIndex = () => {
                   <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
                     {results.slice(0, visible).map((r) => {
                       const total = (r.prep_time || 0) + (r.cook_time || 0);
+                      const local = (r.local_names || []).find(Boolean);
+                      const heading = preferLocal && local ? local : r.name;
+                      const gloss = preferLocal && local ? r.name : local;
+                      const matchNote = explainRecipeMatch(r, queryExpansion);
                       return (
                         <Card
                           key={r.id}
@@ -370,12 +392,18 @@ const RecipeIndex = () => {
                           <CardContent className="p-4">
                             <div className="flex items-start justify-between gap-2 mb-1">
                               <h2 className="font-semibold leading-tight group-hover:text-primary transition-colors">
-                                {r.name}
+                                {heading}
                               </h2>
                               <Badge variant="secondary" className="text-xs shrink-0">
                                 {r.country}
                               </Badge>
                             </div>
+                            {gloss && (
+                              <p className="text-xs italic text-muted-foreground mb-1">{gloss}</p>
+                            )}
+                            {matchNote && (
+                              <p className="text-xs text-primary mb-1">{matchNote}</p>
+                            )}
                             {r.summary && (
                               <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
                                 {r.summary}

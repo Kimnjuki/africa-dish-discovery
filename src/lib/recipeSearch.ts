@@ -117,6 +117,7 @@ export interface SearchableRecipe {
   tags?: string[] | null;
   category?: string | null;
   ingredients?: unknown;
+  local_names?: string[] | null;
 }
 
 const MAX_EDIT_SHORT = 1;
@@ -336,6 +337,7 @@ function recipeHaystack(recipe: SearchableRecipe): string {
   return normalizeSearchText(
     [
       recipe.name || "",
+      ...(recipe.local_names || []),
       recipe.country || "",
       recipe.summary || "",
       recipe.category || "",
@@ -398,7 +400,25 @@ export function scoreRecipeMatch(recipe: SearchableRecipe, expanded: ExpandedQue
     else if (haystackContainsTerm(haystack, term)) score += 10;
   }
   if (expanded.suggestion && name.includes(expanded.suggestion)) score += 15;
+  const locals = (recipe.local_names || []).map((n) => normalizeSearchText(n));
+  if (locals.some((n) => n && (n === expanded.normalized || haystackContainsTerm(n, expanded.normalized)))) {
+    score += 50;
+  }
   return score;
+}
+
+/** Why a query hit this recipe, when it was not a plain English-name match. */
+export function explainRecipeMatch(recipe: SearchableRecipe, expanded: ExpandedQuery): string | null {
+  if (!expanded.normalized) return null;
+  const name = normalizeSearchText(recipe.name || "");
+  const locals = (recipe.local_names || []).map((n) => normalizeSearchText(n)).filter(Boolean);
+  const hitLocal = locals.some(
+    (n) => n === expanded.normalized || haystackContainsTerm(n, expanded.normalized)
+  );
+  const hitName = name === expanded.normalized || haystackContainsTerm(name, expanded.normalized);
+  if (hitLocal && !hitName) return "Matched a local name";
+  if (expanded.expanded && !hitName) return "Matched an alias or close spelling";
+  return null;
 }
 
 /** Filter + rank a recipe list for a free-text query. */
