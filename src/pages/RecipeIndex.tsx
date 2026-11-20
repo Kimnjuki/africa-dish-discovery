@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { PageMeta } from "@/components/seo/PageMeta";
@@ -11,11 +11,10 @@ import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Skeleton } from "@/components/ui/skeleton";
 import { supabase } from "@/integrations/supabase/client";
-import { EnhancedRecipePreparation } from "@/components/enhanced/EnhancedRecipePreparation";
 import RecipeImagePlaceholder from "@/components/RecipeImagePlaceholder";
 import { NutritionBadge } from "@/components/NutritionBadge";
 import { Clock, Users, ChefHat, Filter, X, Search } from "lucide-react";
-import type { IngredientValue, StepValue } from "@/types/content";
+import type { IngredientValue } from "@/types/content";
 import {
   expandSearchQuery,
   ingredientMatchesQuery,
@@ -24,7 +23,10 @@ import {
   scoreRecipeMatch,
 } from "@/lib/recipeSearch";
 import { LocalNameToggle, usePreferLocalNames } from "@/components/recipe/LocalNameToggle";
+import { shouldIndexFacetUrl, canonicalForFacetUrl } from "@/lib/facetIndexation";
+import { track, EVENTS } from "@/lib/analytics";
 
+/** Index-list recipe — steps intentionally omitted to reduce payload. */
 interface IndexRecipe {
   id: string;
   name: string;
@@ -42,7 +44,6 @@ interface IndexRecipe {
   image_url?: string | null;
   local_names?: string[] | null;
   ingredients: IngredientValue[] | null;
-  steps: StepValue[] | null;
   calories?: number | null;
   protein?: number | null;
   carbs?: number | null;
@@ -52,54 +53,97 @@ interface IndexRecipe {
 const PAGE_SIZE = 24;
 const MAX_TIME = 240;
 
-const FACET_KEYS = ["q", "country", "continent", "category", "diet", "difficulty", "time", "ingredient"] as const;
+/** Canonical insertion order for all supported URL params. */
+const FACET_KEYS = [
+  "q",
+  "country",
+  "continent",
+  "category",
+  "diet",
+  "difficulty",
+  "time",
+  "ingredient",
+] as const;
 type FacetKey = (typeof FACET_KEYS)[number];
+
+/** Build a new URLSearchParams with keys in the canonical FACET_KEYS order. */
+function buildStableParams(current: URLSearchParams, key: FacetKey, value: string): URLSearchParams {
+  const next = new URLSearchParams();
+  for (const k of FACET_KEYS) {
+    const v = k === key ? value : (current.get(k) || "");
+    if (v) next.set(k, v);
+  }
+  return next;
+}
 
 const RecipeIndex = () => {
   const [params, setParams] = useSearchParams();
   const [recipes, setRecipes] = useState<IndexRecipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(PAGE_SIZE);
-  const [selected, setSelected] = useState<IndexRecipe | null>(null);
   const { preferLocal, toggle: toggleLocalNames } = usePreferLocalNames();
 
   const get = (key: FacetKey) => params.get(key) || "";
 
-  const setFacet = (key: FacetKey, value: string) => {
-    const next = new URLSearchParams(params);
-    if (!value) next.delete(key);
-    else next.set(key, value);
+  /**
+   * setFacetClick — for filter button/chip clicks: pushes a new history entry
+   * so Back/forward walks through filter changes.
+   */
+  const setFacetClick = (key: FacetKey, value: string) => {
+    const next = buildStableParams(params, key, value);
+    setParams(next, { replace: false });
+    setVisible(PAGE_SIZE);
+    if (value) {
+      track(EVENTS.FILTER_APPLIED, { facet: key, value });
+    }
+  };
+
+  /**
+   * setFacetText — for free-text inputs (q, ingredient): replaces current
+   * history entry while typing to avoid flooding the history stack.
+   */
+  const setFacetText = (key: FacetKey, value: string) => {
+    const next = buildStableParams(params, key, value);
     setParams(next, { replace: true });
     setVisible(PAGE_SIZE);
   };
 
   const clearAll = () => {
-    setParams(new URLSearchParams(), { replace: true });
+    setParams(new URLSearchParams(), { replace: false });
     setVisible(PAGE_SIZE);
   };
 
   useEffect(() => {
     const load = async () => {
       setLoading(true);
+      // steps intentionally omitted — reduces payload significantly.
+      // ingredients kept for client-side ingredient filter.
       const { data, error } = await supabase
         .from("recipes")
         .select(
-          "id,name,slug,country,continent,category,summary,difficulty,prep_time,cook_time,servings,tags,dietary_tags,image_url,ingredients,steps,calories,protein,carbs,fats,dishes(original_name_native)"
+          "id,name,slug,country,continent,category,summary,difficulty,prep_time,cook_time,servings,tags,dietary_tags,image_url,ingredients,calories,protein,carbs,fats,dishes(original_name_native)"
         )
         .order("name", { ascending: true })
         .limit(4000);
       if (!error && data) {
         setRecipes(
-          (data as unknown as Array<IndexRecipe & { dishes?: { original_name_native?: string | null } | { original_name_native?: string | null }[] | null }>).map(
-            (row) => {
-              const dish = Array.isArray(row.dishes) ? row.dishes[0] : row.dishes;
-              const native = dish?.original_name_native?.trim();
-              return {
-                ...row,
-                local_names: native ? [native] : row.local_names || null,
-              };
-            }
-          )
+          (
+            data as unknown as Array<
+              IndexRecipe & {
+                dishes?:
+                  | { original_name_native?: string | null }
+                  | { original_name_native?: string | null }[]
+                  | null;
+              }
+            >
+          ).map((row) => {
+            const dish = Array.isArray(row.dishes) ? row.dishes[0] : row.dishes;
+            const native = dish?.original_name_native?.trim();
+            return {
+              ...row,
+              local_names: native ? [native] : row.local_names || null,
+            };
+          })
         );
       }
       setLoading(false);
@@ -107,31 +151,84 @@ const RecipeIndex = () => {
     load();
   }, []);
 
-  const facets = useMemo(() => {
-    const countries = new Map<string, number>();
-    const continents = new Map<string, number>();
-    const categories = new Map<string, number>();
-    const diets = new Map<string, number>();
-    const difficulties = new Map<string, number>();
-    for (const r of recipes) {
-      if (r.country) countries.set(r.country, (countries.get(r.country) || 0) + 1);
-      if (r.continent) continents.set(r.continent, (continents.get(r.continent) || 0) + 1);
-      if (r.category) categories.set(r.category, (categories.get(r.category) || 0) + 1);
-      if (r.difficulty) difficulties.set(r.difficulty, (difficulties.get(r.difficulty) || 0) + 1);
-      for (const d of r.dietary_tags || []) if (d) diets.set(d, (diets.get(d) || 0) + 1);
-    }
-    const sorted = (m: Map<string, number>, limit?: number) =>
-      [...m.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, limit);
-    return {
-      countries: sorted(countries),
-      continents: sorted(continents),
-      categories: sorted(categories, 12),
-      diets: sorted(diets, 10),
-      difficulties: sorted(difficulties),
-    };
-  }, [recipes]);
-
   const queryExpansion = useMemo(() => expandSearchQuery(get("q")), [params]);
+
+  /**
+   * "Open facet" counting: for each facet group, count recipes that satisfy all
+   * OTHER active filters, so the counts reflect what would remain if that facet
+   * option were chosen.
+   */
+  const facets = useMemo(() => {
+    const countryFilter = params.get("country") || "";
+    const continentFilter = params.get("continent") || "";
+    const categoryFilter = params.get("category") || "";
+    const dietFilter = params.get("diet") || "";
+    const difficultyFilter = params.get("difficulty") || "";
+    const timeFilter = parseInt(params.get("time") || "0", 10);
+    const ingredientFilter = params.get("ingredient") || "";
+
+    /** Test recipe against all active filters EXCEPT the specified one. */
+    const testExcept = (r: IndexRecipe, except: FacetKey): boolean => {
+      if (except !== "country" && countryFilter && r.country !== countryFilter) return false;
+      if (except !== "continent" && continentFilter && r.continent !== continentFilter) return false;
+      if (except !== "category" && categoryFilter && r.category !== categoryFilter) return false;
+      if (except !== "difficulty" && difficultyFilter && r.difficulty !== difficultyFilter)
+        return false;
+      if (except !== "diet" && dietFilter && !(r.dietary_tags || []).includes(dietFilter))
+        return false;
+      if (
+        except !== "time" &&
+        timeFilter > 0 &&
+        (r.prep_time || 0) + (r.cook_time || 0) > timeFilter
+      )
+        return false;
+      if (
+        except !== "q" &&
+        queryExpansion.normalized &&
+        !recipeMatchesExpanded(r, queryExpansion)
+      )
+        return false;
+      if (except !== "ingredient" && ingredientFilter) {
+        const raw = Array.isArray(r.ingredients) ? JSON.stringify(r.ingredients) : "";
+        if (!ingredientMatchesQuery(raw, ingredientFilter)) return false;
+      }
+      return true;
+    };
+
+    const count = (
+      facet: FacetKey,
+      getter: (r: IndexRecipe) => string | null | undefined
+    ): [string, number][] => {
+      const m = new Map<string, number>();
+      for (const r of recipes) {
+        if (!testExcept(r, facet)) continue;
+        const v = getter(r);
+        if (v) m.set(v, (m.get(v) || 0) + 1);
+      }
+      return [...m.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+    };
+
+    const countDiet = (): [string, number][] => {
+      const m = new Map<string, number>();
+      for (const r of recipes) {
+        if (!testExcept(r, "diet")) continue;
+        for (const d of r.dietary_tags || []) {
+          if (d) m.set(d, (m.get(d) || 0) + 1);
+        }
+      }
+      return [...m.entries()]
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+        .slice(0, 10);
+    };
+
+    return {
+      countries: count("country", (r) => r.country).slice(0, 30),
+      continents: count("continent", (r) => r.continent),
+      categories: count("category", (r) => r.category).slice(0, 12),
+      diets: countDiet(),
+      difficulties: count("difficulty", (r) => r.difficulty),
+    };
+  }, [recipes, params, queryExpansion]);
 
   const results = useMemo(() => {
     const ingredient = get("ingredient").trim();
@@ -165,11 +262,24 @@ const RecipeIndex = () => {
     );
   }, [recipes, params, queryExpansion]);
 
+  // Track zero-result searches
+  useEffect(() => {
+    if (!loading && queryExpansion.normalized && results.length === 0) {
+      track(EVENTS.SEARCH_ZERO_RESULT, { q: params.get("q") });
+    }
+    if (!loading && queryExpansion.normalized && results.length > 0) {
+      track(EVENTS.SEARCH_PERFORMED, {
+        q: params.get("q"),
+        resultCount: results.length,
+      });
+    }
+  }, [loading, results.length, queryExpansion.normalized]);
+
   const activeFacets = FACET_KEYS.filter((k) => get(k));
 
-  if (selected) {
-    return <EnhancedRecipePreparation recipe={selected} onBack={() => setSelected(null)} />;
-  }
+  // Compute SEO meta from current params
+  const shouldIndex = shouldIndexFacetUrl(params);
+  const canonicalUrl = canonicalForFacetUrl(params);
 
   const FacetGroup = ({
     label,
@@ -191,7 +301,7 @@ const RecipeIndex = () => {
               size="sm"
               variant={active ? "default" : "outline"}
               className="h-11 text-xs sm:h-8"
-              onClick={() => setFacet(facetKey, active ? "" : value)}
+              onClick={() => setFacetClick(facetKey, active ? "" : value)}
             >
               {value}
               <span className="ml-1.5 opacity-60">{count}</span>
@@ -208,7 +318,8 @@ const RecipeIndex = () => {
         title="Recipe Index | Browse African & World Recipes by Country, Diet & Time"
         description="Browse every recipe on LadhaQuest with filters for country, region, meal type, ingredient, diet, cooking time and difficulty. Find exactly what you can cook tonight."
         keywords="recipe index, african recipes by country, browse recipes, recipe filter, meal type, dietary recipes"
-        canonical="https://www.ladhaquest.com/recipe-index"
+        canonical={canonicalUrl}
+        noIndex={!shouldIndex}
       />
       <Navigation />
 
@@ -250,7 +361,7 @@ const RecipeIndex = () => {
                         className="pl-8"
                         placeholder="Jollof, nyama choma, egusi…"
                         value={get("q")}
-                        onChange={(e) => setFacet("q", e.target.value)}
+                        onChange={(e) => setFacetText("q", e.target.value)}
                       />
                     </div>
                     {queryExpansion.suggestion &&
@@ -260,11 +371,13 @@ const RecipeIndex = () => {
                           <button
                             type="button"
                             className="font-medium text-primary underline-offset-2 hover:underline"
-                            onClick={() => setFacet("q", queryExpansion.suggestion!)}
+                            onClick={() => setFacetClick("q", queryExpansion.suggestion!)}
                           >
                             {queryExpansion.suggestion}
                           </button>
-                          {queryExpansion.expanded ? " (local names, aliases, and close spellings included)" : ""}
+                          {queryExpansion.expanded
+                            ? " (local names, aliases, and close spellings included)"
+                            : ""}
                         </p>
                       )}
                   </div>
@@ -277,7 +390,7 @@ const RecipeIndex = () => {
                       id="ingredient"
                       placeholder="plantain, teff, peanut…"
                       value={get("ingredient")}
-                      onChange={(e) => setFacet("ingredient", e.target.value)}
+                      onChange={(e) => setFacetText("ingredient", e.target.value)}
                     />
                   </div>
 
@@ -290,7 +403,7 @@ const RecipeIndex = () => {
                       max={MAX_TIME}
                       step={15}
                       value={[parseInt(get("time") || "0", 10)]}
-                      onValueChange={([v]) => setFacet("time", v ? String(v) : "")}
+                      onValueChange={([v]) => setFacetClick("time", v ? String(v) : "")}
                     />
                   </div>
 
@@ -334,7 +447,7 @@ const RecipeIndex = () => {
                       <button
                         className="ml-1.5"
                         aria-label={`Remove ${k} filter`}
-                        onClick={() => setFacet(k, "")}
+                        onClick={() => setFacetClick(k, "")}
                       >
                         <X className="w-3 h-3" />
                       </button>
@@ -371,66 +484,92 @@ const RecipeIndex = () => {
                       const heading = preferLocal && local ? local : r.name;
                       const gloss = preferLocal && local ? r.name : local;
                       const matchNote = explainRecipeMatch(r, queryExpansion);
+                      const dietBadges = (r.dietary_tags || []).filter(Boolean).slice(0, 2);
                       return (
-                        <Card
+                        <Link
                           key={r.id}
-                          className="group overflow-hidden hover:shadow-warm transition-all cursor-pointer"
-                          onClick={() => setSelected(r)}
+                          to={`/recipe/${r.slug}`}
+                          className="block group"
+                          aria-label={`View recipe: ${r.name}`}
                         >
-                          <div className="aspect-video overflow-hidden">
-                            {r.image_url ? (
-                              <img
-                                src={r.image_url}
-                                alt={`${r.name} from ${r.country}`}
-                                loading="lazy"
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                              />
-                            ) : (
-                              <RecipeImagePlaceholder name={r.name} country={r.country} />
-                            )}
-                          </div>
-                          <CardContent className="p-4">
-                            <div className="flex items-start justify-between gap-2 mb-1">
-                              <h2 className="font-semibold leading-tight group-hover:text-primary transition-colors">
-                                {heading}
-                              </h2>
-                              <Badge variant="secondary" className="text-xs shrink-0">
-                                {r.country}
-                              </Badge>
+                          <Card className="overflow-hidden hover:shadow-warm transition-all h-full">
+                            <div className="aspect-video overflow-hidden">
+                              {r.image_url ? (
+                                <img
+                                  src={r.image_url}
+                                  alt={`${r.name} from ${r.country}`}
+                                  width={640}
+                                  height={360}
+                                  loading="lazy"
+                                  decoding="async"
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                />
+                              ) : (
+                                <RecipeImagePlaceholder name={r.name} country={r.country} />
+                              )}
                             </div>
-                            {gloss && (
-                              <p className="text-xs italic text-muted-foreground mb-1">{gloss}</p>
-                            )}
-                            {matchNote && (
-                              <p className="text-xs text-primary mb-1">{matchNote}</p>
-                            )}
-                            {r.summary && (
-                              <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
-                                {r.summary}
-                              </p>
-                            )}
-                            <div className="flex items-center gap-4 text-xs text-muted-foreground mb-3">
-                              <span className="flex items-center gap-1">
-                                <Clock className="w-3 h-3" /> {total} min
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <Users className="w-3 h-3" /> {r.servings || 1}
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <ChefHat className="w-3 h-3" /> {r.difficulty || "—"}
-                              </span>
-                            </div>
-                            {r.calories ? (
-                              <NutritionBadge
-                                calories={Math.round(r.calories)}
-                                protein={r.protein || 0}
-                                carbs={r.carbs || 0}
-                                fats={r.fats || 0}
-                                compact
-                              />
-                            ) : null}
-                          </CardContent>
-                        </Card>
+                            <CardContent className="p-4">
+                              <div className="flex items-start justify-between gap-2 mb-1">
+                                <h2 className="font-semibold leading-tight group-hover:text-primary transition-colors">
+                                  {heading}
+                                </h2>
+                                <Badge variant="secondary" className="text-xs shrink-0">
+                                  {r.country}
+                                </Badge>
+                              </div>
+                              {gloss && (
+                                <p className="text-xs italic text-muted-foreground mb-1">{gloss}</p>
+                              )}
+                              {matchNote && (
+                                <p className="text-xs text-primary mb-1">{matchNote}</p>
+                              )}
+                              {r.summary && (
+                                <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
+                                  {r.summary}
+                                </p>
+                              )}
+                              <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground mb-2">
+                                {total > 0 && (
+                                  <span className="flex items-center gap-1">
+                                    <Clock className="w-3 h-3" /> {total} min
+                                  </span>
+                                )}
+                                {r.servings && (
+                                  <span className="flex items-center gap-1">
+                                    <Users className="w-3 h-3" /> {r.servings}
+                                  </span>
+                                )}
+                                {r.difficulty && (
+                                  <span className="flex items-center gap-1">
+                                    <ChefHat className="w-3 h-3" /> {r.difficulty}
+                                  </span>
+                                )}
+                              </div>
+                              {dietBadges.length > 0 && (
+                                <div className="flex flex-wrap gap-1 mb-2">
+                                  {dietBadges.map((d) => (
+                                    <Badge
+                                      key={d}
+                                      variant="outline"
+                                      className="text-[10px] px-1.5 py-0"
+                                    >
+                                      {d}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              )}
+                              {r.calories ? (
+                                <NutritionBadge
+                                  calories={Math.round(r.calories)}
+                                  protein={r.protein || 0}
+                                  carbs={r.carbs || 0}
+                                  fats={r.fats || 0}
+                                  compact
+                                />
+                              ) : null}
+                            </CardContent>
+                          </Card>
+                        </Link>
                       );
                     })}
                   </div>

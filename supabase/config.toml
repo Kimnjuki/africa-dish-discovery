@@ -21,6 +21,11 @@ verify_jwt = true
 [functions.suggest-substitutions]
 verify_jwt = true
 
+# Curated substitution engine v0 (no LLM invent).
+# verify_jwt=true still allows anon: supabase-js sends the anon JWT on invoke.
+[functions.substitutions]
+verify_jwt = true
+
 [functions.import-recipe]
 verify_jwt = true
 

@@ -40,6 +40,14 @@ interface RecipeSchemaProps {
     carbs?: number | null;
     fats?: number | null;
   };
+  /**
+   * When a real human creator profile exists, pass their name (and optionally
+   * their profile URL). The schema will emit Person instead of Organization.
+   * Person is preferred by Google for recipe content — use it whenever
+   * creator_profiles are available.
+   */
+  authorName?: string | null;
+  authorUrl?: string | null;
   /** Only pass when real reviews exist — never invent ratings for SEO. */
   rating?: RecipeSchemaRating | null;
   siteOrigin?: string;
@@ -117,6 +125,8 @@ function suitableForDiet(tags?: string[] | null): string[] | undefined {
 /** Injects schema.org/Recipe JSON-LD into document head for the current recipe. */
 export const RecipeSchema = ({
   recipe,
+  authorName = null,
+  authorUrl = null,
   rating = null,
   siteOrigin = "https://www.ladhaquest.com",
 }: RecipeSchemaProps) => {
@@ -131,16 +141,26 @@ export const RecipeSchema = ({
       ? [recipe.image_url]
       : [`${siteOrigin}/placeholder.svg`];
 
+    // Use Person when a named human author is available; fall back to Organization.
+    // Person is preferred by Google when creator_profiles exist.
+    const authorNode = authorName
+      ? {
+          "@type": "Person",
+          name: authorName,
+          ...(authorUrl ? { url: authorUrl } : {}),
+        }
+      : {
+          "@type": "Organization",
+          name: "LadhaQuest",
+          url: siteOrigin,
+        };
+
     const schema: Record<string, unknown> = {
       "@context": "https://schema.org/",
       "@type": "Recipe",
       name: recipe.name,
       image: images,
-      author: {
-        "@type": "Organization",
-        name: "LadhaQuest",
-        url: siteOrigin,
-      },
+      author: authorNode,
       publisher: {
         "@type": "Organization",
         name: "LadhaQuest",

@@ -1,319 +1,297 @@
-# LadhaQuest Phase 0 Audit
+# LadhaQuest codebase and SEO audit
 
-**Date:** 2026-11-13  
+**Date:** 2026-11-20  
+**Blueprint:** `ladhaquest_master_blueprint.cursor.json` (v1.0.0)  
 **Repo:** `africa-dish-discovery-main`  
 **Live site:** https://www.ladhaquest.com  
-**Strategy source:** `ladhaquest_product_strategy.json` (no pre-existing `feature_gap_matrix` / `phase_0_audit` keys — matrix derived from MVP/growth F01–F17)
+**Scope:** Inspect the repository and the public Supabase API. No application code was changed. Lighthouse, Search Console, and GA4 were not re-run (that is S1-02).
+
+This replaces the 2026-11-13 audit, which was scored against an older F01–F17 strategy. Shipped work from 13–16 November is kept in the appendix so it is not redone.
 
 ---
 
-## Stack detected (A1)
+## Verdict
 
-| Layer | Technology | Evidence |
-|-------|------------|----------|
-| Frontend | **Vite 5 + React 18 + TypeScript** | `package.json`, `vite.config.ts` — **not Next.js** |
-| Routing | React Router DOM v6 | `src/App.tsx` |
-| UI | Tailwind CSS + shadcn/Radix | `src/components/ui/*`, `tailwind.config.ts` |
-| Data / Auth | **Supabase** (Postgres + Auth + Storage + Edge Functions) | `src/integrations/supabase/client.ts`, `supabase/` |
-| Client state | TanStack React Query | `App.tsx` |
-| PWA | `vite-plugin-pwa` + Workbox | `vite.config.ts`, `/install`, `/offline-recipes` |
-| Drag-and-drop | `@dnd-kit/*` | `MealPlannerCalendar.tsx` |
-| Barcode | `@zxing/library` | `BarcodeScanner` |
-| Hosting signals | Cloudflare-managed `robots.txt` on live | Live fetch |
+LadhaQuest is already a Vite + React + Supabase cooking product with country hubs, a filterable recipe index, cook mode, pantry matching, a meal planner, a grocery list, and a post-build HTML prerender. It is not a greenfield Next.js app, and it is not yet an African Ingredient Graph.
 
-**Architecture note:** Strategy JSON proposes Next.js/Nest/Meilisearch. Live product is a SPA + Supabase BaaS. Adapt all Phase 1+ work to Vite/React/Supabase.
+The defensible gap in the blueprint — canonical ingredients, many-to-many local aliases, verified substitutions, and country availability — does not exist in Postgres. Those facts live in client TypeScript (`recipeSearch.ts`, `substitutionGraph.ts`, `localMarket.ts`) and in an edge function that asks an LLM to invent substitute names.
+
+Do not migrate to Next.js, Meilisearch, Redis, or Nest for Sprint 1. Extend the current stack. Put the ingredient graph in Supabase, and stop publishing unconstrained AI substitutions.
 
 ---
 
-## A1 — Inventory
+## Stack detected
 
-### Public / app routes (`src/App.tsx`)
-
-| Path | Page | Auth |
-|------|------|------|
-| `/` | Index (hero, trending, pantry promo, regions) | Public |
-| `/continents`, `/countries`, `/country/:countrySlug` | Geography browse | Public |
-| `/atlas`, `/cuisine-map`, `/dish/:dishSlug`, `/story/:dishSlug` | Dish encyclopedia / cultural story | Public |
-| `/recipes`, `/recipe-index`, `/recipe/:slug` | Discovery + detail | Public |
-| `/meals`, `/ingredients` | Meal / ingredient browse | Public |
-| `/blog`, `/blog/:slug` | Blog | Public |
-| `/auth` | Email/password + Google OAuth | Public |
-| `/meal-planner`, `/meal-planner-calendar` | Meal planning | RequireAuth |
-| `/pantry`, `/my-list`, `/household`, `/recipe-comparison` | Pantry, saves, household, compare | RequireAuth |
-| `/submit-recipe` | Creator upload → `uploads` | RequireAuth |
-| `/import-recipe` | URL / photo / voice import → review | RequireAuth |
-| `/shared-meal-plan/:shareToken` | Shared plan view | Public token |
-| `/offline-recipes`, `/install` | Offline cache / PWA install | Public |
-| `/about`, `/contact`, `/privacy-policy`, `/terms-of-service` | Static/legal | Public |
-| `/recipe-uploader`, `/recipe-gallery`, `/image-verification`, `/image-scraper`, `/admin/dish-qa` | Admin tooling | AdminGate |
-| `/editorial-review` | Moderation of user uploads | Public route (role-gated in page) |
-
-### Key components (product surface)
-
-- Discovery: `AdvancedSearch`, `FeaturedRecipes`, `WorldMapRecipes`, continent maps, `QuickCategoryCards`
-- Recipe UX: `RecipeDetail`, `EnhancedRecipePreparation`, `CookMode`, `RecipeCardPanel`, `RecipeNotes`, `RecipeReviews`, `IngredientSubstitutionPopover`, `NutritionBadge`, `PrintRecipeButton`
-- Planning / shop: `MealPlanner`, `MealPlannerCalendar`, `AIMealGenerator`, `BudgetTracker`, `MealPlanShare`, `SmartShoppingList`
-- Pantry: `PantryDashboard`, `SmartRecipeMatch`, `BarcodeScanner`, `VoiceInput`, `PantryAnalytics`, `ExpirationNotifications`
-- SEO: `PageMeta`, `RecipeSchema`, `Breadcrumbs`, `BlogSchema`
-- PWA: `OfflineIndicator`, `usePWA`
-
-### Data models (Supabase `public` tables — from `types.ts`)
-
-**Core content:** `recipes`, `dishes`, `ingredients`, `recipe_ingredients`, `ingredient_substitutions`, `regions`, `cultural_stories`, `media_assets`, `pronunciation_guides`, `recipe_translations`, `trends`, `discover_filters`
-
-**User / social:** `profiles`, `user_roles`, `favorites`, `saved_items`, `recipe_reviews`, `user_recipe_interactions`, `user_taste_profiles`, `personalized_recommendations`, `badges`, `user_badges`, `user_challenges`, `user_passport_stamps`
-
-**Planning / commerce scaffolding:** `meal_plans`, `planned_meals`, `meal_plan_templates`, `pantry_items`, `shopping_lists`, `shopping_list_items`, `affiliate_suppliers`, `venues`, `venue_offerings`
-
-**Publishing:** `uploads`, `blog_posts`, `newsletter_subscribers`, `contact_submissions`
-
-**Views:** `recipe_ratings_summary`, `discover_africa`, leaderboards
-
-### APIs / Edge Functions (`supabase/functions/`)
-
-| Function | Role |
-|----------|------|
-| `ai-search` | AI-enhanced recipe search |
-| `ai-recommendations` | Personalized recommendations |
-| `ai-meal-generator` | Weekly plan generation |
-| `pantry-intelligence` | Pantry ↔ recipe matching |
-| `suggest-substitutions` | Substitution suggestions |
-| `identify-ingredients` | Ingredient ID (image/scan path) |
-| `pantry-expiry-email` | Expiry notifications |
-| `authenticity-sweep`, `cultural-context-sweep`, `citation-backfill` | Content QA / enrichment |
-
-Client access pattern: `@supabase/supabase-js` REST + `functions.invoke` (no separate Nest/FastAPI).
-
-### Third-party scripts / outbound integrations
-
-| Integration | Status |
-|-------------|--------|
-| Supabase Auth (email + Google OAuth) | Present |
-| Outbound grocery search (Google Shopping, Amazon, Jumia) | Link-out only in `SmartShoppingList` |
-| Cloudflare (live robots / CDN) | Present on live |
-| Client analytics (GA/GTM/PostHog/Sentry) | **Not found** in `src/` or `index.html` |
-| Cookie consent UI | Present (`CookieConsent`) — analytics toggles without wired SDK |
+| Layer | What exists | Blueprint default | Reconciliation |
+|---|---|---|---|
+| Frontend | Vite 5, React 18, TypeScript, Tailwind, shadcn/Radix | Next.js App Router | Keep Vite. A rewrite would throw away prerender, PWA, and the current routes. |
+| Routing | React Router 6, lazy routes in `src/App.tsx` | App Router | Keep. |
+| Rendering | CSR SPA, plus `scripts/prerender-seo.mjs` after `vite build` | SSR/SSG/ISR | Keep prerender. It already emits recipe, country, and hub HTML shells. It is not full SSR. |
+| Data | Supabase Postgres, Auth, Storage, Edge Functions | Postgres + pg_trgm + pgvector | Keep Supabase. Add `pg_trgm` when the alias table exists. Defer pgvector. |
+| Search | Client alias groups + Levenshtein in `src/lib/recipeSearch.ts`; `ai-search` edge function | Meilisearch or Typesense | Keep the client layer. Index aliases in Postgres before adding a search service. |
+| Cache / jobs | None (no Redis, no BullMQ) | Redis + BullMQ | Not required for Sprint 1. Cache hot substitutions in the edge function or a table later. |
+| Auth | Email, Google, phone OTP UI (`PhoneAuthForm`) | Auth.js / Clerk + phone OTP | Keep Supabase Auth. Phone OTP still needs the provider and an SMS gateway turned on. |
+| PWA | `vite-plugin-pwa` / Workbox, `/install`, `/offline-recipes` | Workbox | Keep. |
+| Hosting | Docker (Node 20) + nginx, Coolify from `main`, Cloudflare in front | — | Keep. Canonical host is `https://www.ladhaquest.com`. Apex 301s to www. |
+| CI | `.github/workflows/ci.yml`: lint, typecheck, `npm run build` | + unit, e2e, Lighthouse, schema checks | Tests exist (`test:search`, `test:substitutions`, `test:market`, `test:phone`, `test:offline`, `test:import`) and are not in CI. |
+| Analytics | Cookie banner only. No GA4, PostHog, or Sentry in `src/` or `index.html` | GA4 + PostHog + Search Console | S1-13 is open. Do not invent traffic numbers. |
+| Payments | Grocery panel deep-links (Jumia, Glovo, WhatsApp, M-Pesa, MoMo). No checkout | Paystack, Flutterwave, Stripe | Phase 3. Out of Sprint 1. |
 
 ---
 
-## A2 — Feature gap matrix (F01–F17)
+## Routing and rendering
 
-Statuses: **present** | **partial** | **missing** | **unknown** — based on **code + anon Supabase reads**, not marketing copy.
+Public indexable routes include `/`, `/recipes`, `/recipe-index`, `/recipe/:slug`, `/country/:countrySlug`, `/countries`, `/continents`, `/dish/:dishSlug`, `/story/:dishSlug`, `/atlas`, `/cuisine-map`, `/meals`, `/ingredients`, `/blog`, `/blog/:slug`.
 
-| ID | Feature | Priority | Status | Evidence summary | Gaps vs strategy detail |
-|----|---------|----------|--------|------------------|-------------------------|
-| F01 | Recipe discovery | P0 | **partial** | `/recipes`, `/recipe-index`, `AdvancedSearch` (country, difficulty, time, dietary, ingredients + AI search), maps, categories, homepage trending/seasonal; **`recipeSearch` synonym/typo expansion** (jolof→jollof, ugali aliases) on index + AI-search fallback | No Meilisearch; no first-class budget/skill/kid-friendly/one-pot/low-cost filters; feeds are UI tabs more than ranked personalization |
-| F02 | Structured recipe pages | P0 | **partial** | `/recipe/:slug` + encyclopedia; ingredients/steps JSON; prep/cook/servings/difficulty; macros; allergens; cook mode; timers; serving scale; photos; notes | No video player; no recipe version history; equipment not a first-class structured field; offline is localStorage list not full page cache |
-| F03 | Save and organize | P0 | **partial** | `favorites`, `saved_items` → `/my-list`; `RecipeNotes` | No cookbooks/folders; limited meal-history UX; collection sharing weak |
-| F04 | Meal planner | P0 | **partial** | `/meal-planner`, `/meal-planner-calendar` with `@dnd-kit`; planned meal servings; AI generator; share link | No household entity/size prefs; dietary prefs not a durable household profile |
-| F05 | Smart grocery list | P0 | **partial** | `shopping_list_items`; pantry + recipe add; **`groceryEngine` + `GroceryListPanel`** on meal planners (unit merge, aisle groups, copy/share, manual edit); store/affiliate fields; Jumia/Amazon links | Persisted shared lists / household sync still missing; aisle heuristics are keyword-based not DB-backed |
-| F06 | Local substitution engine | P0 | **partial** | `substitutionGraph` client seed (aliases + flavor/region notes); wired into popover, pantry modal, `recipeMatching`; SQL seed migration for `ingredient_substitutions`; AI fallback retained | Country/price/diet ranking not productized; DB seed applies only after migration deploy; graph is curated bootstrap not full market graph |
-| F07 | Creator publishing | P1 | **partial** | `/submit-recipe` → `uploads`; `/editorial-review`; admin uploader | No creator profiles/analytics/payouts; limited moderation workflow |
-| F08 | Community proof | P1 | **partial** | Detail-page `RecipeReviews` (“I made this”), honest empty state, `recipe_ratings_summary` → JSON-LD `aggregateRating` only when count &gt; 0; `RecipeProvenance` + correction deep-link | Still few real reviews; no cooked-photo uploads or Q&A threads |
-| F09 | Offline / low-data | P0 | **partial** | PWA + Workbox (detail cache capped); `/offline-recipes` hub; localStorage snapshots for pantry + last meal plan + opened recipes; pantry mutation queue + reconnect flush; data-saver toggle | No IndexedDB; no full Background Sync API; meal-plan edits still online-only; grocery list snapshot not yet cached |
-| F10 | Accounts & household sharing | P0 | **partial** | Email/password + Google OAuth; profiles; meal-plan share token; **`households` + `household_members`** (invite code, share-pantry RLS); `/household` create/join/members | **No phone auth**; **no email invites**; no shared shopping-list write-sync; one household per user MVP |
-| F11 | Pantry-aware recommendations | P1 | **present** | `/pantry`, `SmartRecipeMatch`, `pantry-intelligence`, barcode + voice add | Waste/expiry UX exists; depth of ranking can improve |
-| F12 | Budget meal planner | P1 | **partial** | `BudgetTracker`, AI meal gen `budgetPerDay` | Hardcoded/demo budgets; no live local prices or promo optimization |
-| F13 | Grocery integrations | P1 | **partial** | Link-outs + `affiliate_suppliers` table | No partner APIs, cart push, pickup/delivery checkout |
-| F14 | AI cooking assistant | P1 | **partial** | Edge AI search/recs/meal gen/subs; cook-mode voice commands; unit helpers | No conversational troubleshoot chat |
-| F15 | Voice & multilingual UX | P1 | **partial** | Pantry voice input; cook voice; phonetic fields; `recipe_translations` / `pronunciation_guides` tables | No i18n UI; tables largely unused in UX; no productized read-aloud |
-| F16 | Live cooking & classes | P2 | **missing** | No livestream/class routes or components found | Entire feature absent |
-| F17 | Restaurant / packaged discovery | P2 | **partial** | `venues` / `venue_offerings` + DishEncyclopedia venue UI | Anon venues count empty/`*/0`; not a working discovery product |
+App surfaces (`/auth`, `/pantry`, `/my-list`, `/household`, `/meal-planner`, `/meal-planner-calendar`, `/import-recipe`, `/submit-recipe`, `/offline-recipes`, admin tools) are `Disallow`ed in `public/robots.txt`. `noIndex` is set in React on pantry, my-list, household, meal planner, import, and offline recipes only. It runs in `useEffect`, so a non-JS crawler never sees it. `robots.txt` is the control that actually works. `/auth`, `/submit-recipe`, `/meal-planner-calendar`, and `/editorial-review` rely on robots alone.
 
-### P0 rollup
+`index.html` contains a crawlable `#seo-shell` (H1, hub links, 12 recipe links, WebSite + Organization + ItemList JSON-LD). React replaces that node on mount. `scripts/prerender-seo.mjs` writes unique title, description, canonical, and Recipe JSON-LD for:
 
-| Already meaningfully present | Partial / incomplete | Missing |
-|------------------------------|----------------------|---------|
-| Core discovery browse, structured recipe pages with cook mode, meal planner calendar, pantry matching (F11), auth email/Google; F06 client substitution graph bootstrap; F10 household create/join + shared pantry read | F01–F06, F09–F10 (most P0) | Phone auth, email household invites, shared grocery write-sync, price/diet-ranked subs, live market inventory |
+- the hub list in that script (index, countries, atlas, ingredients, blog, legal, install)
+- African recipes (`is_african = true` OR `continent = Africa`)
+- country pages derived from those recipes
+- static blog posts
+
+Sitemap `sitemap-recipes.xml` lists all **2,103** slugs. Prerender covers the African subset (**1,477**). About **626** non-African recipe URLs are in the sitemap and fall through to the SPA shell. That is the main indexation hole left after the 16 November rescue.
 
 ---
 
-## A3 — Performance
+## Production counts (queried 2026-11-20)
 
-**Skipped: Lighthouse / axe / WebPageTest** — tooling not run (heavy / environment); prefer code evidence.
+Anon REST against `qfctezxqcomhrasrsvjg`, `Prefer: count=exact`. These rows are publicly readable. They are not filtered by a `published` status.
 
-Code-based notes:
+| Measure | Count |
+|---|---:|
+| `recipes` | **2,103** |
+| Unique `slug` | **2,103** |
+| `continent = Africa` | **1,477** |
+| `dishes` | **1,428** |
+| `ingredients` | **542** |
+| `recipe_ingredients` | **0** |
+| `ingredient_substitutions` | **0** |
+| `recipe_reviews` | **0** |
+| `ingredient_aliases` | table does not exist (404) |
+| `ingredient_availability` | table does not exist (404) |
+| `creator_profiles` | table does not exist (404) |
 
-- Route-level `React.lazy` + `Suspense` for most pages (`App.tsx`) — good code-splitting.
-- Eager load only `Index` + `NotFound`.
-- PWA caches static assets + Supabase recipes REST (`StaleWhileRevalidate`, max 40 entries) + navigateFallback.
-- App snapshots (pantry/meal plan/opened recipes) live in localStorage via `offlineStore`, not SW precache.
-- Image cache for Unsplash only — many recipe images may miss SW optimization; data-saver shrinks Unsplash URLs.
-- Client-injected meta/JSON-LD (`PageMeta`, `RecipeSchema`) means crawlers that do not execute JS see mainly `index.html` defaults — SPA SEO risk.
-- Homepage live content shows non-African “Featured African Recipes” soup titles — content quality / curation issue impacting perceived performance of discovery.
+Recipe field completeness across all 2,103 rows:
 
----
+| Field | Present |
+|---|---:|
+| `image_url` | 2,103 (0 null). `data/image-audit.json`: 12 duplicate URL groups covering 26 recipes, mostly shared cookbook scans |
+| `ingredients` JSON, `steps` JSON, `history` | 2,103 |
+| `difficulty` | 2,052 |
+| `cook_time` | 2,013 |
+| `prep_time` | 2,003 |
+| `calories` | 972 |
+| `dietary_tags` (non-empty) | 433 |
+| `created_by` | **0** |
+| `verification_status` | 2,027 null; 48 “Wikimedia-cited”; 21 “cookbook-sourced”; 7 “needs verification”. Nothing uses `draft \| published` |
 
-## A4 — SEO check
+### Conflicts in the blueprint
 
-| Check | Live / code | Finding |
-|-------|-------------|---------|
-| `robots.txt` | Live | Allow `/` for Googlebot/Bing; AI training bots disallowed (Cloudflare); Sitemap lines present |
-| `sitemap.xml` | Live + `public/` | Static hub URLs (~17) |
-| `sitemap-recipes.xml` | Live | **3136** `<loc>` recipe URLs (larger than DB recipe count 2103 — possible duplicates/legacy slugs) |
-| Canonical | `index.html` + `PageMeta` | Homepage canonical set; per-route via client JS |
-| Open Graph / Twitter | `index.html` + `PageMeta` | Present; default OG image is `placeholder.svg` (weak social preview) |
-| Recipe JSON-LD | `RecipeSchema.tsx` + `/recipe/:slug` | Stronger `Recipe` (nutrition, cuisine, keywords, image, real `aggregateRating`); still client-injected SPA |
-| WebSite JSON-LD | `index.html` | Present; SearchAction → `/recipe-index?q=` |
-| Copy drift | Live + `index.html` | Meta still says “50+ recipes” while product claims 1,700+ / DB has 2103 |
+| Claim | Resolution |
+|---|---|
+| Homepage 2,100+ vs index 1,700+ | Use **2,103** for the catalog and **1,477** when the sentence is about African recipes. “1,700+” is stale. `index.html` and the hero already say 2,100+. |
+| Sitemap 3,136 vs DB | Fixed in the committed sitemap. `public/sitemap-manifest.json` (2026-11-17) records 2,103 recipe URLs and 4,597 total URLs. |
+| Competitor recipe/review counts and the 65–70% delivery-market claim | Not in this repo. Benchmarks only. Do not put them in UI or investor copy. |
+| `verification_status = published` | That value is unused. “Published” today means “anon can read the row”. |
 
----
-
-## A5 — Coverage
-
-See **[docs/COVERAGE.md](./COVERAGE.md)** — anon Supabase query of `recipes` (2103 rows), grouped by `country` / `continent`.
-
-Highlights: **1477** Africa-continent recipes; **54/54** named African countries have ≥1 recipe; Egypt (200) and Nigeria (112) dominate; heavy **Global (303)** non-African import load.
-
----
-
-## A6 — Mobile / accessibility (code patterns)
-
-**Strengths**
-
-- Viewport + PWA meta; cook mode designed for phone (large type, swipe, Wake Lock).
-- Frequent `aria-label` on icon buttons (servings, cook mode, share, voice).
-- Breadcrumb `nav aria-label`; some `sr-only` close labels in shadcn primitives.
-- Portrait PWA orientation; Install guidance page.
-
-**Gaps / risks**
-
-- No automated a11y run (axe skipped).
-- No `prefers-reduced-motion` policy found.
-- Map-heavy pages may be weak for keyboard/screen-reader users.
-- Auth is email/Google only — phone-first African mobile UX incomplete (ties to F10).
-- Cookie banner + overlays need manual focus-trap verification.
+Country depth is still the 2026-11-13 picture in `docs/COVERAGE.md` (Egypt 200, Nigeria 112, many countries at a seeded floor, plus a large Global/non-African import). Labels are messy (`US` / `USA` / `United States`). There is no `countries` table; `recipes.country` is free text. `regions` is a thin id/name table, and `recipes.region_id` is the only structured geo link.
 
 ---
 
-## Competitive gap summary
+## Data model vs the blueprint
 
-| Competitor pattern | LadhaQuest today |
-|--------------------|------------------|
-| Allrecipes community ratings/reviews at scale | Schema + UI exist; **~1 review** in DB |
-| NYT cooking mode / recipe box | Cook mode **strong**; organization **weak** (no cookbooks) |
-| Mealime planning → grocery | Planner **strong**; grocery merge/aisles/commerce **weak** |
-| Paprika import/scale/offline | Serving scale + offline packs; **URL/photo/voice import shipped** (human review) |
-| SuperCook pantry match | **Strong** differentiator already (F11 present) |
-| Africa-local subs / market pricing | **Core differentiator incomplete** (F06/F12/F13 partial) |
+Recipes are the source of truth, and their ingredients are a JSON blob on `recipes.ingredients`. The relational graph the blueprint specifies is mostly absent.
 
----
+| Blueprint table | In this repo |
+|---|---|
+| `recipes` | Present, wide, and denormalized. Missing slug-stable SEO fields (`seo_title`, `seo_description`, `canonical_url`), structured `status`, `author_id` usage, equipment, spice as a facet, yield separate from `servings`, and step timers. Times are duplicated (`prep_time` and `prep_time_minutes`). |
+| `dishes` | Present: name, slug, country, region string, native name, phonetic spelling, tribe, cultural significance, sources. No `parent_dish_id`, no alternate-name graph, no pan-African flag. |
+| `recipe_ingredients` | Table exists (`ingredient_id`, `quantity` as text, `unit`). **0 rows.** Pantry and search read the JSON blob. |
+| `ingredients` | 542 rows. Columns are only `id`, `name`, `category`, `shelf_life_days`. No slug, allergens, diet tags, nutrition, function tags, safety flags, or licence. |
+| `ingredient_aliases` | **Missing.** Aliases are string arrays in `recipeSearch.ts` and `substitutionGraph.ts`. `morogo` is collapsed to amaranth / imifino / “african spinach”. `sukuma wiki` is collapsed to collard greens. No `match_confidence`, no `is_ambiguous`, no language or country. |
+| `substitutions` | Table `ingredient_substitutions` exists (`original_ingredient_id`, `substitute_ingredient_id`, `quantity_ratio`, `compatibility_score`, `reason`, `notes`). **0 anon-visible rows.** No type, diet, allergens, review status, reviewer, or model version. The live graph is ~34 curated edges in `substitutionGraph.ts`. |
+| `ingredient_availability` | **Missing.** `localMarket.ts` hardcodes price tier and a 0–100 availability score for NG, KE, GH, ZA, EG, TZ. Unknown ingredients get availability **50**, not 0.3 with an “unverified” flag. |
+| Provenance | `recipes.history_sources` and a few `verification_status` strings. No `source` / `licence` / `review_status` / `reviewed_by` on ingredients or substitutions. |
+| Users / creators | `profiles`, `user_roles`, `uploads`. No `creator_profiles`. Submit-recipe writes to `uploads` (0 anon-visible). |
+| Saves, reviews, pantry, plans | `favorites`, `saved_items`, `recipe_reviews` (with `cooked_photo_url`), `pantry_items`, `meal_plans`, `planned_meals`, `shopping_lists`, `shopping_list_items`, `households`, `household_members`, `household_grocery_items`. Reviews currently 0. |
+| `ai_audit_log` | **Missing.** `suggest-substitutions` does not log prompt version, allowlist, or validation. |
 
-## Recommended next implementation prompt
-
-After F08 provenance + Recipe JSON-LD + ratings depth, prefer one of:
-
-> Wire phone auth or email household invites (F10 remaining) so multi-cook households can share pantry without invite-code-only friction.
-
-Alternates: offline grocery-list snapshot / IndexedDB (F09 remaining); dish-page JSON-LD + ItemList for atlas rankings; cooked-photo “I made this” uploads (F08 depth).
-
-Do **not** start with Next.js migration or F16/F17.
+Nutrition on the recipe row (972 / 2,103) has no composition source. The blueprint rule — show an estimate only when it comes from verified composition data — is not enforceable yet.
 
 ---
 
-## Progress
+## Search
 
-**2026-11-16 — Screaming Frog / crawl shell gaps**
+`/recipe-index` persists `q`, `country`, `continent`, `category`, `diet`, `difficulty`, `time`, and `ingredient` in the query string. It shows active chips, a clear-all control, and a count on each facet button. That covers a slice of S1-06.
 
-- Report: `H1: Missing` (100%), homepage Word Count 0, Outlinks 0, Text Ratio 0 — crawler saw empty SPA shell only. Assets (`registerSW.js`, `/assets/*`) marked Indexable.
-- Fix: crawlable `#seo-shell` inside `#root` with real `<h1>`, hub links, 12 African recipe links, country + blog outlinks, ItemList JSON-LD; `robots.txt` Disallow `/assets/` + SW; nginx `X-Robots-Tag: noindex` on JS/CSS/assets.
+Gaps against `feature_specs.A_discovery_and_search`:
 
-**2026-11-16 — GSC SEO rescue (near-zero indexation)**
-
-- Diagnosis from GSC exports: 0 clicks / 1 impression / ~3 indexed pages (last 7 days). Live sitemap still only ~17 hubs.
-- Shipped: segmented sitemap index (4,597 URLs), Africa-first homepage surfaces + crawlable recipe links, accurate meta/OG/JSON-LD, `noindex` on app pages, robots disallow for auth surfaces, post-build African recipe HTML prerender shells, nginx sitemap wildcard.
-- GSC next: submit `https://www.ladhaquest.com/sitemap.xml`, request indexing on homepage + head African recipes. Ensure Coolify build has Supabase env for prerender.
-
-**2026-11-16 — Competitive matrix: freemium + recipe import**
-
-- **Import MVP:** `/import-recipe` — URL (JSON-LD client + edge fallback), photo AI extract, voice/paste family notes; `recipeImport.ts` adapts ingredients to local market; mandatory attribution; submits to `uploads` for human review. Edge: `supabase/functions/import-recipe`.
-- **Freemium:** `premium.ts` soft-gates offline cook packs (5 free) and weekly AI meal plans (2 free); Install page beta unlock; Offline Mode + Recipe Box + AI generator surfaces.
-- **Positioning:** Keep core African cooking free (vs NYT paywall); own family-recipe import + localization (vs Allrecipes/NYT). Canvas + checklist updated.
-- Tests: `npm run test:import`. Deploy edge function `import-recipe` to Supabase; Coolify needs a new commit SHA to rebuild.
-
-**2026-11-14 — Competitive gaps P0/P1 (local execution loop)**
-
-- **F06 productized:** `localMarket.ts` (NG/KE/GH/ZA/EG/TZ prices, stalls, diet/availability); `lookupRankedSubstitutions` + cook-adjustment prompts; popover shows local price + “hard to find”.
-- **F05 market grocery:** stall grouping, cost totals in local currency, one-tap swaps, Offline save → `/offline-recipes`.
-- **F12 budget:** `BudgetTracker` uses market currency + planned cost from the grocery engine (no more hardcoded USD demo).
-- **F09 offline cook packs:** Download for offline on recipe pages; grocery snapshot + cook packs on Offline Mode.
-- **F08 cooked photos:** camera/file upload with client compress; storage bucket + `cooked_photo_url` migration.
-- **F03 Recipe Box:** folders on My List + save menu on recipe detail (localStorage; SQL folders migration ready).
-- Tests: `npm run test:market` (16) + substitutions (24). Apply migration `20261114120000_competitive_gaps_trust_box.sql` for photo column + storage policies.
-- **Cook-from-expiring:** Pantry “Show these first” filter + urgency-first match sort.
-- **IndexedDB mirror:** Offline grocery/cook packs/recipes/pantry mirrored; hydrate on boot if localStorage was evicted.
-- **F10 shared grocery:** `household_grocery_items` + Sync/Load on meal-planner list; Household `share_grocery` toggle.
-- **F10 phone auth UI:** SMS OTP form on `/auth` (needs Supabase Phone provider + SMS gateway).
-- **F13 mobile-money checkout path:** Jumia/Glovo/WhatsApp/M-Pesa/MoMo deep links on grocery panel (no in-app payment capture).
-- **Recently viewed:** continue-cooking strip on My List.
-- Remaining: email household invites; live partner cart APIs; full in-app mobile-money capture.
-- Migrations to apply: `20261114120000_competitive_gaps_trust_box.sql`, `20261116100000_f10_shared_grocery.sql`.
-
-**2026-11-14 — Phase 1 F08 provenance / JSON-LD / ratings (chunk 6)**
-
-- `RecipeSchema`: nutrition, cuisine, keywords, image, `suitableForDiet`; `aggregateRating` only when real reviews exist.
-- `RecipeProvenance` on recipe detail: country/region, also-known-as, ethnic group, occasions, history teaser, suggest-a-correction → Contact prefill.
-- Recipe detail hosts reviews + “I made this” CTA; empty state does not invent ratings.
-- Migration `20261114030000_f08_recipe_provenance_columns.sql`: nullable `local_names` + `ethnic_group` (+ soft dish backfill).
-- Remaining: cooked-photo uploads, Q&A, dish/atlas ItemList JSON-LD, SSR/prerender for crawlers.
-
-**2026-11-14 — Phase 1 F09 offline / low-data (chunk 5)**
-
-- `src/lib/offlineStore.ts`: capped recipe cache, pantry + meal-plan snapshots, pantry op queue, data-saver preference.
-- Pantry loads/edits offline via snapshot + queue; `OfflinePantrySyncHost` flushes on reconnect.
-- Meal planner pages cache last plan for offline open; `/offline-recipes` shows pantry/plan/recipes + data-saver.
-- Data-saver: lighter Unsplash URLs, `DataSaverImage`, cultural video CTA hidden; Install page toggle.
-- Workbox: navigateFallback; recipe runtime cache narrowed (max 40 detail entries); no full catalog precache.
-- Remaining: IndexedDB, Background Sync registration, offline grocery-list snapshot, meal-plan write queue.
-
-**2026-11-14 — Phase 1 F10 household sharing MVP (chunk 4)**
-
-- Schema: `households`, `household_members` (owner/member), invite codes, `share_pantry`; SECURITY DEFINER RPCs for create/join/leave/regenerate.
-- RLS: members see own household + roster; co-members can SELECT pantry when sharing on; co-member profile read for display names.
-- UI: `/household` (create/join by code, members, share toggle, shared pantry list); nav Account → Household; pantry tab household strip.
-- Remaining: email invites, phone auth, shared shopping-list sync, multi-household, collaborative meal plans.
-
-**2026-11-14 — Phase 1 F06 substitution graph bootstrap (chunk 3)**
-
-- Added `src/lib/substitutionGraph.ts`: curated African ingredient aliases + substitution edges with flavor role, region tags, authenticity, and compatibility scores (ugwu, sukuma wiki, egusi, palm oil, scotch bonnet, ogbono, crayfish, irú, etc.).
-- Wired into `IngredientSubstitutionPopover` (graph → DB → AI), pantry `SubstitutionModal` (graph → AI), and `recipeMatching` pantry substitute detection.
-- Expanded search ingredient aliases (`ugwu`, `sukuma wiki`, `morogo`, `molokhia`, `piri piri`, `ogbono`).
-- SQL seed: `supabase/migrations/20261114010000_f06_substitution_graph_seed.sql`.
-- Acceptance: `npm run test:substitutions` — 23/23 pass.
-
-**2026-11-14 — Phase 1 F01 search synonyms / typo tolerance (chunk 2)**
-
-- Added `src/lib/recipeSearch.ts`: African dish alias groups, ingredient aliases, Levenshtein typo correction, word-boundary-safe matching, relevance scoring.
-- Wired into `/recipe-index` (facet search + “showing results for …” suggestion) and `AdvancedSearch` (`search_terms` to edge function + local re-rank when AI off).
-- Updated `supabase/functions/ai-search` fallback to match any expanded term (not raw `includes` on full query).
-- Acceptance: `scripts/test-recipe-search.ts` — 17/17 pass (`jolof`→jollof, `ugalii`→ugali, `nshima`/`sadza`, no `pap`/`paprika` false positive).
-
-**2026-11-13 — Homepage fixes + Phase 1 F05 grocery engine (chunk 1)**
-
-- Fixed homepage “Try Pantry Intelligence” (`PantryShowcase`): React Router `Link` to `/#pantry-intelligence` did not scroll when already on `/`. Now uses explicit scroll with fixed-nav offset + hash sync; Index also handles deep-link hash on load.
-- Stabilized “What are you in the mood for?” cards (`QuickCategoryCards` + `index.css`): removed Card/hover-scale transforms on touch; fixed height; fine-pointer-only hover shadow; hard `transform: none` for `.category-mood-card` on phones.
-- Phase 1 / F05: added `src/lib/groceryEngine.ts` (normalize + unit convert/merge + aisle groups + share text) and `GroceryListPanel` wired into `/meal-planner` and `/meal-planner-calendar` shopping tabs (replaces naive name-key quantity concatenation).
-
-## Skipped work
-
-| Item | Reason |
-|------|--------|
-| Lighthouse | Tooling heavy; not required for Phase 0 |
-| axe / full a11y audit | Same |
-| Service-role / `.env` secrets | Intentionally unused; anon key only |
-| Full F05 share persistence / aisle DB | Deferred — client merge + copy/share shipped first |
-| Meilisearch / dedicated search service | Deferred — client + edge synonym/typo layer shipped first |
-| Full F06 country/price/diet ranking | Deferred — curated graph + UI wiring shipped; ranking/productization next |
-| Household email invites / shared grocery write-sync (F10 remaining) | After F10 schema+code join MVP |
-| Phone auth (F10) | Deferred — email/Google + household code invite first |
-| F05 aisle DB / persisted shared lists | Still open after client grocery engine |
-| IndexedDB + Background Sync API (F09 remaining) | Deferred — localStorage snapshots + pantry queue shipped first |
-| Offline grocery-list / meal-plan write queue | Deferred — read snapshots + pantry queue first |
+- The page loads up to 4,000 recipes, including ingredient and step JSON, then filters in the browser. Facet counts are computed on the full set, not on the filtered set. First load will not hit a 300 ms p95 on a slow phone.
+- `setParams(..., { replace: true })` replaces history, so Back does not walk filter changes.
+- Parameter order is whatever `URLSearchParams` already had. There is no canonical order.
+- One diet value, one ingredient, no exclude, no allergen-free, no equipment, no spice, no budget, no subnational region.
+- Alias match is real (`jolof` → jollof, `sukuma wiki` ↔ collards, typo correction). Ambiguous names do not ask the user. `morogo` is treated as one ingredient.
+- Canonical on the index is always `https://www.ladhaquest.com/recipe-index`, including when filters are on. That avoids an infinite filter index, and it also prevents the blueprint’s allow-list (country, country + meal, country + diet, ingredient) from being indexable URLs.
+- There is no pantry-overlap ranker on this page. Pantry match lives at `/pantry` (`SmartRecipeMatch`, `pantry-intelligence`).
+- Natural-language search is the `ai-search` edge function, not a parser that returns editable filter chips.
 
 ---
 
-## Deliverable paths
+## Substitution engine
 
-- `docs/AUDIT.md` (this file)
-- `docs/COVERAGE.md`
-- `docs/ladhaquest_product_strategy.json` (strategy copy + filled `feature_gap_matrix`)
+Two paths exist, and they disagree with the blueprint.
+
+1. **Curated graph (preferred in the UI).** `lookupRankedSubstitutions` in `substitutionGraph.ts` plus `rankSubstitutesForMarket` in `localMarket.ts`. Diet uses the corrected test (`required.every(d => candidate.diet.includes(d))`) but only as a score bump or a −25 penalty. Incompatible diets are not removed. Availability is a hardcoded number. `IngredientSubstitutionPopover` shows this first.
+2. **LLM fallback.** `supabase/functions/suggest-substitutions` sends the ingredient name to Gemini via the Lovable gateway and parses a free-text JSON array of `{name, ratio, notes, authenticity}`. There is no allowlist, no Zod check against ingredient IDs, no allergen or diet hard filter, no audit log, and no “proposed” review state. This is the failure mode the blueprint forbids: the model invents substitutes, including ones that can introduce dairy or allergens.
+
+There is no `POST /api/substitutions`. Scoring weights are inline, not config. There is no 300-case golden set. Unit tests cover the client graph (`npm run test:substitutions`) and the market ranker (`npm run test:market`).
+
+---
+
+## Structured data, sitemaps, canonicals
+
+| Check | Finding |
+|---|---|
+| `robots.txt` | Allows `/`. Disallows app, auth, and admin routes, `/assets/`, and service-worker files. Blocks a long list of AI-training bots. Sitemap points at `https://www.ladhaquest.com/sitemap.xml`. |
+| Sitemaps | Index plus pages (15), recipes (2,103), dishes (1,428), countries (156 — includes non-African and duplicate labels), blog (12), stories (883). `lastmod` is generated. No glossary or `/substitutes/` sitemap, because those URLs do not exist. |
+| Canonicals | Homepage and prerendered recipes self-canonicalize. Recipe index always canonicalizes to the bare URL. nginx strips the query string when it stamps the SPA shell (`$lq_canon_path`). |
+| Recipe JSON-LD | `RecipeSchema.tsx` and the prerender script emit Recipe with HowToStep, times, yield, cuisine, keywords, nutrition when present, and `aggregateRating` only if a real count is passed. Author is **Organization “LadhaQuest”**, not a Person. 0 recipes have `created_by`. |
+| Breadcrumbs | `Breadcrumbs.tsx` renders visible crumbs and BreadcrumbList JSON-LD. It is a client component, so it is absent from prerendered shells unless the prerender script adds it (it does not). |
+| WebSite SearchAction | In `index.html`, target `/recipe-index?q={search_term_string}`. |
+| Organization | In `index.html`. Logo is the PWA icon. |
+| Person | Not emitted. No creator profile URLs. |
+| Facet indexation policy | Not implemented as an allow-list. Everything with a query string collapses to one canonical. `robots.txt` does not mention sort or deep pagination (the index paginates in memory, so there is no `?page=` crawl trap). |
+| hreflang | None. UI strings are English. |
+
+`PageMeta` writes title, description, robots, Open Graph, and canonical in `useEffect`. Crawlers that do not run JS only see prerendered shells and the homepage `index.html`.
+
+---
+
+## Images and performance risks
+
+- Every recipe has an `image_url`. Many are Supabase storage objects (cookbook page scans). 26 recipes share an image with another recipe. That is a content-quality issue, not a missing-image issue.
+- Workbox caches Unsplash with CacheFirst (40 entries) and recipe REST with StaleWhileRevalidate (40 entries, 3 days). It does not cache the Supabase storage image host.
+- `DataSaverImage` shrinks Unsplash URLs. There is no AVIF/WebP srcset pipeline and no width/height contract on recipe cards.
+- The recipe index ships full ingredient and step payloads for the whole catalog to the phone before the first filter click.
+- The PWA precache glob is `**/*.{js,css,html,ico,png,svg,webp}` up to 5 MB per file. Route-level `React.lazy` is in place; only Index and NotFound are eager.
+- No Lighthouse run in this audit. CI does not enforce the blueprint budgets (170 KB gzip JS per route, LCP 2.5 s, INP 200 ms, CLS 0.1).
+- Prior crawl note (16 November): a non-JS crawler saw an empty SPA. The `#seo-shell` and prerender were added for that. They have not been re-measured with Lighthouse or a fresh Search Console export.
+
+---
+
+## Gap map (blueprint priorities)
+
+| Blueprint item | Status | Evidence |
+|---|---|---|
+| P0 Ingredient graph | **Missing in the database.** Partial in the client. | 542 name-only ingredients. 0 join rows. 0 substitution rows. Alias logic is TypeScript. |
+| P0 Alias-aware search | **Partial** | `recipeSearch.ts` synonyms and typos. No ambiguity prompt. `morogo` is a false synonym. |
+| P0 Faceted discovery + URL state | **Partial** | Chips, counts, clear-all, URL params. Client-side, history replace, unfiltered counts, single canonical. |
+| P0 Recipe schema, hubs, CWV | **Partial** | Prerender + Recipe JSON-LD for African recipes. Author is the organization. No CWV baseline. Country hubs exist (`/country/:slug`). No ingredient glossary per slug, no `/substitutes/` pages. |
+| P1 Recipe utility | **Partial, ahead of the blueprint’s “not built” assumption** | Cook mode, scaling, timers, wake lock, substitution popover, nutrition badge, print, local-name toggle, provenance block. Unit conversion and gram estimates are not a general system. |
+| P1 Saves, notes, reviews | **Partial** | My List, recipe box folders (localStorage), reviews UI. 0 reviews in the DB. Cooked-photo column exists. |
+| P1 Creator studio | **Partial / thin** | `/submit-recipe`, `/import-recipe` (URL, photo, voice → `uploads`, human review), `/editorial-review`. No profiles, Person schema, analytics, or regional reviewer workflow. |
+| P1 Pantry search | **Present** | `/pantry`, barcode, voice, expiry, `pantry-intelligence`. Ranking is not substitution-coverage with verified IDs only. |
+| P2 Planner and shopping | **Partial, ahead of the roadmap** | Calendar, drag-and-drop, AI meal generator, budget tracker, grocery merge, household sync, WhatsApp/deep links. Prices are the hardcoded market table, not `ingredient_availability`. |
+| P3 Commerce | **Link-out only** | Correct to leave here. |
+| P4 Community and AI coach | **Partial and unsafe on substitutions** | Edge functions for search, recommendations, meal gen, cultural sweeps. No grounded coach. The substitution LLM is unconstrained. |
+| Analytics events | **Missing** | The event list in the blueprint is not instrumented. |
+| i18n | **Missing** | English UI. Native names and phonetic fields exist on dishes. |
+| Licence separation (ODbL) | **Not applicable yet** | Open Food Facts is not imported. Cookbook text under `data/cookbooks/` needs a licence check before any further merge. No licence column to hang that on. |
+
+---
+
+## Sprint 1 task list, reconciled
+
+| ID | Task | State |
+|---|---|---|
+| S1-01 | This audit | **Done** (this document) |
+| S1-02 | Lighthouse on 10 templates, Search Console, internal search logs | **Not done.** No GA4, so there is no internal-search log to pull. GSC note from 16 November: about 3 indexed pages and 1 impression in 7 days, before the sitemap expansion. Re-measure after the prerender deploy. |
+| S1-03 | Migrations for ingredients, aliases, substitutions, availability, recipe_ingredients, provenance | **Not done.** Stub tables exist and are empty or name-only. Aliases and availability do not exist. |
+| S1-04 | Seed 100 priority ingredients from an editor CSV | **Not done.** Client seed is ~34 edges, not a validated CSV import. |
+| S1-05 | Alias resolver with trigram, ambiguity, tests | **Partial.** In-memory aliases and Levenshtein. No trigram index, no ambiguity flag. |
+| S1-06 | URL facets with chips, counts, clear-all | **Partial.** See Search. |
+| S1-07 | Facet indexation policy and sitemaps | **Partial.** Sitemaps are split and counts match the DB. Allow-list / noindex for facet URLs is not implemented. |
+| S1-08 | Recipe / Person / BreadcrumbList JSON-LD and a CI validation test | **Partial.** Recipe JSON-LD yes. Person no. BreadcrumbList is client-only. No CI check. |
+| S1-09 | `POST /api/substitutions` v0, hard filters, no LLM | **Not done.** Client ranker plus an LLM that invents names. |
+| S1-10 | Substitution popover | **Present** |
+| S1-11 | Mobile recipe card and image pipeline | **Partial.** Cards show image, time, difficulty, country. No AVIF pipeline. Duplicate cookbook images remain. |
+| S1-12 | Lighthouse CI and structured-data checks | **Not done** |
+| S1-13 | Analytics events | **Not done** |
+
+Definition of done for product tasks (tests in CI, throttled Android, axe, CWV, schema, analytics, provenance) is not met. This audit does not claim that it is.
+
+---
+
+## Reconciled stack (decision)
+
+1. Stay on Vite, React, TypeScript, Tailwind, shadcn, React Router, Supabase, nginx, Coolify.
+2. Treat `scripts/prerender-seo.mjs` as the SEO renderer. Extend it (breadcrumbs, Person when a real author exists, non-African recipes or drop them from the sitemap). Do not start a Next.js migration in Phase 1.
+3. Add the ingredient graph as Supabase migrations: aliases with `match_confidence` and `is_ambiguous`, substitutions with review status, availability with unknown = unscored, provenance and licence columns. Backfill `recipe_ingredients` from the JSON blob without deleting the original text.
+4. Ship substitution v0 as a Supabase edge function that only reads curated rows. Change `suggest-substitutions` so it cannot return an id or a name that was not retrieved. Until that ships, the popover should not call it for diet- or allergen-sensitive cooks.
+5. Add the existing `npm run test:*` scripts to GitHub Actions before adding Lighthouse CI.
+6. Defer Meilisearch, Redis, pgvector, payments, and a conversational coach until the graph and the indexation allow-list are in place.
+
+---
+
+## What to do next
+
+S1-02 needs a human with Search Console access and a Lighthouse run against production (home, `/recipe-index`, a country hub, a prerendered recipe, a non-prerendered recipe, `/ingredients`, `/blog`, `/atlas`, `/dish/:slug`, `/meals`). After that, S1-03 is the first code change: the tables the rest of Sprint 1 has to hang on.
+
+Do not add recipes to close the positioning gap. The catalog count is already 2,103.
+
+---
+
+## Appendix: what shipped after the 13 November audit
+
+Kept so later work does not rebuild it.
+
+- Crawlable `#seo-shell`, `noindex` on JS/CSS, segmented sitemap (4,597 URLs), African recipe HTML prerender.
+- Client substitution graph, market ranking for NG/KE/GH/ZA/EG/TZ, grocery engine, budget tracker, cook-mode popover.
+- Households, shared pantry, shared grocery items, phone OTP form (provider still required).
+- Offline packs, IndexedDB mirror, pantry mutation queue, data-saver.
+- Recipe provenance UI, reviews UI, cooked-photo column, recipe-box folders, import-recipe (URL / photo / voice) into the review queue.
+- Freemium soft gates in `premium.ts` (offline packs and AI meal plans).
+
+Still open from that pass, and still open now: email household invites, live retailer carts, in-app mobile-money capture, Search Console re-measurement, and moving substitutions into reviewed database rows.
+
+---
+
+## S1-03 / S1-04 progress note (2026-11-20)
+
+Schema migration `supabase/migrations/20261120100000_ingredient_graph_schema.sql` and seed migration `supabase/migrations/20261120110000_ingredient_graph_seed.sql` landed.
+
+- `ingredients` extended with slug (unique), canonical_name, food_group, flavor_profile, texture_profile, function_tags, dietary_tags, allergens, nutrition, source, licence, review_status, version, and provenance columns. Slug backfilled from name.
+- `ingredient_aliases` table created: alias_normalized, language, country_code, is_ambiguous, match_confidence, RLS public SELECT, GIN trigram index.
+- `ingredient_substitutions` extended with substitution_type, confidence, flavor_impact, texture_impact, cooking_adjustments, dietary_tags, allergens, is_verified, review_status, source.
+- `ingredient_availability` table created: country_code, region, availability_score, typical_price, currency, price_unit, confidence, RLS public SELECT.
+- `recipe_ingredients` extended with id, group_label, grams_estimate, display_text, preparation_note, is_optional, sort_order, review_status.
+- `ai_audit_log` table created: service-role write only, no anon policies.
+- Seed data: 100 priority African ingredients in `data/ingredients/priority-100.csv`, 42 curated substitution edges in `data/ingredients/substitutions-seed.csv`, 600 market availability rows across NG/KE/GH/ZA/EG/TZ in `data/ingredients/availability-seed.csv`.
+- Import script `scripts/import-ingredient-graph.mjs` added (`npm run seed:ingredients`).
+
+S1-03 and S1-04 are now complete.
+
+---
+
+## Sprint 1 execution progress (2026-11-20)
+
+| ID | Status | Notes |
+|---|---|---|
+| S1-01 | Done | This audit |
+| S1-02 | Partial | `docs/BASELINES.md`; homepage LCP 3.7 s / CLS 0 / SEO 0.92; GSC/GA4 still need human export |
+| S1-03 | Done | Schema migration for graph + provenance |
+| S1-04 | Done | 100 ingredients CSV + SQL seed + import script |
+| S1-05 | Done | `src/lib/aliasResolver.ts` + `npm run test:alias` |
+| S1-06 | Done | RecipeIndex history, stable params, open-facet counts, lighter select |
+| S1-07 | Done | `facetIndexation.ts` + `sitemap-facets.xml` |
+| S1-08 | Done | Person author option, schema CI fixture, BreadcrumbList already present |
+| S1-09 | Done | `substitutionEngine.ts` + edge `substitutions` (no LLM invent); diet hard filters |
+| S1-10 | Done | Popover uses engine; AI invent fallback removed |
+| S1-11 | Done | Index cards link to `/recipe/:slug`, diet badges, image width/height |
+| S1-12 | Done | CI runs unit + schema tests; LHCI workflow_dispatch |
+| S1-13 | Done | `analytics.ts` + key event wiring (consent-aware) |
+
+**Deploy gate (human):** apply `20261120100000_*` and `20261120110000_*` migrations on Supabase, deploy edge function `substitutions`, run `npm run seed:ingredients` with service key if SQL seed is not applied via CLI.

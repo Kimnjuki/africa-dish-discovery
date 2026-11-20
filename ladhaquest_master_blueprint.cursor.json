@@ -1,0 +1,682 @@
+{
+  "meta": {
+    "document": "LadhaQuest Master Blueprint: African Kitchen Intelligence Platform",
+    "version": "1.0.0",
+    "date": "2026-11-20",
+    "target_tool": "Cursor AI",
+    "target_site": "https://www.ladhaquest.com",
+    "synthesised_from": [
+      "Report 1: Strategic assessment and roadmap",
+      "Report 2: Ingredient substitution engine spec",
+      "Report 3: Data strategy and sources",
+      "Report 4: Competitive audit (UI, discovery, regional tagging, creator tools, SEO)"
+    ],
+    "roles_applied": ["Full-stack architect", "SEO strategist", "Food and cooking domain expert"],
+    "mission": "Do not merely add more recipes. Make every recipe actionable in a real African kitchen: discover, plan, shop, cook, learn, share.",
+    "positioning_statement": "LadhaQuest is the African Kitchen Intelligence Platform: the only recipe product that understands local ingredient names, local availability, local prices and local substitutions across 54 African countries and the diaspora.",
+    "how_to_use_in_cursor": [
+      "Save as ladhaquest_master_blueprint.cursor.json at the repo root.",
+      "FIRST inspect the existing codebase (framework, routing, DB, search, structured data) and write docs/AUDIT.md. Do not assume the stack in this file; reconcile it with what exists.",
+      "Execute one sprint at a time from roadmap.sprint_1_task_list, then the phases in order.",
+      "Use the cursor_prompts section as ready-made prompts.",
+      "Every task must meet global_definition_of_done before moving on."
+    ]
+  },
+  "assumptions_and_reconciliation": {
+    "research_limitations": "Live fetch of ladhaquest.com was blocked by robots.txt, so site facts come from the four supplied reports (themselves based on public pages). Cursor must validate every claim against the real codebase and analytics.",
+    "data_conflicts_to_resolve": [
+      {
+        "issue": "Recipe count differs: 2,100+ (homepage claim) vs 1,700+ (recipe index claim).",
+        "action": "Query the production DB for the true published count; use the real number in schema, UI and KPIs."
+      },
+      {
+        "issue": "Competitor claims (Allrecipes 51K+ recipes, 7M+ reviews; African Food Network Africooks) are third-party observations.",
+        "action": "Treat as benchmarks only; never copy competitor content."
+      },
+      {
+        "issue": "Market-size claims (e.g. South Africa, Nigeria, Kenya, Egypt = 65-70% of African food-delivery value) are unverified here.",
+        "action": "Verify with a current source before using in any investor or marketing material."
+      }
+    ],
+    "corrections_to_source_reports": [
+      {
+        "source": "Report 2 filterCandidates()",
+        "problem": "dietConflict checks whether candidate.dietTags INCLUDES any of the user's required diet tags and then rejects. That rejects compatible candidates (a vegan user would reject vegan substitutes).",
+        "fix": "Reject when the candidate does NOT satisfy every required diet tag: requiredDiets.every(d => candidate.dietTags.includes(d)). Also check religious/halal/kosher flags and meat/dairy derived tags."
+      },
+      {
+        "source": "Report 2 candidate SQL",
+        "problem": "INNER JOIN on ingredient_availability drops curated substitutes with no availability row.",
+        "fix": "LEFT JOIN and treat missing availability as unknown (score 0.3, flagged 'availability unverified') instead of excluding; apply the hard availability cutoff only when data exists for that country."
+      },
+      {
+        "source": "Report 2 allowed_candidate_ids example",
+        "problem": "Contains 'ground_cashew paste' (space, not a slug) and ids that are slugs rather than UUIDs.",
+        "fix": "Allowlist must contain real ingredient slugs/UUIDs validated against the DB; reject any LLM output id not in the allowlist."
+      },
+      {
+        "source": "Report 2 example 'coconut milk -> evaporated milk'",
+        "problem": "Introduces a dairy allergen/vegan conflict.",
+        "fix": "The hard filter must catch it; for vegan/dairy-free users suggest cashew/groundnut cream or blended coconut flesh."
+      },
+      {
+        "source": "Reports 2 and 3 alias model",
+        "problem": "Local names are not one-to-one. 'Morogo' (Southern Africa) is a family of leafy greens, not a synonym for sukuma wiki. 'Sukuma wiki' may be kale or collards depending on region.",
+        "fix": "Model aliases as many-to-many (alias -> ingredient with a match_confidence and an ambiguity flag). When an alias maps to several ingredients, the resolver must ask the user or use recipe/country context to disambiguate. Also treat 'ndizi' as banana (Swahili), a different thing from plantain in some markets."
+      },
+      {
+        "source": "Report 3 licensing",
+        "problem": "Open Food Facts is ODbL (share-alike and attribution obligations); FAO and national tables have varying licences.",
+        "fix": "Keep imported datasets in separate tables with licence metadata; legal review before merging ODbL data into a proprietary database that is redistributed."
+      },
+      {
+        "source": "Report 4 scorecard",
+        "problem": "Scores are subjective.",
+        "fix": "Re-score after a measured audit (Lighthouse, Search Console, GA4)."
+      }
+    ]
+  },
+  "executive_summary": {
+    "thesis": "Allrecipes wins on scale and community; African Food Network wins on heritage and contributor identity; no one wins on African cooking utility. LadhaQuest can own that gap by combining its country/region taxonomy with a proprietary African Ingredient Graph, a safe hybrid substitution engine, budget-aware planning, and an attribution-first creator program, all on top of technically excellent recipe SEO.",
+    "top_priorities": [
+      "P0: African Ingredient Graph (aliases, categories, substitutions, availability) and ingredient-aware search",
+      "P0: Faceted discovery with URL-persisted filters and SEO-safe indexation rules",
+      "P0: Recipe schema, structured data, hub pages and Core Web Vitals",
+      "P1: Recipe page upgrade: cook mode, scaling, unit conversion, substitution module, cultural context",
+      "P1: Creator studio with attribution, moderation and regional review",
+      "P1: Pantry search ('cook with what I have')",
+      "P2: Meal planner and consolidated shopping lists with budget awareness",
+      "P3: Commerce (affiliate, kits, diaspora gifting) once utility and traffic are proven",
+      "P4: Community, voice and AI cooking coach in African languages"
+    ],
+    "defensible_moats": [
+      "African Ingredient Graph with local names by language/country",
+      "Human-verified local substitution engine (AI explains, never invents)",
+      "Budget and availability intelligence per country (price bands, seasonality)",
+      "Cultural authority: provenance, cook attribution, regional variants, food stories",
+      "Diaspora bridge: find authentic equivalents abroad and send ingredients home",
+      "Creator economy: African home cooks, chefs and food historians as distribution partners"
+    ]
+  },
+  "current_state_audit": {
+    "observed_strengths": [
+      "2,100+ recipes claimed across 54 African countries",
+      "Recipe index with filters: country, region, meal type, ingredient, diet, time, difficulty",
+      "Country hub pages (e.g. Kenya) with cuisine guide, pantry context, festive dishes",
+      "Local ingredient names and substitution guidance already present in content",
+      "Clear Africa-first positioning"
+    ],
+    "observed_gaps": [
+      "Homepage lacks visual hierarchy, imagery and social proof",
+      "Filter UI lacks active chips, result counts, clear-all and URL persistence",
+      "Recipe cards do not show country/region/time/difficulty/diet/availability at a glance",
+      "No ingredient-aware or natural-language search; no pantry matching",
+      "No saves, reviews, cook notes, personalization, meal planning, shopping lists",
+      "No visible creator studio, profiles or monetization",
+      "No visible commerce layer",
+      "Structured data, canonical rules and faceted-URL governance not confirmed"
+    ],
+    "audit_tasks_for_cursor": [
+      "Identify framework, rendering mode (SSR/SSG/CSR), router, DB, ORM, hosting, CDN",
+      "Inventory recipe data model and fields; measure completeness (images, times, yields, nutrition, author)",
+      "Crawl the site: titles, metas, canonicals, schema validity, internal links, orphan pages, duplicate filter URLs",
+      "Run Lighthouse on 10 representative templates (home, index, country, recipe, blog) for mobile LCP/INP/CLS",
+      "Pull Search Console and GA4 baselines: top queries, zero-result internal searches, device split",
+      "Produce docs/AUDIT.md plus a gap list mapped to this blueprint"
+    ],
+    "code_reconciliation_2026_11_20": "Several observed_gaps above were already stale when this file was saved. See docs/AUDIT.md. The live app has URL-persisted filters, pantry matching, meal planning, shopping lists, cook mode, reviews UI, and prerendered Recipe JSON-LD. The ingredient graph, allowlisted substitution API, analytics, and measured Core Web Vitals are still missing."
+  },
+  "competitive_benchmark": {
+    "competitors": [
+      {
+        "name": "Allrecipes",
+        "role": "Scale, community and utility benchmark",
+        "learn": ["Ratings/reviews as trust signal", "Saved collections", "Meal planning", "Deep faceted navigation"],
+        "avoid": ["Generic taxonomy diluting culture", "Heavy ad density", "Thin African specificity"]
+      },
+      {
+        "name": "African Food Network",
+        "role": "Closest cultural competitor",
+        "learn": ["Named contributors (Africooks) with profile pages", "Essays and stories", "Occasion/season collections"],
+        "gap_to_exploit": ["Less structured faceted search", "No visible ingredient/diet/difficulty/substitution discovery"]
+      },
+      {
+        "name": "Yummly",
+        "role": "Personalisation and meal-planning benchmark",
+        "learn": ["Taste profile personalisation", "Ingredient search", "Dietary filters"]
+      },
+      {
+        "name": "BBC Good Food",
+        "role": "Editorial trust and utility benchmark",
+        "learn": ["Nutrition and tested-recipe credibility", "Meal plans and batch-cooking resources"]
+      },
+      {
+        "name": "Afrofeast / African Vibes",
+        "role": "Niche African competitors",
+        "learn": ["Brand voice, visuals, social-first content"]
+      }
+    ],
+    "scorecard_1_to_5_estimated": {
+      "scale": {"ladhaquest": 3, "allrecipes": 5, "african_food_network": 3},
+      "african_specialization": {"ladhaquest": 5, "allrecipes": 2, "african_food_network": 5},
+      "ui_polish": {"ladhaquest": 3, "allrecipes": 5, "african_food_network": 4},
+      "discovery_depth": {"ladhaquest": 4, "allrecipes": 5, "african_food_network": 3},
+      "regional_tagging": {"ladhaquest": 5, "allrecipes": 2, "african_food_network": 4},
+      "creator_tools": {"ladhaquest": 2, "allrecipes": 4, "african_food_network": 4},
+      "seo_potential": {"ladhaquest": 4, "allrecipes": 5, "african_food_network": 4},
+      "kitchen_utility_tools": {"ladhaquest": 2, "allrecipes": 4, "african_food_network": 2}
+    },
+    "target_scores_in_12_months": {
+      "ui_polish": 5, "discovery_depth": 5, "creator_tools": 4, "seo_potential": 5, "kitchen_utility_tools": 5, "african_specialization": 5
+    },
+    "wedge": "African-specific structured discovery plus practical kitchen utility. Combine African Food Network's cultural depth with Allrecipes' utility.",
+    "scorecard_note": "Subjective. Re-score only after Lighthouse, Search Console, and GA4 baselines. See docs/AUDIT.md."
+  },
+  "product_architecture": {
+    "principles": [
+      "Mobile-first, low-bandwidth friendly (African network conditions, mid-range Android devices)",
+      "Progressive Web App with offline cook mode",
+      "SEO-first rendering: SSR/SSG/ISR for all indexable pages",
+      "Humans verify, AI assists: no AI output is published as fact without review",
+      "Provenance and licence on every record",
+      "Accessible (WCAG 2.2 AA) and internationalised (English first; Swahili, French, Arabic, Hausa, Yoruba, Amharic, Zulu, Portuguese as phased targets)"
+    ],
+    "recommended_stack": {
+      "note": "Adapt to existing stack where possible; this is the default if greenfield or if the current stack is weak.",
+      "frontend": "Next.js (App Router) + TypeScript + Tailwind CSS + shadcn/ui; PWA via service worker (Workbox)",
+      "backend": "Next.js route handlers or a NestJS/Fastify service for heavy jobs; Zod for validation",
+      "database": "PostgreSQL (authoritative) with pg_trgm and unaccent; pgvector for semantic fallback",
+      "search": "Meilisearch or Typesense (typo-tolerant, faceted, fast, multilingual aliases); fallback Postgres FTS",
+      "cache_queue": "Redis (cache, rate limit) + BullMQ for jobs (import, embeddings, price refresh)",
+      "storage_media": "S3-compatible bucket + CDN with image transforms (AVIF/WebP, srcset)",
+      "auth": "Auth.js or Clerk: email, Google, phone OTP (important for African users)",
+      "payments": "Paystack, Flutterwave, M-Pesa (Daraja) and Stripe for diaspora",
+      "analytics": "GA4 + PostHog (events/funnels) + Search Console API",
+      "observability": "Sentry, OpenTelemetry, uptime monitoring",
+      "ai": "LLM API behind a server-side gateway with prompt/version logging, allowlist enforcement and cost caps; embeddings via pgvector",
+      "ci_cd": "GitHub Actions: typecheck, lint, unit, e2e (Playwright), Lighthouse CI, schema validation"
+    },
+    "reconciled_stack_2026_11_20": {
+      "decision": "Do not migrate to Next.js, Meilisearch, Redis, or Nest in Sprint 1.",
+      "frontend": "Vite 5 + React 18 + TypeScript + Tailwind + shadcn/ui + React Router 6",
+      "rendering": "CSR plus scripts/prerender-seo.mjs HTML shells for indexable routes",
+      "backend": "Supabase Postgres, Auth, Storage, and Edge Functions",
+      "search": "src/lib/recipeSearch.ts now; Postgres pg_trgm on ingredient_aliases before any dedicated search engine",
+      "auth": "Supabase email, Google, and phone OTP UI",
+      "hosting": "Docker + nginx on Coolify, Cloudflare in front, canonical host https://www.ladhaquest.com",
+      "reference": "docs/AUDIT.md"
+    },
+    "environments": ["local", "preview per PR", "staging", "production"]
+  },
+  "data_model": {
+    "conventions": "UUID primary keys, stable slugs, created_at/updated_at, soft-delete, row-level provenance fields (source, licence, review_status, reviewed_by, reviewed_at, version).",
+    "tables": {
+      "countries_regions": ["id", "iso2", "name", "african_region", "subnational_regions JSONB", "languages TEXT[]", "currency", "slug"],
+      "dishes": ["id", "slug", "canonical_name", "description", "origin_story", "pan_african BOOLEAN", "origin_country_ids UUID[]", "alternate_names JSONB", "parent_dish_id (variants)"],
+      "recipes": ["id", "slug", "dish_id", "title", "summary", "country_id", "subnational_region", "cuisine_community", "meal_type", "course", "diet_tags TEXT[]", "allergens TEXT[]", "equipment TEXT[]", "spice_level SMALLINT", "difficulty", "prep_min", "cook_min", "total_min", "yield_servings", "instructions JSONB (steps with optional timer_seconds)", "cultural_notes", "serving_context", "pronunciation", "hero_image_id", "video_url", "author_id", "status (draft|in_review|published|rejected)", "published_at", "version", "canonical_url", "seo_title", "seo_description"],
+      "recipe_ingredients": ["id", "recipe_id", "ingredient_id", "group_label", "quantity NUMERIC", "unit", "grams_estimate", "display_text", "preparation_note", "is_optional", "sort_order"],
+      "ingredients": ["id", "slug", "canonical_name", "scientific_name", "category", "food_group", "flavor_profile JSONB", "texture_profile JSONB", "function_tags TEXT[]", "cooking_methods TEXT[]", "nutrition JSONB", "nutrition_source_id", "allergens TEXT[]", "dietary_tags TEXT[]", "default_unit", "gram_per_unit", "safety_flags TEXT[]", "storage_notes", "seasonality JSONB", "image_id"],
+      "ingredient_aliases": ["id", "ingredient_id", "alias", "alias_normalized (unaccented lowercase)", "language", "country_code", "region", "is_primary_local_name", "match_confidence NUMERIC", "is_ambiguous BOOLEAN"],
+      "substitutions": ["id", "source_ingredient_id", "target_ingredient_id", "substitution_type (direct|functional|flavor|texture|emergency)", "ratio", "ratio_unit", "confidence", "flavor_impact", "texture_impact", "cooking_adjustments JSONB", "dietary_tags", "allergens", "context_recipe_types TEXT[]", "is_verified", "review_status (proposed|approved|rejected)", "source", "model_version", "reviewed_by", "reviewed_at"],
+      "ingredient_availability": ["id", "ingredient_id", "country_code", "region", "availability_score", "season", "typical_price", "currency", "price_unit", "price_updated_at", "price_source (survey|retailer|crowd)", "retailer_id", "confidence"],
+      "food_composition_sources": ["id", "name", "country_code", "year", "url", "licence", "import_status"],
+      "users": ["id", "email/phone", "display_name", "country_code", "language", "diet_tags", "allergies", "household_size", "weekly_budget", "currency", "role (user|creator|editor|admin)"],
+      "creator_profiles": ["id", "user_id", "slug", "bio", "country_id", "languages", "social_links (sameAs)", "verified BOOLEAN", "payout_account_ref"],
+      "user_recipe_interactions": ["user_id", "recipe_id", "saved", "cooked_count", "rating 1-5", "review_text", "cook_note", "photo_id", "moderation_status"],
+      "collections": ["id", "owner_id", "title", "is_public", "recipe_ids"],
+      "meal_plans": ["id", "user_id", "week_start", "household_size", "budget", "entries JSONB"],
+      "shopping_lists": ["id", "user_id", "meal_plan_id", "items JSONB (ingredient_id, qty, unit, est_price, checked)"],
+      "pantry_items": ["user_id", "ingredient_id", "quantity", "unit", "expires_on"],
+      "affiliate_links_retailers": ["id", "retailer", "country_code", "ingredient_id", "url", "commission_pct", "last_checked"],
+      "ai_audit_log": ["id", "task", "model", "prompt_version", "input_hash", "output", "allowlist_ids", "validated BOOLEAN", "created_at"],
+      "content_reports": ["id", "target_type", "target_id", "reporter_id", "reason", "status"]
+    },
+    "indexes_and_search": [
+      "GIN trigram index on ingredient_aliases.alias_normalized",
+      "Composite indexes on recipes(country_id, meal_type, status), recipes(status, published_at)",
+      "recipe_ingredients(ingredient_id) for 'recipes using X' and pantry matching",
+      "Search index documents contain: title, aliases of all ingredients (local + English + scientific), country, region, dish alternate names, diets, time buckets, difficulty"
+    ],
+    "migration_rule": "Migrate existing recipes with a script that parses free-text ingredients using an LLM extraction job in proposed state, then human review in an admin queue before relinking to canonical ingredient IDs. Never destroy original text."
+  },
+  "feature_specs": {
+    "A_discovery_and_search": {
+      "priority": "P0",
+      "features": [
+        {
+          "name": "Faceted recipe index",
+          "spec": "Facets: country, region, subnational region, cuisine community, meal type, course, ingredient (include/exclude), diet, allergen-free, cooking time bucket, difficulty, equipment, spice level, budget band. Active-filter chips, result counts per facet, clear-all, sort (relevance, newest, quickest, most saved), URL-persisted state with stable param order.",
+          "acceptance": ["State shareable via URL", "Back/forward works", "Counts update without full reload", "Filter response p95 < 300 ms on mobile networks"]
+        },
+        {
+          "name": "Alias-aware ingredient search",
+          "spec": "Query matches local, English, scientific and market names using alias table plus typo tolerance. Disambiguation prompt when alias is ambiguous (e.g. morogo).",
+          "acceptance": ["'sukuma wiki', 'collard', 'kale' all return overlapping relevant results", "Zero-result rate < 5% for top 1,000 queries"]
+        },
+        {
+          "name": "Cook with what I have (pantry search)",
+          "spec": "User enters ingredients; rank recipes by overlap %, missing-count, substitution-covered gaps, time and cuisine preference. Show 'missing 2: swap X for Y'.",
+          "acceptance": ["Results explain missing items", "Substitution-aware ranking uses verified substitutions only"]
+        },
+        {
+          "name": "Natural-language intent search",
+          "spec": "Queries like 'quick Kenyan dinner', 'Nigerian party food', 'vegan Ethiopian fasting meals' are parsed by an LLM into structured filters (never free text to DB). Falls back to keyword search if parsing fails.",
+          "acceptance": ["Parsed filters displayed as editable chips", "Logged for evaluation"]
+        },
+        {
+          "name": "Map and region browsing",
+          "spec": "Interactive Africa map to country, then subnational region; region-to-ingredient mapping.",
+          "acceptance": ["Works with keyboard and screen readers", "Static fallback list for no-JS crawlers"]
+        },
+        {
+          "name": "Personalised feed and similar recipes",
+          "spec": "Based on saves, diet, country, cooked history; similar-recipe retrieval via ingredient overlap + embeddings.",
+          "acceptance": ["Cold-start uses country/diet defaults"]
+        }
+      ]
+    },
+    "B_recipe_page_and_cooking_utility": {
+      "priority": "P1",
+      "features": [
+        "Mobile-first recipe card: image, country, region, time, difficulty, diet badges, availability indicator for the user's country",
+        "Servings scaling and unit conversion (metric/imperial/local measures such as 'tin', 'cup', 'handful' with gram estimates)",
+        "Inline ingredient popovers: local names, photo, substitutions, where to buy",
+        "Substitution module per ingredient (calls substitution engine)",
+        "Cook mode: step-by-step, wake lock, large type, timers per step, voice read-aloud, offline via PWA cache",
+        "Cultural context block: origin, dish variants, serving context, pronunciation (audio), contributor story",
+        "Nutrition estimate with source and 'estimated' label; computed from verified composition data only",
+        "Save, collections, cook notes, print view, share cards",
+        "Reviews and 'I cooked this' photos with moderation; ratings markup only from genuine first-party reviews"
+      ]
+    },
+    "C_ingredient_graph_and_hubs": {
+      "priority": "P0",
+      "features": [
+        "Ingredient glossary pages: local names by language/country, photo, how to buy/store/prepare, substitutions, nutrition (with source), seasonality, recipes using it",
+        "Country hubs, region hubs, dish-variant pages, occasion/season collections",
+        "Editorial review gate for every programmatic hub (no thin pages)"
+      ]
+    },
+    "D_substitution_engine": {
+      "priority": "P0/P1",
+      "summary": "Hybrid rules + curated knowledge graph + AI explanation. See substitution_engine section."
+    },
+    "E_planning_and_shopping": {
+      "priority": "P2",
+      "features": [
+        "Weekly meal planner by household size, budget, diet, allergies, pantry, cuisine preference, time per day",
+        "Consolidated shopping list merging duplicate ingredients across recipes with unit normalisation, aisle/market grouping and local names",
+        "Budget estimator using ingredient_availability price bands with 'last updated' and confidence",
+        "Pantry tracker with expiry nudges and 'use it up' suggestions",
+        "Batch-cooking and leftovers suggestions",
+        "Export to WhatsApp/SMS/print (WhatsApp share is a major local channel)"
+      ]
+    },
+    "F_creator_studio": {
+      "priority": "P1",
+      "features": [
+        "Onboarding: profile, country, languages, verification (ID or social proof), attribution preferences",
+        "Guided structured submission wizard: dish, country+region (required), ingredients via alias picker, steps with timers, photos/video, story, variant notes",
+        "Validation: required fields, image quality checks, plagiarism/duplicate detection (embedding + text similarity), allergen/diet auto-suggest",
+        "Moderation queue with regional reviewer step, status workflow, feedback comments, version history",
+        "Creator profile pages with Person schema and sameAs links",
+        "Analytics: views, saves, cooks, search impressions, earnings",
+        "Monetisation (phase 3): revenue share, tips, premium courses, creator storefronts",
+        "Family-recipe preservation: audio/video oral history upload, elder attribution, consent capture"
+      ],
+      "benchmarks": "Match African Food Network's named-cook attribution, then exceed it with structured tooling and analytics."
+    },
+    "G_commerce_and_diaspora": {
+      "priority": "P3",
+      "features": [
+        "Affiliate ingredient links per country/retailer; 'buy this ingredient' on recipe and glossary pages",
+        "Recipe kits and ingredient bundles with retail/delivery partners (supermarket and delivery integrations)",
+        "Price comparison across retailers where APIs/feeds exist",
+        "Diaspora mode: 'I live in {UK/US/CA/UAE}' maps African ingredients to locally available equivalents and African grocers; gift/send-to-home kits",
+        "Creator storefronts and sponsored ingredient listings (clearly labelled)"
+      ],
+      "preconditions": "Only start once organic traffic, saves and substitution usage show product-market fit; secure licences and partner agreements first."
+    },
+    "H_community_and_ai": {
+      "priority": "P4",
+      "features": [
+        "Moderated user recipes, reviews, Q&A on recipes",
+        "AI cooking coach (chat and voice) grounded in LadhaQuest recipes and the ingredient graph; cites sources; refuses to invent medical/nutrition claims",
+        "Voice-first support in Swahili first, then Hausa, Yoruba, Amharic, Zulu, French, Arabic, Portuguese",
+        "Premium creator courses and live cook-alongs",
+        "B2B licensing: ingredient graph API for retailers, health apps, NGOs"
+      ]
+    }
+  },
+  "substitution_engine": {
+    "design_principle": "Curated graph is the source of truth. AI never invents or ranks substitutions; it explains and adapts quantities from an allowlist supplied by retrieval.",
+    "pipeline": [
+      "1. Normalise input (text, locale, recipe context) and resolve ingredient via alias table (country/language aware, disambiguate if ambiguous)",
+      "2. Retrieve candidates in layers: (a) curated direct, (b) functional equivalents by function_tags, (c) semantic candidates via embeddings and co-occurrence (flagged lower trust, never marked verified)",
+      "3. Apply hard filters: allergens, diet/religious (halal, vegan, vegetarian, gluten-free, etc.), food safety, cooking-method incompatibility, availability (only when data exists)",
+      "4. Score and rank candidates",
+      "5. LLM step: explain and adapt quantities/cooking notes using ONLY allowlisted IDs; validate JSON schema and IDs; fall back to template explanation on failure",
+      "6. Return ranked results with confidence, impact labels and warnings; cache by (ingredient, country, diet-hash, method)"
+    ],
+    "scoring": {
+      "formula": "Score = 0.30*C + 0.20*F + 0.15*T + 0.15*A + 0.10*B + 0.05*D + 0.05*U",
+      "weights_sum_to_one": true,
+      "signals": {
+        "C": "Curated substitution confidence (0-1)",
+        "F": "Flavor similarity",
+        "T": "Texture and cooking-behaviour similarity",
+        "A": "Local availability (unknown = 0.3 and flagged)",
+        "B": "Budget fit",
+        "D": "Dietary/allergy compatibility beyond hard filters (e.g. preferences)",
+        "U": "User preference and past acceptance"
+      },
+      "weights_stored_in_config": true,
+      "tuning": "Weights are configurable and re-fitted from feedback in Phase 4; keep an offline evaluation set of 300 expert-labelled substitution cases."
+    },
+    "confidence_bands": {"high": ">= 0.85", "medium": "0.65 - 0.849", "low": "< 0.65 (never present as exact replacement; always show tradeoff)"},
+    "api": {
+      "endpoint": "POST /api/substitutions",
+      "request": {
+        "ingredient": "string (free text or ingredient_id)",
+        "country_code": "KE",
+        "language": "sw|en|...",
+        "recipe_id": "optional",
+        "servings": 4,
+        "required_amount": 1,
+        "unit": "bunch",
+        "diet_tags": [],
+        "allergies": [],
+        "budget": null,
+        "cooking_method": "sauté",
+        "user_pantry": []
+      },
+      "response": {
+        "resolved_ingredient": {"id": "uuid", "name": "string", "ambiguous": false},
+        "substitutions": [
+          {
+            "ingredient_id": "uuid",
+            "name": "Kale",
+            "local_name": "Sukuma wiki",
+            "type": "direct|functional|emergency",
+            "adjusted_amount": 1,
+            "unit": "bunch",
+            "score": 0.89,
+            "confidence": "high",
+            "flavor_impact": "low",
+            "texture_impact": "low",
+            "reason": "string",
+            "cooking_adjustments": ["string"],
+            "warnings": ["string"],
+            "verified": true,
+            "availability": {"score": 0.9, "known": true}
+          }
+        ],
+        "meta": {"cached": false, "llm_used": true, "fallback": false}
+      },
+      "rate_limit": "per IP and per user; cache hot queries in Redis (TTL 24h, invalidate on substitution edits)"
+    },
+    "llm_guardrails": [
+      "Provide allowed_candidate_ids; reject any output ID not in the list",
+      "Strict JSON schema validation (Zod); on failure, retry once then fall back to templated explanation",
+      "No invented nutrition facts; nutrition only from verified DB fields",
+      "Always surface allergen/food-safety warnings from DB, not from the model",
+      "Log prompt version, model, input hash, output and validation result to ai_audit_log",
+      "Temperature low; max tokens capped; cost budget per request",
+      "Prompt-injection hygiene: treat user text and recipe text as data, never instructions"
+    ],
+    "quality_controls": [
+      "Human culinary reviewer approves every substitution before is_verified=true",
+      "Separate direct, functional and emergency types in UI",
+      "Show confidence, flavor impact, texture impact, cooking adjustments",
+      "'Worked / didn't work' feedback loop on every suggestion",
+      "AI-proposed substitutions stored as proposed, never auto-published"
+    ],
+    "seed_plan": {
+      "phase_1": "500-1,000 high-frequency ingredients with editor-curated substitutes",
+      "priority_groups": ["Leafy greens (sukuma wiki, ugu, morogo, ewedu, cassava leaves, kale, spinach)", "Starches (maize flour, cassava, yam, plantain, rice, millet, sorghum, fufu, ugali)", "Legumes (cowpeas, pigeon peas, lentils, groundnuts)", "Proteins (goat, beef, chicken, fish, dried fish, eggs)", "Spices and aromatics (ginger, garlic, scotch bonnet, berbere, curry powder)", "Fats (palm oil, groundnut oil, coconut oil, shea butter, ghee)", "Thickeners/bases (egusi, groundnut paste, peanut butter, tomato paste, coconut milk)", "Fermented/specialty (ogiri, iru, locust beans, tamarind, baobab, hibiscus)"],
+      "phase_2": "Context signals: country, region, availability, budget, diet, allergy, recipe type, cooking method",
+      "phase_3": "AI-proposed expansion reviewed by editors and trusted cooks",
+      "phase_4": "Learning loop from clicks, saves, completion, ratings, feedback"
+    },
+    "required_tests": [
+      "Allergen filtering (including cross-reactive groups, e.g. peanut/groundnut paste)",
+      "Diet filtering (corrected logic: candidate must satisfy ALL required diets)",
+      "Ratio conversion and unit normalisation",
+      "Availability ranking and unknown-availability handling",
+      "Alias disambiguation",
+      "LLM guardrails: ID allowlist, schema failure, injection attempts, timeout fallback",
+      "Cache hit/miss and invalidation",
+      "Golden-set regression on 300 expert-labelled cases"
+    ],
+    "current_code_warning": "supabase/functions/suggest-substitutions invents substitute names with no allowlist. src/lib/localMarket.ts applies diet as a score penalty, not a hard reject. Do not treat either as the engine in this spec until S1-09 replaces them."
+  },
+  "data_strategy": {
+    "layers": [
+      {"layer": "Core nutrition", "sources": ["USDA FoodData Central", "FAO/INFOODS"], "use": "Baseline nutrients per 100 g, food groups, portions", "priority": "High"},
+      {"layer": "African nutrition", "sources": ["FAO/INFOODS directory of national and regional tables (Kenya, Nigeria, Ethiopia, Tanzania, Senegal, Morocco, South Africa, Cameroon, Mozambique, Mali)", "AFROFOODS", "WAFOODS West African composition tables"], "use": "Local foods, varieties, preparations", "priority": "Highest"},
+      {"layer": "Ingredient identity", "sources": ["Wikidata", "Open Food Facts taxonomy", "USDA", "custom taxonomy"], "use": "Canonical IDs, categories, allergens, dietary tags", "priority": "High"},
+      {"layer": "Local names", "sources": ["LadhaQuest editors", "Wikidata labels", "linguistic sources", "creator submissions"], "use": "Aliases by language/country", "priority": "Highest"},
+      {"layer": "Substitutions", "sources": ["Culinary editors", "AI proposals reviewed by humans"], "use": "Rules, ratios, impacts, adjustments", "priority": "Highest"},
+      {"layer": "Availability and prices", "sources": ["Retailer feeds/APIs", "market surveys", "crowdsourced reports"], "use": "Availability, price bands, seasonality", "priority": "High"},
+      {"layer": "Packaged products", "sources": ["Open Food Facts"], "use": "Barcode lookup, allergens, product nutrition", "priority": "Medium"},
+      {"layer": "Media", "sources": ["Original photography", "Wikimedia Commons (licence-checked)", "creator uploads with consent"], "use": "Ingredient and dish imagery", "priority": "Medium"}
+    ],
+    "import_pipeline": [
+      "Import USDA FDC baseline (API/bulk) into staging tables",
+      "Import FAO/national African tables (licence check per source) into staging",
+      "Normalise and merge to canonical ingredients with stable IDs; dedupe",
+      "Attach aliases (language, country, region) from editors",
+      "Add culinary metadata and substitution rules (editor-curated)",
+      "Add availability/price for Kenya, Nigeria, Ghana, South Africa first, then diaspora markets (UK, US, Canada, UAE)",
+      "Provenance on every record; validate continuously via user reports"
+    ],
+    "provenance_fields": ["source", "source_url", "licence", "imported_at", "confidence", "review_status", "reviewed_by", "version"],
+    "quality_targets": {"phase_1": "1,000 verified ingredients, 3,000+ aliases", "phase_2": "3,000 ingredients", "scale": "10,000 only after quality metrics hold"},
+    "rules": [
+      "Quality over volume: a bad substitution damages trust",
+      "AI output is 'proposed' until human approved",
+      "Models never overwrite authoritative nutrition values",
+      "Check every dataset licence before import; ODbL (Open Food Facts) requires attribution and share-alike handling; keep such data separable",
+      "Nutrition displayed as estimate with source; recipe nutrition computed from verified ingredient data"
+    ]
+  },
+  "seo_strategy": {
+    "goal": "Own the 'African recipe + country + ingredient + substitution' search landscape with programmatic but editorially reviewed pages.",
+    "technical": [
+      "SSR/SSG/ISR for recipes, hubs, glossary; client-only rendering forbidden for indexable content",
+      "JSON-LD: Recipe (name, image[], author, datePublished, description, recipeCuisine, recipeCategory, keywords, recipeIngredient, recipeInstructions as HowToStep, prepTime, cookTime, totalTime, recipeYield, nutrition, video where present), Person (authors, sameAs), Organization, WebSite with SearchAction, BreadcrumbList (Home > Country > Region > Dish > Recipe), FAQPage only where visible FAQs exist, ItemList on collection hubs",
+      "aggregateRating only from genuine first-party reviews; never fabricate",
+      "Canonical URLs for every page; self-canonical clean URL for recipes",
+      "Faceted URL governance: indexable allow-list = single-facet combos with demand (country, country+meal type, country+diet, ingredient). All other combinations noindex,follow or canonicalised; param order normalised; no infinite combinations; robots.txt blocks crawl traps (sort, page>N variants as appropriate)",
+      "XML sitemaps split by type (recipes, hubs, glossary, creators, images), lastmod accurate, hreflang when translations launch",
+      "Image SEO: descriptive filenames, alt text, srcset, AVIF/WebP, lazy loading below the fold, explicit width/height",
+      "Core Web Vitals targets (mobile, p75): LCP < 2.5 s, INP < 200 ms, CLS < 0.1; budget JS per template",
+      "Clean 301s, no redirect chains, custom 404 with search, pagination with crawlable links"
+    ],
+    "content_architecture": {
+      "hubs": ["/country/{country}", "/region/{region}", "/ingredient/{slug} (glossary)", "/dish/{slug} (variants)", "/collections/{slug} (occasion, season, festival, diet)", "/creators/{slug}", "/substitutes/{ingredient}-substitutes (high-intent long-tail)"],
+      "internal_linking_rules": [
+        "Country hub links to region collections, top dishes, ingredient glossary and substitution pages",
+        "Recipe links up (country, region, dish) and sideways (variants, related recipes, ingredient pages)",
+        "Ingredient page links to every recipe using it and to its substitutes",
+        "Breadcrumbs on every page"
+      ],
+      "programmatic_quality_gate": "A generated hub/substitution page is published only if it has unique editorial intro, at least N (e.g. 5) relevant recipes or verified substitutes, and passes duplicate-content checks."
+    },
+    "keyword_clusters": [
+      "[dish] recipe + [country] (e.g. kenyan pilau recipe)",
+      "[ingredient] substitute / what is [local name] in English",
+      "[local name] in [language/country] (ugu leaves in English, morogo meaning)",
+      "[country] traditional food, [occasion] food (Eid, Christmas, wedding, party)",
+      "African [diet] recipes (vegan, halal, gluten-free)",
+      "where to buy [ingredient] in [UK/US/...] (diaspora)",
+      "budget meal plans for [country]"
+    ],
+    "eeat": ["Named author with profile and credentials", "Cultural context and sources per recipe", "Last-reviewed dates and reviewer attribution", "Editorial policy and corrections page", "Original photography"],
+    "measurement": ["Search Console queries by cluster", "Rich result eligibility and validity", "Index coverage and crawl stats", "Organic clicks by template", "CWV field data"],
+    "acceptance": [
+      "Every recipe emits valid Recipe JSON-LD (Rich Results Test passes) with author",
+      "No critical missing title, meta, canonical, alt or mobile-usability errors in site audit",
+      "No unbounded indexable filter permutations"
+    ]
+  },
+  "ui_ux_spec": {
+    "design_principles": ["Visual-first (large food imagery)", "African identity (colour, typography, patterns) without cliche", "Fast on 3G/4G", "One-hand mobile use", "Ad-light, utility-heavy"],
+    "homepage": ["Hero search with intent chips (Quick dinner, Party food, Vegan, By country)", "Featured country/region carousel with map entry", "Trending and seasonal recipes with images", "Substitution and pantry search teasers", "Creator spotlights and social proof (real numbers only)", "Newsletter and app-install prompt"],
+    "recipe_card": ["Image, title, country flag, region, time, difficulty, diet badges, save button, 'ingredients you can find in {country}' indicator"],
+    "navigation": ["Discover (by country/region/dish)", "Ingredients", "Plan", "Creators", "Search always visible"],
+    "accessibility": ["WCAG 2.2 AA", "Keyboard navigation", "Contrast", "Reduced motion", "Alt text", "Screen-reader-friendly filters and map"],
+    "performance_budgets": {"js_per_route_kb_gz": 170, "image_hero_kb": 120, "lcp_s": 2.5, "inp_ms": 200, "cls": 0.1},
+    "i18n": "English first; externalised strings; ingredient aliases already multilingual; add Swahili and French next"
+  },
+  "monetization": {
+    "principles": "Utility and trust first; ads must not crowd recipes; clearly label sponsored/affiliate.",
+    "streams": [
+      {"stream": "Affiliate ingredient/kit links", "phase": 3},
+      {"stream": "Premium subscription (meal planner, advanced pantry, offline packs, ad-free)", "phase": 2},
+      {"stream": "Creator revenue share, tips, courses, storefronts", "phase": 3},
+      {"stream": "Diaspora gifting and recipe kits", "phase": 3},
+      {"stream": "Brand partnerships and sponsored collections", "phase": 3},
+      {"stream": "B2B licensing of ingredient graph/substitution API", "phase": 4},
+      {"stream": "Light, fast display ads (limited density)", "phase": 2}
+    ],
+    "pricing_note": "Price in local currency with mobile-money support; test tiers per market."
+  },
+  "growth_and_retention": {
+    "acquisition": ["Programmatic SEO hubs", "WhatsApp/Instagram/TikTok/YouTube short-form cooking clips from recipes", "Creator referral and co-marketing", "Diaspora communities and cultural festivals", "PR around the African Ingredient Graph"],
+    "retention": ["Saved collections", "Weekly meal-plan email/WhatsApp", "Streaks for 'I cooked this'", "Seasonal and festival campaigns", "Personalised push (PWA)"],
+    "analytics_events": ["search_performed", "search_zero_result", "filter_applied", "recipe_viewed", "recipe_saved", "substitution_requested", "substitution_feedback", "cook_mode_started", "cook_mode_completed", "plan_created", "shopping_list_exported", "creator_submission_started", "creator_submission_published", "affiliate_click"]
+  },
+  "security_privacy_compliance": [
+    "Validate all inputs (Zod); parameterised SQL/ORM; rate limiting; CSRF and XSS protection; secure headers and CSP",
+    "Secrets in environment manager; no keys in repo",
+    "Privacy: consent for analytics/cookies; compliance with Kenya Data Protection Act, Nigeria NDPA, South Africa POPIA, GDPR for diaspora users; data export/delete flows",
+    "UGC moderation, report tools, copyright/DMCA process, creator licence terms granting LadhaQuest display rights while crediting the cook",
+    "Oral-history and family-recipe consent records",
+    "Allergen and nutrition disclaimers; never present estimates as medical advice",
+    "AI: log, cap cost, no PII in prompts"
+  ],
+  "roadmap": {
+    "phase_0_audit_and_foundations": {
+      "weeks": "0-2",
+      "deliverables": ["docs/AUDIT.md", "Baselines (Lighthouse, GSC, GA4)", "Decision on stack reconciliation", "Staging environment and CI"],
+      "kpis": ["Baselines recorded"]
+    },
+    "phase_1_foundation": {
+      "weeks": "2-10",
+      "scope": ["Normalised recipe + ingredient schema and migration", "Alias-aware ingredient search and faceted discovery with URL state", "Recipe JSON-LD, canonical rules, sitemaps, breadcrumbs", "Country/region/ingredient hub templates", "Curated substitutions v1 (500+ ingredients) and substitution module/API", "Saves, collections, cook notes, creator attribution", "Mobile-first PWA shell, UI refresh of home, index and recipe card"],
+      "kpis": ["Valid Recipe schema on 100% of recipes", "Zero-result search rate < 5%", "LCP < 2.5 s mobile p75", "500+ verified ingredients, 1,000+ verified substitutions", "Organic impressions +30% vs baseline in 90 days"]
+    },
+    "phase_2_daily_utility": {
+      "weeks": "10-20",
+      "scope": ["Cook mode with timers and offline", "Scaling, unit conversion, nutrition estimates", "Pantry search and tracker", "Meal planner and consolidated shopping list with budget", "Natural-language search", "Creator studio v1 (submission, moderation, profiles)", "Reviews and ratings (moderated)"],
+      "kpis": ["Recipe save rate > 8% of recipe sessions", "Return-visitor rate +20%", "Meal plans created per WAU", "Substitution feedback positive rate > 80%", "Approved creator recipes per month"]
+    },
+    "phase_3_commerce": {
+      "weeks": "20-32",
+      "scope": ["Affiliate links and retailer availability (Kenya, Nigeria, South Africa first)", "Ingredient bundles/kits and delivery partner integrations", "Diaspora mode and gifting", "Creator monetisation and storefronts", "Premium subscription"],
+      "kpis": ["Affiliate CTR and revenue per 1,000 sessions", "Kit conversion rate", "Paying subscribers", "Creator payouts"]
+    },
+    "phase_4_community_and_ai": {
+      "weeks": "32+",
+      "scope": ["Community recipes, Q&A, family-recipe preservation and oral histories", "AI cooking coach, voice in African languages", "Premium courses", "B2B ingredient graph API", "Additional languages"],
+      "kpis": ["Active creators", "Voice sessions", "B2B pilots", "Multi-language organic traffic share"]
+    },
+    "sprint_1_task_list": [
+      "S1-01 Audit codebase and produce docs/AUDIT.md with stack, data model and gaps",
+      "S1-02 Capture baselines: Lighthouse on 10 templates, Search Console top queries, internal search logs",
+      "S1-03 Create DB migrations: ingredients, ingredient_aliases, substitutions, ingredient_availability, recipe_ingredients (+ provenance fields)",
+      "S1-04 Seed 100 priority ingredients with aliases (editor CSV import script with validation)",
+      "S1-05 Build alias resolver service with normalisation, trigram match and ambiguity handling + unit tests",
+      "S1-06 Implement URL-persisted faceted filters (country, region, meal, diet, time, difficulty, ingredient) with chips, counts, clear-all",
+      "S1-07 Implement faceted-URL indexation policy (allow-list, noindex, canonical) and sitemap generation",
+      "S1-08 Add Recipe/Person/BreadcrumbList JSON-LD to recipe template with validation test in CI",
+      "S1-09 Build /api/substitutions v0 (curated retrieval + hard filters + scoring, no LLM) with required unit tests",
+      "S1-10 Recipe page: substitution popover on ingredients",
+      "S1-11 Redesign recipe card and index layout (mobile-first), image optimisation pipeline",
+      "S1-12 Add Lighthouse CI and structured-data checks to GitHub Actions",
+      "S1-13 Analytics events instrumentation"
+    ]
+  },
+  "cursor_prompts": [
+    {
+      "id": "P-AUDIT",
+      "title": "Codebase and SEO audit",
+      "prompt": "Read ladhaquest_master_blueprint.cursor.json. Inspect this repository and write docs/AUDIT.md covering framework, rendering mode, routing, DB schema, search implementation, structured data, sitemap/robots/canonicals, image handling and performance risks. Map each finding to a blueprint item and propose a reconciled stack. Do not change code yet."
+    },
+    {
+      "id": "P-SCHEMA",
+      "title": "Ingredient graph schema",
+      "prompt": "Using data_model in the blueprint, create migrations for ingredients, ingredient_aliases (many-to-many with match_confidence and is_ambiguous), substitutions, ingredient_availability, recipe_ingredients and provenance fields. Add seed scripts that import editor CSVs with Zod validation and review_status. Include rollback and tests."
+    },
+    {
+      "id": "P-SEARCH",
+      "title": "Faceted, alias-aware search",
+      "prompt": "Implement search per feature_specs.A_discovery_and_search: facets for country, region, meal type, ingredient include/exclude, diet, allergen-free, time bucket, difficulty. Alias-aware typo-tolerant ingredient matching. URL-persisted state, chips, counts, clear-all, SSR. Add indexation rules from seo_strategy.technical and Playwright tests for URL persistence and zero-result handling."
+    },
+    {
+      "id": "P-SUBS",
+      "title": "Substitution engine",
+      "prompt": "Build POST /api/substitutions per the substitution_engine section including corrected hard-filter logic (candidate must satisfy ALL required diets), LEFT JOIN availability with unknown handling, configurable weights, Redis cache, and LLM step restricted to an allowlist with Zod schema validation and fallback. Write all required_tests plus a golden-set regression harness."
+    },
+    {
+      "id": "P-SEO",
+      "title": "Recipe SEO and hubs",
+      "prompt": "Add Recipe, Person, Organization, WebSite SearchAction, BreadcrumbList and ItemList JSON-LD; canonical tags; split sitemaps; hub templates for country, region, ingredient glossary and substitute pages with the programmatic_quality_gate. Add CI checks for schema validity, titles, metas, alt text and Lighthouse budgets."
+    },
+    {
+      "id": "P-RECIPE-UX",
+      "title": "Recipe page and cook mode",
+      "prompt": "Implement feature_specs.B_recipe_page_and_cooking_utility: mobile-first recipe card, scaling and unit conversion, ingredient popovers with local names, cook mode with wake lock, timers and offline PWA caching, save/collections/cook notes. Respect performance_budgets."
+    },
+    {
+      "id": "P-CREATOR",
+      "title": "Creator studio",
+      "prompt": "Implement feature_specs.F_creator_studio phase-1 scope: onboarding, guided submission wizard requiring region, country, ingredients via alias picker, steps, image and attribution; duplicate detection; moderation queue with regional reviewer step; creator profile pages with Person schema; version history."
+    },
+    {
+      "id": "P-PLANNER",
+      "title": "Meal planner and shopping list",
+      "prompt": "Implement feature_specs.E_planning_and_shopping: weekly planner by household size, budget, diet and pantry; consolidated shopping list with unit normalisation and local names; price estimates from ingredient_availability with freshness labels; export to WhatsApp/print."
+    }
+  ],
+  "testing_and_quality": {
+    "unit": ["Alias resolution", "Substitution scoring/filters", "Unit conversion and scaling", "Shopping list consolidation"],
+    "integration": ["API endpoints with test DB", "Search index sync", "Import pipelines"],
+    "e2e": ["Filter URL persistence", "Search to recipe to save", "Cook mode offline", "Creator submission to moderation to publish"],
+    "seo": ["Structured data validation", "Canonical and indexation rules", "Sitemap correctness", "Lighthouse CI budgets"],
+    "content_quality": ["Editorial review sampling of programmatic pages", "Duplicate-content detection", "Expert-labelled substitution golden set"],
+    "accessibility": ["axe checks in CI", "Manual screen-reader pass on filters and cook mode"]
+  },
+  "risks_and_mitigations": [
+    {"risk": "Incorrect or unsafe substitutions erode trust", "mitigation": "Human verification, hard allergen filters, confidence labels, feedback loop, allowlisted LLM"},
+    {"risk": "Thin or duplicate programmatic pages cause SEO penalties", "mitigation": "Quality gate, editorial intros, noindex low-value combinations"},
+    {"risk": "Dataset licence violations", "mitigation": "Licence field per source, legal review, separable ODbL data"},
+    {"risk": "Cultural errors or misattribution", "mitigation": "Regional reviewers, contributor attribution, corrections policy"},
+    {"risk": "Low creator supply", "mitigation": "Guided tooling, revenue share, partnerships with cooks and food historians, family-recipe campaigns"},
+    {"risk": "Price/availability data goes stale", "mitigation": "Timestamps and confidence, crowd verification, show 'estimated'"},
+    {"risk": "Scope creep into commerce too early", "mitigation": "Gate Phase 3 on Phase 1-2 KPIs"},
+    {"risk": "AI cost and hallucination", "mitigation": "Narrow tasks, caching, cost caps, schema validation, fallbacks"},
+    {"risk": "Poor performance on low-end devices/networks", "mitigation": "Performance budgets, PWA caching, image optimisation, CI enforcement"}
+  ],
+  "global_definition_of_done": [
+    "Code reviewed, typed, linted; unit and e2e tests pass in CI",
+    "Mobile-first verified on a throttled mid-range Android profile",
+    "Accessibility checks pass (axe plus manual spot checks)",
+    "Lighthouse and CWV budgets met on affected templates",
+    "Structured data valid and canonical/indexation rules verified for new pages",
+    "Analytics events firing and documented",
+    "Provenance, licence and review_status present on all new data records",
+    "No fabricated ratings, reviews, nutrition or credentials",
+    "Docs updated (README, ADRs, data dictionary)"
+  ],
+  "guardrails": [
+    "Do not scrape competitor content or reproduce copyrighted recipes",
+    "Use original, contributor-owned or properly licensed media",
+    "Do not fabricate ratings, reviews, nutrition data, or author credentials",
+    "Require editorial or community review for culturally sensitive origin, naming and regional claims",
+    "AI proposes, humans approve; the LLM never invents substitution IDs or overwrites authoritative data",
+    "Validate every instruction here against the real codebase before implementing; do not invent unsupported capabilities"
+  ],
+  "final_principle": "Do not merely add more recipes. Make every recipe actionable in a real African kitchen."
+}

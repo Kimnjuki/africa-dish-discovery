@@ -209,7 +209,7 @@ const staticPages = [
 
 console.log("Fetching content from Supabase…");
 
-const [recipes, dishes, recipeCountries, dbBlog] = await Promise.all([
+const [recipes, dishes, recipeCountries, africanCountryRows, dbBlog] = await Promise.all([
   fetchAll("recipes", "slug,name,summary,country,image_url,updated_at,created_at", {
     filter: "slug=not.is.null",
     order: "slug.asc",
@@ -222,6 +222,11 @@ const [recipes, dishes, recipeCountries, dbBlog] = await Promise.all([
     filter: "country=not.is.null",
     order: "country.asc",
   }),
+  // Fetch African country names for facet sitemap entries.
+  fetchAll("recipes", "country,updated_at", {
+    filter: "continent=eq.Africa&country=not.is.null",
+    order: "country.asc",
+  }).catch(() => []),
   fetchAll("blog_posts", "slug,title,excerpt,image_url,published_at,updated_at,is_published", {
     filter: "is_published=eq.true&slug=not.is.null",
     order: "slug.asc",
@@ -360,7 +365,47 @@ const storiesFile = writeUrlset(
   )
 );
 
-const children = [pagesFile, recipesFile, dishesFile, countriesFile, blogFile, storiesFile];
+// ── Facet sitemap: high-demand African country filter URLs ─────────────────
+// Allow-listed single-facet URLs (country) are indexable per S1-07.
+// Stable param order: ?country=<name> (single facet, so only one param).
+// Cap at 54 entries (number of African sovereign states).
+const africanCountryMap = new Map();
+for (const row of africanCountryRows) {
+  const name = row.country?.trim();
+  if (!name) continue;
+  const prev = africanCountryMap.get(name);
+  const last = formatLastmod(row.updated_at);
+  if (!prev || last > prev.lastmod) {
+    africanCountryMap.set(name, { name, lastmod: last });
+  }
+}
+
+const africanFacetEntries = [...africanCountryMap.values()]
+  .sort((a, b) => a.name.localeCompare(b.name))
+  .slice(0, 54) // cap at ~54 African countries
+  .map(({ name, lastmod }) =>
+    urlEntry({
+      loc: `/recipe-index?country=${encodeURIComponent(name)}`,
+      lastmod,
+      changefreq: "weekly",
+      priority: "0.65",
+    })
+  );
+
+const facetsFile =
+  africanFacetEntries.length > 0
+    ? writeUrlset("sitemap-facets.xml", africanFacetEntries)
+    : null;
+
+const children = [
+  pagesFile,
+  recipesFile,
+  dishesFile,
+  countriesFile,
+  blogFile,
+  storiesFile,
+  ...(facetsFile ? [facetsFile] : []),
+];
 writeIndex(children);
 
 // Point robots.txt at the index only
@@ -386,13 +431,15 @@ const summary = {
     countries: countryMap.size,
     blog: blogMap.size,
     stories: storyDishes.length,
+    facetCountryUrls: africanFacetEntries.length,
     totalUrls:
       staticPages.length +
       uniqueRecipes.size +
       uniqueDishes.size +
       countryMap.size +
       blogMap.size +
-      storyDishes.length,
+      storyDishes.length +
+      africanFacetEntries.length,
   },
 };
 

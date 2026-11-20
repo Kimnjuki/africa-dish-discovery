@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit -p tsconfig.app.json",
     "test:search": "node --experimental-strip-types scripts/test-recipe-search.ts",
     "test:substitutions": "node --experimental-strip-types scripts/test-substitution-graph.ts",
+    "test:alias": "node --experimental-strip-types scripts/test-alias-resolver.ts",
     "test:market": "node --experimental-strip-types scripts/test-local-market.ts",
     "test:phone": "node --experimental-strip-types scripts/test-phone-auth.ts",
     "test:offline": "node --experimental-strip-types scripts/test-offline-store.ts",
@@ -19,7 +20,10 @@
     "sitemap": "node scripts/generate-sitemaps.mjs",
     "indexnow": "node scripts/indexnow.mjs",
     "prerender": "node scripts/prerender-seo.mjs",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "seed:ingredients": "node scripts/import-ingredient-graph.mjs",
+    "test:schema": "node scripts/validate-recipe-schema.mjs",
+    "test:lighthouse": "npx --yes @lhci/cli autorun"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

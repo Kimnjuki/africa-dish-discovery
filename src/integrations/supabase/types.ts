@@ -578,34 +578,82 @@ export type Database = {
       }
       ingredient_substitutions: {
         Row: {
+          allergens: string[] | null
           compatibility_score: number | null
+          confidence: number | null
+          context_recipe_types: string[] | null
+          cooking_adjustments: Json | null
           created_at: string | null
+          dietary_tags: string[] | null
+          flavor_impact: string | null
           id: string
+          is_verified: boolean | null
+          licence: string | null
+          model_version: string | null
           notes: string | null
           original_ingredient_id: string
           quantity_ratio: number | null
+          ratio_unit: string | null
           reason: string
+          review_status: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          source: string | null
           substitute_ingredient_id: string
+          substitution_type: string | null
+          texture_impact: string | null
         }
         Insert: {
+          allergens?: string[] | null
           compatibility_score?: number | null
+          confidence?: number | null
+          context_recipe_types?: string[] | null
+          cooking_adjustments?: Json | null
           created_at?: string | null
+          dietary_tags?: string[] | null
+          flavor_impact?: string | null
           id?: string
+          is_verified?: boolean | null
+          licence?: string | null
+          model_version?: string | null
           notes?: string | null
           original_ingredient_id: string
           quantity_ratio?: number | null
+          ratio_unit?: string | null
           reason: string
+          review_status?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source?: string | null
           substitute_ingredient_id: string
+          substitution_type?: string | null
+          texture_impact?: string | null
         }
         Update: {
+          allergens?: string[] | null
           compatibility_score?: number | null
+          confidence?: number | null
+          context_recipe_types?: string[] | null
+          cooking_adjustments?: Json | null
           created_at?: string | null
+          dietary_tags?: string[] | null
+          flavor_impact?: string | null
           id?: string
+          is_verified?: boolean | null
+          licence?: string | null
+          model_version?: string | null
           notes?: string | null
           original_ingredient_id?: string
           quantity_ratio?: number | null
+          ratio_unit?: string | null
           reason?: string
+          review_status?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source?: string | null
           substitute_ingredient_id?: string
+          substitution_type?: string | null
+          texture_impact?: string | null
         }
         Relationships: [
           {
@@ -624,27 +672,280 @@ export type Database = {
           },
         ]
       }
-      ingredients: {
+      ingredient_aliases: {
         Row: {
-          category: string | null
-          created_at: string | null
+          alias: string
+          alias_normalized: string
+          country_code: string
+          created_at: string
           id: string
-          name: string
-          shelf_life_days: number | null
+          ingredient_id: string
+          is_ambiguous: boolean
+          is_primary_local_name: boolean
+          language: string
+          licence: string | null
+          match_confidence: number
+          region: string | null
+          review_status: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          source: string | null
         }
         Insert: {
-          category?: string | null
-          created_at?: string | null
+          alias: string
+          alias_normalized: string
+          country_code?: string
+          created_at?: string
           id?: string
-          name: string
-          shelf_life_days?: number | null
+          ingredient_id: string
+          is_ambiguous?: boolean
+          is_primary_local_name?: boolean
+          language?: string
+          licence?: string | null
+          match_confidence?: number
+          region?: string | null
+          review_status?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source?: string | null
         }
         Update: {
+          alias?: string
+          alias_normalized?: string
+          country_code?: string
+          created_at?: string
+          id?: string
+          ingredient_id?: string
+          is_ambiguous?: boolean
+          is_primary_local_name?: boolean
+          language?: string
+          licence?: string | null
+          match_confidence?: number
+          region?: string | null
+          review_status?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ingredient_aliases_ingredient_id_fkey"
+            columns: ["ingredient_id"]
+            isOneToOne: false
+            referencedRelation: "ingredients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ingredient_availability: {
+        Row: {
+          availability_score: number | null
+          confidence: number | null
+          country_code: string
+          created_at: string | null
+          currency: string | null
+          id: string
+          ingredient_id: string
+          licence: string | null
+          price_source: string | null
+          price_unit: string | null
+          price_updated_at: string | null
+          region: string
+          retailer_id: string | null
+          review_status: string | null
+          season: string | null
+          source: string | null
+          typical_price: number | null
+        }
+        Insert: {
+          availability_score?: number | null
+          confidence?: number | null
+          country_code: string
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          ingredient_id: string
+          licence?: string | null
+          price_source?: string | null
+          price_unit?: string | null
+          price_updated_at?: string | null
+          region?: string
+          retailer_id?: string | null
+          review_status?: string | null
+          season?: string | null
+          source?: string | null
+          typical_price?: number | null
+        }
+        Update: {
+          availability_score?: number | null
+          confidence?: number | null
+          country_code?: string
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          ingredient_id?: string
+          licence?: string | null
+          price_source?: string | null
+          price_unit?: string | null
+          price_updated_at?: string | null
+          region?: string
+          retailer_id?: string | null
+          review_status?: string | null
+          season?: string | null
+          source?: string | null
+          typical_price?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ingredient_availability_ingredient_id_fkey"
+            columns: ["ingredient_id"]
+            isOneToOne: false
+            referencedRelation: "ingredients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ingredients: {
+        Row: {
+          allergens: string[] | null
+          canonical_name: string | null
+          category: string | null
+          confidence: number | null
+          cooking_methods: string[] | null
+          created_at: string | null
+          default_unit: string | null
+          dietary_tags: string[] | null
+          flavor_profile: Json | null
+          food_group: string | null
+          function_tags: string[] | null
+          gram_per_unit: number | null
+          id: string
+          image_id: string | null
+          imported_at: string | null
+          licence: string | null
+          name: string
+          nutrition: Json | null
+          nutrition_source_id: string | null
+          review_status: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          safety_flags: string[] | null
+          scientific_name: string | null
+          seasonality: Json | null
+          shelf_life_days: number | null
+          slug: string | null
+          source: string | null
+          source_url: string | null
+          storage_notes: string | null
+          texture_profile: Json | null
+          updated_at: string | null
+          version: number | null
+        }
+        Insert: {
+          allergens?: string[] | null
+          canonical_name?: string | null
           category?: string | null
+          confidence?: number | null
+          cooking_methods?: string[] | null
+          created_at?: string | null
+          default_unit?: string | null
+          dietary_tags?: string[] | null
+          flavor_profile?: Json | null
+          food_group?: string | null
+          function_tags?: string[] | null
+          gram_per_unit?: number | null
+          id?: string
+          image_id?: string | null
+          imported_at?: string | null
+          licence?: string | null
+          name: string
+          nutrition?: Json | null
+          nutrition_source_id?: string | null
+          review_status?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          safety_flags?: string[] | null
+          scientific_name?: string | null
+          seasonality?: Json | null
+          shelf_life_days?: number | null
+          slug?: string | null
+          source?: string | null
+          source_url?: string | null
+          storage_notes?: string | null
+          texture_profile?: Json | null
+          updated_at?: string | null
+          version?: number | null
+        }
+        Update: {
+          allergens?: string[] | null
+          canonical_name?: string | null
+          category?: string | null
+          confidence?: number | null
+          cooking_methods?: string[] | null
+          created_at?: string | null
+          default_unit?: string | null
+          dietary_tags?: string[] | null
+          flavor_profile?: Json | null
+          food_group?: string | null
+          function_tags?: string[] | null
+          gram_per_unit?: number | null
+          id?: string
+          image_id?: string | null
+          imported_at?: string | null
+          licence?: string | null
+          name?: string
+          nutrition?: Json | null
+          nutrition_source_id?: string | null
+          review_status?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          safety_flags?: string[] | null
+          scientific_name?: string | null
+          seasonality?: Json | null
+          shelf_life_days?: number | null
+          slug?: string | null
+          source?: string | null
+          source_url?: string | null
+          storage_notes?: string | null
+          texture_profile?: Json | null
+          updated_at?: string | null
+          version?: number | null
+        }
+        Relationships: []
+      }
+      ai_audit_log: {
+        Row: {
+          allowlist_ids: string[] | null
+          created_at: string | null
+          id: string
+          input_hash: string | null
+          model: string | null
+          output: Json | null
+          prompt_version: string | null
+          task: string | null
+          validated: boolean | null
+        }
+        Insert: {
+          allowlist_ids?: string[] | null
           created_at?: string | null
           id?: string
-          name?: string
-          shelf_life_days?: number | null
+          input_hash?: string | null
+          model?: string | null
+          output?: Json | null
+          prompt_version?: string | null
+          task?: string | null
+          validated?: boolean | null
+        }
+        Update: {
+          allowlist_ids?: string[] | null
+          created_at?: string | null
+          id?: string
+          input_hash?: string | null
+          model?: string | null
+          output?: Json | null
+          prompt_version?: string | null
+          task?: string | null
+          validated?: boolean | null
         }
         Relationships: []
       }

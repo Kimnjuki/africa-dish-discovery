@@ -32,6 +32,7 @@ import { cacheRecipe, getCachedRecipes, isBrowserOffline } from "@/lib/offlineSt
 import { trackRecipeView } from "@/lib/recentlyViewed";
 import { useDataSaver } from "@/hooks/useDataSaver";
 import { DataSaverImage } from "@/components/DataSaverImage";
+import { track, EVENTS } from "@/lib/analytics";
 
 type DishProvenance = {
   original_name_native: string | null;
@@ -155,6 +156,11 @@ const RecipeDetail = () => {
           name: parsed.name,
           country: parsed.country || undefined,
           imageUrl: parsed.image_url,
+        });
+        track(EVENTS.RECIPE_VIEWED, {
+          slug: parsed.slug || slug,
+          name: parsed.name,
+          country: parsed.country,
         });
       }
       if (rec?.country) {

@@ -7,6 +7,7 @@ import { stepToText, prepareIngredientLine, ingredientToText } from "@/lib/recip
 import type { IngredientValue, StepValue } from "@/types/content";
 import { bestCookSubstitutionPrompt } from "@/lib/substitutionGraph";
 import { resolveMarketId, type MarketId } from "@/lib/localMarket";
+import { track, EVENTS } from "@/lib/analytics";
 
 interface CookModeProps {
   recipeName: string;
@@ -66,6 +67,9 @@ export const CookMode = ({
   }, [ingredients, multiplier, country, marketId]);
 
   useEffect(() => {
+    // Track cook mode start once on mount.
+    track(EVENTS.COOK_MODE_STARTED, { recipeName, stepCount: list.length });
+
     const request = async () => {
       try {
         if (navigator.wakeLock?.request && document.visibilityState === "visible") {

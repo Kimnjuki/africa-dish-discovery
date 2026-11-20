@@ -55,7 +55,7 @@ function asStringArray(value: unknown): string[] {
   if (typeof value === "string") {
     return value
       .split(/\n|•|\r/)
-      .map((l) => l.replace(/^\d+[\).\s]+/, "").trim())
+      .map((l) => l.replace(/^\d+[).\s]+/, "").trim())
       .filter(Boolean);
   }
   return [];

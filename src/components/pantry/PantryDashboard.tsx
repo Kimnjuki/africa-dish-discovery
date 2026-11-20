@@ -372,6 +372,7 @@ const PantryDashboard = () => {
 
       // Local matching over a large recipe corpus (core pantry intelligence)
       const pageSize = 1000;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- paginated recipe corpus for matcher
       let recipes: any[] = [];
       let from = 0;
       while (from < 3000) {
@@ -470,6 +471,7 @@ const PantryDashboard = () => {
             if (Array.isArray(data?.matches) && data.matches.length) {
               const byId = new Map(enrichedMatches.map((m) => [m.id, m]));
               const merged = data.matches
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any -- edge AI match payload
                 .map((ai: any) => {
                   const base = byId.get(ai.recipeId);
                   if (!base) return null;

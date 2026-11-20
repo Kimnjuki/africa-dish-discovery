@@ -720,10 +720,16 @@ export function rankSubstitutesForMarket(
       else if (ratio > 1.4) score -= 10;
       else if (ratio < 1) score += 4;
     }
-    if (diet.length && market.diet.length) {
-      const ok = diet.every((d) => market.diet.includes(d));
-      if (ok) score += 8;
-      else score -= 25;
+    // Hard diet filter: candidate must satisfy EVERY required diet tag.
+    if (diet.length) {
+      if (!market.diet.length) {
+        // Unknown diet profile — keep but do not boost; soft-penalize
+        score -= 8;
+      } else if (!diet.every((d) => market.diet.includes(d))) {
+        return null;
+      } else {
+        score += 8;
+      }
     }
     // Soft-penalize specialty items when a budget cook is shopping
     if (preferCheap && market.tier === "specialty") score -= 6;
@@ -749,7 +755,7 @@ export function rankSubstitutesForMarket(
       savingsVsOriginal,
       cookHint: cookHintParts.join(" "),
     } satisfies RankedSubstitute;
-  });
+  }).filter((row): row is RankedSubstitute => row != null);
 
   ranked.sort((a, b) => b.rankScore - a.rankScore);
   return ranked.slice(0, options.limit ?? 6);

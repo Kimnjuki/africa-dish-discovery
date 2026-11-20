@@ -4,17 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Repeat, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { stripIngredientNoise } from "@/lib/substitutionGraph";
 import {
-  lookupRankedSubstitutions,
-  stripIngredientNoise,
-  type MarketRankedSubstitute,
-} from "@/lib/substitutionGraph";
-import {
-  formatMoney,
+  getDietPreferences,
   getMarketPreference,
   resolveMarketId,
   type MarketId,
 } from "@/lib/localMarket";
+import {
+  findSubstitutions,
+  type SubstitutionCandidate,
+} from "@/lib/substitutionEngine";
+import { track, EVENTS } from "@/lib/analytics";
 
 interface Suggestion {
   name: string;
@@ -22,10 +23,13 @@ interface Suggestion {
   notes: string;
   authenticity: "high" | "medium" | "low";
   regions?: string[];
-  source?: "graph" | "db" | "ai";
+  source?: "engine" | "db";
   priceLabel?: string;
   availability?: number;
   cookPrompt?: string;
+  warnings?: string[];
+  confidence?: string;
+  verified?: boolean;
 }
 
 interface Props {
@@ -34,6 +38,8 @@ interface Props {
   region?: string;
   dishName?: string;
   marketId?: MarketId;
+  dietTags?: string[];
+  allergies?: string[];
   onSelect?: (substituteName: string) => void;
 }
 
@@ -43,20 +49,30 @@ const authColor: Record<string, string> = {
   low: "bg-muted text-muted-foreground",
 };
 
-function fromRanked(hits: MarketRankedSubstitute[], marketId: MarketId): Suggestion[] {
+function confidenceToAuth(c: SubstitutionCandidate["confidence"]): Suggestion["authenticity"] {
+  if (c === "high") return "high";
+  if (c === "medium") return "medium";
+  return "low";
+}
+
+function fromEngine(hits: SubstitutionCandidate[], marketId: MarketId): Suggestion[] {
   return hits.map((s) => ({
     name: s.name,
-    ratio: s.ratio,
-    notes: s.cookHint || s.notes,
-    authenticity: s.authenticity,
-    regions: s.regions,
-    source: "graph" as const,
+    ratio: `${s.adjusted_amount}:1`,
+    notes: s.reason,
+    authenticity: confidenceToAuth(s.confidence),
+    source: "engine" as const,
     priceLabel:
-      s.market.unitPrice != null
-        ? `~${formatMoney(s.market.unitPrice, marketId)}/${s.market.unit}`
+      s.availability.known
+        ? undefined
         : undefined,
-    availability: s.market.availability,
-    cookPrompt: s.cookAdjustment?.prompt,
+    availability: Math.round(s.availability.score * 100),
+    cookPrompt: s.cooking_adjustments[0],
+    warnings: s.warnings,
+    confidence: s.confidence,
+    verified: s.verified,
+    // keep marketId referenced for future price wiring
+    ...(marketId ? {} : {}),
   }));
 }
 
@@ -66,35 +82,52 @@ export const IngredientSubstitutionPopover = ({
   region,
   dishName,
   marketId: marketProp,
+  dietTags,
+  allergies,
   onSelect,
 }: Props) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [disambiguation, setDisambiguation] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const fetchSubs = async () => {
-    if (suggestions.length || loading) return;
+    if (suggestions.length || loading || disambiguation) return;
     setLoading(true);
     setError(null);
+    track(EVENTS.SUBSTITUTION_REQUESTED, { ingredient, country, region, dishName });
     try {
       const cleaned = stripIngredientNoise(ingredient);
       const regionHint = country || region;
       const marketId = marketProp || resolveMarketId(regionHint) || getMarketPreference();
+      const diets = dietTags?.length ? dietTags : getDietPreferences();
 
-      // 1) Local Africa-first graph, ranked by market price / availability
-      const graphHits = lookupRankedSubstitutions(cleaned || ingredient, {
-        regionHint,
+      // 1) Curated engine v0 — hard filters, no LLM invent
+      const engine = findSubstitutions({
+        ingredient: cleaned || ingredient,
+        countryCode: country,
         marketId,
-        preferCheap: true,
+        dietTags: diets,
+        allergies: allergies || [],
         limit: 5,
       });
-      if (graphHits.length) {
-        setSuggestions(fromRanked(graphHits, marketId));
+
+      if (engine.resolved_ingredient.ambiguous) {
+        setDisambiguation(
+          engine.resolved_ingredient.disambiguation_prompt ||
+            "This name matches more than one ingredient. Pick the one you mean."
+        );
+        setSuggestions([]);
         return;
       }
 
-      // 2) DB-backed substitutions
+      if (engine.substitutions.length) {
+        setSuggestions(fromEngine(engine.substitutions, marketId));
+        return;
+      }
+
+      // 2) DB-backed verified substitutions only (no AI invent fallback)
       const { data: ing } = await supabase
         .from("ingredients")
         .select("id, name")
@@ -119,22 +152,14 @@ export const IngredientSubstitutionPopover = ({
               notes: s.notes || s.reason || "",
               authenticity: "high" as const,
               source: "db" as const,
+              verified: true,
             }))
           );
           return;
         }
       }
 
-      // 3) Fallback to AI gateway with cultural context
-      const { data, error: fnError } = await supabase.functions.invoke("suggest-substitutions", {
-        body: { ingredient, country, region, dish_name: dishName },
-      });
-      if (fnError) throw fnError;
-      setSuggestions(
-        (Array.isArray(data?.suggestions) ? data.suggestions : []).map(
-          (s: Suggestion) => ({ ...s, source: "ai" as const })
-        )
-      );
+      setSuggestions([]);
     } catch (e) {
       setError((e as Error).message || "Could not load substitutes");
     } finally {
@@ -172,8 +197,13 @@ export const IngredientSubstitutionPopover = ({
             </div>
           )}
           {error && <p className="text-xs text-destructive">{error}</p>}
-          {!loading && !error && suggestions.length === 0 && (
-            <p className="text-xs text-muted-foreground">No substitutes found.</p>
+          {disambiguation && (
+            <p className="text-xs text-amber-800 dark:text-amber-300">{disambiguation}</p>
+          )}
+          {!loading && !error && !disambiguation && suggestions.length === 0 && (
+            <p className="text-xs text-muted-foreground">
+              No verified substitutes yet. We only show curated swaps — never invented ones.
+            </p>
           )}
           <ul className="space-y-2">
             {suggestions.map((s, i) => (
@@ -184,7 +214,7 @@ export const IngredientSubstitutionPopover = ({
                     variant="outline"
                     className={`text-[10px] ${authColor[s.authenticity] || ""}`}
                   >
-                    {s.authenticity}
+                    {s.confidence || s.authenticity}
                   </Badge>
                 </div>
                 <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
@@ -193,11 +223,16 @@ export const IngredientSubstitutionPopover = ({
                   {s.availability != null && s.availability < 45 && (
                     <span className="text-amber-700 dark:text-amber-400">Hard to find</span>
                   )}
-                  {s.source === "graph" && <span>local graph</span>}
+                  {s.verified && <span>verified</span>}
                 </div>
                 {(s.cookPrompt || s.notes) && (
                   <p className="mt-1 text-xs text-muted-foreground">{s.cookPrompt || s.notes}</p>
                 )}
+                {s.warnings?.length ? (
+                  <p className="mt-1 text-[11px] text-amber-700 dark:text-amber-400">
+                    {s.warnings.join(" · ")}
+                  </p>
+                ) : null}
                 {onSelect && (
                   <Button
                     type="button"

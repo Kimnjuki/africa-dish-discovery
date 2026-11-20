@@ -188,7 +188,7 @@ const EnhancedPantryIntelligence = () => {
     setLoading(true);
     try {
       const pageSize = 1000;
-      let recipes: any[] = [];
+      let recipes: Recipe[] = [];
       let from = 0;
       while (from < 3000) {
         const { data, error } = await supabase
@@ -201,7 +201,7 @@ const EnhancedPantryIntelligence = () => {
           .range(from, from + pageSize - 1);
         if (error) throw error;
         if (!data?.length) break;
-        recipes = recipes.concat(data);
+        recipes = recipes.concat(data as unknown as Recipe[]);
         if (data.length < pageSize) break;
         from += pageSize;
       }

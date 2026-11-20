@@ -17,4 +17,19 @@ jobs:
       - run: npm ci
       - run: npm run lint
       - run: npm run typecheck
+
+      # Unit test suites
+      - run: npm run test:search
+      - run: npm run test:substitutions
+      - run: npm run test:alias
+      - run: npm run test:market
+      - run: npm run test:schema
+
       - run: npm run build
+
+# ── Lighthouse CI (optional, workflow_dispatch only) ─────────────────────────
+# Full performance budgets (170 KB gzip JS, LCP 2.5 s, INP 200 ms, CLS 0.1)
+# will be enforced in a later sprint. The lenient baseline here (perf >= 0.5)
+# is intentionally loose so it does not block feature work.
+# To run locally: npx @lhci/cli autorun
+# Config: .lighthouserc.cjs

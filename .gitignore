@@ -15,6 +15,10 @@ dist-ssr
 .env.*
 supabase/.temp/
 
+# Local Lighthouse lab dumps (large)
+docs/lighthouse-*.json
+docs/lh-*.json
+
 # Local cookbook DOCX extracts (images live in Supabase recipe-uploads)
 data/cookbooks/**/unzipped/
 data/cookbooks/**/source.docx
