@@ -2,12 +2,23 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { X, ChevronLeft, ChevronRight, CheckCircle2, ListChecks, Repeat } from "lucide-react";
+import {
+  X,
+  ChevronLeft,
+  ChevronRight,
+  CheckCircle2,
+  ListChecks,
+  Repeat,
+  Timer,
+  Pause,
+  Play,
+} from "lucide-react";
 import { stepToText, prepareIngredientLine, ingredientToText } from "@/lib/recipeUnits";
 import type { IngredientValue, StepValue } from "@/types/content";
 import { bestCookSubstitutionPrompt } from "@/lib/substitutionGraph";
 import { resolveMarketId, type MarketId } from "@/lib/localMarket";
 import { track, EVENTS } from "@/lib/analytics";
+import { isLooseItem } from "@/types/content";
 
 interface CookModeProps {
   recipeName: string;
@@ -36,10 +47,21 @@ export const CookMode = ({
   onClose,
 }: CookModeProps) => {
   const list: string[] = Array.isArray(steps) ? steps.map(stepToText).filter(Boolean) : [];
+  const stepTimers = useMemo(() => {
+    if (!Array.isArray(steps)) return [] as (number | null)[];
+    return steps.map((s) => {
+      if (!isLooseItem(s)) return null;
+      const raw = s.duration ?? s.time ?? (s as { timer_seconds?: number }).timer_seconds;
+      const n = typeof raw === "number" ? raw : Number(raw);
+      return Number.isFinite(n) && n > 0 ? Math.round(n) : null;
+    });
+  }, [steps]);
   const [index, setIndex] = useState(Math.min(startIndex, Math.max(0, list.length - 1)));
   const [done, setDone] = useState<number[]>([]);
   const [showIngredients, setShowIngredients] = useState(false);
   const [appliedSwaps, setAppliedSwaps] = useState<Record<number, string>>({});
+  const [timerLeft, setTimerLeft] = useState<number | null>(null);
+  const [timerRunning, setTimerRunning] = useState(false);
   const wakeLock = useRef<WakeLockSentinel | null>(null);
   const touch = useRef<{ x: number; y: number } | null>(null);
   const marketId = marketProp || resolveMarketId(country);
@@ -100,6 +122,38 @@ export const CookMode = ({
   const go = (next: number) => {
     setIndex(Math.max(0, Math.min(next, Math.max(0, list.length - 1))));
     setShowIngredients(false);
+    setTimerRunning(false);
+    setTimerLeft(null);
+  };
+
+  useEffect(() => {
+    if (!timerRunning || timerLeft === null) return;
+    if (timerLeft <= 0) {
+      setTimerRunning(false);
+      try {
+        if ("vibrate" in navigator) navigator.vibrate?.(200);
+      } catch {
+        /* noop */
+      }
+      return;
+    }
+    const id = window.setTimeout(() => setTimerLeft((t) => (t === null ? t : t - 1)), 1000);
+    return () => window.clearTimeout(id);
+  }, [timerRunning, timerLeft]);
+
+  const formatTimer = (sec: number) => {
+    const m = Math.floor(sec / 60);
+    const s = sec % 60;
+    return `${m}:${String(s).padStart(2, "0")}`;
+  };
+
+  const finishCook = () => {
+    track(EVENTS.COOK_MODE_COMPLETED, {
+      recipeName,
+      stepCount: list.length,
+      completedSteps: done.length,
+    });
+    onClose(index);
   };
 
   useEffect(() => {
@@ -210,6 +264,50 @@ export const CookMode = ({
             <p className="text-[1.65rem] font-medium leading-snug sm:text-3xl sm:leading-relaxed">
               {list[index] || "No steps available for this recipe yet."}
             </p>
+
+            {(stepTimers[index] || timerLeft !== null) && (
+              <div className="mt-6 flex flex-wrap items-center gap-3 rounded-lg border p-3">
+                <Timer className="h-5 w-5 text-muted-foreground" />
+                <span className="text-2xl font-semibold tabular-nums">
+                  {formatTimer(timerLeft ?? stepTimers[index] ?? 0)}
+                </span>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="secondary"
+                  onClick={() => {
+                    if (timerRunning) {
+                      setTimerRunning(false);
+                    } else {
+                      if (timerLeft === null) setTimerLeft(stepTimers[index] || 0);
+                      setTimerRunning(true);
+                    }
+                  }}
+                >
+                  {timerRunning ? (
+                    <>
+                      <Pause className="mr-1 h-4 w-4" /> Pause
+                    </>
+                  ) : (
+                    <>
+                      <Play className="mr-1 h-4 w-4" /> Start timer
+                    </>
+                  )}
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => {
+                    setTimerRunning(false);
+                    setTimerLeft(stepTimers[index] || 0);
+                  }}
+                >
+                  Reset
+                </Button>
+              </div>
+            )}
+
             <Button
               className="mt-6 h-12 hover:scale-100"
               size="lg"
@@ -271,7 +369,7 @@ export const CookMode = ({
           variant="hero"
           size="lg"
           className="h-14 hover:scale-100"
-          onClick={() => (atEnd ? onClose(index) : go(index + 1))}
+          onClick={() => (atEnd ? finishCook() : go(index + 1))}
         >
           {atEnd ? "Finish" : "Next"}
           {!atEnd && <ChevronRight className="ml-1 h-5 w-5" />}

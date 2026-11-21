@@ -19,10 +19,13 @@ export const NutritionBadge = ({ calories, protein, carbs, fats, compact = true 
         <TooltipTrigger asChild>
           <Badge variant="outline" className="gap-1 text-xs cursor-help">
             <Flame className="w-3 h-3 text-orange-500" />
-            {calories} cal
+            {calories} cal · est.
           </Badge>
         </TooltipTrigger>
         <TooltipContent>
+          <p className="mb-2 text-[11px] text-muted-foreground">
+            Estimated nutrition — not medical advice. Values come from recipe metadata when present.
+          </p>
           <div className="grid grid-cols-4 gap-3 text-xs">
             <div className="text-center">
               <div className="font-bold text-orange-500">{calories}</div>
@@ -47,23 +50,28 @@ export const NutritionBadge = ({ calories, protein, carbs, fats, compact = true 
   }
 
   return (
-    <div className="grid grid-cols-4 gap-2 rounded-lg bg-muted/50 p-3 text-center">
-      <div>
-        <div className="text-base font-bold text-orange-500 sm:text-lg">{calories}</div>
-        <div className="text-xs text-muted-foreground">Calories</div>
+    <div className="space-y-2">
+      <div className="grid grid-cols-4 gap-2 rounded-lg bg-muted/50 p-3 text-center">
+        <div>
+          <div className="text-base font-bold text-orange-500 sm:text-lg">{calories}</div>
+          <div className="text-xs text-muted-foreground">Calories</div>
+        </div>
+        <div>
+          <div className="text-base font-bold text-blue-500 sm:text-lg">{protein || 0}g</div>
+          <div className="text-xs text-muted-foreground">Protein</div>
+        </div>
+        <div>
+          <div className="text-base font-bold text-green-500 sm:text-lg">{carbs || 0}g</div>
+          <div className="text-xs text-muted-foreground">Carbs</div>
+        </div>
+        <div>
+          <div className="text-base font-bold text-yellow-500 sm:text-lg">{fats || 0}g</div>
+          <div className="text-xs text-muted-foreground">Fat</div>
+        </div>
       </div>
-      <div>
-        <div className="text-base font-bold text-blue-500 sm:text-lg">{protein || 0}g</div>
-        <div className="text-xs text-muted-foreground">Protein</div>
-      </div>
-      <div>
-        <div className="text-base font-bold text-green-500 sm:text-lg">{carbs || 0}g</div>
-        <div className="text-xs text-muted-foreground">Carbs</div>
-      </div>
-      <div>
-        <div className="text-base font-bold text-yellow-500 sm:text-lg">{fats || 0}g</div>
-        <div className="text-xs text-muted-foreground">Fat</div>
-      </div>
+      <p className="text-[11px] text-muted-foreground">
+        Estimated values from recipe data. Not medical advice.
+      </p>
     </div>
   );
 };

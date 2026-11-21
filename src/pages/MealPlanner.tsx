@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Calendar, Plus, Trash2, ChefHat, Sparkles, Share2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { EVENTS, track } from "@/lib/analytics";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { AIMealGenerator } from "@/components/meal-planner/AIMealGenerator";
@@ -270,6 +271,7 @@ const MealPlanner = () => {
         .single();
 
       if (error) throw error;
+      track(EVENTS.PLAN_CREATED, { planId: data.id, weekStart: newPlanDate });
       toast.success("Meal plan created!");
       setMealPlans([data, ...mealPlans]);
       setCurrentPlan(data);

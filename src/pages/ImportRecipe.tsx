@@ -317,7 +317,7 @@ export default function ImportRecipe() {
       });
 
       toast.success("Submitted for human review with attribution preserved");
-      navigate("/submit-recipe");
+      navigate("/creator-studio?tab=submissions");
     } catch (err: unknown) {
       toast.error(readErrorMessage(err) || "Submit failed");
     } finally {

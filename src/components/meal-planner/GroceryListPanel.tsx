@@ -25,6 +25,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { toast } from "sonner";
+import { EVENTS, track } from "@/lib/analytics";
 import type { IngredientValue } from "@/types/content";
 import {
   addManualGroceryItem,
@@ -149,6 +150,7 @@ const GroceryListPanel = ({ planName, sources, onCostChange }: GroceryListPanelP
 
   const handleShare = async () => {
     const text = exportGroceryListText(items, `Shopping list — ${planName}`, { marketId });
+    track(EVENTS.SHOPPING_LIST_EXPORTED, { planName, itemCount: items.length, marketId });
     if (navigator.share) {
       try {
         await navigator.share({ title: `Shopping list — ${planName}`, text });

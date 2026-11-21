@@ -126,6 +126,14 @@ export function saveToFolder(
     cookedAt: entry.cookedAt ?? null,
     savedAt: new Date().toISOString(),
   });
+  try {
+    // Lazy import avoids circular deps with analytics consumers.
+    void import("@/lib/analytics").then(({ track, EVENTS }) => {
+      track(EVENTS.RECIPE_SAVED, { recipeId: entry.recipeId, slug: entry.slug, folderId });
+    });
+  } catch {
+    /* analytics optional */
+  }
   return writeBox(state);
 }
 

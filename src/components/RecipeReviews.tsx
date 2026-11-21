@@ -228,11 +228,14 @@ export const RecipeReviews = ({
 
     try {
       const cookedPhotoUrl = await uploadCookedPhoto(user.id);
+      // Photos and long reviews need a light moderation gate; simple star ratings can go live.
+      const needsModeration = Boolean(cookedPhotoUrl) || (reviewText?.trim().length || 0) > 280;
       const payload = {
         rating,
         review_text: reviewText || null,
         made_it: true,
         cooked_photo_url: cookedPhotoUrl,
+        moderation_status: needsModeration ? "pending" : "approved",
         updated_at: new Date().toISOString(),
       };
 
@@ -271,7 +274,11 @@ export const RecipeReviews = ({
           });
           if (fallbackError) throw fallbackError;
         }
-        toast.success("Thanks — your “I made this” rating is live");
+        toast.success(
+          needsModeration
+            ? "Thanks — photo/long reviews appear after a quick check"
+            : "Thanks — your “I made this” rating is live"
+        );
       }
 
       if (recipeSlug && recipeName) {
