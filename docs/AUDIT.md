@@ -186,13 +186,13 @@ There is no `POST /api/substitutions`. Scoring weights are inline, not config. T
 
 | Blueprint item | Status | Evidence |
 |---|---|---|
-| P0 Ingredient graph | **Missing in the database.** Partial in the client. | 542 name-only ingredients. 0 join rows. 0 substitution rows. Alias logic is TypeScript. |
+| P0 Ingredient graph | **Partial in DB + client.** | Seed applied to prod: ~586 ingredients, 110 aliases, 42 substitutions, 228 availability rows. Client still has parallel TypeScript aliases. `recipe_ingredients` join still thin. |
 | P0 Alias-aware search | **Partial** | `recipeSearch.ts` synonyms and typos. No ambiguity prompt. `morogo` is a false synonym. |
 | P0 Faceted discovery + URL state | **Partial** | Chips, counts, clear-all, URL params. Client-side, history replace, unfiltered counts, single canonical. |
 | P0 Recipe schema, hubs, CWV | **Partial** | Prerender + Recipe JSON-LD for African recipes. Author is the organization. No CWV baseline. Country hubs exist (`/country/:slug`). No ingredient glossary per slug, no `/substitutes/` pages. |
 | P1 Recipe utility | **Partial, ahead of the blueprint’s “not built” assumption** | Cook mode, scaling, timers, wake lock, substitution popover, nutrition badge, print, local-name toggle, provenance block. Unit conversion and gram estimates are not a general system. |
 | P1 Saves, notes, reviews | **Partial** | My List, recipe box folders (localStorage), reviews UI. 0 reviews in the DB. Cooked-photo column exists. |
-| P1 Creator studio | **Partial / thin** | `/submit-recipe`, `/import-recipe` (URL, photo, voice → `uploads`, human review), `/editorial-review`. No profiles, Person schema, analytics, or regional reviewer workflow. |
+| P1 Creator studio | **Partial / thin** | `/submit-recipe` + `/import-recipe` (auth → `uploads` pending) → `/editorial-review` (AdminGate). Nav links + analytics events added. Recipes INSERT locked to admin/mod. No creator profiles, Person schema, or regional reviewer workflow yet. |
 | P1 Pantry search | **Present** | `/pantry`, barcode, voice, expiry, `pantry-intelligence`. Ranking is not substitution-coverage with verified IDs only. |
 | P2 Planner and shopping | **Partial, ahead of the roadmap** | Calendar, drag-and-drop, AI meal generator, budget tracker, grocery merge, household sync, WhatsApp/deep links. Prices are the hardcoded market table, not `ingredient_availability`. |
 | P3 Commerce | **Link-out only** | Correct to leave here. |
@@ -209,8 +209,8 @@ There is no `POST /api/substitutions`. Scoring weights are inline, not config. T
 |---|---|---|
 | S1-01 | This audit | **Done** (this document) |
 | S1-02 | Lighthouse on 10 templates, Search Console, internal search logs | **Not done.** No GA4, so there is no internal-search log to pull. GSC note from 16 November: about 3 indexed pages and 1 impression in 7 days, before the sitemap expansion. Re-measure after the prerender deploy. |
-| S1-03 | Migrations for ingredients, aliases, substitutions, availability, recipe_ingredients, provenance | **Not done.** Stub tables exist and are empty or name-only. Aliases and availability do not exist. |
-| S1-04 | Seed 100 priority ingredients from an editor CSV | **Not done.** Client seed is ~34 edges, not a validated CSV import. |
+| S1-03 | Migrations for ingredients, aliases, substitutions, availability, recipe_ingredients, provenance | **Mostly done.** Schema + seed on prod; `recipe_ingredients` backfill still open. |
+| S1-04 | Seed 100 priority ingredients from an editor CSV | **Done (SQL seed).** 100 priority ingredients + aliases/subs/availability applied; slug conflict fix shipped. |
 | S1-05 | Alias resolver with trigram, ambiguity, tests | **Partial.** In-memory aliases and Levenshtein. No trigram index, no ambiguity flag. |
 | S1-06 | URL facets with chips, counts, clear-all | **Partial.** See Search. |
 | S1-07 | Facet indexation policy and sitemaps | **Partial.** Sitemaps are split and counts match the DB. Allow-list / noindex for facet URLs is not implemented. |

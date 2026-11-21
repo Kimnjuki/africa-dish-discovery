@@ -1,8 +1,9 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { PageMeta } from "@/components/seo/PageMeta";
+import { EVENTS, track } from "@/lib/analytics";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -69,6 +70,10 @@ export default function ImportRecipe() {
   const [attribution, setAttribution] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
   const recognitionRef = useRef<SpeechRecognitionLike | null>(null);
+
+  useEffect(() => {
+    track(EVENTS.CREATOR_SUBMISSION_STARTED, { source: "import-recipe" });
+  }, []);
 
   const adaptationCount = draft?.local_adaptations.length || 0;
 
@@ -295,6 +300,13 @@ export default function ImportRecipe() {
         .select("id")
         .single();
       if (error) throw error;
+
+      track(EVENTS.CREATOR_SUBMISSION_PUBLISHED, {
+        source: "import-recipe",
+        status: "pending_review",
+        import_method: draft.import_method,
+        country: draft.country,
+      });
 
       saveToFolder({
         recipeId: data.id,

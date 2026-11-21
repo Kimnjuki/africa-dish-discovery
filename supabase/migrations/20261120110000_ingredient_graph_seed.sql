@@ -110,8 +110,8 @@ VALUES
   ('Zucchini',          'zucchini',          'Zucchini',          'vegetable',  'Pantry & Condiments',  ARRAY['vegetarian','vegan','halal','gluten_free','dairy_free','nut_free'], ARRAY[]::text[], ARRAY['vegetable','mild','bulk'],                            'piece', 'approved', 'ladhaquest-seed-v1', 'CC0-1.0'),
   ('Chicken Stock',     'chicken-stock',     'Chicken Stock',     'condiment',  'Pantry & Condiments',  ARRAY['halal','gluten_free','dairy_free','nut_free'], ARRAY[]::text[], ARRAY['liquid-base','umami','flavoring'],                                        'l',     'approved', 'ladhaquest-seed-v1', 'CC0-1.0'),
   ('Eggs',              'eggs',              'Eggs',              'protein',    'Pantry & Condiments',  ARRAY['vegetarian','halal','gluten_free','dairy_free','nut_free'], ARRAY['egg'], ARRAY['protein','binder','emulsifier'],                                   'piece', 'approved', 'ladhaquest-seed-v1', 'CC0-1.0')
-ON CONFLICT (name) DO UPDATE SET
-  slug           = EXCLUDED.slug,
+ON CONFLICT (slug) DO UPDATE SET
+  name           = EXCLUDED.name,
   canonical_name = EXCLUDED.canonical_name,
   category       = EXCLUDED.category,
   food_group     = EXCLUDED.food_group,

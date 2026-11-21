@@ -114,7 +114,7 @@ const App = () => (
               <Route path="/atlas" element={<DishAtlas />} />
               <Route path="/dish/:dishSlug" element={<DishEncyclopedia />} />
               <Route path="/country/:countrySlug" element={<CountryRecipes />} />
-              <Route path="/editorial-review" element={<EditorialReview />} />
+              <Route path="/editorial-review" element={<AdminGate><EditorialReview /></AdminGate>} />
               <Route path="/admin/dish-qa" element={<AdminGate><AdminDishQA /></AdminGate>} />
               <Route path="/recipe/:slug" element={<RecipeDetail />} />
               <Route path="/cuisine-map" element={<CuisineMap />} />

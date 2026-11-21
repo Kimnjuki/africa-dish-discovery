@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { ChefHat, Menu, X, Search, User, LogOut, Package, Calendar, LayoutGrid, Heart, Home, WifiOff, FileUp } from "lucide-react";
+import { ChefHat, Menu, X, Search, User, LogOut, Package, Calendar, LayoutGrid, Heart, Home, WifiOff, FileUp, Upload } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -142,6 +142,10 @@ const Navigation = () => {
                     <Calendar className="w-4 h-4 mr-2" />
                     Meal Planner
                   </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigate('/submit-recipe')}>
+                    <Upload className="w-4 h-4 mr-2" />
+                    Submit recipe
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={() => navigate('/import-recipe')}>
                     <FileUp className="w-4 h-4 mr-2" />
                     Import recipe
@@ -209,6 +213,14 @@ const Navigation = () => {
                 </button>
               ))}
 
+              <Link
+                to="/submit-recipe"
+                className="flex min-h-11 items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <Upload className="w-4 h-4" />
+                Submit recipe
+              </Link>
               <Link
                 to="/import-recipe"
                 className="flex min-h-11 items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
