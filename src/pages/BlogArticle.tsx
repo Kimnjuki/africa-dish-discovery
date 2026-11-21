@@ -182,7 +182,7 @@ const BlogArticle = () => {
   return (
     <div className="min-h-screen">
       <PageMeta
-        title={`${post.title} | LadhaQuest Blog`}
+        title={`${post.title} | LadhaQuest`}
         description={post.excerpt}
         keywords={post.tags.join(", ")}
         canonical={`https://www.ladhaquest.com/blog/${post.slug}`}

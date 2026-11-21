@@ -101,19 +101,20 @@ if (existsSync(publicOg) && !existsSync(resolve(distDir, "og-image.jpg"))) {
   copyFileSync(publicOg, resolve(distDir, "og-image.jpg"));
 }
 
+/** Keep titles ≤ ~60 chars so SERP snippets are not truncated. */
 const hubs = [
-  ["recipes", "African Recipes | Authentic Dishes from West, East, North & Southern Africa | LadhaQuest", "Browse 2,100+ authentic African recipes from West, East, North, Central, and Southern Africa, with local ingredient names and substitutions.", "African recipes"],
-  ["recipe-index", "Recipe Index | Browse African & World Recipes by Country, Diet & Time", "Search the LadhaQuest recipe index by country, diet, and time. Find authentic African dishes you can cook at home.", "Recipe index"],
-  ["countries", "Browse Recipes by Country | LadhaQuest", "Browse LadhaQuest recipes by country and open a food guide for each African cuisine.", "Recipes by country"],
-  ["continents", "Explore African Continents | Regional Cuisines | LadhaQuest", "Explore African cooking by region: West, East, North, Central, and Southern Africa.", "African regions"],
-  ["atlas", "African Food Atlas | Top 50 Dishes, Best Stews & 100 Foods to Try", "Explore the LadhaQuest African food atlas: landmark dishes, stews, and foods to try.", "African food atlas"],
-  ["cuisine-map", "Cuisine Map of Africa | LadhaQuest", "Explore African dishes by region and country on a cuisine map, with native names and cultural context.", "Cuisine map of Africa"],
-  ["meals", "African Meals by Time of Day | Breakfast, Lunch & Dinner | LadhaQuest", "Find African breakfast, lunch, and dinner ideas from across the continent.", "African meals"],
-  ["ingredients", "African Cooking Ingredients Guide | Spices, Staples & Produce | LadhaQuest", "A guide to African cooking ingredients: spices, staples, produce, and how they are used.", "African cooking ingredients"],
-  ["blog", "African Food Blog | Authentic Recipes, Guides & Cooking Tips | LadhaQuest", "Guides and cooking stories from LadhaQuest, covering Jollof, Egusi, Doro Wat, tagine, and more.", "African food blog"],
-  ["about", "About LadhaQuest | Our Mission & Story", "Learn about LadhaQuest's mission to share authentic African recipes, local ingredients, and culinary heritage.", "About LadhaQuest"],
+  ["recipes", "African Recipes by Region | LadhaQuest", "Browse 2,100+ authentic African recipes with local ingredient names and substitutions.", "African recipes"],
+  ["recipe-index", "Recipe Index by Country & Diet | LadhaQuest", "Search LadhaQuest recipes by country, diet, and cook time.", "Recipe index"],
+  ["countries", "Browse Recipes by Country | LadhaQuest", "Open a food guide for each African cuisine on LadhaQuest.", "Recipes by country"],
+  ["continents", "African Regional Cuisines | LadhaQuest", "Explore West, East, North, Central, and Southern African cooking.", "African regions"],
+  ["atlas", "African Food Atlas | Dishes to Try", "Landmark African dishes, stews, and foods to cook next.", "African food atlas"],
+  ["cuisine-map", "Cuisine Map of Africa | LadhaQuest", "Explore African dishes by region and country, with native names.", "Cuisine map of Africa"],
+  ["meals", "African Breakfast, Lunch & Dinner", "Find African meal ideas by time of day across the continent.", "African meals"],
+  ["ingredients", "African Cooking Ingredients Guide", "Spices, staples, produce, and how they are used in African kitchens.", "African cooking ingredients"],
+  ["blog", "African Food Blog | LadhaQuest", "Guides and cooking stories covering Jollof, Egusi, Doro Wat, and more.", "African food blog"],
+  ["about", "About LadhaQuest | Our Mission", "LadhaQuest shares authentic African recipes, local ingredients, and culinary heritage.", "About LadhaQuest"],
   ["contact", "Contact Us | LadhaQuest", "Contact the LadhaQuest team about recipes, partnerships, or questions.", "Contact LadhaQuest"],
-  ["install", "Install LadhaQuest App | Offline African Recipes", "Install LadhaQuest for offline access to authentic African recipes.", "Install LadhaQuest"],
+  ["install", "Install LadhaQuest | Offline Recipes", "Install LadhaQuest for offline access to authentic African recipes.", "Install LadhaQuest"],
   ["privacy-policy", "Privacy Policy | LadhaQuest", "How LadhaQuest collects, uses, and protects personal information.", "Privacy Policy"],
   ["terms-of-service", "Terms of Service | LadhaQuest", "The terms that apply when you use LadhaQuest.", "Terms of Service"],
 ];
@@ -143,13 +144,28 @@ async function fetchAfricanRecipes() {
   return rows;
 }
 
+function clipMeta(text, max = 155) {
+  const clean = stripHtml(text);
+  if (clean.length <= max) return clean;
+  const sliced = clean.slice(0, max - 1);
+  const cut = Math.max(sliced.lastIndexOf(". "), sliced.lastIndexOf(" "));
+  return `${(cut > 60 ? sliced.slice(0, cut) : sliced).trim()}…`;
+}
+
 function injectMeta(html, recipe) {
-  const title = `${recipe.name} Recipe${recipe.country ? ` — ${recipe.country}` : ""} | LadhaQuest`;
-  const description = stripHtml(
+  const countryBit = recipe.country ? ` — ${recipe.country}` : "";
+  let title = `${recipe.name} Recipe${countryBit} | LadhaQuest`;
+  if (title.length > 60) {
+    title = `${recipe.name}${countryBit} | LadhaQuest`;
+  }
+  if (title.length > 60) {
+    title = `${String(recipe.name || "").slice(0, 40).trim()} | LadhaQuest`;
+  }
+  const description = clipMeta(
     recipe.summary ||
       recipe.brief_description ||
       `Authentic ${recipe.country || "African"} recipe for ${recipe.name}. Ingredients, steps, and cultural context on LadhaQuest.`
-  ).slice(0, 160);
+  );
   const canonical = `${site}/recipe/${recipe.slug}`;
   const image = recipe.image_url || `${site}/og-image.jpg`;
   const ingredients = asList(recipe.ingredients).slice(0, 40);
@@ -284,6 +300,27 @@ function shellPage(html, { title, description, canonical, h1 }) {
     `<meta name="twitter:description" content="${escapeHtml(description)}" />`
   );
   out = out.replace(/<h1>[^<]*<\/h1>/i, `<h1>${escapeHtml(h1)}</h1>`);
+  // Give hub/country/blog shells enough visible copy for non-JS crawlers.
+  out = out.replace(
+    /<main>[\s\S]*?<\/main>/i,
+    `<main>
+          <h1>${escapeHtml(h1)}</h1>
+          <p>${escapeHtml(description)}</p>
+          <p>
+            LadhaQuest helps you cook authentic African food at home with local ingredient names,
+            market-aware substitutions, meal planning, and offline cook mode.
+          </p>
+          <h2>Explore LadhaQuest</h2>
+          <ul>
+            <li><a href="/recipes">Browse recipes</a></li>
+            <li><a href="/recipe-index">Recipe index</a></li>
+            <li><a href="/countries">Recipes by country</a></li>
+            <li><a href="/continents">African regions</a></li>
+            <li><a href="/blog">Food blog</a></li>
+            <li><a href="${canonical}">Canonical page</a></li>
+          </ul>
+        </main>`
+  );
   return out;
 }
 
@@ -317,8 +354,11 @@ for (const [path, title, description, h1] of hubs) {
 }
 
 for (const post of readStaticBlog()) {
-  const title = `${post.title} | LadhaQuest Blog`;
-  const description = post.excerpt || post.title;
+  let title = `${post.title} | LadhaQuest`;
+  if (title.length > 60) {
+    title = `${String(post.title || "").slice(0, 48).trim()}… | LadhaQuest`;
+  }
+  const description = clipMeta(post.excerpt || post.title);
   publishHtml(
     `blog/${post.slug}`,
     shellPage(baseHtml, {
@@ -351,8 +391,12 @@ if (!url || !key) {
     publishHtml(
       `country/${slug}`,
       shellPage(baseHtml, {
-        title: `${name} Food Guide — Authentic Recipes & Cuisine | LadhaQuest`,
-        description: `Explore authentic ${name} recipes on LadhaQuest, with local dishes, ingredients, and cooking context.`,
+        title: `${name} Food Guide | LadhaQuest`.length <= 60
+          ? `${name} Food Guide | LadhaQuest`
+          : `${name} Recipes | LadhaQuest`,
+        description: clipMeta(
+          `Explore authentic ${name} recipes on LadhaQuest, with local dishes, ingredients, and cooking context.`
+        ),
         canonical: `${site}/country/${slug}`,
         h1: `${name} recipes`,
       })
