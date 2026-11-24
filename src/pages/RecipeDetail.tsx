@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { EnhancedRecipePreparation } from "@/components/enhanced/EnhancedRecipePreparation";
 import RecipeImagePlaceholder from "@/components/RecipeImagePlaceholder";
 import { IngredientChecklist } from "@/components/recipe/IngredientChecklist";
+import { RecipeShopLinks } from "@/components/recipe/RecipeShopLinks";
 import { NutritionBadge } from "@/components/NutritionBadge";
 import { PrintRecipeButton } from "@/components/PrintRecipeButton";
 import { CookMode } from "@/components/recipe/CookMode";
@@ -372,6 +373,7 @@ const RecipeDetail = () => {
                     </CardContent>
                   </Card>
                   <IngredientChecklist ingredients={recipe.ingredients} multiplier={mult} country={country} dishName={title} />
+                  <RecipeShopLinks recipeId={recipe.id} recipeSlug={recipe.slug || slug} country={country} />
                   <RecipeProvenance
                     recipeName={recipe.name}
                     recipeSlug={recipe.slug || slug}
