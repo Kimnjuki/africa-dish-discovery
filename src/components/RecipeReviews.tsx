@@ -115,11 +115,11 @@ export const RecipeReviews = ({
   const loadReviews = useCallback(
     async (currentUser: User | null) => {
       try {
+        // Use * — production may lack cooked_photo_url / made_it until migrations apply.
+        // Explicit selects that include missing columns → HTTP 400.
         const { data, error } = await supabase
           .from("recipe_reviews")
-          .select(
-            "id, recipe_id, user_id, rating, review_text, cooked_photo_url, created_at, updated_at"
-          )
+          .select("*")
           .eq("recipe_id", recipeId)
           .order("created_at", { ascending: false })
           .limit(50);
