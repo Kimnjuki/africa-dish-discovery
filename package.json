@@ -24,6 +24,7 @@
     "seed:ingredients": "node scripts/import-ingredient-graph.mjs",
     "backfill:recipe-ingredients": "node scripts/backfill-recipe-ingredients.mjs --sql",
     "wikidata:extract": "node scripts/wikidata-ingredient-extract.mjs",
+    "wikidata:curate": "node scripts/curate-wikidata-aliases.mjs",
     "sync:substitutions": "node scripts/sync-substitutions-from-graph.mjs",
     "audit:completeness": "node scripts/recipe-completeness-audit.mjs",
     "infer:nutrition": "node scripts/infer-recipe-nutrition.mjs",

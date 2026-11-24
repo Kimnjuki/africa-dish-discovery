@@ -280,8 +280,9 @@ export default function AdminDataQuality() {
               <li>Reject Wikidata noise (disambiguation pages, wrong taxon, brand names).</li>
               <li>Language codes follow Wikidata (sw, ha, yo, ig, am, zu, fr, ar, pt, en).</li>
               <li>
-                Re-run <code>npm run wikidata:extract</code> to propose more aliases; they stay{" "}
-                <code>proposed</code> until reviewed.
+                Re-run <code>npm run wikidata:extract</code> to propose more aliases, then{" "}
+                <code>npm run wikidata:curate</code> for safe auto-approve / reject. Ambiguous rows
+                stay <code>proposed</code> for this queue.
               </li>
             </ul>
           </TabsContent>

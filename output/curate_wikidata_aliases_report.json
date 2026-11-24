@@ -1,0 +1,611 @@
+{
+  "generated_at": "2026-11-24T10:50:26.027Z",
+  "proposed_scanned": 535,
+  "approve": 281,
+  "reject": 32,
+  "leave_proposed": 222,
+  "approve_sample": [
+    {
+      "id": "51e70e07-ef34-47a3-9b11-66c2ee9b3cf3",
+      "reason": "self_match",
+      "alias": "Ugwu",
+      "ingredient": "Ugwu",
+      "conf": 0.7,
+      "lang": "en"
+    },
+    {
+      "id": "7a7b52e1-477a-4800-9647-1d19848a94b9",
+      "reason": "self_match",
+      "alias": "Ugwu",
+      "ingredient": "Ugwu",
+      "conf": 0.7,
+      "lang": "sw"
+    },
+    {
+      "id": "4cd83c4d-e625-4b14-84ae-4e7bedb173ff",
+      "reason": "self_match",
+      "alias": "Ugwu",
+      "ingredient": "Ugwu",
+      "conf": 0.7,
+      "lang": "zu"
+    },
+    {
+      "id": "3466f49a-8310-4882-b5ba-e265bd11ecc4",
+      "reason": "self_match",
+      "alias": "Ugwu",
+      "ingredient": "Ugwu",
+      "conf": 0.7,
+      "lang": "fr"
+    },
+    {
+      "id": "8b518abd-0b18-4dcb-9924-d7cd283855e7",
+      "reason": "self_match",
+      "alias": "Ugwu",
+      "ingredient": "Ugwu",
+      "conf": 0.7,
+      "lang": "pt"
+    },
+    {
+      "id": "12e74a8f-e7be-4da6-a59e-7c87e8fdd26b",
+      "reason": "self_match",
+      "alias": "Sukuma wiki",
+      "ingredient": "Sukuma Wiki",
+      "conf": 0.7,
+      "lang": "en"
+    },
+    {
+      "id": "b55af014-3492-459e-bd0c-f2f79477a38a",
+      "reason": "mid_conf_close",
+      "alias": "Sukuma Wiiki",
+      "ingredient": "Sukuma Wiki",
+      "conf": 0.55,
+      "lang": "en"
+    },
+    {
+      "id": "bfdf88e1-5424-42f4-863b-96ec44b97b77",
+      "reason": "self_match",
+      "alias": "Sukuma wiki",
+      "ingredient": "Sukuma Wiki",
+      "conf": 0.7,
+      "lang": "ha"
+    },
+    {
+      "id": "2c324c99-b46f-402b-86ef-57aa7efa58e3",
+      "reason": "self_match",
+      "alias": "Sukuma wiki",
+      "ingredient": "Sukuma Wiki",
+      "conf": 0.7,
+      "lang": "ig"
+    },
+    {
+      "id": "d1b43f58-6456-40c7-8687-cfa02a607884",
+      "reason": "self_match",
+      "alias": "Sukuma wiki",
+      "ingredient": "Sukuma Wiki",
+      "conf": 0.55,
+      "lang": "fr"
+    },
+    {
+      "id": "9449185f-8f84-4afe-b5e3-fc24f756725c",
+      "reason": "self_match",
+      "alias": "Citrullus colocynthis",
+      "ingredient": "Egusi",
+      "conf": 0.7,
+      "lang": "en"
+    },
+    {
+      "id": "cc00fa8c-0237-4a44-958a-fd24d679e591",
+      "reason": "self_match",
+      "alias": "egusi",
+      "ingredient": "Egusi",
+      "conf": 0.55,
+      "lang": "en"
+    },
+    {
+      "id": "aa2ecfe9-2f0e-4150-9886-510c943d688d",
+      "reason": "high_conf_safe_lang",
+      "alias": "Kwartowa",
+      "ingredient": "Egusi",
+      "conf": 0.7,
+      "lang": "ha"
+    },
+    {
+      "id": "c84e53a0-6cf6-4f85-9ddf-278fc1dce9c6",
+      "reason": "high_conf_safe_lang",
+      "alias": "Coloquinte",
+      "ingredient": "Egusi",
+      "conf": 0.7,
+      "lang": "fr"
+    },
+    {
+      "id": "6688302c-e97c-47a5-9fb3-1898b0f48460",
+      "reason": "self_match",
+      "alias": "Citrullus colocynthis",
+      "ingredient": "Egusi",
+      "conf": 0.55,
+      "lang": "fr"
+    },
+    {
+      "id": "bb7a33b8-5894-44b6-bc71-390d96266d93",
+      "reason": "self_match",
+      "alias": "Citrullus colocynthis",
+      "ingredient": "Egusi",
+      "conf": 0.7,
+      "lang": "pt"
+    },
+    {
+      "id": "bfcb6d3b-d3a0-4238-8a37-160d0b8ebb1c",
+      "reason": "self_match",
+      "alias": "palm oil",
+      "ingredient": "Palm Oil",
+      "conf": 0.7,
+      "lang": "en"
+    },
+    {
+      "id": "d1dbea93-ad5d-4dd6-b5ae-dec27ccc6245",
+      "reason": "high_conf_safe_lang",
+      "alias": "Mawese",
+      "ingredient": "Palm Oil",
+      "conf": 0.7,
+      "lang": "sw"
+    },
+    {
+      "id": "1d065bff-b756-478e-9de6-5d1a122a9cf3",
+      "reason": "high_conf_safe_lang",
+      "alias": "Manja",
+      "ingredient": "Palm Oil",
+      "conf": 0.7,
+      "lang": "ha"
+    },
+    {
+      "id": "3ac765f4-f788-44a1-80d1-bae2dff98ec0",
+      "reason": "high_conf_safe_lang",
+      "alias": "Mmanụ nri",
+      "ingredient": "Palm Oil",
+      "conf": 0.7,
+      "lang": "ig"
+    },
+    {
+      "id": "0dfd2066-6382-4537-a5a2-5e6ed35d46cd",
+      "reason": "high_conf_safe_lang",
+      "alias": "huile de palme",
+      "ingredient": "Palm Oil",
+      "conf": 0.7,
+      "lang": "fr"
+    },
+    {
+      "id": "3cc726cd-41f2-4fd3-99d4-486f19bd919b",
+      "reason": "high_conf_safe_lang",
+      "alias": "azeite de dendê",
+      "ingredient": "Palm Oil",
+      "conf": 0.7,
+      "lang": "pt"
+    },
+    {
+      "id": "0f9574c5-ed96-4cf2-9509-a223573514b4",
+      "reason": "self_match",
+      "alias": "Scotch bonnet",
+      "ingredient": "Scotch Bonnet",
+      "conf": 0.7,
+      "lang": "en"
+    },
+    {
+      "id": "0d377d1f-218a-4101-a67b-4c2ab4b1ca51",
+      "reason": "self_match",
+      "alias": "Capsicum chinense 'Scotch Bonnet'",
+      "ingredient": "Scotch Bonnet",
+      "conf": 0.55,
+      "lang": "en"
+    },
+    {
+      "id": "7f732f85-421b-41d0-8cd3-a4c9d225c01e",
+      "reason": "self_match",
+      "alias": "Scotch bonnet",
+      "ingredient": "Scotch Bonnet",
+      "conf": 0.7,
+      "lang": "fr"
+    },
+    {
+      "id": "0dd0f93f-e635-474b-9e02-a1b3d2220360",
+      "reason": "self_match",
+      "alias": "Scotch bonnet",
+      "ingredient": "Scotch Bonnet",
+      "conf": 0.7,
+      "lang": "pt"
+    },
+    {
+      "id": "ee6aa634-5c26-4f76-a9ea-4c9e292caa42",
+      "reason": "self_match",
+      "alias": "cassava",
+      "ingredient": "Cassava",
+      "conf": 0.7,
+      "lang": "en"
+    },
+    {
+      "id": "c3fa1e94-230f-436a-9a1b-ae46b261c380",
+      "reason": "self_match",
+      "alias": "Manihot Esculenta",
+      "ingredient": "Cassava",
+      "conf": 0.55,
+      "lang": "en"
+    },
+    {
+      "id": "91cded3a-f452-475c-82ae-a5e47667ec32",
+      "reason": "high_conf_safe_lang",
+      "alias": "Muhogo",
+      "ingredient": "Cassava",
+      "conf": 0.7,
+      "lang": "sw"
+    },
+    {
+      "id": "d9b1555f-d253-4ea6-858f-346415398248",
+      "reason": "high_conf_safe_lang",
+      "alias": "Rogo",
+      "ingredient": "Cassava",
+      "conf": 0.7,
+      "lang": "ha"
+    }
+  ],
+  "reject_sample": [
+    {
+      "id": "3db75558-f1a1-4d68-a15d-7499d51b3b7c",
+      "reason": "denylist_or_cas",
+      "alias": "bitter apple"
+    },
+    {
+      "id": "59f56d7c-2cdd-4c64-a05a-377333b455b6",
+      "reason": "denylist_or_cas",
+      "alias": "bitter cucumber"
+    },
+    {
+      "id": "943a3c10-1691-458c-812f-ec1a0c040579",
+      "reason": "denylist_or_cas",
+      "alias": "desert gourd"
+    },
+    {
+      "id": "c1477ecd-4878-4c90-8d73-0866f0e73320",
+      "reason": "denylist_or_cas",
+      "alias": "wild gourd"
+    },
+    {
+      "id": "a302ba40-73d4-4827-924d-dfa2e5ffd22c",
+      "reason": "denylist_or_cas",
+      "alias": "vine of Sodom"
+    },
+    {
+      "id": "613e941b-4326-40d0-b47d-433cd8b11e3e",
+      "reason": "nonmatching_binomial",
+      "alias": "Colocynthis citrullus"
+    },
+    {
+      "id": "1e2de173-e634-492f-bc9e-ab02c478b330",
+      "reason": "denylist_or_cas",
+      "alias": "coloquintida"
+    },
+    {
+      "id": "7b8d810b-7a2a-4925-a55a-7fc5264bc28f",
+      "reason": "nonmatching_binomial",
+      "alias": "Coloquinte vraie"
+    },
+    {
+      "id": "7f118d56-cc3d-4281-9f6e-5a7faa1f1f92",
+      "reason": "denylist_or_cas",
+      "alias": "8002-75-3"
+    },
+    {
+      "id": "de2013bc-213b-4836-9428-ac1719f35b5c",
+      "reason": "nonmatching_binomial",
+      "alias": "Azeite de palma"
+    },
+    {
+      "id": "d28b5dc9-1074-4580-960e-e7025495a570",
+      "reason": "nonmatching_binomial",
+      "alias": "Manihot utilissima"
+    },
+    {
+      "id": "aeeb37c8-fb6b-4189-b18c-19125c9014f0",
+      "reason": "nonmatching_binomial",
+      "alias": "Plantago psyllium"
+    },
+    {
+      "id": "2a6b5bfa-47d4-49d2-a830-5ad55b5be2a4",
+      "reason": "nonmatching_binomial",
+      "alias": "Psyllium afrum"
+    },
+    {
+      "id": "a4f02cfa-1e05-41ce-ab2b-3e38a0b0da5d",
+      "reason": "nonmatching_binomial",
+      "alias": "Plantain psyllium"
+    },
+    {
+      "id": "f067b260-f377-428f-9017-f8dda1a3efd8",
+      "reason": "nonmatching_binomial",
+      "alias": "Annual bunch grass"
+    },
+    {
+      "id": "4cd16c56-a8d8-4292-96df-93e4691a3f87",
+      "reason": "nonmatching_binomial",
+      "alias": "American groundnut"
+    },
+    {
+      "id": "d867d323-2188-40e1-a709-361c8c5ea1e0",
+      "reason": "nonmatching_binomial",
+      "alias": "Indian potato"
+    },
+    {
+      "id": "140e02e6-c9ca-4aba-9a45-7e2d69d1f813",
+      "reason": "nonmatching_binomial",
+      "alias": "Nalta jute"
+    },
+    {
+      "id": "7d06f349-069f-4613-b023-bcc59878c4a5",
+      "reason": "nonmatching_binomial",
+      "alias": "Tossa jute"
+    },
+    {
+      "id": "fe7fe5e2-5c6a-4bd4-a8a4-62dd50f78291",
+      "reason": "nonmatching_binomial",
+      "alias": "Jute mallow"
+    },
+    {
+      "id": "74c0f4db-2d32-4d95-a6f1-08abe027e436",
+      "reason": "nonmatching_binomial",
+      "alias": "Bitterleaf tree"
+    },
+    {
+      "id": "9620f1c1-29b4-4d2c-affd-655618c58de3",
+      "reason": "nonmatching_binomial",
+      "alias": "Capra hircus"
+    },
+    {
+      "id": "754042c3-449b-48db-9d35-a6cb769ac206",
+      "reason": "nonmatching_binomial",
+      "alias": "Capra hircus"
+    },
+    {
+      "id": "4e5272a7-c01b-4775-bd7e-1a4ecded2cad",
+      "reason": "collision",
+      "alias": "couscous"
+    },
+    {
+      "id": "a62085ba-60a6-4551-8792-05ed5be9c1f1",
+      "reason": "nonmatching_binomial",
+      "alias": "Zingiber officinalis"
+    },
+    {
+      "id": "e0c22ca8-bb41-486a-a006-fcd2ac1d9122",
+      "reason": "collision",
+      "alias": "Nyanya"
+    },
+    {
+      "id": "97bd2550-6d77-4fb4-af64-35b43a6bcaf1",
+      "reason": "nonmatching_binomial",
+      "alias": "Lycopersicum esculentum"
+    },
+    {
+      "id": "07793e9d-6bb6-47c6-ab53-e3d5eec6721a",
+      "reason": "nonmatching_binomial",
+      "alias": "Brassica oleraceae"
+    },
+    {
+      "id": "1178ecd8-daa5-41c8-ac93-83b81ed9a82a",
+      "reason": "nonmatching_binomial",
+      "alias": "Brassica sylvestris"
+    },
+    {
+      "id": "e6986a2c-007f-4707-9a5b-3cb3b4011711",
+      "reason": "nonmatching_binomial",
+      "alias": "Guinea spice"
+    }
+  ],
+  "skip_sample": [
+    {
+      "id": "179eea11-bc47-4de4-bbc0-748c4d7931a8",
+      "reason": "needs_human",
+      "alias": "colocynth",
+      "conf": 0.55,
+      "lang": "en"
+    },
+    {
+      "id": "1545c13c-b39a-43b8-87b3-208679a6fd8a",
+      "reason": "needs_human",
+      "alias": "dendê oil",
+      "conf": 0.55,
+      "lang": "en"
+    },
+    {
+      "id": "fd2f34a0-c75f-448a-873c-4329130cf76f",
+      "reason": "ambiguous_binomial",
+      "alias": "Epo pupa"
+    },
+    {
+      "id": "98a46bac-b212-4c71-82a9-b51aa899e0b5",
+      "reason": "needs_human",
+      "alias": "huile de palmier",
+      "conf": 0.55,
+      "lang": "fr"
+    },
+    {
+      "id": "4cd4262e-d068-4b0b-9706-7881989f822f",
+      "reason": "needs_human",
+      "alias": "Óleo de palma",
+      "conf": 0.55,
+      "lang": "pt"
+    },
+    {
+      "id": "5290cd7e-d1c4-41a7-8dd7-278d2f0938f8",
+      "reason": "needs_human",
+      "alias": "Epô",
+      "conf": 0.55,
+      "lang": "pt"
+    },
+    {
+      "id": "d8fa3429-40c4-493e-8d93-a0d3dfdebe8c",
+      "reason": "needs_human",
+      "alias": "Óleo de dendê",
+      "conf": 0.55,
+      "lang": "pt"
+    },
+    {
+      "id": "11832a66-4813-40da-a38c-92e55a2a4f3c",
+      "reason": "needs_human",
+      "alias": "Epô pupá",
+      "conf": 0.55,
+      "lang": "pt"
+    },
+    {
+      "id": "a464d865-24c2-4304-95f5-fc1087c95f08",
+      "reason": "needs_human",
+      "alias": "piment écossais",
+      "conf": 0.55,
+      "lang": "fr"
+    },
+    {
+      "id": "0308380a-aeb2-444a-92c3-6e2a2bd86fe0",
+      "reason": "needs_human",
+      "alias": "manioc",
+      "conf": 0.55,
+      "lang": "en"
+    },
+    {
+      "id": "2b784436-8992-48db-90f3-26a8a397badc",
+      "reason": "needs_human",
+      "alias": "mandioca",
+      "conf": 0.55,
+      "lang": "en"
+    },
+    {
+      "id": "a2648342-5b58-4f10-a5f7-0bb014a9d1ba",
+      "reason": "needs_human",
+      "alias": "cassava plant",
+      "conf": 0.55,
+      "lang": "en"
+    },
+    {
+      "id": "876c79d2-97bd-4064-adf6-528a0f535cdd",
+      "reason": "needs_human",
+      "alias": "Saka-saka",
+      "conf": 0.55,
+      "lang": "fr"
+    },
+    {
+      "id": "802cadca-acc9-4617-906e-1b4d7d4a4271",
+      "reason": "needs_human",
+      "alias": "Magnoc",
+      "conf": 0.55,
+      "lang": "fr"
+    },
+    {
+      "id": "d6ffc48a-7a66-46cc-8792-6de5e64bbf63",
+      "reason": "needs_human",
+      "alias": "mandiocazeiro",
+      "conf": 0.55,
+      "lang": "pt"
+    },
+    {
+      "id": "7220bf50-6424-4e49-9479-49481818871d",
+      "reason": "needs_human",
+      "alias": "maniva",
+      "conf": 0.55,
+      "lang": "pt"
+    },
+    {
+      "id": "b2d6a73c-0ae2-4144-85b2-2b073110eb70",
+      "reason": "needs_human",
+      "alias": "maniveira",
+      "conf": 0.55,
+      "lang": "pt"
+    },
+    {
+      "id": "228adb6d-6abb-4676-8c0b-4cebfe168611",
+      "reason": "needs_human",
+      "alias": "macaxeira",
+      "conf": 0.55,
+      "lang": "pt"
+    },
+    {
+      "id": "49d39fd2-5fea-4054-8947-42f8709d4d95",
+      "reason": "needs_human",
+      "alias": "aipim",
+      "conf": 0.55,
+      "lang": "pt"
+    },
+    {
+      "id": "9c8e449d-f318-412e-a2b2-36461c70c192",
+      "reason": "needs_human",
+      "alias": "plantain africain",
+      "conf": 0.55,
+      "lang": "fr"
+    },
+    {
+      "id": "d0786280-6488-4cd9-9328-85b4f57739ca",
+      "reason": "needs_human",
+      "alias": "herbes aux puces",
+      "conf": 0.55,
+      "lang": "fr"
+    },
+    {
+      "id": "96340eb3-7eb1-485d-b0d8-f0995f5df21f",
+      "reason": "needs_human",
+      "alias": "Plantago psyllium auct.",
+      "conf": 0.55,
+      "lang": "fr"
+    },
+    {
+      "id": "f95b16f2-83d8-4c01-8678-e1287dca36b3",
+      "reason": "needs_human",
+      "alias": "Jí",
+      "conf": 0.7,
+      "lang": "ig"
+    },
+    {
+      "id": "844ce95f-7a06-4078-a890-a41341575cb0",
+      "reason": "needs_human",
+      "alias": "Williams' lovegrass",
+      "conf": 0.55,
+      "lang": "en"
+    },
+    {
+      "id": "49e1bf1b-cd8d-49d5-845f-27d0d6884fde",
+      "reason": "needs_human",
+      "alias": "minor cereals",
+      "conf": 0.55,
+      "lang": "en"
+    },
+    {
+      "id": "1da35265-4dfb-4b44-b3d5-f92a688d3388",
+      "reason": "needs_human",
+      "alias": "Nutri-Cereals",
+      "conf": 0.55,
+      "lang": "en"
+    },
+    {
+      "id": "ebeb4e9a-39b2-43d7-8a4a-87fbf83c40dd",
+      "reason": "needs_human",
+      "alias": "Millet (graminée)",
+      "conf": 0.55,
+      "lang": "fr"
+    },
+    {
+      "id": "8b0ec9ab-cefc-458a-b138-d980e4fe29c9",
+      "reason": "needs_human",
+      "alias": "corn plant",
+      "conf": 0.55,
+      "lang": "en"
+    },
+    {
+      "id": "8064504f-93ac-4109-9de4-c9c60f6f2e07",
+      "reason": "needs_human",
+      "alias": "maize plant",
+      "conf": 0.55,
+      "lang": "en"
+    },
+    {
+      "id": "a1c1ebf1-ac26-4dda-9bc5-c77e7c3face6",
+      "reason": "needs_human",
+      "alias": "muhindi",
+      "conf": 0.55,
+      "lang": "sw"
+    }
+  ]
+}
