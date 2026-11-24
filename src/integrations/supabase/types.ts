@@ -840,6 +840,7 @@ export type Database = {
           texture_profile: Json | null
           updated_at: string | null
           version: number | null
+          wikidata_qid: string | null
         }
         Insert: {
           allergens?: string[] | null
@@ -875,6 +876,7 @@ export type Database = {
           texture_profile?: Json | null
           updated_at?: string | null
           version?: number | null
+          wikidata_qid?: string | null
         }
         Update: {
           allergens?: string[] | null
@@ -910,6 +912,7 @@ export type Database = {
           texture_profile?: Json | null
           updated_at?: string | null
           version?: number | null
+          wikidata_qid?: string | null
         }
         Relationships: []
       }
@@ -1475,26 +1478,44 @@ export type Database = {
       recipe_ingredients: {
         Row: {
           created_at: string | null
+          display_text: string | null
           id: string
           ingredient_id: string
-          quantity: string | null
+          is_optional: boolean | null
+          preparation_note: string | null
+          quantity: number | null
           recipe_id: string
+          review_status: string | null
+          sort_order: number | null
+          source: string | null
           unit: string | null
         }
         Insert: {
           created_at?: string | null
+          display_text?: string | null
           id?: string
           ingredient_id: string
-          quantity?: string | null
+          is_optional?: boolean | null
+          preparation_note?: string | null
+          quantity?: number | null
           recipe_id: string
+          review_status?: string | null
+          sort_order?: number | null
+          source?: string | null
           unit?: string | null
         }
         Update: {
           created_at?: string | null
+          display_text?: string | null
           id?: string
           ingredient_id?: string
-          quantity?: string | null
+          is_optional?: boolean | null
+          preparation_note?: string | null
+          quantity?: number | null
           recipe_id?: string
+          review_status?: string | null
+          sort_order?: number | null
+          source?: string | null
           unit?: string | null
         }
         Relationships: [

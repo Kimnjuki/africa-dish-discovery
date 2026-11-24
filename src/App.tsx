@@ -49,6 +49,7 @@ const DishEncyclopedia = lazy(() => import("./pages/DishEncyclopedia"));
 const SubmitRecipe = lazy(() => import("./pages/SubmitRecipe"));
 const EditorialReview = lazy(() => import("./pages/EditorialReview"));
 const AdminDishQA = lazy(() => import("./pages/AdminDishQA"));
+const AdminDataQuality = lazy(() => import("./pages/AdminDataQuality"));
 const RecipeDetail = lazy(() => import("./pages/RecipeDetail"));
 const MyList = lazy(() => import("./pages/MyList"));
 const Household = lazy(() => import("./pages/Household"));
@@ -120,6 +121,7 @@ const App = () => (
               <Route path="/country/:countrySlug" element={<CountryRecipes />} />
               <Route path="/editorial-review" element={<AdminGate><EditorialReview /></AdminGate>} />
               <Route path="/admin/dish-qa" element={<AdminGate><AdminDishQA /></AdminGate>} />
+              <Route path="/admin/data-quality" element={<AdminGate><AdminDataQuality /></AdminGate>} />
               <Route path="/recipe/:slug" element={<RecipeDetail />} />
               <Route path="/cuisine-map" element={<CuisineMap />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

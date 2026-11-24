@@ -48,6 +48,8 @@ import {
   buildPantryInsights,
   splitPantryInput,
 } from "@/utils/recipeMatching";
+import { matchPantryViaIngredientGraph } from "@/lib/graphPantryMatch";
+import { track, EVENTS } from "@/lib/analytics";
 import type { CookableRecipe } from "@/types/content";
 import type { User } from "@supabase/supabase-js";
 import {
@@ -369,38 +371,49 @@ const PantryDashboard = () => {
 
     try {
       const prioritizedItems = getItemsForMatching();
+      const pantryPayload = prioritizedItems.map((item) => ({
+        id: item.id,
+        name: item.ingredient_name,
+        ingredient_name: item.ingredient_name,
+        expires_at: item.expires_at || undefined,
+      }));
 
-      // Local matching over a large recipe corpus (core pantry intelligence)
-      const pageSize = 1000;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any -- paginated recipe corpus for matcher
-      let recipes: any[] = [];
-      let from = 0;
-      while (from < 3000) {
-        const { data, error } = await supabase
-          .from("recipes")
-          .select(
-            "id,name,country,summary,prep_time,cook_time,servings,difficulty,image_url,tags,ingredients,cuisine_type,category"
-          )
-          .not("ingredients", "is", null)
-          .order("name")
-          .range(from, from + pageSize - 1);
-        if (error) throw error;
-        if (!data?.length) break;
-        recipes = recipes.concat(data);
-        if (data.length < pageSize) break;
-        from += pageSize;
+      // Prefer relational ingredient graph when recipe_ingredients is populated
+      let localMatches: ReturnType<typeof findMatchingRecipes> = [];
+      let usedGraph = false;
+      try {
+        const graph = await matchPantryViaIngredientGraph(pantryPayload, 40);
+        if (graph.matches.length > 0) {
+          localMatches = graph.matches;
+          usedGraph = graph.meta.usedGraph;
+        }
+      } catch (graphErr) {
+        console.warn("Graph pantry match failed, falling back to JSON", graphErr);
       }
 
-      const localMatches = findMatchingRecipes(
-        prioritizedItems.map((item) => ({
-          id: item.id,
-          name: item.ingredient_name,
-          ingredient_name: item.ingredient_name,
-          expires_at: item.expires_at || undefined,
-        })),
-        recipes,
-        18
-      ).slice(0, 40);
+      if (!localMatches.length) {
+        const pageSize = 1000;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- paginated recipe corpus for matcher
+        let recipes: any[] = [];
+        let from = 0;
+        while (from < 3000) {
+          const { data, error } = await supabase
+            .from("recipes")
+            .select(
+              "id,name,country,summary,prep_time,cook_time,servings,difficulty,image_url,tags,ingredients,cuisine_type,category"
+            )
+            .not("ingredients", "is", null)
+            .order("name")
+            .range(from, from + pageSize - 1);
+          if (error) throw error;
+          if (!data?.length) break;
+          recipes = recipes.concat(data);
+          if (data.length < pageSize) break;
+          from += pageSize;
+        }
+
+        localMatches = findMatchingRecipes(pantryPayload, recipes, 18).slice(0, 40);
+      }
 
       const enrichedMatches: RecipeMatch[] = localMatches.map((match) => ({
         ...match.recipe,
@@ -419,6 +432,11 @@ const PantryDashboard = () => {
 
       setRecipeMatches(enrichedMatches);
       setAiInsights(buildPantryInsights(localMatches, pantryItems.length));
+      track(EVENTS.PANTRY_MATCH, {
+        count: enrichedMatches.length,
+        source: usedGraph ? "ingredient_graph" : "json_fallback",
+        pantrySize: pantryItems.length,
+      });
       // Local results are enough — stop the spinner before optional AI enrichment
       setMatchLoading(false);
 
@@ -431,7 +449,9 @@ const PantryDashboard = () => {
           toast.info("No strong matches found. Try adding more ingredients.");
         } else {
           toast.success(
-            `Found ${enrichedMatches.length} pantry match${enrichedMatches.length === 1 ? "" : "es"}`
+            `Found ${enrichedMatches.length} pantry match${enrichedMatches.length === 1 ? "" : "es"}${
+              usedGraph ? " (ingredient graph)" : ""
+            }`
           );
         }
       }

@@ -32,6 +32,8 @@ export const EVENTS = {
   CREATOR_SUBMISSION_STARTED: "creator_submission_started",
   CREATOR_SUBMISSION_PUBLISHED: "creator_submission_published",
   AFFILIATE_CLICK: "affiliate_click",
+  PANTRY_MATCH: "pantry_match",
+  ALIAS_REVIEWED: "alias_reviewed",
 } as const;
 
 export type EventName = (typeof EVENTS)[keyof typeof EVENTS];

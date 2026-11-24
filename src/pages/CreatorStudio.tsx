@@ -105,7 +105,7 @@ export default function CreatorStudio() {
         .select("id,status,rejection_reason,editor_notes,review_region,version,created_at,recipe_data")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
-      setUploads((data || []) as UploadRow[]);
+      setUploads((data || []) as unknown as UploadRow[]);
     } catch (err: unknown) {
       toast({ title: "Could not load studio", description: readErrorMessage(err), variant: "destructive" });
     } finally {

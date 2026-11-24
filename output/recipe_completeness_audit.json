@@ -1,0 +1,70 @@
+{
+  "generated_at": "2026-11-24T10:38:57.899Z",
+  "total": 2103,
+  "complete_required": 2103,
+  "completeness_pct": 100,
+  "kpi_target_pct": 95,
+  "field_coverage": {
+    "name": {
+      "count": 2103,
+      "pct": 100
+    },
+    "slug": {
+      "count": 2103,
+      "pct": 100
+    },
+    "country": {
+      "count": 2103,
+      "pct": 100
+    },
+    "image_url": {
+      "count": 2103,
+      "pct": 100
+    },
+    "ingredients": {
+      "count": 2103,
+      "pct": 100
+    },
+    "steps": {
+      "count": 2103,
+      "pct": 100
+    },
+    "prep_time": {
+      "count": 2103,
+      "pct": 100
+    },
+    "cook_time": {
+      "count": 2103,
+      "pct": 100
+    },
+    "difficulty": {
+      "count": 2103,
+      "pct": 100
+    },
+    "servings": {
+      "count": 2103,
+      "pct": 100
+    },
+    "summary": {
+      "count": 2103,
+      "pct": 100
+    },
+    "calories": {
+      "count": 972,
+      "pct": 46.22
+    },
+    "dietary_tags": {
+      "count": 433,
+      "pct": 20.59
+    },
+    "history": {
+      "count": 2103,
+      "pct": 100
+    },
+    "verification_status": {
+      "count": 76,
+      "pct": 3.61
+    }
+  },
+  "sample_incomplete": []
+}

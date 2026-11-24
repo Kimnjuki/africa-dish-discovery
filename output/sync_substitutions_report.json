@@ -1,0 +1,39 @@
+{
+  "generated_at": "2026-11-24T10:37:18.801Z",
+  "parsed": 79,
+  "resolved": 75,
+  "unresolved": [
+    {
+      "from": "coconut milk",
+      "to": "cashew cream",
+      "score": 82,
+      "reason": "Neutral plant cream with similar body for stews and sauces",
+      "notes": "Blend soaked cashews with water; milder than coconut. Not for nut-allergic cooks.",
+      "ratio": 1
+    },
+    {
+      "from": "coconut milk",
+      "to": "groundnut cream",
+      "score": 74,
+      "reason": "West African creamy body for soups and stews when coconut is scarce",
+      "notes": "Use unsweetened paste thinned with stock; peanut flavour is stronger.",
+      "ratio": 1
+    },
+    {
+      "from": "coconut milk",
+      "to": "blended coconut flesh",
+      "score": 92,
+      "reason": "Same fruit — blend fresh or reconstituted coconut flesh with water",
+      "notes": "Closest flavour; strain for smoothness.",
+      "ratio": 1
+    },
+    {
+      "from": "injera",
+      "to": "sourdough flatbread",
+      "score": 50,
+      "reason": "Sour fermented wrap when teff injera is unavailable",
+      "notes": "Texture differs; teff flour tortillas are closer when available.",
+      "ratio": 1
+    }
+  ]
+}

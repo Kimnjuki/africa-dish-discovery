@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useRequireAuth } from "@/hooks/useRequireAuth";
 import { Button } from "@/components/ui/button";
@@ -254,7 +255,12 @@ export default function EditorialReview() {
     <div className="min-h-screen flex flex-col">
       <Navigation />
       <main className="flex-1 container mx-auto px-4 py-8 max-w-5xl">
-        <h1 className="text-4xl font-bold mb-2">Editorial Review</h1>
+        <div className="mb-2 flex flex-wrap items-end justify-between gap-3">
+          <h1 className="text-4xl font-bold">Editorial Review</h1>
+          <Button asChild variant="outline" size="sm">
+            <Link to="/admin/data-quality">Ingredient data quality</Link>
+          </Button>
+        </div>
         <p className="text-muted-foreground mb-6">
           Regional review → revise loop → publish. Community cooks never write directly to the recipe catalog.
         </p>
