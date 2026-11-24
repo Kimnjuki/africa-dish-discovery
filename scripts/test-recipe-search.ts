@@ -6,6 +6,7 @@ import {
   explainRecipeMatch,
   expandSearchQuery,
   haystackContainsTerm,
+  recipeHasIngredient,
   recipeMatchesQuery,
   searchRecipes,
 } from "../src/lib/recipeSearch.ts";
@@ -90,6 +91,18 @@ console.log("local names — haystack and explanation");
   assert(recipeMatchesQuery(matoke, "matooke"), "matooke matches local name");
   const expanded = expandSearchQuery("matooke");
   assert(explainRecipeMatch(matoke, expanded) === "Matched a local name", "explains local-name hit");
+}
+
+console.log("recipeHasIngredient — graph text preferred");
+{
+  const withGraph = {
+    name: "Cassava Leaves Stew",
+    ingredients: [{ name: "water" }],
+    graph_ingredient_text: "cassava muhogo manihot esculenta",
+  };
+  assert(recipeHasIngredient(withGraph, "muhogo"), "muhogo hits graph alias");
+  assert(recipeHasIngredient(withGraph, "cassava"), "cassava hits graph name");
+  assert(!recipeHasIngredient(withGraph, "teff"), "teff does not false-match");
 }
 
 console.log("\n" + "=".repeat(40));

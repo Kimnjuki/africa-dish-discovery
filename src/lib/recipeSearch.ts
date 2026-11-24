@@ -118,6 +118,8 @@ export interface SearchableRecipe {
   category?: string | null;
   ingredients?: unknown;
   local_names?: string[] | null;
+  /** Normalized names + aliases from recipe_ingredients (preferred for ingredient facets). */
+  graph_ingredient_text?: string | null;
 }
 
 const MAX_EDIT_SHORT = 1;
@@ -343,6 +345,7 @@ function recipeHaystack(recipe: SearchableRecipe): string {
       recipe.category || "",
       ...(recipe.tags || []),
       ingText,
+      recipe.graph_ingredient_text || "",
     ].join(" ")
   );
 }
@@ -382,6 +385,20 @@ export function ingredientMatchesQuery(ingredientBlob: string, rawQuery: string)
   if (!terms.length) return true;
   const hay = normalizeSearchText(ingredientBlob);
   return terms.some((t) => haystackContainsTerm(hay, t));
+}
+
+/**
+ * Prefer graph-mapped ingredient text; fall back to JSON blob when graph is empty.
+ */
+export function recipeHasIngredient(recipe: SearchableRecipe, rawQuery: string): boolean {
+  const graph = recipe.graph_ingredient_text?.trim();
+  if (graph) return ingredientMatchesQuery(graph, rawQuery);
+  const raw = Array.isArray(recipe.ingredients)
+    ? JSON.stringify(recipe.ingredients)
+    : typeof recipe.ingredients === "string"
+      ? recipe.ingredients
+      : "";
+  return ingredientMatchesQuery(raw, rawQuery);
 }
 
 /**

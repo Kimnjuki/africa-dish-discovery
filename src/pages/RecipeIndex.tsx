@@ -17,11 +17,12 @@ import { Clock, Users, ChefHat, Filter, X, Search } from "lucide-react";
 import type { IngredientValue } from "@/types/content";
 import {
   expandSearchQuery,
-  ingredientMatchesQuery,
+  recipeHasIngredient,
   recipeMatchesExpanded,
   explainRecipeMatch,
   scoreRecipeMatch,
 } from "@/lib/recipeSearch";
+import { loadRecipeGraphIngredientText } from "@/lib/graphIngredientIndex";
 import { LocalNameToggle, usePreferLocalNames } from "@/components/recipe/LocalNameToggle";
 import { shouldIndexFacetUrl, canonicalForFacetUrl } from "@/lib/facetIndexation";
 import { track, EVENTS } from "@/lib/analytics";
@@ -48,6 +49,7 @@ interface IndexRecipe {
   protein?: number | null;
   carbs?: number | null;
   fats?: number | null;
+  graph_ingredient_text?: string | null;
 }
 
 const PAGE_SIZE = 24;
@@ -117,14 +119,18 @@ const RecipeIndex = () => {
     const load = async () => {
       setLoading(true);
       // steps intentionally omitted — reduces payload significantly.
-      // ingredients kept for client-side ingredient filter.
-      const { data, error } = await supabase
-        .from("recipes")
-        .select(
-          "id,name,slug,country,continent,category,summary,difficulty,prep_time,cook_time,servings,tags,dietary_tags,image_url,ingredients,calories,protein,carbs,fats,dishes(original_name_native)"
-        )
-        .order("name", { ascending: true })
-        .limit(4000);
+      // ingredients kept as JSON fallback; graph text preferred for facet filter.
+      const [recipeRes, graphText] = await Promise.all([
+        supabase
+          .from("recipes")
+          .select(
+            "id,name,slug,country,continent,category,summary,difficulty,prep_time,cook_time,servings,tags,dietary_tags,image_url,ingredients,calories,protein,carbs,fats,dishes(original_name_native)"
+          )
+          .order("name", { ascending: true })
+          .limit(4000),
+        loadRecipeGraphIngredientText(),
+      ]);
+      const { data, error } = recipeRes;
       if (!error && data) {
         setRecipes(
           (
@@ -142,6 +148,7 @@ const RecipeIndex = () => {
             return {
               ...row,
               local_names: native ? [native] : row.local_names || null,
+              graph_ingredient_text: graphText.get(row.id) || null,
             };
           })
         );
@@ -189,8 +196,7 @@ const RecipeIndex = () => {
       )
         return false;
       if (except !== "ingredient" && ingredientFilter) {
-        const raw = Array.isArray(r.ingredients) ? JSON.stringify(r.ingredients) : "";
-        if (!ingredientMatchesQuery(raw, ingredientFilter)) return false;
+        if (!recipeHasIngredient(r, ingredientFilter)) return false;
       }
       return true;
     };
@@ -247,10 +253,7 @@ const RecipeIndex = () => {
       if (diet && !(r.dietary_tags || []).includes(diet)) return false;
       if (time > 0 && (r.prep_time || 0) + (r.cook_time || 0) > time) return false;
       if (queryExpansion.normalized && !recipeMatchesExpanded(r, queryExpansion)) return false;
-      if (ingredient) {
-        const raw = Array.isArray(r.ingredients) ? JSON.stringify(r.ingredients) : "";
-        if (!ingredientMatchesQuery(raw, ingredient)) return false;
-      }
+      if (ingredient && !recipeHasIngredient(r, ingredient)) return false;
       return true;
     });
 
@@ -388,10 +391,13 @@ const RecipeIndex = () => {
                     </label>
                     <Input
                       id="ingredient"
-                      placeholder="plantain, teff, peanut…"
+                      placeholder="plantain, muhogo, egusi…"
                       value={get("ingredient")}
                       onChange={(e) => setFacetText("ingredient", e.target.value)}
                     />
+                    <p className="text-xs text-muted-foreground">
+                      Matches mapped ingredients and local aliases (e.g. muhogo → cassava).
+                    </p>
                   </div>
 
                   <div className="space-y-2">
