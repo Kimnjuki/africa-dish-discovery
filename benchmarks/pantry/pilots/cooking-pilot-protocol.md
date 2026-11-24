@@ -30,6 +30,17 @@ Offline metrics filter systems; this pilot checks whether households can **actua
 | `false_ready_reported` | boolean |
 | `safety_incident` | boolean + notes |
 
+## Logging tooling
+
+```bash
+npm run pilot:cooking:seed     # optional sample row
+npm run pilot:cooking:log -- --file path/to/row.json
+npm run pilot:cooking:status   # households, gates, ready_for_online_ab
+```
+
+Append-only log: `pilots/cooking-pilot-log.jsonl` (schema in `cooking-pilot-log.schema.json`).  
+Roster: `pilots/household-roster.json` (target 20–30).
+
 ## Gate to expand
 
 Proceed to controlled online experiment only after:
@@ -37,3 +48,4 @@ Proceed to controlled online experiment only after:
 - Zero critical safety incidents in pilot
 - False-ready reports investigated and patched
 - Qualitative usability issues triaged
+- `npm run pilot:cooking:status` reports `ready_for_online_ab: true`

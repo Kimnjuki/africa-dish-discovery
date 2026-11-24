@@ -57,6 +57,11 @@ import {
   type PantryMatchConstraints,
 } from "@/lib/pantryConstraints";
 import { track, EVENTS } from "@/lib/analytics";
+import {
+  loadOrAssignVariant,
+  trackPantryExperimentExposure,
+  type PantryExperimentVariant,
+} from "@/lib/pantryExperiment";
 import type { CookableRecipe } from "@/types/content";
 import type { User } from "@supabase/supabase-js";
 import {
@@ -83,6 +88,8 @@ const PantryDashboard = () => {
   const [editingItem, setEditingItem] = useState<PantryItemWithExpiry | null>(null);
   const [editForm, setEditForm] = useState({ name: '', quantity: '', unit: '', expires_at: '' });
   const [householdName, setHouseholdName] = useState<string | null>(null);
+  const [householdId, setHouseholdId] = useState<string | null>(null);
+  const [experimentVariant, setExperimentVariant] = useState<PantryExperimentVariant | null>(null);
   const [sharedHouseholdItems, setSharedHouseholdItems] = useState<SharedPantryItem[]>([]);
   const [usingOfflineSnapshot, setUsingOfflineSnapshot] = useState(false);
   const [pantryConstraints, setPantryConstraints] = useState<PantryMatchConstraints>(() =>
@@ -160,6 +167,12 @@ const PantryDashboard = () => {
     if (!user) return;
     try {
       const { household, members } = await fetchMyHousehold();
+      const hhId = household?.id ?? null;
+      setHouseholdId(hhId);
+      const assignKey = hhId || user.id;
+      const variant = loadOrAssignVariant(assignKey);
+      setExperimentVariant(variant);
+      trackPantryExperimentExposure(variant, { household_id: hhId, user_id: user.id });
       if (!household?.share_pantry) {
         setHouseholdName(household?.name ?? null);
         setSharedHouseholdItems([]);
@@ -171,7 +184,13 @@ const PantryDashboard = () => {
     } catch (error) {
       console.error("Error loading household pantry:", error);
       setHouseholdName(null);
+      setHouseholdId(null);
       setSharedHouseholdItems([]);
+      if (user) {
+        const variant = loadOrAssignVariant(user.id);
+        setExperimentVariant(variant);
+        trackPantryExperimentExposure(variant, { user_id: user.id });
+      }
     }
   };
 
@@ -393,32 +412,38 @@ const PantryDashboard = () => {
         expires_at: item.expires_at || undefined,
       }));
 
-      // Prefer relational ingredient graph when recipe_ingredients is populated
+      // A/B: control = strict JSON cookability; treatment = graph-first hybrid
+      const variant =
+        experimentVariant ??
+        (user ? loadOrAssignVariant(householdId || user.id) : "treatment");
       let localMatches: ReturnType<typeof findMatchingRecipes> = [];
       let usedGraph = false;
-      try {
-        const graph = await matchPantryViaIngredientGraph(pantryPayload, 40);
-        if (graph.matches.length > 0) {
-          localMatches = sortByCookability(
-            graph.matches
-              .map((m) => {
-                const { blocked, reasons } = recipeViolatesConstraints(m.recipe, pantryConstraints);
-                if (!blocked) return m;
-                return {
-                  ...m,
-                  canMakeNow: false,
-                  constraintBlocked: true,
-                  constraintReasons: reasons,
-                  priority: "low" as const,
-                  priorityReason: reasons[0] || m.priorityReason,
-                };
-              })
-              .filter((m) => !m.constraintBlocked)
-          );
-          usedGraph = graph.meta.usedGraph;
+
+      if (variant === "treatment") {
+        try {
+          const graph = await matchPantryViaIngredientGraph(pantryPayload, 40);
+          if (graph.matches.length > 0) {
+            localMatches = sortByCookability(
+              graph.matches
+                .map((m) => {
+                  const { blocked, reasons } = recipeViolatesConstraints(m.recipe, pantryConstraints);
+                  if (!blocked) return m;
+                  return {
+                    ...m,
+                    canMakeNow: false,
+                    constraintBlocked: true,
+                    constraintReasons: reasons,
+                    priority: "low" as const,
+                    priorityReason: reasons[0] || m.priorityReason,
+                  };
+                })
+                .filter((m) => !m.constraintBlocked)
+            );
+            usedGraph = graph.meta.usedGraph;
+          }
+        } catch (graphErr) {
+          console.warn("Graph pantry match failed, falling back to JSON", graphErr);
         }
-      } catch (graphErr) {
-        console.warn("Graph pantry match failed, falling back to JSON", graphErr);
       }
 
       if (!localMatches.length) {
@@ -471,6 +496,8 @@ const PantryDashboard = () => {
         count: enrichedMatches.length,
         source: usedGraph ? "ingredient_graph" : "json_fallback",
         pantrySize: pantryItems.length,
+        experiment_variant: variant,
+        can_cook_now: enrichedMatches.filter((m) => m.canCookNow).length,
       });
       // Local results are enough — stop the spinner before optional AI enrichment
       setMatchLoading(false);
@@ -592,6 +619,25 @@ const PantryDashboard = () => {
   const startCooking = (recipe: CookableRecipe) => {
     setSelectedRecipe(recipe);
     setIsCookingPopupOpen(true);
+    track(EVENTS.COOK_MODE_STARTED, {
+      recipe_id: recipe.id,
+      experiment_variant: experimentVariant,
+      from: "pantry",
+    });
+  };
+
+  const reportPantryCookConfirmed = (recipeId: string, meta?: Record<string, unknown>) => {
+    track(EVENTS.PANTRY_COOK_CONFIRMED, {
+      recipe_id: recipeId,
+      experiment_variant: experimentVariant,
+      household_id: householdId,
+      ...meta,
+    });
+    track(EVENTS.COOK_MODE_COMPLETED, {
+      recipe_id: recipeId,
+      experiment_variant: experimentVariant,
+      from: "pantry",
+    });
   };
 
   if (loading) {
@@ -911,6 +957,9 @@ const PantryDashboard = () => {
           recipe={selectedRecipe}
           isOpen={isCookingPopupOpen}
           onClose={() => {
+            if (selectedRecipe?.id) {
+              reportPantryCookConfirmed(selectedRecipe.id, { close_source: "popup" });
+            }
             setIsCookingPopupOpen(false);
             setSelectedRecipe(null);
           }}

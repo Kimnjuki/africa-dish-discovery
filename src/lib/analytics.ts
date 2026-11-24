@@ -33,6 +33,10 @@ export const EVENTS = {
   CREATOR_SUBMISSION_PUBLISHED: "creator_submission_published",
   AFFILIATE_CLICK: "affiliate_click",
   PANTRY_MATCH: "pantry_match",
+  PANTRY_EXPERIMENT_EXPOSURE: "pantry_experiment_exposure",
+  PANTRY_COOK_CONFIRMED: "pantry_cook_confirmed",
+  PANTRY_FALSE_READY_REPORT: "pantry_false_ready_report",
+  PANTRY_SAFETY_REPORT: "pantry_safety_report",
   ALIAS_REVIEWED: "alias_reviewed",
 } as const;
 

@@ -1,0 +1,13 @@
+{
+  "target_households": 30,
+  "min_households": 20,
+  "markets": [
+    "ke",
+    "ng",
+    "gh",
+    "za",
+    "diaspora"
+  ],
+  "consented": [],
+  "notes": "Add { household_id, market, consented_at } rows as recruits enroll."
+}
