@@ -1,0 +1,15 @@
+{"case_id":"ke-001-ugali-sukuma-full","pantry_id":"p1","canonical":"maize flour","outcome":"resolved","relation":"exact_or_alias"}
+{"case_id":"ke-001-ugali-sukuma-full","pantry_id":"p2","canonical":"sukuma wiki","outcome":"resolved","relation":"exact_or_alias"}
+{"case_id":"ke-002-muhogo-alias","pantry_id":"p1","canonical":"cassava","outcome":"resolved","relation":"exact_or_alias"}
+{"case_id":"ng-001-egusi-full","pantry_id":"p7","canonical":"ugwu","outcome":"resolved","relation":"exact_or_alias"}
+{"case_id":"ng-004-iru-yoruba","pantry_id":"p1","canonical":"locust beans","outcome":"resolved","relation":"exact_or_alias"}
+{"case_id":"za-001-pap-chakalaka","pantry_id":"p1","canonical":"maize meal","outcome":"resolved","relation":"exact_or_alias"}
+{"case_id":"za-001-pap-chakalaka","pantry_id":"p4","canonical":"beans","outcome":"resolved","relation":"possible_substitute"}
+{"case_id":"us-001-jollof-diaspora-sub","pantry_id":"p4","canonical":"scotch bonnet","outcome":"resolved","relation":"possible_substitute"}
+{"case_id":"us-001-jollof-diaspora-sub","pantry_id":"p5","canonical":"palm oil","outcome":"resolved","relation":"possible_substitute"}
+{"case_id":"uk-001-uncertain-rice","pantry_id":"p1","canonical":"rice","outcome":"clarify","relation":"ambiguous"}
+{"case_id":"amb-001-greens-not-interchangeable","pantry_id":"p1","canonical":"spinach","outcome":"resolved","relation":"exact_or_alias"}
+{"case_id":"amb-003-beans-category","pantry_id":"p1","canonical":null,"outcome":"clarify","relation":"broader_category"}
+{"case_id":"amb-003-beans-category","pantry_id":"p4","canonical":null,"outcome":"clarify","relation":"ambiguous"}
+{"case_id":"ng-005-rogo-hausa","pantry_id":"p1","canonical":"cassava","outcome":"resolved","relation":"exact_or_alias"}
+{"case_id":"prep-002-flour-vs-grain","pantry_id":"p1","canonical":"teff","outcome":"resolved","relation":"broader_category"}

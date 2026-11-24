@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PantryBenchmarkCase",
+  "type": "object",
+  "required": ["id", "version", "market", "mode", "pantry", "candidates", "gold"],
+  "properties": {
+    "id": { "type": "string" },
+    "version": { "type": "string" },
+    "split": { "enum": ["development", "validation", "heldout", "safety"] },
+    "market": {
+      "enum": ["ke", "ng", "gh", "za", "diaspora-us", "diaspora-uk", "multi"]
+    },
+    "mode": { "enum": ["cook_now", "shop_first"] },
+    "tags": { "type": "array", "items": { "type": "string" } },
+    "pantry": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "quantity": { "type": ["number", "null"] },
+          "unit": { "type": ["string", "null"] },
+          "quantity_known": { "type": "boolean" },
+          "expires_at": { "type": ["string", "null"] },
+          "language": { "type": "string" },
+          "relation_hint": {
+            "enum": ["exact_or_alias", "broader_category", "possible_substitute", "ambiguous"]
+          }
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "properties": {
+        "allergies": { "type": "array", "items": { "type": "string" } },
+        "diets": { "type": "array", "items": { "type": "string" } },
+        "equipment": { "type": "array", "items": { "type": "string" } },
+        "max_total_minutes": { "type": ["number", "null"] },
+        "servings": { "type": ["number", "null"] }
+      }
+    },
+    "candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "ingredients"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "country": { "type": "string" },
+          "ingredients": { "type": "array" },
+          "prep_time": { "type": "number" },
+          "cook_time": { "type": "number" },
+          "servings": { "type": "number" },
+          "tags": { "type": "array", "items": { "type": "string" } },
+          "requires_equipment": { "type": "array", "items": { "type": "string" } },
+          "allergens": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "gold": {
+      "type": "object",
+      "required": ["relevance", "resolution"],
+      "properties": {
+        "relevance": {
+          "type": "object",
+          "additionalProperties": { "enum": [0, 1, 2, 3] }
+        },
+        "resolution": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "canonical": { "type": ["string", "null"] },
+              "outcome": {
+                "enum": ["resolved", "clarify", "reject_guess"]
+              },
+              "relation": {
+                "enum": ["exact_or_alias", "broader_category", "possible_substitute", "ambiguous"]
+              }
+            }
+          }
+        },
+        "ready_recipe_ids": { "type": "array", "items": { "type": "string" } },
+        "essential_missing_by_recipe": {
+          "type": "object",
+          "additionalProperties": { "type": "array", "items": { "type": "string" } }
+        },
+        "critical_safety_ids": { "type": "array", "items": { "type": "string" } },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}

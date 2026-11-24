@@ -1,0 +1,553 @@
+{
+  "run_id": "pantry-eval-2026-11-24T11-11-56-597Z",
+  "benchmark_version": "1.0.0",
+  "catalog_version": "catalog-2026-11-24-8bbfe38a",
+  "ingredient_graph_version": "graph-2026-11-24-8bbfe38a",
+  "system_version": "8bbfe38a6a8d39d4020ddd7a58b8fd3177462ded",
+  "model_version": null,
+  "prompt_version": null,
+  "splits": [
+    "development",
+    "safety",
+    "validation"
+  ],
+  "case_count": 90,
+  "mode_note": "cook_now relevance≥2; shop_first relevance≥1",
+  "systems": [
+    {
+      "system": "random_baseline",
+      "cases": 90,
+      "metrics": {
+        "precision_at_5": 0.5182291666666666,
+        "ndcg_at_5": 0.8550787366144431,
+        "false_ready_rate": 0,
+        "false_ready_count": 0,
+        "ready_labeled_count": 0,
+        "essential_missing_ingredient_recall": 1,
+        "essential_missing_ingredient_precision": 1,
+        "critical_constraint_violations": 0,
+        "resolution_proxy_accuracy": 1,
+        "p95_latency_ms": 0,
+        "mean_latency_ms": 0,
+        "mean_cost_per_request": 0
+      },
+      "failure_sample": [],
+      "failure_count": 0
+    },
+    {
+      "system": "overlap_baseline",
+      "cases": 90,
+      "metrics": {
+        "precision_at_5": 0.5182291666666666,
+        "ndcg_at_5": 0.890956518100658,
+        "false_ready_rate": 0.4098360655737705,
+        "false_ready_count": 25,
+        "ready_labeled_count": 61,
+        "essential_missing_ingredient_recall": 0.9746835443037974,
+        "essential_missing_ingredient_precision": 0.9936708860759493,
+        "critical_constraint_violations": 22,
+        "resolution_proxy_accuracy": 1,
+        "p95_latency_ms": 10.918700000000001,
+        "mean_latency_ms": 3.7465766666666633,
+        "mean_cost_per_request": 0
+      },
+      "failure_sample": [
+        {
+          "case_id": "prep-002-flour-vs-grain",
+          "recipe_id": "r-injera",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "safe-001-peanut-allergy",
+          "recipe_id": "r-mafe",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "safe-001-peanut-allergy",
+          "recipe_id": "r-mafe",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "safe-002-blender-required",
+          "recipe_id": "r-ata-din-din",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "safe-003-time-budget",
+          "recipe_id": "r-bean-stew",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "safe-006-dairy-allergy-sub",
+          "recipe_id": "r-bobotie",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "safe-006-dairy-allergy-sub",
+          "recipe_id": "r-bobotie",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-003",
+          "recipe_id": "r-ke-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-003",
+          "recipe_id": "r-ke-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-006",
+          "recipe_id": "r-ke-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-006",
+          "recipe_id": "r-ke-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-009",
+          "recipe_id": "r-ke-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-009",
+          "recipe_id": "r-ke-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-012",
+          "recipe_id": "r-ke-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-012",
+          "recipe_id": "r-ke-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-015",
+          "recipe_id": "r-ng-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-015",
+          "recipe_id": "r-ng-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-018",
+          "recipe_id": "r-ng-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-018",
+          "recipe_id": "r-ng-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-021",
+          "recipe_id": "r-ng-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-021",
+          "recipe_id": "r-ng-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-024",
+          "recipe_id": "r-ng-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-024",
+          "recipe_id": "r-ng-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-027",
+          "recipe_id": "r-gh-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-027",
+          "recipe_id": "r-gh-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-030",
+          "recipe_id": "r-gh-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-030",
+          "recipe_id": "r-gh-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-033",
+          "recipe_id": "r-gh-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-033",
+          "recipe_id": "r-gh-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-036",
+          "recipe_id": "r-gh-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-036",
+          "recipe_id": "r-gh-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-039",
+          "recipe_id": "r-za-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-039",
+          "recipe_id": "r-za-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-042",
+          "recipe_id": "r-za-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-042",
+          "recipe_id": "r-za-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-045",
+          "recipe_id": "r-za-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-045",
+          "recipe_id": "r-za-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-048",
+          "recipe_id": "r-za-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-048",
+          "recipe_id": "r-za-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "diaspora-us-gen-051",
+          "recipe_id": "r-diaspora-us-2-hard",
+          "type": "critical_safety_ready"
+        }
+      ],
+      "failure_count": 47
+    },
+    {
+      "system": "quantity_aware_baseline",
+      "cases": 90,
+      "metrics": {
+        "precision_at_5": 0.5182291666666666,
+        "ndcg_at_5": 0.890956518100658,
+        "false_ready_rate": 0.4098360655737705,
+        "false_ready_count": 25,
+        "ready_labeled_count": 61,
+        "essential_missing_ingredient_recall": 0.9746835443037974,
+        "essential_missing_ingredient_precision": 0.9936708860759493,
+        "critical_constraint_violations": 22,
+        "resolution_proxy_accuracy": 1,
+        "p95_latency_ms": 7.150899999999979,
+        "mean_latency_ms": 2.83366,
+        "mean_cost_per_request": 0
+      },
+      "failure_sample": [
+        {
+          "case_id": "prep-002-flour-vs-grain",
+          "recipe_id": "r-injera",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "safe-001-peanut-allergy",
+          "recipe_id": "r-mafe",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "safe-001-peanut-allergy",
+          "recipe_id": "r-mafe",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "safe-002-blender-required",
+          "recipe_id": "r-ata-din-din",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "safe-003-time-budget",
+          "recipe_id": "r-bean-stew",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "safe-006-dairy-allergy-sub",
+          "recipe_id": "r-bobotie",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "safe-006-dairy-allergy-sub",
+          "recipe_id": "r-bobotie",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-003",
+          "recipe_id": "r-ke-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-003",
+          "recipe_id": "r-ke-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-006",
+          "recipe_id": "r-ke-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-006",
+          "recipe_id": "r-ke-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-009",
+          "recipe_id": "r-ke-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-009",
+          "recipe_id": "r-ke-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-012",
+          "recipe_id": "r-ke-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-012",
+          "recipe_id": "r-ke-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-015",
+          "recipe_id": "r-ng-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-015",
+          "recipe_id": "r-ng-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-018",
+          "recipe_id": "r-ng-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-018",
+          "recipe_id": "r-ng-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-021",
+          "recipe_id": "r-ng-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-021",
+          "recipe_id": "r-ng-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-024",
+          "recipe_id": "r-ng-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-024",
+          "recipe_id": "r-ng-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-027",
+          "recipe_id": "r-gh-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-027",
+          "recipe_id": "r-gh-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-030",
+          "recipe_id": "r-gh-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-030",
+          "recipe_id": "r-gh-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-033",
+          "recipe_id": "r-gh-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-033",
+          "recipe_id": "r-gh-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-036",
+          "recipe_id": "r-gh-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-036",
+          "recipe_id": "r-gh-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-039",
+          "recipe_id": "r-za-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-039",
+          "recipe_id": "r-za-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-042",
+          "recipe_id": "r-za-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-042",
+          "recipe_id": "r-za-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-045",
+          "recipe_id": "r-za-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-045",
+          "recipe_id": "r-za-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-048",
+          "recipe_id": "r-za-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-048",
+          "recipe_id": "r-za-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "diaspora-us-gen-051",
+          "recipe_id": "r-diaspora-us-2-hard",
+          "type": "critical_safety_ready"
+        }
+      ],
+      "failure_count": 47
+    },
+    {
+      "system": "production_matcher",
+      "cases": 90,
+      "metrics": {
+        "precision_at_5": 0.5338541666666666,
+        "ndcg_at_5": 0.9874180597808452,
+        "false_ready_rate": 0.02702702702702703,
+        "false_ready_count": 1,
+        "ready_labeled_count": 37,
+        "essential_missing_ingredient_recall": 0.9746835443037974,
+        "essential_missing_ingredient_precision": 0.9936708860759493,
+        "critical_constraint_violations": 0,
+        "resolution_proxy_accuracy": 1,
+        "p95_latency_ms": 5.809900000000084,
+        "mean_latency_ms": 2.760349999999988,
+        "mean_cost_per_request": 0
+      },
+      "failure_sample": [
+        {
+          "case_id": "prep-002-flour-vs-grain",
+          "recipe_id": "r-injera",
+          "type": "production_soft_false_ready"
+        }
+      ],
+      "failure_count": 1
+    }
+  ],
+  "gates": {
+    "critical_safety": {
+      "pass": true,
+      "detail": [
+        {
+          "system": "random_baseline",
+          "violations": 0
+        },
+        {
+          "system": "overlap_baseline",
+          "violations": 22
+        },
+        {
+          "system": "quantity_aware_baseline",
+          "violations": 22
+        },
+        {
+          "system": "production_matcher",
+          "violations": 0
+        }
+      ]
+    },
+    "false_ready_rate_lt_2pct": {
+      "pass": false,
+      "detail": [
+        {
+          "system": "random_baseline",
+          "rate": 0
+        },
+        {
+          "system": "overlap_baseline",
+          "rate": 0.4098360655737705
+        },
+        {
+          "system": "quantity_aware_baseline",
+          "rate": 0.4098360655737705
+        },
+        {
+          "system": "production_matcher",
+          "rate": 0.02702702702702703
+        }
+      ]
+    },
+    "beats_overlap_ndcg": {
+      "pass": true
+    }
+  }
+}

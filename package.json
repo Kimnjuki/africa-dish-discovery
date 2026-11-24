@@ -17,6 +17,7 @@
     "test:phone": "node --experimental-strip-types scripts/test-phone-auth.ts",
     "test:offline": "node --experimental-strip-types scripts/test-offline-store.ts",
     "test:import": "node --experimental-strip-types scripts/test-recipe-import.ts",
+    "test:pantry-cookability": "node --experimental-strip-types scripts/test-pantry-cookability.ts",
     "sitemap": "node scripts/generate-sitemaps.mjs",
     "indexnow": "node scripts/indexnow.mjs",
     "prerender": "node scripts/prerender-seo.mjs",
@@ -28,6 +29,10 @@
     "sync:substitutions": "node scripts/sync-substitutions-from-graph.mjs",
     "audit:completeness": "node scripts/recipe-completeness-audit.mjs",
     "infer:nutrition": "node scripts/infer-recipe-nutrition.mjs",
+    "bench:pantry:freeze": "node scripts/freeze-pantry-benchmark-snapshot.mjs",
+    "bench:pantry:cases": "node scripts/generate-pantry-benchmark-cases.mjs",
+    "bench:pantry": "node --experimental-strip-types scripts/run-pantry-benchmark.mjs",
+    "bench:pantry:report": "node -e \"const r=require('fs').readFileSync('benchmarks/pantry/reports/latest.json','utf8'); console.log(r)\"",
     "test:schema": "node scripts/validate-recipe-schema.mjs",
     "test:lighthouse": "npx --yes @lhci/cli autorun"
   },

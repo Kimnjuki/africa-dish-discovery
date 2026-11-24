@@ -1,0 +1,16 @@
+{
+  "ingredient_graph_version": "graph-2026-11-24-8bbfe38a",
+  "frozen_at": "2026-11-24T11:10:04.930Z",
+  "git_commit": "8bbfe38a6a8d39d4020ddd7a58b8fd3177462ded",
+  "counts": {
+    "ingredients": 602,
+    "aliases_approved": 406,
+    "aliases_proposed": 222,
+    "ingredient_substitutions": 76
+  },
+  "relation_policy": {
+    "exact_or_alias": "identity / reviewed alias",
+    "broader_category": "not proof of specific species/product",
+    "possible_substitute": "culinary swap; requires reviewed edge + prep notes"
+  }
+}

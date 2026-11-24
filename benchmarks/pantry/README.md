@@ -1,0 +1,58 @@
+# LadhaQuest pantry cookability benchmark
+
+Evaluates whether pantry matching recommends dishes a household can **genuinely cook**—not whether ingredient *names* look similar.
+
+## Modes
+
+| Mode | Relevant labels |
+|------|-----------------|
+| `cook_now` | 3 (fully cookable) and 2 (reviewed substitution + adjustments) |
+| `shop_first` | 3, 2, and 1 (useful shop-first with correct missing disclosure) |
+
+Label **0** is never relevant. Safety / constraint failures are scored separately and never “averaged away.”
+
+## Stages instrumented
+
+1. Input understanding  
+2. Ingredient resolution (exact / alias ≠ category ≠ substitute)  
+3. Inventory (quantity, freshness, uncertainty)  
+4. Recipe retrieval  
+5. Substitution quality  
+6. Constraints (allergy, diet, equipment, time, servings)  
+7. Ranking  
+8. Explanation consistency  
+
+## Layout
+
+```
+benchmarks/pantry/
+  cases/           development.jsonl | validation.jsonl | heldout.jsonl | safety.jsonl
+  judgments/       recipe_relevance.jsonl | ingredient_resolution.jsonl
+  snapshots/       catalog + ingredient graph freeze metadata
+  runners/         overlap | quantity_aware | graph_offline | production
+  metrics/         ranking | cookability | resolution | missing | constraints
+  reports/         generated JSON reports (null metrics until measured)
+  pilots/          cooking-pilot protocol + online experiment plan
+```
+
+## Run
+
+```bash
+npm run bench:pantry:freeze     # snapshot versions from live DB
+npm run bench:pantry            # offline eval on development + safety
+npm run bench:pantry:report     # print latest report summary
+```
+
+## Launch gates (provisional)
+
+| Metric | Gate |
+|--------|------|
+| Critical safety | 0 observed critical failures |
+| False-ready rate | < 2% on held-out (report CI) |
+| Essential missing-ingredient recall | ≥ 98% |
+| Precision@5 (cook_now, ≥5 qualifiers) | ≥ 80% |
+| Ingredient resolution | ≥ 95% overall + per-language |
+| NDCG@5 | beat strongest deterministic baseline |
+| LLM factual consistency | no invented pantry facts / substitute IDs |
+
+Do not seed dashboards with plausible metrics—leave null until measured.
