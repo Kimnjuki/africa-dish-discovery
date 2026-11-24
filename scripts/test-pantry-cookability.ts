@@ -169,6 +169,54 @@ console.log("ranking — ready above missing-main");
   assert(ranked.find((m) => m.recipe.id === "almost")?.canMakeNow === false, "almost egusi not ready");
 }
 
+console.log("quantity — cups↔g conversion blocks shortfall");
+{
+  const short = calculateRecipeMatch(
+    [
+      { id: "1", name: "rice", ingredient_name: "rice", quantity: 100, unit: "g", quantity_known: true },
+      { id: "2", name: "onion", ingredient_name: "onion", quantity: 2, unit: "piece", quantity_known: true },
+      { id: "3", name: "tomato", ingredient_name: "tomato", quantity: 3, unit: "piece", quantity_known: true },
+      { id: "4", name: "oil", ingredient_name: "oil", quantity: 3, unit: "tbsp", quantity_known: true },
+      { id: "5", name: "salt", ingredient_name: "salt", quantity: 1, unit: "tsp", quantity_known: true },
+    ],
+    {
+      id: "jollof",
+      name: "Jollof",
+      ingredients: [
+        { name: "rice", quantity: 2, unit: "cups" },
+        { name: "onion", quantity: 1, unit: "piece" },
+        { name: "tomato", quantity: 2, unit: "piece" },
+        { name: "oil", quantity: 2, unit: "tbsp" },
+        { name: "salt", quantity: 1, unit: "tsp" },
+      ],
+    }
+  );
+  assert(short.canMakeNow === false, "100 g rice < 2 cups → not ready");
+  assert(!!short.quantityWarning, "quantity warning present");
+
+  const enough = calculateRecipeMatch(
+    [
+      { id: "1", name: "rice", ingredient_name: "rice", quantity: 500, unit: "g", quantity_known: true },
+      { id: "2", name: "onion", ingredient_name: "onion", quantity: 2, unit: "piece", quantity_known: true },
+      { id: "3", name: "tomato", ingredient_name: "tomato", quantity: 3, unit: "piece", quantity_known: true },
+      { id: "4", name: "oil", ingredient_name: "oil", quantity: 3, unit: "tbsp", quantity_known: true },
+      { id: "5", name: "salt", ingredient_name: "salt", quantity: 1, unit: "tsp", quantity_known: true },
+    ],
+    {
+      id: "jollof2",
+      name: "Jollof",
+      ingredients: [
+        { name: "rice", quantity: 2, unit: "cups" },
+        { name: "onion", quantity: 1, unit: "piece" },
+        { name: "tomato", quantity: 2, unit: "piece" },
+        { name: "oil", quantity: 2, unit: "tbsp" },
+        { name: "salt", quantity: 1, unit: "tsp" },
+      ],
+    }
+  );
+  assert(enough.canMakeNow === true, "500 g rice ≥ 2 cups → ready");
+}
+
 console.log("\n" + "=".repeat(40));
 console.log(`Passed: ${passed}  Failed: ${failed}`);
 if (failed > 0) process.exit(1);

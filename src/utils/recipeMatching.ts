@@ -4,6 +4,7 @@ import {
   recipeViolatesConstraints,
   type PantryMatchConstraints,
 } from "../lib/pantryConstraints.ts";
+import { compareQuantities } from "../lib/unitConversion.ts";
 
 export interface PantryIngredient {
   id: string;
@@ -561,7 +562,7 @@ export const calculateRecipeMatch = (
     Math.max(recipeCoverage, blended) + Math.min(urgencyBoost, 12) + (matchedCount >= 3 ? 5 : 0)
   );
 
-  // Quantity / uncertainty demotion (same-unit compare when both sides known)
+  // Quantity / uncertainty demotion (cups↔g via unit conversion graph)
   let quantityWarning: string | null = null;
   for (let i = 0; i < rawIngredients.length; i++) {
     const raw = rawIngredients[i];
@@ -572,7 +573,7 @@ export const calculateRecipeMatch = (
         : typeof (raw as { amount?: unknown }).amount === "number"
           ? Number((raw as { amount: number }).amount)
           : null;
-    const reqUnit = String((raw as { unit?: string }).unit || "").toLowerCase();
+    const reqUnit = String((raw as { unit?: string }).unit || "").toLowerCase() || null;
     const label = recipeLabels[i];
     if (reqQty == null || !label) continue;
     const hit = pantryMatchesIngredient(normalizedUserIngredients, label);
@@ -585,18 +586,29 @@ export const calculateRecipeMatch = (
       name: string;
       ingredient_name?: string;
     };
-    if (pan.quantity_known === false || (pan.quantity == null && pan.quantity_known !== true)) {
-      // Explicit unknown qty on a quantified staple → not ready
-      if (/\b(flour|rice|meat|fish|oil|beans|meal|dough)\b/i.test(label)) {
+    const cmp = compareQuantities({
+      pantryAmount: pan.quantity,
+      pantryUnit: pan.unit,
+      pantryKnown: pan.quantity_known,
+      requiredAmount: reqQty,
+      requiredUnit: reqUnit,
+      ingredientName: label,
+    });
+    if (!cmp.comparable) {
+      if (cmp.reason === "unknown_quantity") {
+        // Recipe asks for a measured amount; pantry qty unknown → never claim Ready
         quantityWarning = `Confirm you have enough ${label}`;
+      } else if (cmp.reason === "unknown_density" || cmp.reason === "incompatible_units") {
+        // Cannot convert measured pantry ↔ recipe → do not claim Ready
+        quantityWarning = `Confirm units for ${label} (cannot convert pantry ↔ recipe)`;
       }
       continue;
     }
-    if (pan.quantity == null) continue;
-    const pu = String(pan.unit || "").toLowerCase();
-    if (pu && reqUnit && pu !== reqUnit) continue; // conversion graph later
-    if (Number(pan.quantity) + 1e-9 < reqQty) {
-      quantityWarning = `Not enough ${label} (${pan.quantity}${pu ? " " + pu : ""} < ${reqQty}${reqUnit ? " " + reqUnit : ""})`;
+    if (!cmp.ok) {
+      const pu = String(pan.unit || "").toLowerCase();
+      quantityWarning = `Not enough ${label} (${pan.quantity}${pu ? " " + pu : ""} < ${reqQty}${
+        reqUnit ? " " + reqUnit : ""
+      })`;
       break;
     }
   }

@@ -3,6 +3,8 @@
  * Keep overlap ≠ cookability — these score the second.
  */
 
+import { compareQuantities } from "./unitConversion.mjs";
+
 export function falseReadyRate(predictions) {
   // predictions: [{ labeledReady, goldRelevance, safetyFail }]
   const ready = predictions.filter((p) => p.labeledReady);
@@ -46,33 +48,22 @@ function fuzzyIn(token, set) {
 /**
  * Quantity-aware cookability: available usable qty >= required for servings.
  * Unknown pantry qty → not "ready"; may be "check quantity".
+ * Cups↔g via unit conversion graph when density is known.
  */
 export function quantityOk(pantryItem, requiredAmount, requiredUnit) {
-  if (pantryItem.quantity_known === false || pantryItem.quantity == null) {
-    return { ok: false, reason: "quantity_unknown" };
-  }
-  if (requiredAmount == null) return { ok: true, reason: "no_recipe_qty" };
-  // Same-unit compare only in v1 (conversion graph later)
-  const pu = String(pantryItem.unit || "").toLowerCase();
-  const ru = String(requiredUnit || "").toLowerCase();
-  if (pu && ru && pu !== ru && !unitAlias(pu, ru)) {
+  const cmp = compareQuantities({
+    pantryAmount: pantryItem.quantity,
+    pantryUnit: pantryItem.unit,
+    pantryKnown: pantryItem.quantity_known,
+    requiredAmount,
+    requiredUnit,
+    ingredientName: pantryItem.name || pantryItem.ingredient_name || "",
+  });
+  if (!cmp.comparable) {
+    if (cmp.reason === "unknown_quantity") return { ok: false, reason: "quantity_unknown" };
+    if (cmp.reason === "unknown_density") return { ok: false, reason: "unit_mismatch" };
     return { ok: false, reason: "unit_mismatch" };
   }
-  if (Number(pantryItem.quantity) + 1e-9 < Number(requiredAmount)) {
-    return { ok: false, reason: "insufficient_quantity" };
-  }
-  return { ok: true, reason: "ok" };
-}
-
-function unitAlias(a, b) {
-  const groups = [
-    ["g", "gram", "grams"],
-    ["kg", "kilogram", "kilograms"],
-    ["ml", "milliliter", "millilitre"],
-    ["l", "liter", "litre"],
-    ["tsp", "teaspoon", "teaspoons"],
-    ["tbsp", "tablespoon", "tablespoons"],
-    ["cup", "cups"],
-  ];
-  return groups.some((g) => g.includes(a) && g.includes(b));
+  if (!cmp.ok) return { ok: false, reason: "insufficient_quantity", basis: cmp.basis };
+  return { ok: true, reason: "ok", basis: cmp.basis };
 }
