@@ -38,12 +38,35 @@ benchmarks/pantry/
 ## Run
 
 ```bash
-npm run bench:pantry:freeze     # snapshot versions from live DB
-npm run bench:pantry:cases      # regenerate development/validation/safety/heldout
-npm run test:pantry-cookability # unit gates for false-ready killers
-npm run bench:pantry            # offline eval (includes heldout)
-npm run bench:pantry:report     # print latest report summary
+npm run bench:pantry:freeze          # snapshot versions from live DB
+npm run bench:pantry:cases           # regenerate development/validation/safety/heldout
+npm run bench:pantry:heldout:grow    # grow held-out toward 200 (or -- --target 500)
+npm run bench:pantry:adjudicate:seed # bootstrap dual reviewers from pilot labels
+npm run bench:pantry:adjudicate      # merge A/B → disagreements + adjudicated
+npm run test:pantry-cookability      # unit gates for false-ready killers
+npm run test:unit-conversion         # cups↔g conversion graph
+npm run bench:pantry                 # offline eval (includes heldout)
+npm run bench:pantry:report          # print latest report summary
+npm run pilot:cooking:status         # 20–30 household pilot gate
 ```
+
+## Dual-reviewer adjudication
+
+See `judgments/ADJUDICATION.md`. Freeze held-out reporting only when `adjudicated: true` and `reviewers >= 2`.
+
+## Held-out growth
+
+Track progress in `cases/HELDOUT_GROWTH.md` (200 dual-review batch → 500 scale freeze).
+
+## Unit conversion
+
+Production: `src/lib/unitConversion.ts` (wired into `recipeMatching`).  
+Offline runners: `metrics/unitConversion.mjs` (used by `quantityOk`).
+
+## Cooking pilot → online A/B
+
+1. Run 20–30 household pilot (`pilots/cooking-pilot-protocol.md`).
+2. When `pilot:cooking:status` is clean, enable online A/B (`pilots/online-experiment-plan.md`).
 
 ## Production improvements wired to the product
 

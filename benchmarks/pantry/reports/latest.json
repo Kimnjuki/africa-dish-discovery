@@ -1,9 +1,9 @@
 {
-  "run_id": "pantry-eval-2026-11-24T11-23-47-070Z",
+  "run_id": "pantry-eval-2026-11-24T11-41-28-323Z",
   "benchmark_version": "1.0.0",
   "catalog_version": "catalog-2026-11-24-3cbc0793",
   "ingredient_graph_version": "graph-2026-11-24-3cbc0793",
-  "system_version": "3cbc0793d2e23e6c570e1558abea7955ecb79867",
+  "system_version": "75f597f8fb88862021c06e654895dce3955f52da",
   "model_version": null,
   "prompt_version": null,
   "splits": [
@@ -12,15 +12,15 @@
     "validation",
     "heldout"
   ],
-  "case_count": 93,
+  "case_count": 280,
   "mode_note": "cook_now relevance≥2; shop_first relevance≥1",
   "systems": [
     {
       "system": "random_baseline",
-      "cases": 93,
+      "cases": 280,
       "metrics": {
-        "precision_at_5": 0.5176767676767676,
-        "ndcg_at_5": 0.83506495612178,
+        "precision_at_5": 0.6815336463223787,
+        "ndcg_at_5": 0.9000508325790866,
         "false_ready_rate": 0,
         "false_ready_count": 0,
         "ready_labeled_count": 0,
@@ -37,19 +37,19 @@
     },
     {
       "system": "overlap_baseline",
-      "cases": 93,
+      "cases": 280,
       "metrics": {
-        "precision_at_5": 0.5176767676767676,
-        "ndcg_at_5": 0.8945513581632735,
-        "false_ready_rate": 0.3968253968253968,
-        "false_ready_count": 25,
-        "ready_labeled_count": 63,
-        "essential_missing_ingredient_recall": 0.975,
-        "essential_missing_ingredient_precision": 0.98125,
-        "critical_constraint_violations": 22,
+        "precision_at_5": 0.6815336463223787,
+        "ndcg_at_5": 0.9654826388232298,
+        "false_ready_rate": 0.41568627450980394,
+        "false_ready_count": 106,
+        "ready_labeled_count": 255,
+        "essential_missing_ingredient_recall": 0.9868421052631579,
+        "essential_missing_ingredient_precision": 0.9901315789473685,
+        "critical_constraint_violations": 63,
         "resolution_proxy_accuracy": 1,
-        "p95_latency_ms": 11.846100000000035,
-        "mean_latency_ms": 4.652416129032255,
+        "p95_latency_ms": 4.371499999999969,
+        "mean_latency_ms": 1.8289778571428534,
         "mean_cost_per_request": 0
       },
       "failure_sample": [
@@ -254,23 +254,23 @@
           "type": "production_soft_false_ready"
         }
       ],
-      "failure_count": 46
+      "failure_count": 128
     },
     {
       "system": "quantity_aware_baseline",
-      "cases": 93,
+      "cases": 280,
       "metrics": {
-        "precision_at_5": 0.5176767676767676,
-        "ndcg_at_5": 0.8945513581632735,
-        "false_ready_rate": 0.3870967741935484,
-        "false_ready_count": 24,
-        "ready_labeled_count": 62,
-        "essential_missing_ingredient_recall": 0.975,
-        "essential_missing_ingredient_precision": 0.98125,
-        "critical_constraint_violations": 22,
+        "precision_at_5": 0.6815336463223787,
+        "ndcg_at_5": 0.9654826388232298,
+        "false_ready_rate": 0.3299492385786802,
+        "false_ready_count": 65,
+        "ready_labeled_count": 197,
+        "essential_missing_ingredient_recall": 0.9868421052631579,
+        "essential_missing_ingredient_precision": 0.9901315789473685,
+        "critical_constraint_violations": 63,
         "resolution_proxy_accuracy": 1,
-        "p95_latency_ms": 8.89269999999999,
-        "mean_latency_ms": 3.9487741935483784,
+        "p95_latency_ms": 4.251199999999926,
+        "mean_latency_ms": 1.7089389285714334,
         "mean_cost_per_request": 0
       },
       "failure_sample": [
@@ -475,23 +475,23 @@
           "type": "production_soft_false_ready"
         }
       ],
-      "failure_count": 46
+      "failure_count": 128
     },
     {
       "system": "graph_offline",
-      "cases": 93,
+      "cases": 280,
       "metrics": {
-        "precision_at_5": 0.5176767676767676,
-        "ndcg_at_5": 0.9797214150313986,
-        "false_ready_rate": 0.08108108108108109,
-        "false_ready_count": 3,
-        "ready_labeled_count": 37,
-        "essential_missing_ingredient_recall": 0.9875,
-        "essential_missing_ingredient_precision": 0.9510416666666666,
+        "precision_at_5": 0.7777777777777777,
+        "ndcg_at_5": 0.9933620459275442,
+        "false_ready_rate": 0.22872340425531915,
+        "false_ready_count": 43,
+        "ready_labeled_count": 188,
+        "essential_missing_ingredient_recall": 0.993421052631579,
+        "essential_missing_ingredient_precision": 0.9742324561403507,
         "critical_constraint_violations": 0,
         "resolution_proxy_accuracy": 1,
-        "p95_latency_ms": 2.638500000000022,
-        "mean_latency_ms": 1.0562043010752526,
+        "p95_latency_ms": 1.4817000000000462,
+        "mean_latency_ms": 0.6078282142857063,
         "mean_cost_per_request": 0
       },
       "failure_sample": [
@@ -509,25 +509,210 @@
           "case_id": "held-003-quantity-unknown-rice",
           "recipe_id": "r-jollof",
           "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-et-unkqty-1",
+          "recipe_id": "r-held-grow-et-unkqty-1",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-cm-unkqty-1",
+          "recipe_id": "r-held-grow-cm-unkqty-1",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-gh-unkqty-2",
+          "recipe_id": "r-held-grow-gh-unkqty-2",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ug-unkqty-2",
+          "recipe_id": "r-held-grow-ug-unkqty-2",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ke-unkqty-3",
+          "recipe_id": "r-held-grow-ke-unkqty-3",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-sn-unkqty-3",
+          "recipe_id": "r-held-grow-sn-unkqty-3",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-diaspora-us-unkqty-3",
+          "recipe_id": "r-held-grow-diaspora-us-unkqty-3",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-za-unkqty-4",
+          "recipe_id": "r-held-grow-za-unkqty-4",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ci-unkqty-4",
+          "recipe_id": "r-held-grow-ci-unkqty-4",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ng-unkqty-5",
+          "recipe_id": "r-held-grow-ng-unkqty-5",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-tz-unkqty-5",
+          "recipe_id": "r-held-grow-tz-unkqty-5",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-diaspora-uk-unkqty-5",
+          "recipe_id": "r-held-grow-diaspora-uk-unkqty-5",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-et-unkqty-6",
+          "recipe_id": "r-held-grow-et-unkqty-6",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-cm-unkqty-6",
+          "recipe_id": "r-held-grow-cm-unkqty-6",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-gh-unkqty-7",
+          "recipe_id": "r-held-grow-gh-unkqty-7",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ug-unkqty-7",
+          "recipe_id": "r-held-grow-ug-unkqty-7",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ke-unkqty-8",
+          "recipe_id": "r-held-grow-ke-unkqty-8",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-sn-unkqty-8",
+          "recipe_id": "r-held-grow-sn-unkqty-8",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-diaspora-us-unkqty-8",
+          "recipe_id": "r-held-grow-diaspora-us-unkqty-8",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-za-unkqty-9",
+          "recipe_id": "r-held-grow-za-unkqty-9",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ci-unkqty-9",
+          "recipe_id": "r-held-grow-ci-unkqty-9",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ng-unkqty-10",
+          "recipe_id": "r-held-grow-ng-unkqty-10",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-tz-unkqty-10",
+          "recipe_id": "r-held-grow-tz-unkqty-10",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-diaspora-uk-unkqty-10",
+          "recipe_id": "r-held-grow-diaspora-uk-unkqty-10",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-et-unkqty-11",
+          "recipe_id": "r-held-grow-et-unkqty-11",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-cm-unkqty-11",
+          "recipe_id": "r-held-grow-cm-unkqty-11",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-gh-unkqty-12",
+          "recipe_id": "r-held-grow-gh-unkqty-12",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ug-unkqty-12",
+          "recipe_id": "r-held-grow-ug-unkqty-12",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ke-unkqty-13",
+          "recipe_id": "r-held-grow-ke-unkqty-13",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-sn-unkqty-13",
+          "recipe_id": "r-held-grow-sn-unkqty-13",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-diaspora-us-unkqty-13",
+          "recipe_id": "r-held-grow-diaspora-us-unkqty-13",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-za-unkqty-14",
+          "recipe_id": "r-held-grow-za-unkqty-14",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ci-unkqty-14",
+          "recipe_id": "r-held-grow-ci-unkqty-14",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ng-unkqty-15",
+          "recipe_id": "r-held-grow-ng-unkqty-15",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-tz-unkqty-15",
+          "recipe_id": "r-held-grow-tz-unkqty-15",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-diaspora-uk-unkqty-15",
+          "recipe_id": "r-held-grow-diaspora-uk-unkqty-15",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-et-unkqty-16",
+          "recipe_id": "r-held-grow-et-unkqty-16",
+          "type": "production_soft_false_ready"
         }
       ],
-      "failure_count": 3
+      "failure_count": 43
     },
     {
       "system": "production_matcher",
-      "cases": 93,
+      "cases": 280,
       "metrics": {
-        "precision_at_5": 0.5858585858585859,
-        "ndcg_at_5": 0.9918885660125595,
+        "precision_at_5": 0.798904538341158,
+        "ndcg_at_5": 0.9973448183710176,
         "false_ready_rate": 0,
         "false_ready_count": 0,
-        "ready_labeled_count": 38,
-        "essential_missing_ingredient_recall": 0.975,
-        "essential_missing_ingredient_precision": 0.98125,
+        "ready_labeled_count": 149,
+        "essential_missing_ingredient_recall": 0.9868421052631579,
+        "essential_missing_ingredient_precision": 0.9901315789473685,
         "critical_constraint_violations": 0,
         "resolution_proxy_accuracy": 1,
-        "p95_latency_ms": 6.4565000000000055,
-        "mean_latency_ms": 2.927454838709666,
+        "p95_latency_ms": 4.556799999999839,
+        "mean_latency_ms": 1.701639285714282,
         "mean_cost_per_request": 0
       },
       "failure_sample": [],
@@ -544,11 +729,11 @@
         },
         {
           "system": "overlap_baseline",
-          "violations": 22
+          "violations": 63
         },
         {
           "system": "quantity_aware_baseline",
-          "violations": 22
+          "violations": 63
         },
         {
           "system": "graph_offline",
@@ -569,15 +754,15 @@
         },
         {
           "system": "overlap_baseline",
-          "rate": 0.3968253968253968
+          "rate": 0.41568627450980394
         },
         {
           "system": "quantity_aware_baseline",
-          "rate": 0.3870967741935484
+          "rate": 0.3299492385786802
         },
         {
           "system": "graph_offline",
-          "rate": 0.08108108108108109
+          "rate": 0.22872340425531915
         },
         {
           "system": "production_matcher",
