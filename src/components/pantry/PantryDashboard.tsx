@@ -375,6 +375,8 @@ const PantryDashboard = () => {
         id: item.id,
         name: item.ingredient_name,
         ingredient_name: item.ingredient_name,
+        quantity: item.quantity ?? undefined,
+        unit: item.unit || undefined,
         expires_at: item.expires_at || undefined,
       }));
 
@@ -495,6 +497,11 @@ const PantryDashboard = () => {
                 .map((ai: any) => {
                   const base = byId.get(ai.recipeId);
                   if (!base) return null;
+                  // Never let LLM mark Ready when local cookability said no.
+                  const canCookNow =
+                    base.canCookNow && (ai.canCookNow === undefined || ai.canCookNow === true)
+                      ? true
+                      : false;
                   return {
                     ...base,
                     matchScore: Math.max(base.matchScore, ai.matchScore || 0),
@@ -504,7 +511,7 @@ const PantryDashboard = () => {
                         : base.substitutionSuggestions,
                     priority: ai.priority || base.priority,
                     priorityReason: ai.priorityReason || base.priorityReason,
-                    canCookNow: ai.canCookNow ?? base.canCookNow,
+                    canCookNow,
                   } as RecipeMatch;
                 })
                 .filter(Boolean) as RecipeMatch[];

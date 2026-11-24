@@ -222,15 +222,19 @@ export async function matchPantryViaIngredientGraph(
     }
 
     const matchPercentage = Math.round(s.score * 100);
-    const canMakeNow = matchPercentage >= 85 || (s.matched.size >= s.total - 1 && s.total > 0);
+    // Cookability-first: ready only with zero missing essentials (no "almost ready").
+    const canMakeNow = missingIngredients.length === 0 && s.matched.size > 0;
     let priority: "high" | "medium" | "low" = "low";
     let priorityReason: string | undefined;
     if (s.urgency > 0) {
       priority = "high";
       priorityReason = "Uses expiring pantry items";
+    } else if (canMakeNow) {
+      priority = "high";
+      priorityReason = "You can cook this now";
     } else if (matchPercentage >= 75) {
       priority = "high";
-      priorityReason = "Strong pantry coverage";
+      priorityReason = "Strong pantry coverage — short shopping list";
     } else if (matchPercentage >= 50) {
       priority = "medium";
     }

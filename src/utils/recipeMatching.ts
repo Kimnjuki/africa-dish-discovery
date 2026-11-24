@@ -1,5 +1,5 @@
-import type { IngredientValue } from "@/types/content";
-import { getSubstituteNames } from "@/lib/substitutionGraph";
+import type { IngredientValue } from "../types/content.ts";
+import { getSubstituteNames } from "../lib/substitutionGraph.ts";
 
 interface PantryIngredient {
   id: string;
@@ -26,6 +26,8 @@ interface Recipe {
   category?: string;
 }
 
+export type CookabilityMode = "cook_now" | "shop_first";
+
 export interface MatchResult {
   recipe: Recipe;
   matchPercentage: number;
@@ -34,12 +36,15 @@ export interface MatchResult {
   missingIngredients: string[];
   matchedIngredients: string[];
   substitutableIngredients: Array<{ original: string; substitute: string }>;
+  /** True only when no essential ingredients are missing (subs already counted as covered). */
   canMakeNow: boolean;
   needsShopping: boolean;
   urgencyBoost: number;
   pantryCoverage: number;
   priority: "high" | "medium" | "low";
   priorityReason?: string;
+  /** Unboosted recipe coverage 0–100 (for eval / explanations). */
+  recipeCoverage?: number;
 }
 
 /** Lightweight extras beyond the Africa-first substitution graph (generic pantry noise). */
@@ -194,7 +199,8 @@ export const splitPantryInput = (raw: string): string[] => {
       const trimmed = chunk.trim();
       if (!trimmed) return [];
 
-      // Prefer comma lists; also split space-separated single-ingredient words
+      // Prefer comma lists; also split space-separated single-ingredient words.
+      // Do NOT split multi-word ingredient phrases (e.g. "whole teff grain", "palm oil").
       if (!/,/.test(text) && trimmed.split(/\s+/).length >= 2 && trimmed.length <= 100) {
         const { masked, compounds } = protectCompounds(trimmed);
         const words = masked
@@ -204,7 +210,13 @@ export const splitPantryInput = (raw: string): string[] => {
         const lookLikeList =
           words.length + compounds.length >= 2 &&
           words.every((w) => /^[a-z][a-z'-]*$/i.test(w));
-        if (lookLikeList) return [...compounds, ...words];
+        // If the original phrase is itself a known compound / prep phrase, keep whole.
+        const asPhrase = normalizeIngredientName(trimmed);
+        const isPrepPhrase =
+          /\b(flour|oil|leaves|leaf|seeds|paste|sauce|powder|milk|butter|meal|dough|grain|grains)\b/.test(
+            asPhrase
+          ) || COMPOUND_INGREDIENTS.some((c) => asPhrase === c || asPhrase.includes(c));
+        if (lookLikeList && !isPrepPhrase) return [...compounds, ...words];
       }
       return [trimmed];
     })
@@ -307,16 +319,51 @@ const tokensOf = (name: string): string[] =>
     .map(singularize)
     .filter((t) => t.length > 1 && !STOP.has(t) && !STOP.has(singularize(t)));
 
+/** Tokens that must not alone prove a compound ingredient match. */
+const WEAK_SOLO_TOKENS = new Set([
+  "oil",
+  "pepper",
+  "bean",
+  "beans",
+  "flour",
+  "leaf",
+  "leaves",
+  "seed",
+  "seeds",
+  "sauce",
+  "paste",
+  "powder",
+  "stock",
+  "broth",
+  "milk",
+  "butter",
+  "rice",
+  "meat",
+  "fish",
+  "green",
+  "greens",
+]);
+
 export const namesOverlap = (a: string, b: string): boolean => {
   if (!a || !b) return false;
   const na = normalizeIngredientName(a);
   const nb = normalizeIngredientName(b);
   if (!na || !nb) return false;
-  if (na === nb || na.includes(nb) || nb.includes(na)) return true;
+  if (na === nb) return true;
+
+  // Substring only when the shorter side is a full compound (≥2 tokens) or length ≥ 5
+  const shorter = na.length <= nb.length ? na : nb;
+  const longer = na.length <= nb.length ? nb : na;
+  if (shorter.length >= 5 && longer.includes(shorter)) {
+    const shortTokens = tokensOf(shorter);
+    if (shortTokens.length >= 2 || !WEAK_SOLO_TOKENS.has(shortTokens[0] || shorter)) {
+      return true;
+    }
+  }
 
   const sa = singularize(na.replace(/\s+/g, ""));
   const sb = singularize(nb.replace(/\s+/g, ""));
-  if (sa === sb || sa.includes(sb) || sb.includes(sa)) return true;
+  if (sa === sb) return true;
 
   const ta = tokensOf(na);
   const tb = tokensOf(nb);
@@ -324,9 +371,14 @@ export const namesOverlap = (a: string, b: string): boolean => {
 
   const setB = new Set(tb);
   const hits = ta.filter((t) => setB.has(t)).length;
-  if (hits >= 1 && (ta.length === 1 || tb.length === 1)) return true;
+  // Single-token hit only when that token is distinctive (not oil/pepper/beans/…)
+  if (hits === 1 && (ta.length === 1 || tb.length === 1)) {
+    const solo = ta.length === 1 ? ta[0] : tb[0];
+    if (WEAK_SOLO_TOKENS.has(solo)) return false;
+    return true;
+  }
   if (hits >= Math.min(2, Math.min(ta.length, tb.length))) return true;
-  return hits >= 1 && (setB.has(ta[0]) || ta.includes(tb[0]));
+  return false;
 };
 
 const getIngredientSubstitutes = (ingredient: string): string[] => {
@@ -352,6 +404,30 @@ const daysUntilExpiry = (expiresAt?: string | null): number | null => {
   return Math.ceil(ms / (1000 * 60 * 60 * 24));
 };
 
+/**
+ * Exact/alias ≠ preparation state. Whole grain ≠ flour; fresh fish ≠ stockfish.
+ * Broad category names must not silently satisfy a specific prepared form.
+ */
+export const preparationCompatible = (recipeIng: string, pantryIng: string): boolean => {
+  const r = normalizeIngredientName(recipeIng);
+  const p = normalizeIngredientName(pantryIng);
+  if (!r || !p) return false;
+  const rFlour = /\bflour\b/.test(r);
+  const pFlour = /\bflour\b/.test(p);
+  const pWholeGrain = /\b(whole|grain|grains|berries|berry)\b/.test(p) && !pFlour;
+  // Recipe needs flour; pantry is whole grain OR the bare cereal name without flour.
+  if (rFlour && pWholeGrain) return false;
+  if (rFlour && !pFlour) {
+    const rBase = r.replace(/\bflour\b/g, "").replace(/\s+/g, " ").trim();
+    const pBase = p.replace(/\b(whole|grain|grains|berries|berry)\b/g, "").replace(/\s+/g, " ").trim();
+    if (rBase && (p === rBase || pBase === rBase || namesOverlap(rBase, p))) return false;
+  }
+  if (/\bfresh\b/.test(r) && /\b(dried|dry|stockfish)\b/.test(p)) return false;
+  if (/\b(dried|dry|stockfish)\b/.test(r) && /\bfresh\b/.test(p)) return false;
+  if (/\bcooked\b/.test(r) && /\b(raw|dried|dry)\b/.test(p)) return false;
+  return true;
+};
+
 const pantryMatchesIngredient = (
   normalizedUserIngredients: Array<{
     normalizedName: string;
@@ -362,19 +438,25 @@ const pantryMatchesIngredient = (
   }>,
   recipeIngName: string
 ) => {
-  const exact = normalizedUserIngredients.find((userIng) =>
-    namesOverlap(userIng.normalizedName, recipeIngName)
+  const compatible = (userIng: { normalizedName: string }) =>
+    preparationCompatible(recipeIngName, userIng.normalizedName);
+
+  const exact = normalizedUserIngredients.find(
+    (userIng) => namesOverlap(userIng.normalizedName, recipeIngName) && compatible(userIng)
   );
   if (exact) return { kind: "exact" as const, user: exact };
 
   const substitutes = getIngredientSubstitutes(recipeIngName);
-  const viaSub = normalizedUserIngredients.find((userIng) =>
-    substitutes.some((sub) => namesOverlap(userIng.normalizedName, sub))
+  const viaSub = normalizedUserIngredients.find(
+    (userIng) =>
+      compatible(userIng) &&
+      substitutes.some((sub) => namesOverlap(userIng.normalizedName, sub))
   );
   if (viaSub) return { kind: "sub" as const, user: viaSub };
 
   // Reverse: pantry item has substitutes that cover the recipe ingredient
   const reverse = normalizedUserIngredients.find((userIng) => {
+    if (!compatible(userIng)) return false;
     const panSubs = getIngredientSubstitutes(userIng.normalizedName);
     return panSubs.some((sub) => namesOverlap(sub, recipeIngName));
   });
@@ -458,14 +540,21 @@ export const calculateRecipeMatch = (
     Math.max(recipeCoverage, blended) + Math.min(urgencyBoost, 12) + (matchedCount >= 3 ? 5 : 0)
   );
 
+  // Cookability-first: Ready only when every essential ingredient is present
+  // (exact or reviewed substitute already counted above). Overlap ≠ cookable.
+  const canMakeNow = missingIngredients.length === 0 && matchedCount > 0;
+
   let priority: "high" | "medium" | "low" = "low";
   let priorityReason: string | undefined;
   if (urgencyBoost >= 10 && recipeCoverage >= 35) {
     priority = "high";
     priorityReason = "Uses ingredients expiring soon";
-  } else if (recipeCoverage >= 75 || (matchedCount >= 4 && missingIngredients.length <= 2)) {
+  } else if (canMakeNow) {
     priority = "high";
-    priorityReason = "You can cook this now";
+    priorityReason =
+      substitutableIngredients.length > 0
+        ? "Cookable now with pantry substitutions"
+        : "You can cook this now";
   } else if (recipeCoverage >= 45 || matchedCount >= 3) {
     priority = "medium";
     priorityReason = "Strong pantry overlap — short shopping list";
@@ -482,12 +571,13 @@ export const calculateRecipeMatch = (
     missingIngredients,
     matchedIngredients,
     substitutableIngredients,
-    canMakeNow: recipeCoverage >= 70 && missingIngredients.length <= 2,
-    needsShopping: recipeCoverage >= 40 && recipeCoverage < 70,
+    canMakeNow,
+    needsShopping: !canMakeNow && missingIngredients.length > 0 && recipeCoverage >= 35,
     urgencyBoost,
     pantryCoverage,
     priority,
     priorityReason,
+    recipeCoverage,
   };
 };
 
