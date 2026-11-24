@@ -1,0 +1,5458 @@
+{
+  "generated_at": "2026-11-24T10:16:31.077Z",
+  "count": 50,
+  "matched": 50,
+  "results": [
+    {
+      "ingredient_id": "8ccc62de-ebb2-4b5e-876c-09ae4618877c",
+      "name": "Ugwu",
+      "slug": "ugwu",
+      "qid": "Q7877947",
+      "wikidata_label": "Ugwu",
+      "wikidata_description": "family name",
+      "scientific_name": null,
+      "aliases": [
+        {
+          "alias": "Ugwu",
+          "alias_normalized": "ugwu",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Ugwu",
+          "alias_normalized": "ugwu",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Ugwu",
+          "alias_normalized": "ugwu",
+          "language": "zu",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Ugwu",
+          "alias_normalized": "ugwu",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Ugwu",
+          "alias_normalized": "ugwu",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "ab6c1152-0559-45db-af28-3666a1f35c62",
+      "name": "Sukuma Wiki",
+      "slug": "sukuma-wiki",
+      "qid": "Q12070251",
+      "wikidata_label": "Sukuma wiki",
+      "wikidata_description": "East African dish made with collard greens",
+      "scientific_name": null,
+      "aliases": [
+        {
+          "alias": "Sukuma wiki",
+          "alias_normalized": "sukuma wiki",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Sukuma Wiiki",
+          "alias_normalized": "sukuma wiiki",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Sukuma wiki",
+          "alias_normalized": "sukuma wiki",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Sukuma wiki",
+          "alias_normalized": "sukuma wiki",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Sukuma wiki",
+          "alias_normalized": "sukuma wiki",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "5ab63eec-83f3-4941-98ff-9588b98be668",
+      "name": "Egusi",
+      "slug": "egusi",
+      "qid": "Q913609",
+      "wikidata_label": "Citrullus colocynthis",
+      "wikidata_description": "species of plant in the family Cucurbitaceae",
+      "scientific_name": "Citrullus colocynthis",
+      "aliases": [
+        {
+          "alias": "Citrullus colocynthis",
+          "alias_normalized": "citrullus colocynthis",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "colocynth",
+          "alias_normalized": "colocynth",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "bitter apple",
+          "alias_normalized": "bitter apple",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "bitter cucumber",
+          "alias_normalized": "bitter cucumber",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "desert gourd",
+          "alias_normalized": "desert gourd",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "wild gourd",
+          "alias_normalized": "wild gourd",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "egusi",
+          "alias_normalized": "egusi",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "vine of Sodom",
+          "alias_normalized": "vine of sodom",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Colocynthis citrullus",
+          "alias_normalized": "colocynthis citrullus",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "coloquintida",
+          "alias_normalized": "coloquintida",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Kwartowa",
+          "alias_normalized": "kwartowa",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Coloquinte",
+          "alias_normalized": "coloquinte",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Coloquinte vraie",
+          "alias_normalized": "coloquinte vraie",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Citrullus colocynthis",
+          "alias_normalized": "citrullus colocynthis",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Citrullus colocynthis",
+          "alias_normalized": "citrullus colocynthis",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "430bba53-d5b1-48df-a532-426e1767670d",
+      "name": "Palm Oil",
+      "slug": "palm-oil",
+      "qid": "Q231458",
+      "wikidata_label": "palm oil",
+      "wikidata_description": "edible and biocombustible vegetable oil from fruit of oil palms",
+      "scientific_name": null,
+      "aliases": [
+        {
+          "alias": "palm oil",
+          "alias_normalized": "palm oil",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "dendê oil",
+          "alias_normalized": "dende oil",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Mawese",
+          "alias_normalized": "mawese",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Manja",
+          "alias_normalized": "manja",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Epo pupa",
+          "alias_normalized": "epo pupa",
+          "language": "yo",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Mmanụ nri",
+          "alias_normalized": "mmanu nri",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "huile de palme",
+          "alias_normalized": "huile de palme",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "8002-75-3",
+          "alias_normalized": "8002 75 3",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "huile de palmier",
+          "alias_normalized": "huile de palmier",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "azeite de dendê",
+          "alias_normalized": "azeite de dende",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Óleo de palma",
+          "alias_normalized": "oleo de palma",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Epô",
+          "alias_normalized": "epo",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Azeite de palma",
+          "alias_normalized": "azeite de palma",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Óleo de dendê",
+          "alias_normalized": "oleo de dende",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Epô pupá",
+          "alias_normalized": "epo pupa",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "4c4f1149-57e3-4389-bd0a-43904e9841c0",
+      "name": "Scotch Bonnet",
+      "slug": "scotch-bonnet",
+      "qid": "Q466854",
+      "wikidata_label": "Scotch bonnet",
+      "wikidata_description": "cultivar of chili pepper",
+      "scientific_name": "Capsicum chinense ‘Scotch Bonnet’",
+      "aliases": [
+        {
+          "alias": "Scotch bonnet",
+          "alias_normalized": "scotch bonnet",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Capsicum chinense 'Scotch Bonnet'",
+          "alias_normalized": "capsicum chinense scotch bonnet",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Scotch bonnet",
+          "alias_normalized": "scotch bonnet",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "piment écossais",
+          "alias_normalized": "piment ecossais",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Scotch bonnet",
+          "alias_normalized": "scotch bonnet",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "dfd7e42e-ceb6-44dc-85b8-c1dca0ea3b93",
+      "name": "Cassava",
+      "slug": "cassava",
+      "qid": "Q83124",
+      "wikidata_label": "cassava",
+      "wikidata_description": "species of plant native to South America cultivated for industrial and food uses",
+      "scientific_name": "Manihot esculenta",
+      "aliases": [
+        {
+          "alias": "cassava",
+          "alias_normalized": "cassava",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "manioc",
+          "alias_normalized": "manioc",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "mandioca",
+          "alias_normalized": "mandioca",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "cassava plant",
+          "alias_normalized": "cassava plant",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Manihot Esculenta",
+          "alias_normalized": "manihot esculenta",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Muhogo",
+          "alias_normalized": "muhogo",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Rogo",
+          "alias_normalized": "rogo",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Manihot esculenta",
+          "alias_normalized": "manihot esculenta",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Ẹ̀gẹ́",
+          "alias_normalized": "ege",
+          "language": "yo",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Cassava",
+          "alias_normalized": "cassava",
+          "language": "yo",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Manihot esculenta",
+          "alias_normalized": "manihot esculenta",
+          "language": "yo",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "manioc",
+          "alias_normalized": "manioc",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Saka-saka",
+          "alias_normalized": "saka saka",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Magnoc",
+          "alias_normalized": "magnoc",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Manihot esculenta",
+          "alias_normalized": "manihot esculenta",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "mandioca",
+          "alias_normalized": "mandioca",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Manihot esculenta",
+          "alias_normalized": "manihot esculenta",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Manihot utilissima",
+          "alias_normalized": "manihot utilissima",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "mandiocazeiro",
+          "alias_normalized": "mandiocazeiro",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "maniva",
+          "alias_normalized": "maniva",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "maniveira",
+          "alias_normalized": "maniveira",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "cassava",
+          "alias_normalized": "cassava",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "macaxeira",
+          "alias_normalized": "macaxeira",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "aipim",
+          "alias_normalized": "aipim",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "a84bc4b0-71bf-4789-b757-97f904ce2040",
+      "name": "Plantain",
+      "slug": "plantain",
+      "qid": "Q789360",
+      "wikidata_label": "Plantago afra",
+      "wikidata_description": "species of plant",
+      "scientific_name": "Plantago afra",
+      "aliases": [
+        {
+          "alias": "Plantago afra",
+          "alias_normalized": "plantago afra",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Plantain",
+          "alias_normalized": "plantain",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Plantago psyllium",
+          "alias_normalized": "plantago psyllium",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Plantago afra",
+          "alias_normalized": "plantago afra",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Psyllium afrum",
+          "alias_normalized": "psyllium afrum",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "plantain africain",
+          "alias_normalized": "plantain africain",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "herbes aux puces",
+          "alias_normalized": "herbes aux puces",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Plantago psyllium auct.",
+          "alias_normalized": "plantago psyllium auct",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Plantain psyllium",
+          "alias_normalized": "plantain psyllium",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Plantago afra",
+          "alias_normalized": "plantago afra",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "eaa3375c-f7e1-4ce3-bf2f-bb792803043c",
+      "name": "Yam",
+      "slug": "yam",
+      "qid": "Q71549",
+      "wikidata_label": "Dioscorea",
+      "wikidata_description": "genus of plants",
+      "scientific_name": "Dioscorea",
+      "aliases": [
+        {
+          "alias": "Dioscorea",
+          "alias_normalized": "dioscorea",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Yam",
+          "alias_normalized": "yam",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Doya",
+          "alias_normalized": "doya",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Dioscorea",
+          "alias_normalized": "dioscorea",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Isu",
+          "alias_normalized": "isu",
+          "language": "yo",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Yam",
+          "alias_normalized": "yam",
+          "language": "yo",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Jí",
+          "alias_normalized": "ji",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "igname",
+          "alias_normalized": "igname",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Dioscorea",
+          "alias_normalized": "dioscorea",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "ba267f35-e953-442f-aaa3-2f57631a00b5",
+      "name": "Teff",
+      "slug": "teff",
+      "qid": "Q843942",
+      "wikidata_label": "Eragrostis tef",
+      "wikidata_description": "species of plant",
+      "scientific_name": "Eragrostis tef",
+      "aliases": [
+        {
+          "alias": "Eragrostis tef",
+          "alias_normalized": "eragrostis tef",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Teff",
+          "alias_normalized": "teff",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Williams' lovegrass",
+          "alias_normalized": "williams lovegrass",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Annual bunch grass",
+          "alias_normalized": "annual bunch grass",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Mtefi",
+          "alias_normalized": "mtefi",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Teff",
+          "alias_normalized": "teff",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Eragrostis tef",
+          "alias_normalized": "eragrostis tef",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Teff",
+          "alias_normalized": "teff",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "47901971-6a7e-42bc-8ade-540af871f34a",
+      "name": "Fonio",
+      "slug": "fonio",
+      "qid": "Q12439809",
+      "wikidata_label": "Fonio",
+      "wikidata_description": "common name for two or three species of grass cultivated for their grains in West Africa",
+      "scientific_name": null,
+      "aliases": [
+        {
+          "alias": "Fonio",
+          "alias_normalized": "fonio",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Fonio",
+          "alias_normalized": "fonio",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Fonio",
+          "alias_normalized": "fonio",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "6302d594-51a7-4de7-8923-9ca9608740fa",
+      "name": "Sorghum",
+      "slug": "sorghum",
+      "qid": "Q12111",
+      "wikidata_label": "Sorghum",
+      "wikidata_description": "genus of plants",
+      "scientific_name": "Sorghum",
+      "aliases": [
+        {
+          "alias": "Sorghum",
+          "alias_normalized": "sorghum",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Mtama",
+          "alias_normalized": "mtama",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "dawa",
+          "alias_normalized": "dawa",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Sorghum",
+          "alias_normalized": "sorghum",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Sorghum",
+          "alias_normalized": "sorghum",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "4be925b8-baa8-4d83-abe3-2b3a3c6ee781",
+      "name": "Millet",
+      "slug": "millet",
+      "qid": "Q259438",
+      "wikidata_label": "millet",
+      "wikidata_description": "group of small-seeded grasses",
+      "scientific_name": null,
+      "aliases": [
+        {
+          "alias": "millet",
+          "alias_normalized": "millet",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "millets",
+          "alias_normalized": "millets",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "minor cereals",
+          "alias_normalized": "minor cereals",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Nutri-Cereals",
+          "alias_normalized": "nutri cereals",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Ulezi",
+          "alias_normalized": "ulezi",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "gero",
+          "alias_normalized": "gero",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "millet",
+          "alias_normalized": "millet",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Millet (graminée)",
+          "alias_normalized": "millet graminee",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "milhete",
+          "alias_normalized": "milhete",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "f3273b99-1d3f-4b98-a7b7-6a0329171441",
+      "name": "Maize",
+      "slug": "maize",
+      "qid": "Q11575",
+      "wikidata_label": "maize",
+      "wikidata_description": "species of grass cultivated as a food crop",
+      "scientific_name": "Zea mays",
+      "aliases": [
+        {
+          "alias": "maize",
+          "alias_normalized": "maize",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "corn plant",
+          "alias_normalized": "corn plant",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "maize plant",
+          "alias_normalized": "maize plant",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "corn",
+          "alias_normalized": "corn",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Zea mays",
+          "alias_normalized": "zea mays",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Mhindi",
+          "alias_normalized": "mhindi",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "muhindi",
+          "alias_normalized": "muhindi",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "masara",
+          "alias_normalized": "masara",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Àgbàdo",
+          "alias_normalized": "agbado",
+          "language": "yo",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Yangan",
+          "alias_normalized": "yangan",
+          "language": "yo",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Ọ̀ka",
+          "alias_normalized": "oka",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Ihe ọ̀kụkụ ọka",
+          "alias_normalized": "ihe okuku oka",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "ukwu ọka",
+          "alias_normalized": "ukwu oka",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "maïs",
+          "alias_normalized": "mais",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Zea mays",
+          "alias_normalized": "zea mays",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "blé d’Inde",
+          "alias_normalized": "ble d inde",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "milho",
+          "alias_normalized": "milho",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Zea mays",
+          "alias_normalized": "zea mays",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "planta de milho",
+          "alias_normalized": "planta de milho",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "planta do milho",
+          "alias_normalized": "planta do milho",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "63af8c94-4cad-4c84-b19a-6e9f55a76aa2",
+      "name": "Groundnut",
+      "slug": "groundnut",
+      "qid": "Q568933",
+      "wikidata_label": "Apios americana",
+      "wikidata_description": "species of plant",
+      "scientific_name": "Apios americana",
+      "aliases": [
+        {
+          "alias": "Apios americana",
+          "alias_normalized": "apios americana",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "American groundnut",
+          "alias_normalized": "american groundnut",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "potato bean",
+          "alias_normalized": "potato bean",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "hopniss",
+          "alias_normalized": "hopniss",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Indian potato",
+          "alias_normalized": "indian potato",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "hodoimo",
+          "alias_normalized": "hodoimo",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "America-hodoimo",
+          "alias_normalized": "america hodoimo",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "cinnamon vine",
+          "alias_normalized": "cinnamon vine",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "groundnut",
+          "alias_normalized": "groundnut",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Mharagwe-viazi",
+          "alias_normalized": "mharagwe viazi",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Apios americana",
+          "alias_normalized": "apios americana",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "glycine tubéreuse",
+          "alias_normalized": "glycine tubereuse",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Apios americana",
+          "alias_normalized": "apios americana",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "662246dc-7cce-41a8-a266-c2539708e599",
+      "name": "Crayfish",
+      "slug": "crayfish",
+      "qid": "Q1211742",
+      "wikidata_label": "crayfish",
+      "wikidata_description": "common name for freshwater crustaceans members of the superfamilies Astacoidea and Parastacoidea",
+      "scientific_name": null,
+      "aliases": [
+        {
+          "alias": "crayfish",
+          "alias_normalized": "crayfish",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "crawfish",
+          "alias_normalized": "crawfish",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "crawdads",
+          "alias_normalized": "crawdads",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "écrevisse",
+          "alias_normalized": "ecrevisse",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "lagostim",
+          "alias_normalized": "lagostim",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Langostino",
+          "alias_normalized": "langostino",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "56649076-c59d-4095-a7da-e8141b2a4198",
+      "name": "Stockfish",
+      "slug": "stockfish",
+      "qid": "Q213725",
+      "wikidata_label": "stockfish",
+      "wikidata_description": "unsalted fish preserved by drying in cold air and wind",
+      "scientific_name": null,
+      "aliases": [
+        {
+          "alias": "stockfish",
+          "alias_normalized": "stockfish",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "stockfish",
+          "alias_normalized": "stockfish",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "poisson séché",
+          "alias_normalized": "poisson seche",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "bacalhau",
+          "alias_normalized": "bacalhau",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "7b7aa3fc-c0b0-4322-8f11-09a89a04e05b",
+      "name": "Iru",
+      "slug": "iru",
+      "qid": "Q34740",
+      "wikidata_label": "genus",
+      "wikidata_description": "taxonomic rank used in the biological classification of living and fossil organisms, and viruses",
+      "scientific_name": null,
+      "aliases": [
+        {
+          "alias": "genus",
+          "alias_normalized": "genus",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "jenasi",
+          "alias_normalized": "jenasi",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "genre",
+          "alias_normalized": "genre",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "genre botanique",
+          "alias_normalized": "genre botanique",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "genre zoologique",
+          "alias_normalized": "genre zoologique",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "genre biologique",
+          "alias_normalized": "genre biologique",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "genus",
+          "alias_normalized": "genus",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Genus",
+          "alias_normalized": "genus",
+          "language": "ar",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "género",
+          "alias_normalized": "genero",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "genera",
+          "alias_normalized": "genera",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "nome genérico",
+          "alias_normalized": "nome generico",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "genus",
+          "alias_normalized": "genus",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "6f911cfb-b1f1-4c70-99cb-71cb5d27db3b",
+      "name": "Okra",
+      "slug": "okra",
+      "qid": "Q12047207",
+      "wikidata_label": "okra",
+      "wikidata_description": "vegetable, use Q80531 for the species",
+      "scientific_name": null,
+      "aliases": [
+        {
+          "alias": "okra",
+          "alias_normalized": "okra",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "lady fingers",
+          "alias_normalized": "lady fingers",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Abelmoschus esculentus",
+          "alias_normalized": "abelmoschus esculentus",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "a16163c9-91fd-4032-89c1-14c54fc53483",
+      "name": "Molokhia",
+      "slug": "molokhia",
+      "qid": "Q165343",
+      "wikidata_label": "Corchorus olitorius",
+      "wikidata_description": "species of plant",
+      "scientific_name": "Corchorus olitorius",
+      "aliases": [
+        {
+          "alias": "Corchorus olitorius",
+          "alias_normalized": "corchorus olitorius",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Mulukhiyah",
+          "alias_normalized": "mulukhiyah",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Nalta jute",
+          "alias_normalized": "nalta jute",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Molokheyya",
+          "alias_normalized": "molokheyya",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Molokhia",
+          "alias_normalized": "molokhia",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Mulukhiyyah",
+          "alias_normalized": "mulukhiyyah",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Molokhiyya",
+          "alias_normalized": "molokhiyya",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Jew's mallow",
+          "alias_normalized": "jew s mallow",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Denje'c'jute",
+          "alias_normalized": "denje c jute",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Tossa jute",
+          "alias_normalized": "tossa jute",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Jute mallow",
+          "alias_normalized": "jute mallow",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Corète potagère",
+          "alias_normalized": "corete potagere",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Corchorus olitorius",
+          "alias_normalized": "corchorus olitorius",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Corchorus olitorius",
+          "alias_normalized": "corchorus olitorius",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "b44b89d3-4d20-4c7a-82b7-5ad9c9eccd4d",
+      "name": "Morogo",
+      "slug": "morogo",
+      "qid": "Q6913209",
+      "wikidata_label": "Morogo",
+      "wikidata_description": "African leafy vegetable",
+      "scientific_name": null,
+      "aliases": [
+        {
+          "alias": "Morogo",
+          "alias_normalized": "morogo",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Morogo",
+          "alias_normalized": "morogo",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Umbido",
+          "alias_normalized": "umbido",
+          "language": "zu",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "97b23234-36b1-4858-8a41-da70403f2f56",
+      "name": "Bitterleaf",
+      "slug": "bitterleaf",
+      "qid": "Q54463136",
+      "wikidata_label": "Gymnanthemum extensum",
+      "wikidata_description": "Gymnanthemum extensum",
+      "scientific_name": "Gymnanthemum extensum",
+      "aliases": [
+        {
+          "alias": "Gymnanthemum extensum",
+          "alias_normalized": "gymnanthemum extensum",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Bitterleaf tree",
+          "alias_normalized": "bitterleaf tree",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Herbs",
+          "alias_normalized": "herbs",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Gymnanthemum extensum",
+          "alias_normalized": "gymnanthemum extensum",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Gymnanthemum extensum",
+          "alias_normalized": "gymnanthemum extensum",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "93123bc6-0285-426f-b28e-e36c7b9a7f64",
+      "name": "Tilapia",
+      "slug": "tilapia",
+      "qid": "Q47793",
+      "wikidata_label": "tilapia",
+      "wikidata_description": "common name for nearly a hundred species of cichlid fish from the tilapiine cichlid tribe",
+      "scientific_name": null,
+      "aliases": [
+        {
+          "alias": "tilapia",
+          "alias_normalized": "tilapia",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Karfasa",
+          "alias_normalized": "karfasa",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Tilapia",
+          "alias_normalized": "tilapia",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Tilapia",
+          "alias_normalized": "tilapia",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "tilápia",
+          "alias_normalized": "tilapia",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "3f9313e6-21ad-46a0-9486-685f5f056c46",
+      "name": "Goat",
+      "slug": "goat",
+      "qid": "Q2934",
+      "wikidata_label": "goat",
+      "wikidata_description": "domesticated mammal raised for its meat and milk",
+      "scientific_name": "Capra aegagrus hircus",
+      "aliases": [
+        {
+          "alias": "goat",
+          "alias_normalized": "goat",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "domestic goat",
+          "alias_normalized": "domestic goat",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "goats",
+          "alias_normalized": "goats",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Capra hircus",
+          "alias_normalized": "capra hircus",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "C. hircus",
+          "alias_normalized": "c hircus",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Capra aegagrus hircus",
+          "alias_normalized": "capra aegagrus hircus",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "C. aegagrus hircus",
+          "alias_normalized": "c aegagrus hircus",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "C. a. hircus",
+          "alias_normalized": "c a hircus",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Mbuzi-kaya",
+          "alias_normalized": "mbuzi kaya",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "akuya",
+          "alias_normalized": "akuya",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "bunsuru",
+          "alias_normalized": "bunsuru",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Ewúrẹ́",
+          "alias_normalized": "ewure",
+          "language": "yo",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "ewu",
+          "alias_normalized": "ewu",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Imbuzi",
+          "alias_normalized": "imbuzi",
+          "language": "zu",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Ibhokhwe",
+          "alias_normalized": "ibhokhwe",
+          "language": "xh",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "chèvre",
+          "alias_normalized": "chevre",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "capra hircus",
+          "alias_normalized": "capra hircus",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "chèvre domestique",
+          "alias_normalized": "chevre domestique",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "cabri",
+          "alias_normalized": "cabri",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "C. hircus",
+          "alias_normalized": "c hircus",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Capra aegagrus hircus",
+          "alias_normalized": "capra aegagrus hircus",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "C. aegagrus hircus",
+          "alias_normalized": "c aegagrus hircus",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "C. a. hircus",
+          "alias_normalized": "c a hircus",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Capra aegagrus hircus",
+          "alias_normalized": "capra aegagrus hircus",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "cabra",
+          "alias_normalized": "cabra",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "bode",
+          "alias_normalized": "bode",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Capra hircus",
+          "alias_normalized": "capra hircus",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "C. hircus",
+          "alias_normalized": "c hircus",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "C. aegagrus hircus",
+          "alias_normalized": "c aegagrus hircus",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "C. a. hircus",
+          "alias_normalized": "c a hircus",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "25913fb7-df12-4ff6-a8f1-55e0fa8ff1a1",
+      "name": "Hibiscus",
+      "slug": "hibiscus",
+      "qid": "Q157124",
+      "wikidata_label": "Hibiscus",
+      "wikidata_description": "genus of plants",
+      "scientific_name": "Hibiscus",
+      "aliases": [
+        {
+          "alias": "Hibiscus",
+          "alias_normalized": "hibiscus",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "rose mallow",
+          "alias_normalized": "rose mallow",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Hibiscus",
+          "alias_normalized": "hibiscus",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Hibiscus",
+          "alias_normalized": "hibiscus",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Hibiscus",
+          "alias_normalized": "hibiscus",
+          "language": "zu",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Hibiscus",
+          "alias_normalized": "hibiscus",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Hibisque",
+          "alias_normalized": "hibisque",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Ibisque",
+          "alias_normalized": "ibisque",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Hibiscus",
+          "alias_normalized": "hibiscus",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Hibisco",
+          "alias_normalized": "hibisco",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "4af26623-ee2f-4bd1-b48f-57a27e0ca009",
+      "name": "Baobab",
+      "slug": "baobab",
+      "qid": "Q131825",
+      "wikidata_label": "Adansonia za",
+      "wikidata_description": "species of plant",
+      "scientific_name": "Adansonia za",
+      "aliases": [
+        {
+          "alias": "Adansonia za",
+          "alias_normalized": "adansonia za",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Baobab",
+          "alias_normalized": "baobab",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Adansonia za",
+          "alias_normalized": "adansonia za",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Adansonia za",
+          "alias_normalized": "adansonia za",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "d6dc2883-3b07-42dd-a0b0-bba5bc47630e",
+      "name": "Cocoyam",
+      "slug": "cocoyam",
+      "qid": "Q2149005",
+      "wikidata_label": "cocoyam",
+      "wikidata_description": "starchy tropical root vegetable",
+      "scientific_name": null,
+      "aliases": [
+        {
+          "alias": "cocoyam",
+          "alias_normalized": "cocoyam",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "taro",
+          "alias_normalized": "taro",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Cocoyam",
+          "alias_normalized": "cocoyam",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "ede",
+          "alias_normalized": "ede",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "utara ede",
+          "alias_normalized": "utara ede",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Cocoyam",
+          "alias_normalized": "cocoyam",
+          "language": "zu",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Cocoyam",
+          "alias_normalized": "cocoyam",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Cocoyam",
+          "alias_normalized": "cocoyam",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "5dfbc295-7ed2-4bf9-87f5-a8522ef3a1f7",
+      "name": "Garri",
+      "slug": "garri",
+      "qid": "Q135117239",
+      "wikidata_label": "Garri",
+      "wikidata_description": "male given name",
+      "scientific_name": null,
+      "aliases": [
+        {
+          "alias": "Garri",
+          "alias_normalized": "garri",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "6611db07-c8dc-499f-a477-9e1ea95e1f59",
+      "name": "fufu",
+      "slug": "fufu",
+      "qid": "Q941004",
+      "wikidata_label": "fufu",
+      "wikidata_description": "dough-like food in African cuisine",
+      "scientific_name": null,
+      "aliases": [
+        {
+          "alias": "fufu",
+          "alias_normalized": "fufu",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "cassava fufu",
+          "alias_normalized": "cassava fufu",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "fufuo",
+          "alias_normalized": "fufuo",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "foofoo",
+          "alias_normalized": "foofoo",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "foufou",
+          "alias_normalized": "foufou",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "utara",
+          "alias_normalized": "utara",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "utara akpu",
+          "alias_normalized": "utara akpu",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "akpu",
+          "alias_normalized": "akpu",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Fufu",
+          "alias_normalized": "fufu",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Fufu",
+          "alias_normalized": "fufu",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "sakora",
+          "alias_normalized": "sakora",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "fufuo",
+          "alias_normalized": "fufuo",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "foofoo",
+          "alias_normalized": "foofoo",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "foufou",
+          "alias_normalized": "foufou",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Fufu",
+          "alias_normalized": "fufu",
+          "language": "yo",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Utara akpu",
+          "alias_normalized": "utara akpu",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "ụtara",
+          "alias_normalized": "utara",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "akpu",
+          "alias_normalized": "akpu",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "foufou",
+          "alias_normalized": "foufou",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "foutou",
+          "alias_normalized": "foutou",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "couscous",
+          "alias_normalized": "couscous",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "couscous de manioc",
+          "alias_normalized": "couscous de manioc",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "fufu",
+          "alias_normalized": "fufu",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "5b6f6aac-4306-4718-b660-afb1962133c8",
+      "name": "Black Pepper",
+      "slug": "black-pepper",
+      "qid": "Q43084",
+      "wikidata_label": "black pepper",
+      "wikidata_description": "species of plant",
+      "scientific_name": "Piper nigrum",
+      "aliases": [
+        {
+          "alias": "black pepper",
+          "alias_normalized": "black pepper",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "peppercorn",
+          "alias_normalized": "peppercorn",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Piper nigrum",
+          "alias_normalized": "piper nigrum",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "peppercorn",
+          "alias_normalized": "peppercorn",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "poivre",
+          "alias_normalized": "poivre",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "piper nigrum",
+          "alias_normalized": "piper nigrum",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "pimenta-preta",
+          "alias_normalized": "pimenta preta",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "pimenta do reino",
+          "alias_normalized": "pimenta do reino",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "pimenteira",
+          "alias_normalized": "pimenteira",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "f490b348-bc12-42b0-86cb-f972d0fc4bab",
+      "name": "Water",
+      "slug": "water",
+      "qid": "Q283",
+      "wikidata_label": "water",
+      "wikidata_description": "chemical compound whose molecules are formed by two hydrogen atoms and one oxygen atom",
+      "scientific_name": null,
+      "aliases": [
+        {
+          "alias": "water",
+          "alias_normalized": "water",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "dihydrogen monoxide",
+          "alias_normalized": "dihydrogen monoxide",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "dihydridooxygen",
+          "alias_normalized": "dihydridooxygen",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "hydrogen hydroxide",
+          "alias_normalized": "hydrogen hydroxide",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "dihydrogen oxide",
+          "alias_normalized": "dihydrogen oxide",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "oxidane",
+          "alias_normalized": "oxidane",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "hydrogen oxide",
+          "alias_normalized": "hydrogen oxide",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "pure water",
+          "alias_normalized": "pure water",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "maji",
+          "alias_normalized": "maji",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "ruwa",
+          "alias_normalized": "ruwa",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "omi",
+          "alias_normalized": "omi",
+          "language": "yo",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "mmiri",
+          "alias_normalized": "mmiri",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "oshimiri",
+          "alias_normalized": "oshimiri",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "osimiri",
+          "alias_normalized": "osimiri",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "amanzi",
+          "alias_normalized": "amanzi",
+          "language": "zu",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "amanzi",
+          "alias_normalized": "amanzi",
+          "language": "xh",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "eau",
+          "alias_normalized": "eau",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "monoxide de dihydrogène",
+          "alias_normalized": "monoxide de dihydrogene",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "oxide de dihydrogène",
+          "alias_normalized": "oxide de dihydrogene",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "eau pure",
+          "alias_normalized": "eau pure",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "oxide d'hydrogène",
+          "alias_normalized": "oxide d hydrogene",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "dihydrooxigène",
+          "alias_normalized": "dihydrooxigene",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "hydroxide d'hydrogène",
+          "alias_normalized": "hydroxide d hydrogene",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "acide hydroxique",
+          "alias_normalized": "acide hydroxique",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "água",
+          "alias_normalized": "agua",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "monóxido de di-hidrogênio",
+          "alias_normalized": "monoxido de di hidrogenio",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "diíbrido oxigênio",
+          "alias_normalized": "diibrido oxigenio",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "fefebde6-8d3c-4c71-bead-70bb892304eb",
+      "name": "Garlic",
+      "slug": "garlic",
+      "qid": "Q21546392",
+      "wikidata_label": "garlic",
+      "wikidata_description": "culinary ingredient (for the species use Q23400)",
+      "scientific_name": null,
+      "aliases": [
+        {
+          "alias": "garlic",
+          "alias_normalized": "garlic",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "head of garlic",
+          "alias_normalized": "head of garlic",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "bulb of garlic",
+          "alias_normalized": "bulb of garlic",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "tafarnuwa",
+          "alias_normalized": "tafarnuwa",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "tête d'ail",
+          "alias_normalized": "tete d ail",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "ail",
+          "alias_normalized": "ail",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "alho",
+          "alias_normalized": "alho",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "33a4f0a5-2461-4df2-865e-28f96da2cc48",
+      "name": "Ginger",
+      "slug": "ginger",
+      "qid": "Q35625",
+      "wikidata_label": "ginger",
+      "wikidata_description": "plant species",
+      "scientific_name": "Zingiber officinale",
+      "aliases": [
+        {
+          "alias": "ginger",
+          "alias_normalized": "ginger",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Zingiber officinale",
+          "alias_normalized": "zingiber officinale",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "ginger root",
+          "alias_normalized": "ginger root",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Mtangawizi",
+          "alias_normalized": "mtangawizi",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Citta",
+          "alias_normalized": "citta",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Ata ilẹ̀",
+          "alias_normalized": "ata ile",
+          "language": "yo",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Ginger",
+          "alias_normalized": "ginger",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "gingembre",
+          "alias_normalized": "gingembre",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Zingiber officinale",
+          "alias_normalized": "zingiber officinale",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Zingiber officinalis",
+          "alias_normalized": "zingiber officinalis",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "gingembre frais",
+          "alias_normalized": "gingembre frais",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "gengibre",
+          "alias_normalized": "gengibre",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Zingiber officinale",
+          "alias_normalized": "zingiber officinale",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "mangarataia",
+          "alias_normalized": "mangarataia",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "952c78fd-0960-4526-92a0-c95c09ba8830",
+      "name": "Onion",
+      "slug": "onion",
+      "qid": "Q23485",
+      "wikidata_label": "onion",
+      "wikidata_description": "species of plant",
+      "scientific_name": "Allium cepa",
+      "aliases": [
+        {
+          "alias": "onion",
+          "alias_normalized": "onion",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "onion plant",
+          "alias_normalized": "onion plant",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Allium cepa L.",
+          "alias_normalized": "allium cepa l",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "kitunguu",
+          "alias_normalized": "kitunguu",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Albasa",
+          "alias_normalized": "albasa",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "àlùbọ́sà",
+          "alias_normalized": "alubosa",
+          "language": "yo",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Allium cepa",
+          "alias_normalized": "allium cepa",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "yabasị osisi",
+          "alias_normalized": "yabasi osisi",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Uanyanisi",
+          "alias_normalized": "uanyanisi",
+          "language": "zu",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "itswele",
+          "alias_normalized": "itswele",
+          "language": "xh",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Oignon",
+          "alias_normalized": "oignon",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Allium cepa",
+          "alias_normalized": "allium cepa",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "ognon",
+          "alias_normalized": "ognon",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "oignons",
+          "alias_normalized": "oignons",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "cebola",
+          "alias_normalized": "cebola",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Allium cepa",
+          "alias_normalized": "allium cepa",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "cebolo",
+          "alias_normalized": "cebolo",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "42ccde10-4854-4c3e-8ad4-18c07b78787e",
+      "name": "tomato",
+      "slug": "tomato",
+      "qid": "Q23501",
+      "wikidata_label": "tomato",
+      "wikidata_description": "type of plant species with edible, often red, berry fruit",
+      "scientific_name": "Solanum lycopersicum",
+      "aliases": [
+        {
+          "alias": "tomato",
+          "alias_normalized": "tomato",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "garden tomato",
+          "alias_normalized": "garden tomato",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "love apple",
+          "alias_normalized": "love apple",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "tomato plant",
+          "alias_normalized": "tomato plant",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Mnyanya",
+          "alias_normalized": "mnyanya",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Nyanya",
+          "alias_normalized": "nyanya",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Tumatir",
+          "alias_normalized": "tumatir",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Tòmátò",
+          "alias_normalized": "tomato",
+          "language": "yo",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "tomato",
+          "alias_normalized": "tomato",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Utamatisi",
+          "alias_normalized": "utamatisi",
+          "language": "zu",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "tomate",
+          "alias_normalized": "tomate",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Lycopersicum esculentum",
+          "alias_normalized": "lycopersicum esculentum",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Fullred",
+          "alias_normalized": "fullred",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "tomates",
+          "alias_normalized": "tomates",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "plant de tomate",
+          "alias_normalized": "plant de tomate",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "tomateiro",
+          "alias_normalized": "tomateiro",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "tomate",
+          "alias_normalized": "tomate",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "ae80db66-9dac-4f20-9dc1-a00254b50008",
+      "name": "Rice",
+      "slug": "rice",
+      "qid": "Q161426",
+      "wikidata_label": "Oryza molida",
+      "wikidata_description": "species of plant (for the food see Q5090)",
+      "scientific_name": "Oryza sativa",
+      "aliases": [
+        {
+          "alias": "Oryza molida",
+          "alias_normalized": "oryza molida",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Rice",
+          "alias_normalized": "rice",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "paddy",
+          "alias_normalized": "paddy",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Mpunga wa kiasia",
+          "alias_normalized": "mpunga wa kiasia",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Shinkafa",
+          "alias_normalized": "shinkafa",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "osikapa",
+          "alias_normalized": "osikapa",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "oryza sativa",
+          "alias_normalized": "oryza sativa",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Arroz",
+          "alias_normalized": "arroz",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "390b2450-4ce6-45f0-ad43-50bdf32dafa4",
+      "name": "Chicken",
+      "slug": "chicken",
+      "qid": "Q780",
+      "wikidata_label": "chicken",
+      "wikidata_description": "domesticated bird kept by humans primarily as a food source",
+      "scientific_name": "Gallus gallus domesticus",
+      "aliases": [
+        {
+          "alias": "chicken",
+          "alias_normalized": "chicken",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Gallus gallus domesticus",
+          "alias_normalized": "gallus gallus domesticus",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "chickens",
+          "alias_normalized": "chickens",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "vistas",
+          "alias_normalized": "vistas",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Kuku",
+          "alias_normalized": "kuku",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Gallus gallus domesticus",
+          "alias_normalized": "gallus gallus domesticus",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Kaza",
+          "alias_normalized": "kaza",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Gallus gallus domesticus",
+          "alias_normalized": "gallus gallus domesticus",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Adìyẹ",
+          "alias_normalized": "adiye",
+          "language": "yo",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Nne ọkụkọ",
+          "alias_normalized": "nne okuko",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Inkukhu",
+          "alias_normalized": "inkukhu",
+          "language": "zu",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Inkuku",
+          "alias_normalized": "inkuku",
+          "language": "xh",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Gallus gallus domesticus",
+          "alias_normalized": "gallus gallus domesticus",
+          "language": "xh",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "poulet",
+          "alias_normalized": "poulet",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Gallus gallus domesticus",
+          "alias_normalized": "gallus gallus domesticus",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "poule domestique",
+          "alias_normalized": "poule domestique",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "coq domestique",
+          "alias_normalized": "coq domestique",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "poule",
+          "alias_normalized": "poule",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Gallus gallus domesticus",
+          "alias_normalized": "gallus gallus domesticus",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "ff37ab9c-575c-4eb4-8fae-8839a29d99d7",
+      "name": "Beef",
+      "slug": "beef",
+      "qid": "Q192628",
+      "wikidata_label": "beef",
+      "wikidata_description": "meat from cattle",
+      "scientific_name": null,
+      "aliases": [
+        {
+          "alias": "beef",
+          "alias_normalized": "beef",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "bovine meat",
+          "alias_normalized": "bovine meat",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "cow meat",
+          "alias_normalized": "cow meat",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "bull meat",
+          "alias_normalized": "bull meat",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Bos taurus as food",
+          "alias_normalized": "bos taurus as food",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "cattle meat",
+          "alias_normalized": "cattle meat",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "nyama ya ng'ombe",
+          "alias_normalized": "nyama ya ng ombe",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "naman shanu",
+          "alias_normalized": "naman shanu",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "ẹran",
+          "alias_normalized": "eran",
+          "language": "yo",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "viande bovine",
+          "alias_normalized": "viande bovine",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "viande de bœuf",
+          "alias_normalized": "viande de b uf",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "viande de vache",
+          "alias_normalized": "viande de vache",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "viande de taureau",
+          "alias_normalized": "viande de taureau",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "bœuf (viande)",
+          "alias_normalized": "b uf viande",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "carne bovina",
+          "alias_normalized": "carne bovina",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "carne de boi",
+          "alias_normalized": "carne de boi",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "carne de vaca",
+          "alias_normalized": "carne de vaca",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "94ae82df-e882-4806-bed9-3efc4b2c4081",
+      "name": "Spinach",
+      "slug": "spinach",
+      "qid": "Q81464",
+      "wikidata_label": "Spinacia oleracea",
+      "wikidata_description": "species of plant",
+      "scientific_name": "Spinacia oleracea",
+      "aliases": [
+        {
+          "alias": "Spinacia oleracea",
+          "alias_normalized": "spinacia oleracea",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "spinach plant",
+          "alias_normalized": "spinach plant",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "spinach",
+          "alias_normalized": "spinach",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Umkleshe",
+          "alias_normalized": "umkleshe",
+          "language": "zu",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "épinard",
+          "alias_normalized": "epinard",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Épinards",
+          "alias_normalized": "epinards",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Spinacia oleracea",
+          "alias_normalized": "spinacia oleracea",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "épinard frais",
+          "alias_normalized": "epinard frais",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "pousses d'épinard",
+          "alias_normalized": "pousses d epinard",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "espinafre",
+          "alias_normalized": "espinafre",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Spinacia oleracea",
+          "alias_normalized": "spinacia oleracea",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "1262494d-97dc-4fb6-a24a-444007c1b7e4",
+      "name": "Kale",
+      "slug": "kale",
+      "qid": "Q1027176",
+      "wikidata_label": "Kale",
+      "wikidata_description": "district of Malatya, Turkey",
+      "scientific_name": null,
+      "aliases": [
+        {
+          "alias": "Kale",
+          "alias_normalized": "kale",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Kale",
+          "alias_normalized": "kale",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Kale",
+          "alias_normalized": "kale",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "c9ba16b1-e9cd-44ae-8239-a75ae4a34c55",
+      "name": "Collard Greens",
+      "slug": "collard-greens",
+      "qid": "Q146212",
+      "wikidata_label": "Brassica oleracea",
+      "wikidata_description": "species of plant",
+      "scientific_name": "Brassica oleracea",
+      "aliases": [
+        {
+          "alias": "Brassica oleracea",
+          "alias_normalized": "brassica oleracea",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Brassica oleraceae",
+          "alias_normalized": "brassica oleraceae",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "collard greens",
+          "alias_normalized": "collard greens",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "wild cabbage",
+          "alias_normalized": "wild cabbage",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Brassica oleracea",
+          "alias_normalized": "brassica oleracea",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Brassica oleracea",
+          "alias_normalized": "brassica oleracea",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Brassica oleracea",
+          "alias_normalized": "brassica oleracea",
+          "language": "zu",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Brassica olearacea",
+          "alias_normalized": "brassica olearacea",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "chou blanc",
+          "alias_normalized": "chou blanc",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "cabut",
+          "alias_normalized": "cabut",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "chou commun",
+          "alias_normalized": "chou commun",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "chou vert",
+          "alias_normalized": "chou vert",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "couves",
+          "alias_normalized": "couves",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Brassica sylvestris",
+          "alias_normalized": "brassica sylvestris",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "26e204b9-8791-4947-af60-472eb425e3b6",
+      "name": "Habanero",
+      "slug": "habanero",
+      "qid": "Q764375",
+      "wikidata_label": "habanero",
+      "wikidata_description": "strain of pepper (Capsicum)",
+      "scientific_name": "Capsicum chinense ‘Habanero’",
+      "aliases": [
+        {
+          "alias": "habanero",
+          "alias_normalized": "habanero",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Capsicum chinense ‘Habanero’",
+          "alias_normalized": "capsicum chinense habanero",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "habanero chili",
+          "alias_normalized": "habanero chili",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "habanero pepper",
+          "alias_normalized": "habanero pepper",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "piment habanero",
+          "alias_normalized": "piment habanero",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Habanero",
+          "alias_normalized": "habanero",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "a2717e0e-1efa-4d4d-8303-049e63107d30",
+      "name": "Cayenne Pepper",
+      "slug": "cayenne-pepper",
+      "qid": "Q6598",
+      "wikidata_label": "cayenne pepper",
+      "wikidata_description": "hot chili pepper used to flavor dishes",
+      "scientific_name": "Capsicum annuum var. acuminatum",
+      "aliases": [
+        {
+          "alias": "cayenne pepper",
+          "alias_normalized": "cayenne pepper",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Guinea spice",
+          "alias_normalized": "guinea spice",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "cow-horn pepper",
+          "alias_normalized": "cow horn pepper",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "aleva",
+          "alias_normalized": "aleva",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "bird pepper",
+          "alias_normalized": "bird pepper",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "red pepper",
+          "alias_normalized": "red pepper",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Capsicum annuum 'Cayenne'",
+          "alias_normalized": "capsicum annuum cayenne",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "red hot chili pepper",
+          "alias_normalized": "red hot chili pepper",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Capsicum annuum var. acuminatum",
+          "alias_normalized": "capsicum annuum var acuminatum",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "long Cayenne",
+          "alias_normalized": "long cayenne",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "piment de Cayenne",
+          "alias_normalized": "piment de cayenne",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Capsicum annuum 'Cayenne'",
+          "alias_normalized": "capsicum annuum cayenne",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Capsicum annuum var. acuminatum",
+          "alias_normalized": "capsicum annuum var acuminatum",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "piment d'oiseau",
+          "alias_normalized": "piment d oiseau",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "piment rouge",
+          "alias_normalized": "piment rouge",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "pimenta-caiena",
+          "alias_normalized": "pimenta caiena",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "2f8c82ae-b371-42a3-bd09-f50042a3e2b7",
+      "name": "Coconut Milk",
+      "slug": "coconut-milk",
+      "qid": "Q841779",
+      "wikidata_label": "coconut milk",
+      "wikidata_description": "liquid that comes from the grated meat of a coconut",
+      "scientific_name": null,
+      "aliases": [
+        {
+          "alias": "coconut milk",
+          "alias_normalized": "coconut milk",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Madara ta kwakwa",
+          "alias_normalized": "madara ta kwakwa",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Mmiri akị bekee",
+          "alias_normalized": "mmiri aki bekee",
+          "language": "ig",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "lait de coco",
+          "alias_normalized": "lait de coco",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Miti haari",
+          "alias_normalized": "miti haari",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Haari",
+          "alias_normalized": "haari",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "leite de coco",
+          "alias_normalized": "leite de coco",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "ba5c4831-2af0-4406-8612-79cbee764c06",
+      "name": "Vegetable Oil",
+      "slug": "vegetable-oil",
+      "qid": "Q4739805",
+      "wikidata_label": "vegetable oil",
+      "wikidata_description": "oil extracted from seeds, or less often, from other parts of fruits",
+      "scientific_name": null,
+      "aliases": [
+        {
+          "alias": "vegetable oil",
+          "alias_normalized": "vegetable oil",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "plant oils",
+          "alias_normalized": "plant oils",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "plant oil",
+          "alias_normalized": "plant oil",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "man girki",
+          "alias_normalized": "man girki",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Amafutha emifino",
+          "alias_normalized": "amafutha emifino",
+          "language": "zu",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "huile végétale",
+          "alias_normalized": "huile vegetale",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "óleo vegetal",
+          "alias_normalized": "oleo vegetal",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "óleo de plantas",
+          "alias_normalized": "oleo de plantas",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "gorduras vegetais",
+          "alias_normalized": "gorduras vegetais",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "da6ad7c3-006c-4af3-a9e3-f8bf45afbf1c",
+      "name": "Sweet Potato",
+      "slug": "sweet-potato",
+      "qid": "Q37937",
+      "wikidata_label": "sweet potato",
+      "wikidata_description": "species of plant and food",
+      "scientific_name": "Ipomoea batatas",
+      "aliases": [
+        {
+          "alias": "sweet potato",
+          "alias_normalized": "sweet potato",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Kiazi kitamu",
+          "alias_normalized": "kiazi kitamu",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Dankali",
+          "alias_normalized": "dankali",
+          "language": "ha",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "patate douce",
+          "alias_normalized": "patate douce",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Ipomoea batatas",
+          "alias_normalized": "ipomoea batatas",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Ipomea batatas",
+          "alias_normalized": "ipomea batatas",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "patates douces",
+          "alias_normalized": "patates douces",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "camote",
+          "alias_normalized": "camote",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "batata-doce",
+          "alias_normalized": "batata doce",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Batatas-doces",
+          "alias_normalized": "batatas doces",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Ipomoea batatas",
+          "alias_normalized": "ipomoea batatas",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Kunkundukunku",
+          "alias_normalized": "kunkundukunku",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "6ede4282-a061-4d54-b07e-b8fe17e35f4e",
+      "name": "Black-Eyed Peas",
+      "slug": "black-eyed-peas",
+      "qid": "Q134541",
+      "wikidata_label": "Black Eyed Peas",
+      "wikidata_description": "American hip hop group from California",
+      "scientific_name": null,
+      "aliases": [
+        {
+          "alias": "Black Eyed Peas",
+          "alias_normalized": "black eyed peas",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "The Black Eyed Peas",
+          "alias_normalized": "the black eyed peas",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Black Eyed Pods",
+          "alias_normalized": "black eyed pods",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "The Black Eyed Pods",
+          "alias_normalized": "the black eyed pods",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "BEP",
+          "alias_normalized": "bep",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Black Eyed Peas",
+          "alias_normalized": "black eyed peas",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "The Black Eyed Peas",
+          "alias_normalized": "the black eyed peas",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "The Black Eyed Peas",
+          "alias_normalized": "the black eyed peas",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Black Eyed Peas",
+          "alias_normalized": "black eyed peas",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "fa5f338a-587b-42cd-9452-1b7303cb99de",
+      "name": "Lentils",
+      "slug": "lentils",
+      "qid": "Q141224176",
+      "wikidata_label": "Lentils",
+      "wikidata_description": "1984 diploma thesis by Md Lal Mahmud Miah at University of Canterbury",
+      "scientific_name": null,
+      "aliases": [
+        {
+          "alias": "Lentils",
+          "alias_normalized": "lentils",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "111ef4cd-be2c-4313-a40c-d4622a4d2a17",
+      "name": "Chickpeas",
+      "slug": "chickpeas",
+      "qid": "Q81375",
+      "wikidata_label": "cicer arietinum",
+      "wikidata_description": "species of legume plant",
+      "scientific_name": "Cicer arietinum",
+      "aliases": [
+        {
+          "alias": "cicer arietinum",
+          "alias_normalized": "cicer arietinum",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "garbanzo",
+          "alias_normalized": "garbanzo",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "ceci",
+          "alias_normalized": "ceci",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "cece",
+          "alias_normalized": "cece",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "chana",
+          "alias_normalized": "chana",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "chick pea plant",
+          "alias_normalized": "chick pea plant",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "chickpea",
+          "alias_normalized": "chickpea",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "chickpeas",
+          "alias_normalized": "chickpeas",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "chola",
+          "alias_normalized": "chola",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "bengal gram",
+          "alias_normalized": "bengal gram",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "kabuli chana",
+          "alias_normalized": "kabuli chana",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Mnjegere mkubwa",
+          "alias_normalized": "mnjegere mkubwa",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "pois chiche",
+          "alias_normalized": "pois chiche",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "cicer arietinum",
+          "alias_normalized": "cicer arietinum",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "pois chiches",
+          "alias_normalized": "pois chiches",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Grão-de-bico",
+          "alias_normalized": "grao de bico",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Cicer arietinum",
+          "alias_normalized": "cicer arietinum",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Ervilha-de-galinha",
+          "alias_normalized": "ervilha de galinha",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Ervilha-de-bengala",
+          "alias_normalized": "ervilha de bengala",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Gravanço",
+          "alias_normalized": "gravanco",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "Ervanço",
+          "alias_normalized": "ervanco",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "34a2857d-6b5c-4aed-83dc-938e35b0e054",
+      "name": "Prawns",
+      "slug": "prawns",
+      "qid": "Q98862366",
+      "wikidata_label": "poleepkwa",
+      "wikidata_description": "fictional species of extraterrestrials in District 9",
+      "scientific_name": null,
+      "aliases": [
+        {
+          "alias": "poleepkwa",
+          "alias_normalized": "poleepkwa",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "prawn",
+          "alias_normalized": "prawn",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "poleepkwas",
+          "alias_normalized": "poleepkwas",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "prawns",
+          "alias_normalized": "prawns",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    },
+    {
+      "ingredient_id": "e9df1942-36d8-4263-ace2-2bfc1bcef9f7",
+      "name": "eggplant",
+      "slug": "eggplant",
+      "qid": "Q7540",
+      "wikidata_label": "Solanum melongena",
+      "wikidata_description": "species of plant",
+      "scientific_name": "Solanum melongena",
+      "aliases": [
+        {
+          "alias": "eggplant",
+          "alias_normalized": "eggplant",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "eggfruit",
+          "alias_normalized": "eggfruit",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "mad apple",
+          "alias_normalized": "mad apple",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "aubergine",
+          "alias_normalized": "aubergine",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "brinjal",
+          "alias_normalized": "brinjal",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "melongene",
+          "alias_normalized": "melongene",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "guinea squash",
+          "alias_normalized": "guinea squash",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "purple cucumber",
+          "alias_normalized": "purple cucumber",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "white eggplant",
+          "alias_normalized": "white eggplant",
+          "language": "en",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "mbiringani",
+          "alias_normalized": "mbiringani",
+          "language": "sw",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "aubergine",
+          "alias_normalized": "aubergine",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "aubergine violette",
+          "alias_normalized": "aubergine violette",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "aubergine blanche",
+          "alias_normalized": "aubergine blanche",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "aubergine graffiti",
+          "alias_normalized": "aubergine graffiti",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "aubergine longue",
+          "alias_normalized": "aubergine longue",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "aubergine ronde",
+          "alias_normalized": "aubergine ronde",
+          "language": "fr",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.55,
+          "review_status": "proposed"
+        },
+        {
+          "alias": "beringela",
+          "alias_normalized": "beringela",
+          "language": "pt",
+          "country_code": "",
+          "source": "wikidata",
+          "match_confidence": 0.7,
+          "review_status": "proposed"
+        }
+      ],
+      "status": "matched"
+    }
+  ]
+}

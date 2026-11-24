@@ -4,14 +4,14 @@ FROM node:20-slim AS builder
 
 WORKDIR /app
 
-ENV NODE_OPTIONS=--max-old-space-size=4096
+# Prefer IPv4 via Node (npm config "dns-result-order" is invalid on current npm).
+ENV NODE_OPTIONS="--max-old-space-size=4096 --dns-result-order=ipv4first"
 
 COPY package.json package-lock.json ./
 RUN npm config set registry https://registry.npmjs.org \
     && npm config set fetch-retries 5 \
     && npm config set fetch-retry-mintimeout 20000 \
     && npm config set fetch-retry-maxtimeout 120000 \
-    && npm config set dns-result-order ipv4first \
     && npm ci --no-audit --no-fund \
     || npm ci --no-audit --no-fund
 

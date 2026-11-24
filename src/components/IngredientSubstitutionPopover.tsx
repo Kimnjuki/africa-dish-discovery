@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Repeat, Loader2 } from "lucide-react";
+import { Repeat, Loader2, ThumbsUp, ThumbsDown } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { stripIngredientNoise } from "@/lib/substitutionGraph";
 import {
@@ -91,6 +91,34 @@ export const IngredientSubstitutionPopover = ({
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [disambiguation, setDisambiguation] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  /** substitute name → worked | failed */
+  const [feedback, setFeedback] = useState<Record<string, "worked" | "failed">>({});
+
+  const reportFeedback = (
+    substitute: string,
+    verdict: "worked" | "failed" | "accepted",
+    meta?: { confidence?: string; source?: string }
+  ) => {
+    setFeedback((prev) =>
+      verdict === "accepted" ? prev : { ...prev, [substitute]: verdict === "worked" ? "worked" : "failed" }
+    );
+    const payload = {
+      ingredient,
+      substitute,
+      verdict,
+      country,
+      region,
+      dishName,
+      confidence: meta?.confidence,
+      source: meta?.source,
+    };
+    track(EVENTS.SUBSTITUTION_FEEDBACK, payload);
+    if (verdict === "accepted" || verdict === "worked") {
+      track(EVENTS.SUBSTITUTION_ACCEPT, payload);
+    } else if (verdict === "failed") {
+      track(EVENTS.SUBSTITUTION_REJECT, payload);
+    }
+  };
 
   const fetchSubs = async () => {
     if (suggestions.length || loading || disambiguation) return;
@@ -123,7 +151,14 @@ export const IngredientSubstitutionPopover = ({
       }
 
       if (engine.substitutions.length) {
-        setSuggestions(fromEngine(engine.substitutions, marketId));
+        const list = fromEngine(engine.substitutions, marketId);
+        setSuggestions(list);
+        track(EVENTS.SUBSTITUTION_VIEWED, {
+          ingredient,
+          count: list.length,
+          source: "engine",
+          substitutes: list.map((s) => s.name),
+        });
         return;
       }
 
@@ -145,21 +180,27 @@ export const IngredientSubstitutionPopover = ({
           .limit(5);
 
         if (subs && subs.length) {
-          setSuggestions(
-            subs.map((s) => ({
-              name: (s.ingredients as { name?: string } | null)?.name ?? "Unknown",
-              ratio: `${s.quantity_ratio ?? 1}:1`,
-              notes: s.notes || s.reason || "",
-              authenticity: "high" as const,
-              source: "db" as const,
-              verified: true,
-            }))
-          );
+          const list = subs.map((s) => ({
+            name: (s.ingredients as { name?: string } | null)?.name ?? "Unknown",
+            ratio: `${s.quantity_ratio ?? 1}:1`,
+            notes: s.notes || s.reason || "",
+            authenticity: "high" as const,
+            source: "db" as const,
+            verified: true,
+          }));
+          setSuggestions(list);
+          track(EVENTS.SUBSTITUTION_VIEWED, {
+            ingredient,
+            count: list.length,
+            source: "db",
+            substitutes: list.map((s) => s.name),
+          });
           return;
         }
       }
 
       setSuggestions([]);
+      track(EVENTS.SUBSTITUTION_VIEWED, { ingredient, count: 0, source: "none" });
     } catch (e) {
       setError((e as Error).message || "Could not load substitutes");
     } finally {
@@ -233,20 +274,58 @@ export const IngredientSubstitutionPopover = ({
                     {s.warnings.join(" · ")}
                   </p>
                 ) : null}
-                {onSelect && (
+                <div className="mt-2 flex flex-wrap items-center gap-2">
+                  {onSelect && (
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="secondary"
+                      className="h-8"
+                      onClick={() => {
+                        reportFeedback(s.name, "accepted", {
+                          confidence: s.confidence,
+                          source: s.source,
+                        });
+                        onSelect(s.name);
+                        setOpen(false);
+                      }}
+                    >
+                      Use this
+                    </Button>
+                  )}
                   <Button
                     type="button"
                     size="sm"
-                    variant="secondary"
-                    className="mt-2 h-8"
-                    onClick={() => {
-                      onSelect(s.name);
-                      setOpen(false);
-                    }}
+                    variant={feedback[s.name] === "worked" ? "default" : "outline"}
+                    className="h-8 gap-1"
+                    aria-label={`${s.name} worked`}
+                    onClick={() =>
+                      reportFeedback(s.name, "worked", {
+                        confidence: s.confidence,
+                        source: s.source,
+                      })
+                    }
                   >
-                    Use this
+                    <ThumbsUp className="h-3.5 w-3.5" />
+                    Worked
                   </Button>
-                )}
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant={feedback[s.name] === "failed" ? "destructive" : "outline"}
+                    className="h-8 gap-1"
+                    aria-label={`${s.name} did not work`}
+                    onClick={() =>
+                      reportFeedback(s.name, "failed", {
+                        confidence: s.confidence,
+                        source: s.source,
+                      })
+                    }
+                  >
+                    <ThumbsDown className="h-3.5 w-3.5" />
+                    Didn&apos;t work
+                  </Button>
+                </div>
               </li>
             ))}
           </ul>

@@ -1,0 +1,338 @@
+{
+  "generated_at": "2026-11-24T10:02:48.779Z",
+  "recipes": 2103,
+  "ingredient_lines": 16312,
+  "matched_lines": 14007,
+  "unique_join_rows": 14007,
+  "match_rate_lines": 0.8587,
+  "recipes_with_any_match": 2096,
+  "recipes_with_full_line_match": 820,
+  "method_counts": {
+    "contains": 3542,
+    "exact": 10407,
+    "fuzzy": 58
+  },
+  "top_unmatched": [
+    {
+      "text": "Cabbage",
+      "count": 12
+    },
+    {
+      "text": "cabbage",
+      "count": 11
+    },
+    {
+      "text": "vanilla",
+      "count": 11
+    },
+    {
+      "text": "vinegar",
+      "count": 9
+    },
+    {
+      "text": "spices",
+      "count": 9
+    },
+    {
+      "text": "Ice",
+      "count": 8
+    },
+    {
+      "text": "berbere",
+      "count": 8
+    },
+    {
+      "text": "smoked herrings",
+      "count": 7
+    },
+    {
+      "text": "Green chilies",
+      "count": 7
+    },
+    {
+      "text": "1 teaspoon oregano",
+      "count": 7
+    },
+    {
+      "text": "Green chili",
+      "count": 6
+    },
+    {
+      "text": "curry leaves",
+      "count": 6
+    },
+    {
+      "text": "allspice",
+      "count": 6
+    },
+    {
+      "text": "peanut paste",
+      "count": 6
+    },
+    {
+      "text": "Niter Kibbeh",
+      "count": 5
+    },
+    {
+      "text": "1 bouquet garni (see “Bag o' Spices” on page 8)",
+      "count": 5
+    },
+    {
+      "text": "Spices",
+      "count": 5
+    },
+    {
+      "text": "Wooden skewers",
+      "count": 5
+    },
+    {
+      "text": "Dijon mustard",
+      "count": 5
+    },
+    {
+      "text": "egg yolks",
+      "count": 5
+    },
+    {
+      "text": "niter kibbeh",
+      "count": 5
+    },
+    {
+      "text": "white vinegar",
+      "count": 5
+    },
+    {
+      "text": "chilies",
+      "count": 5
+    },
+    {
+      "text": "1 teaspoon Aleppo pepper",
+      "count": 5
+    },
+    {
+      "text": "2 chillies",
+      "count": 4
+    },
+    {
+      "text": "1 egg yolk",
+      "count": 4
+    },
+    {
+      "text": "Bread",
+      "count": 4
+    },
+    {
+      "text": "assorted meats",
+      "count": 4
+    },
+    {
+      "text": "spaghetti",
+      "count": 4
+    },
+    {
+      "text": "cheese",
+      "count": 4
+    },
+    {
+      "text": "Chili flakes",
+      "count": 4
+    },
+    {
+      "text": "Ice cubes",
+      "count": 4
+    },
+    {
+      "text": "Juice of 2 lemons",
+      "count": 4
+    },
+    {
+      "text": "oil for deep frying",
+      "count": 4
+    },
+    {
+      "text": "Seasoning cubes",
+      "count": 4
+    },
+    {
+      "text": "½ teaspoon Aleppo pepper",
+      "count": 4
+    },
+    {
+      "text": "ugba (oil bean)",
+      "count": 3
+    },
+    {
+      "text": "ugba",
+      "count": 3
+    },
+    {
+      "text": "Vanilla",
+      "count": 3
+    },
+    {
+      "text": "2 medium-sized yellow onions",
+      "count": 3
+    },
+    {
+      "text": "Red Wine Vinegar",
+      "count": 3
+    },
+    {
+      "text": "whole fish",
+      "count": 3
+    },
+    {
+      "text": "2 medium sliced onions",
+      "count": 3
+    },
+    {
+      "text": "simple syrup",
+      "count": 3
+    },
+    {
+      "text": "1 meaty ham bone",
+      "count": 3
+    },
+    {
+      "text": "warqa pastry",
+      "count": 3
+    },
+    {
+      "text": "herbs",
+      "count": 3
+    },
+    {
+      "text": "2 yellow onions",
+      "count": 3
+    },
+    {
+      "text": "1 tsp dried oregano",
+      "count": 3
+    },
+    {
+      "text": "ice",
+      "count": 3
+    },
+    {
+      "text": "brick pastry",
+      "count": 3
+    },
+    {
+      "text": "anise",
+      "count": 3
+    },
+    {
+      "text": "1 tablespoon black peppercorns",
+      "count": 3
+    },
+    {
+      "text": "mixed berries",
+      "count": 3
+    },
+    {
+      "text": "bay",
+      "count": 3
+    },
+    {
+      "text": "Niter kibbeh (spiced butter)",
+      "count": 3
+    },
+    {
+      "text": "5 black peppercorns",
+      "count": 3
+    },
+    {
+      "text": "dried herrings",
+      "count": 3
+    },
+    {
+      "text": "Mirin",
+      "count": 3
+    },
+    {
+      "text": "country pepper",
+      "count": 3
+    },
+    {
+      "text": "Tortillas",
+      "count": 3
+    },
+    {
+      "text": "green chilies",
+      "count": 3
+    },
+    {
+      "text": "firm fish",
+      "count": 3
+    },
+    {
+      "text": "fresh chili",
+      "count": 3
+    },
+    {
+      "text": "400ml palm-nut cream",
+      "count": 3
+    },
+    {
+      "text": "Cheese",
+      "count": 3
+    },
+    {
+      "text": "bird's eye chili",
+      "count": 3
+    },
+    {
+      "text": "anise seeds",
+      "count": 2
+    },
+    {
+      "text": "1/2 cabbage",
+      "count": 2
+    },
+    {
+      "text": "flatbread",
+      "count": 2
+    },
+    {
+      "text": "waterleaf",
+      "count": 2
+    },
+    {
+      "text": "1 tsp roasted curry",
+      "count": 2
+    },
+    {
+      "text": "Good quality cooking oil",
+      "count": 2
+    },
+    {
+      "text": "1 teaspoon marjoram",
+      "count": 2
+    },
+    {
+      "text": "Attiéké",
+      "count": 2
+    },
+    {
+      "text": "egg wash",
+      "count": 2
+    },
+    {
+      "text": "green chili",
+      "count": 2
+    },
+    {
+      "text": "5 whole black peppercorns",
+      "count": 2
+    },
+    {
+      "text": "red pepper flakes",
+      "count": 2
+    },
+    {
+      "text": "palm nut cream",
+      "count": 2
+    }
+  ],
+  "apply": false
+}

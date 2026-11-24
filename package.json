@@ -22,6 +22,8 @@
     "prerender": "node scripts/prerender-seo.mjs",
     "preview": "vite preview",
     "seed:ingredients": "node scripts/import-ingredient-graph.mjs",
+    "backfill:recipe-ingredients": "node scripts/backfill-recipe-ingredients.mjs --sql",
+    "wikidata:extract": "node scripts/wikidata-ingredient-extract.mjs",
     "test:schema": "node scripts/validate-recipe-schema.mjs",
     "test:lighthouse": "npx --yes @lhci/cli autorun"
   },

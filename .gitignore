@@ -19,6 +19,10 @@ supabase/.temp/
 docs/lighthouse-*.json
 docs/lh-*.json
 
+# Generated backfill / Wikidata SQL dumps (regenerate via npm scripts)
+output/**/*.sql
+output/backfill_chunks/
+
 # Local cookbook DOCX extracts (images live in Supabase recipe-uploads)
 data/cookbooks/**/unzipped/
 data/cookbooks/**/source.docx

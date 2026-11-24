@@ -1,0 +1,377 @@
+{
+  "project": "LadhaQuest implementation audit",
+  "audit_date": "2026-11-24",
+  "scope": "Compare prior recommendations with publicly observable LadhaQuest product claims and pages",
+  "verification_status": "partial_public_evidence_only",
+  "important_caveat": "Search results show product claims and marketing copy, but the live application could not be rendered for functional testing. Therefore, implementation should be verified through account-level testing, API inspection, database/schema review, and user flows before declaring a feature complete.",
+  "public_evidence": [
+    {
+      "claim": "2,100+ African recipes across 54 countries",
+      "evidence": "Homepage and recipe-index search results",
+      "source": "web:68"
+    },
+    {
+      "claim": "Local ingredient names and substitutions",
+      "evidence": "Homepage and recipe pages reference local ingredient names and substitutions",
+      "source": "web:68"
+    },
+    {
+      "claim": "Meal planning",
+      "evidence": "Homepage and recipe pages reference meal planning",
+      "source": "web:68"
+    },
+    {
+      "claim": "Offline cook mode",
+      "evidence": "Homepage and install page reference offline cook mode",
+      "source": "web:68"
+    },
+    {
+      "claim": "AI-powered pantry system",
+      "evidence": "Homepage references an AI-powered pantry system",
+      "source": "web:68"
+    },
+    {
+      "claim": "Market-aware substitutions",
+      "evidence": "Recipe pages reference market-aware substitutions",
+      "source": "web:70"
+    },
+    {
+      "claim": "AI meal plans and budget optimization",
+      "evidence": "Install page lists unlimited AI meal plans and budget optimization as premium features",
+      "source": "web:71"
+    },
+    {
+      "claim": "Advanced batch substitutions",
+      "evidence": "Install page lists advanced batch substitutions as a premium feature",
+      "source": "web:71"
+    },
+    {
+      "claim": "Household collaboration",
+      "evidence": "Install page lists household collaboration pro tools",
+      "source": "web:71"
+    },
+    {
+      "claim": "Smart pantry matching",
+      "evidence": "About page references ingredient substitutions and smart pantry matching",
+      "source": "web:72"
+    },
+    {
+      "claim": "Creator early access",
+      "evidence": "Install page references early access to creator tools",
+      "source": "web:71"
+    }
+  ],
+  "recommendation_audit": [
+    {
+      "recommendation": "Structured recipe schema and advanced search",
+      "status": "likely_partially_implemented",
+      "public_evidence": "Recipe index supports country, region, meal type, ingredient, diet, time, and difficulty filters; recipe pages exist for country-specific dishes.",
+      "gaps_to_verify": [
+        "Structured recipe JSON-LD",
+        "ingredient-level search",
+        "natural-language search",
+        "search relevance",
+        "recipe completeness",
+        "nutrition and allergen fields"
+      ],
+      "execution_guideline": [
+        "Audit every recipe for required fields: title, slug, country, region, cuisine, meal type, diet tags, allergens, servings, prep/cook/total time, difficulty, equipment, ingredients, steps, nutrition, cost, local names, substitutions, provenance, media, ratings, and related recipes.",
+        "Create a canonical recipe schema and migration plan; reject recipes missing critical fields from premium search and AI planning.",
+        "Implement JSON-LD Recipe structured data on every public recipe page.",
+        "Build PostgreSQL full-text search plus Typesense/Meilisearch for fast filtering and typo tolerance.",
+        "Add ingredient-level search using recipe_ingredients joins and normalized ingredient IDs.",
+        "Add natural-language query parsing for budget, time, diet, country, cuisine, and available ingredients.",
+        "Track search impressions, zero-result rate, click-through rate, and search-to-recipe-view conversion."
+      ]
+    },
+    {
+      "recommendation": "African ingredient graph and local-name extraction",
+      "status": "likely_partially_implemented",
+      "public_evidence": "LadhaQuest publicly claims local ingredient names and substitutions.",
+      "gaps_to_verify": [
+        "Canonical ingredient IDs",
+        "Wikidata QIDs",
+        "multilingual aliases",
+        "country-specific names",
+        "scientific names",
+        "flavor/texture profiles",
+        "provenance",
+        "review workflow"
+      ],
+      "execution_guideline": [
+        "Create canonical ingredients, ingredient_aliases, substitutions, ingredient_availability, and ingredient_sources tables.",
+        "Seed the graph with 1,000 high-frequency African ingredients before expanding.",
+        "Run a Wikidata extraction pipeline using SPARQL for discovery and wbgetentities for labels, aliases, descriptions, and claims.",
+        "Extract names in English, Swahili, Hausa, Yoruba, Igbo, Amharic, Zulu, Xhosa, French, Arabic, and Portuguese.",
+        "Store all Wikidata-derived aliases as review_status='proposed' and confidence below curated records.",
+        "Require culinary editors to approve local names, country mappings, and substitutions.",
+        "Maintain source, license, imported_at, confidence, review_status, reviewer, and last_reviewed on every record.",
+        "Build an admin review queue with approve, reject, edit, merge, and flag-duplicate actions."
+      ]
+    },
+    {
+      "recommendation": "Ingredient substitution engine",
+      "status": "likely_implemented_at_marketing_level",
+      "public_evidence": "LadhaQuest advertises substitutions, market-aware substitutions, and advanced batch substitutions.",
+      "gaps_to_verify": [
+        "Substitution ranking logic",
+        "hard allergen/diet filters",
+        "quantity conversion",
+        "cooking adjustments",
+        "confidence labels",
+        "human review",
+        "feedback loop"
+      ],
+      "execution_guideline": [
+        "Implement retrieval in three layers: curated substitutions, functional equivalents, and semantic candidates.",
+        "Apply hard filters before ranking: allergens, dietary restrictions, safety flags, availability, and cooking-method compatibility.",
+        "Score candidates using curated confidence, flavor similarity, texture similarity, availability, budget fit, dietary compatibility, and user preference.",
+        "Return direct, functional, and emergency substitutions separately so users understand tradeoffs.",
+        "Use the LLM only to explain the selected substitute and adjust quantity, liquid, seasoning, or cook time.",
+        "Pass an allowlist of candidate ingredient IDs to the LLM; never allow it to invent an ingredient ID or final ranking.",
+        "Show confidence, flavor impact, texture impact, cooking adjustments, and warnings in the UI.",
+        "Track acceptance, rejection, recipe completion, and 'this worked / did not work' feedback to improve rankings."
+      ]
+    },
+    {
+      "recommendation": "Meal planner and grocery list",
+      "status": "likely_implemented_at_marketing_level",
+      "public_evidence": "LadhaQuest advertises meal planning, AI meal plans, budget optimization, and household collaboration.",
+      "gaps_to_verify": [
+        "Weekly plan generation",
+        "household size",
+        "budget constraints",
+        "dietary constraints",
+        "pantry integration",
+        "consolidated grocery list",
+        "leftover planning",
+        "offline plan access"
+      ],
+      "execution_guideline": [
+        "Create meal_plans, planned_meals, grocery_lists, grocery_list_items, pantry_items, and household_members tables.",
+        "Let users set household size, days, meals per day, budget, diet, allergies, cuisine preferences, and pantry inventory.",
+        "Generate plans using recipe constraints, nutrition targets, ingredient overlap, seasonal availability, and budget limits.",
+        "Aggregate ingredients across planned meals, normalize units, combine duplicates, and group by supermarket aisle or market section.",
+        "Allow users to mark pantry items as owned and exclude them from the shopping list.",
+        "Support portion scaling, unit conversion, leftovers, and meal swaps.",
+        "Cache generated plans and allow offline access to the active plan."
+      ]
+    },
+    {
+      "recommendation": "AI pantry system",
+      "status": "likely_implemented_at_marketing_level",
+      "public_evidence": "LadhaQuest advertises an AI-powered pantry system and smart pantry matching.",
+      "gaps_to_verify": [
+        "Pantry item ingestion",
+        "barcode scanning",
+        "photo recognition",
+        "expiry tracking",
+        "use-up-ingredients recommendations",
+        "privacy controls"
+      ],
+      "execution_guideline": [
+        "Build pantry_items with ingredient_id, quantity, unit, purchase_date, expiry_date, location, confidence, and source.",
+        "Support manual entry, barcode scan, receipt OCR, and optional photo recognition.",
+        "Use the substitution engine to recommend recipes based on available ingredients.",
+        "Prioritize expiring items and reduce food waste through 'use it up' suggestions.",
+        "Never automatically publish uncertain AI-recognized items; require user confirmation.",
+        "Provide clear privacy controls, deletion, and data-export options."
+      ]
+    },
+    {
+      "recommendation": "Offline mobile experience",
+      "status": "likely_implemented_at_marketing_level",
+      "public_evidence": "LadhaQuest advertises offline cook mode and unlimited offline packs.",
+      "gaps_to_verify": [
+        "Service worker reliability",
+        "offline saved recipes",
+        "offline meal plans",
+        "image caching",
+        "conflict resolution",
+        "storage limits",
+        "low-data mode"
+      ],
+      "execution_guideline": [
+        "Implement a PWA with service-worker caching for app shell, saved recipes, active meal plans, and recently viewed recipes.",
+        "Use IndexedDB for offline recipe and plan storage; use Cache Storage for static assets and selected media.",
+        "Provide explicit offline-pack downloads with storage estimates and deletion controls.",
+        "Compress images, lazy-load media, and offer a low-data image mode.",
+        "Sync saved recipes, pantry changes, and meal-plan edits when connectivity returns.",
+        "Test on low-end Android devices, slow 3G, intermittent connectivity, and background sync."
+      ]
+    },
+    {
+      "recommendation": "Creator economy and community",
+      "status": "early_or_partial",
+      "public_evidence": "Install page mentions early access to creator tools; no broad public evidence of a full creator publishing, moderation, monetization, or community system.",
+      "gaps_to_verify": [
+        "Recipe submission",
+        "moderation",
+        "creator profiles",
+        "followers",
+        "analytics",
+        "payouts",
+        "community reviews",
+        "family-recipe preservation"
+      ],
+      "execution_guideline": [
+        "Build creator profiles with bio, country, specialties, verified badge, recipes, followers, and contact controls.",
+        "Create a recipe submission workflow with draft, review, approved, rejected, and published states.",
+        "Add moderation for copyright, plagiarism, food safety, cultural accuracy, spam, and inappropriate content.",
+        "Require source attribution and permission documentation for family or third-party recipes.",
+        "Add creator analytics: views, saves, completion rate, ratings, follower growth, and revenue.",
+        "Launch monetization through premium classes, affiliate ingredient bundles, brand collaborations, and creator subscriptions.",
+        "Add community reviews, photos, cook notes, regional variants, and family-story preservation."
+      ]
+    },
+    {
+      "recommendation": "Commerce and local supply integrations",
+      "status": "not_publicly_confirmed",
+      "public_evidence": "No clear public evidence of retailer integrations, ingredient bundles, delivery, price comparison, or marketplace checkout.",
+      "gaps_to_verify": [
+        "Retail partnerships",
+        "product catalog",
+        "price freshness",
+        "availability",
+        "checkout",
+        "payments",
+        "delivery",
+        "affiliate disclosure"
+      ],
+      "execution_guideline": [
+        "Start with affiliate links and ingredient bundles rather than building a full marketplace.",
+        "Create products, retailers, offers, prices, availability, and price_history tables.",
+        "Map recipe ingredients to retailer products with confidence and fallback options.",
+        "Show price freshness, retailer name, availability status, and substitution alternatives.",
+        "Integrate local payment methods, including mobile money where available.",
+        "Partner with one retailer or delivery provider per launch market before scaling.",
+        "Clearly disclose affiliate and sponsored placements.",
+        "Measure recipe-to-cart conversion, bundle attach rate, repeat purchase rate, and revenue per active user."
+      ]
+    },
+    {
+      "recommendation": "Nutrition, dietary, and safety layer",
+      "status": "partially_observable",
+      "public_evidence": "Recipe index includes diet filters; nutrition completeness is not publicly confirmed.",
+      "gaps_to_verify": [
+        "Per-serving nutrition",
+        "allergens",
+        "portion assumptions",
+        "health claims",
+        "medical disclaimers",
+        "data-source citations"
+      ],
+      "execution_guideline": [
+        "Store nutrition per 100 g and per serving, with source, confidence, and calculation method.",
+        "Use FAO/national African food-composition tables for local foods and USDA FoodData Central for global baseline coverage.",
+        "Calculate recipe nutrition from ingredient quantities, accounting for yield loss and preparation method where possible.",
+        "Display allergens, dietary tags, and food-safety warnings prominently.",
+        "Avoid medical claims; label nutrition as estimates and link to sources.",
+        "Require dietitian or nutrition-reviewer approval for health-oriented collections."
+      ]
+    },
+    {
+      "recommendation": "Analytics, experimentation, and quality operations",
+      "status": "unknown",
+      "public_evidence": "No public evidence.",
+      "gaps_to_verify": [
+        "Event taxonomy",
+        "funnels",
+        "retention",
+        "content quality",
+        "search quality",
+        "substitution acceptance",
+        "commerce attribution"
+      ],
+      "execution_guideline": [
+        "Implement a consistent event taxonomy: search, recipe_view, save, share, substitution_view, substitution_accept, plan_create, list_create, pantry_update, checkout_start, purchase, and creator_submit.",
+        "Build dashboards for acquisition, activation, engagement, retention, content quality, AI quality, and revenue.",
+        "Run A/B tests on search ranking, recipe-page layout, substitution presentation, meal-plan onboarding, and pricing.",
+        "Set weekly quality reviews for zero-result searches, incorrect substitutions, broken recipes, and user reports.",
+        "Establish an incident process for bad nutrition, allergen, food-safety, or cultural-accuracy errors."
+      ]
+    }
+  ],
+  "priority_execution_plan": {
+    "next_30_days": [
+      "Run a full product audit with real accounts across web and mobile",
+      "Export and audit recipe, ingredient, substitution, pantry, and meal-plan data",
+      "Test substitution flows for 50 high-frequency African ingredients",
+      "Measure search relevance, zero-result rate, recipe completeness, and page performance",
+      "Fix critical data-quality issues and publish missing nutrition/allergen/provenance fields",
+      "Implement substitution confidence, source attribution, and feedback controls",
+      "Add analytics events and quality dashboards"
+    ],
+    "next_90_days": [
+      "Build the African ingredient graph with Wikidata extraction and editorial review",
+      "Complete the substitution engine with hard filters, transparent scoring, and LLM guardrails",
+      "Ship pantry-to-recipe recommendations and use-up-ingredients suggestions",
+      "Improve meal planning with budget, household, diet, and pantry constraints",
+      "Launch creator recipe submission and moderation workflow",
+      "Launch affiliate ingredient links and recipe bundles in one pilot market"
+    ],
+    "next_180_days": [
+      "Add retailer availability, price freshness, and delivery integrations",
+      "Launch voice-first AI cooking assistance in priority languages",
+      "Expand community recipes, family-recipe preservation, and regional variants",
+      "Introduce premium creator courses and monetization",
+      "Scale B2B licensing for restaurants, hotels, schools, and food brands"
+    ]
+  },
+  "kpis": {
+    "content_quality": [
+      "Recipe completeness above 95%",
+      "Verified substitution coverage above 80% for top 1,000 ingredients",
+      "Zero-result search below 5%"
+    ],
+    "engagement": [
+      "Weekly active users",
+      "Save rate above 8%",
+      "Meal-plan creation above 15% of active users",
+      "Return sessions above 2.5 per active user weekly"
+    ],
+    "substitution_quality": [
+      "Substitution acceptance above 60%",
+      "Incorrect-substitution reports below 2%",
+      "Top-3 precision above 80%"
+    ],
+    "commerce": [
+      "Recipe-to-cart above 5%",
+      "Bundle attach rate above 12%",
+      "Repeat purchase above 25%"
+    ],
+    "creator_growth": [
+      "Creator retention above 40% after 90 days",
+      "Community recipe acceptance above 70%"
+    ],
+    "performance": [
+      "Largest Contentful Paint below 2.5 seconds on 3G",
+      "Offline saved-recipe success above 99%"
+    ]
+  },
+  "cursor_ai_implementation": {
+    "instruction": "Use this audit as the implementation backlog for LadhaQuest. First verify existing functionality, then close the highest-risk data and AI-quality gaps before expanding commerce.",
+    "verification_completed_at": "2026-11-24",
+    "verification_artifact": "output/ladhaquest_codebase_verification.json",
+    "product_audit_checklist": "docs/PRODUCT_AUDIT_CHECKLIST.md",
+    "first_tasks": [
+      "Create a product audit checklist and test all advertised features with real user accounts",
+      "Inspect current database schema and generate an entity-relationship diagram",
+      "Audit recipe completeness and create a data-quality score for every recipe",
+      "Implement ingredient_aliases with Wikidata QIDs, language, country, source, confidence, and review status",
+      "Build the Wikidata extraction pipeline with SPARQL discovery and wbgetentities detail extraction",
+      "Implement substitution retrieval, hard filtering, scoring, explanation, and feedback events",
+      "Implement meal planner, grocery-list consolidation, pantry matching, and offline sync",
+      "Add recipe JSON-LD, SEO landing pages, Core Web Vitals monitoring, and structured analytics",
+      "Create creator submission, moderation, attribution, and analytics workflows",
+      "Build an admin data-quality dashboard for aliases, substitutions, nutrition, availability, and user reports"
+    ],
+    "recommended_build_order_after_verification": [
+      "Backfill recipe_ingredients from recipes.ingredients JSON",
+      "Wire substitution accept/reject feedback + SUBSTITUTION_FEEDBACK analytics",
+      "Expand curated substitution seed (target 200+ verified edges)",
+      "Add wikidata_qid + SPARQL/wbgetentities pipeline with review_status=proposed",
+      "Run manual product audit checklist on web and PWA"
+    ]
+  }
+}

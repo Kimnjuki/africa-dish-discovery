@@ -1,0 +1,198 @@
+{
+  "project": "LadhaQuest",
+  "verification_date": "2026-11-24",
+  "execution_pass": {
+    "completed_at": "2026-11-24",
+    "recipe_ingredients_backfilled": 14007,
+    "match_rate_lines": 0.859,
+    "staples_seeded": true,
+    "substitution_edges_client": 60,
+    "substitution_edges_db_verified": 74,
+    "wikidata_qid_column": true,
+    "wikidata_priority_extract": 50,
+    "substitution_feedback_ui": true,
+    "scripts": [
+      "scripts/backfill-recipe-ingredients.mjs",
+      "scripts/wikidata-ingredient-extract.mjs",
+      "supabase/functions/backfill-recipe-ingredients/index.ts"
+    ]
+  },
+  "sources": [
+    "output/ladhaquest_implementation_audit.json",
+    "docs/AUDIT.md (2026-11-20, partially stale)",
+    "repo codebase inspection",
+    "live anon Supabase REST counts against qfctezxqcomhrasrsvjg",
+    "npm test:substitutions / test:alias / test:offline / test:schema"
+  ],
+  "bottom_line": "Public marketing claims are largely backed by real product surfaces and substantial client/engine code. The competitive risk remains data depth and operational quality: recipe_ingredients is empty, substitution coverage is ~42 curated edges, aliases are thin (110), Wikidata QIDs are absent, creator_profiles is empty, and substitution feedback analytics are defined but not wired in the UI.",
+  "live_counts": {
+    "recipes": 2103,
+    "recipes_africa": 1477,
+    "ingredients": 586,
+    "ingredient_aliases": 110,
+    "ingredient_substitutions": 42,
+    "ingredient_substitutions_verified": 42,
+    "ingredient_availability": 228,
+    "recipe_ingredients": 0,
+    "creator_profiles": 0,
+    "ai_audit_log": 0,
+    "recipe_reviews_anon_visible": 0,
+    "scientific_name_populated": 0,
+    "aliases_with_country_code": 58,
+    "aliases_swahili": 15,
+    "recipes_with_calories": 972,
+    "recipes_with_created_by": 0
+  },
+  "unit_tests": {
+    "test:substitutions": "24/24 pass",
+    "test:alias": "30/30 pass",
+    "test:offline": "3/3 pass",
+    "test:schema": "25/25 pass"
+  },
+  "recommendation_vs_code_vs_data": [
+    {
+      "recommendation": "African recipe library",
+      "public_status": "Implemented",
+      "code_status": "shipped",
+      "data_status": "2103 recipes; 1477 Africa; JSON ingredients/steps on every row",
+      "assessment": "Catalog is real. Relational ingredient joins and creator attribution are not."
+    },
+    {
+      "recommendation": "Local ingredient names",
+      "public_status": "Likely implemented",
+      "code_status": "shipped_partial",
+      "data_status": "110 aliases in Postgres; parallel client alias maps still exist; no Wikidata QIDs",
+      "assessment": "UI and alias resolver exist. Governed multilingual dataset is early (110 aliases, 15 Swahili)."
+    },
+    {
+      "recommendation": "Ingredient substitutions",
+      "public_status": "Likely implemented",
+      "code_status": "shipped_v0",
+      "data_status": "42 verified DB edges + ~36 client graph edges; LLM invent disabled",
+      "assessment": "Architecture matches the audit (curated retrieval, hard filters, scoring, no invent). Coverage and feedback loop are the gaps—not the feature label."
+    },
+    {
+      "recommendation": "Meal planning",
+      "public_status": "Likely implemented",
+      "code_status": "shipped_ui",
+      "data_status": "meal_plans table exists; anon-visible rows 0 (user-scoped RLS expected)",
+      "assessment": "Planner UI, AI generator, budget tracker, grocery merge exist. Live usefulness still needs account-level testing."
+    },
+    {
+      "recommendation": "Offline cook mode",
+      "public_status": "Likely implemented",
+      "code_status": "shipped_partial",
+      "data_status": "PWA + offline recipes page + offlineStore helpers; limited automated coverage",
+      "assessment": "Present. Reliability on low-end Android / intermittent 3G unverified in this pass."
+    },
+    {
+      "recommendation": "AI pantry system",
+      "public_status": "Likely implemented",
+      "code_status": "shipped_ui",
+      "data_status": "pantry_items user-scoped; barcode/voice/expiry components present",
+      "assessment": "Feature surface exists. Recognition confirmation, privacy export, and pantry→recipe ranking quality need account audit."
+    },
+    {
+      "recommendation": "Budget-aware planning",
+      "public_status": "Likely implemented",
+      "code_status": "shipped_partial",
+      "data_status": "Hardcoded localMarket prices; 228 availability rows not driving planner pricing",
+      "assessment": "Budget UI exists; price freshness and availability-backed planning are not operationalized."
+    },
+    {
+      "recommendation": "Household collaboration",
+      "public_status": "Likely implemented",
+      "code_status": "shipped_ui",
+      "data_status": "household migrations present; needs account testing",
+      "assessment": "Code path exists; collaboration reliability unverified."
+    },
+    {
+      "recommendation": "Creator economy",
+      "public_status": "Early/partial",
+      "code_status": "phase2_v1_shipped",
+      "data_status": "creator_profiles 0; created_by 0; submit/studio/editorial routes exist",
+      "assessment": "Workflow code is ahead of content. No published creators yet."
+    },
+    {
+      "recommendation": "Commerce and retailer integrations",
+      "public_status": "Not publicly confirmed",
+      "code_status": "link_out_only",
+      "data_status": "Jumia/Glovo/WhatsApp/M-Pesa deep links; no catalog/checkout",
+      "assessment": "Matches audit. Affiliate bundles still the right next commerce step."
+    },
+    {
+      "recommendation": "Nutrition and safety layer",
+      "public_status": "Partially observable",
+      "code_status": "partial",
+      "data_status": "972/2103 calories; diet tags sparse; allergen fields on ingredients schema; composition sources weak",
+      "assessment": "Filters and badges exist. Completeness and source-backed nutrition remain below KPI (95%)."
+    },
+    {
+      "recommendation": "Analytics and quality operations",
+      "public_status": "Unknown",
+      "code_status": "events_defined_partially_wired",
+      "data_status": "search/recipe_view/save/plan/list/cook/creator/sub_request wired; SUBSTITUTION_FEEDBACK defined but unused; no dashboard",
+      "assessment": "Instrumentation started. Acceptance/incorrect-sub KPIs cannot be measured yet."
+    }
+  ],
+  "highest_risk_gaps": [
+    {
+      "id": "G1",
+      "gap": "recipe_ingredients has 0 rows — recipes still depend on JSON blobs",
+      "blocks": ["ingredient-level search", "pantry matching on IDs", "grocery aggregation accuracy", "substitution coverage measurement"]
+    },
+    {
+      "id": "G2",
+      "gap": "Substitution coverage too thin (~42 verified edges vs KPI 80% of top 1000)",
+      "blocks": ["substitution acceptance KPI", "market-aware reliability"]
+    },
+    {
+      "id": "G3",
+      "gap": "No Wikidata QID column or SPARQL/wbgetentities pipeline",
+      "blocks": ["governed multilingual aliases", "scientific names", "editorial proposed→approved workflow at scale"]
+    },
+    {
+      "id": "G4",
+      "gap": "Dual source of truth: client TypeScript graphs + Postgres seed",
+      "blocks": ["consistent rankings", "editorial governance", "edge-function parity"]
+    },
+    {
+      "id": "G5",
+      "gap": "Substitution feedback event unused; no accept/reject UI loop",
+      "blocks": ["acceptance >60%", "incorrect reports <2%"]
+    },
+    {
+      "id": "G6",
+      "gap": "Creator profiles empty; recipe created_by unused",
+      "blocks": ["creator retention KPI", "attribution, Person JSON-LD at scale"]
+    }
+  ],
+  "stale_docs_note": "docs/AUDIT.md still contains sections claiming LLM invent mode and missing tables. Those sections are outdated relative to current code and live DB (schema+seed applied; suggest-substitutions invent disabled). Prefer this verification file + live counts for Sprint decisions.",
+  "next_executable_tasks": [
+    {
+      "priority": 1,
+      "task": "Backfill recipe_ingredients from recipes.ingredients JSON onto canonical ingredient IDs",
+      "why": "Unblocks relational search, pantry, grocery, and coverage metrics"
+    },
+    {
+      "priority": 2,
+      "task": "Wire substitution accept/reject feedback UI + SUBSTITUTION_FEEDBACK analytics",
+      "why": "Enables substitution quality KPIs without waiting for more data"
+    },
+    {
+      "priority": 3,
+      "task": "Expand curated substitution seed toward top-frequency African ingredients (target 200+ verified edges)",
+      "why": "Closes the advertised-vs-usable gap on the highest-risk differentiator"
+    },
+    {
+      "priority": 4,
+      "task": "Add wikidata_qid + Wikidata SPARQL/wbgetentities extraction with review_status=proposed",
+      "why": "Starts the governed African ingredient graph from the audit 90-day plan"
+    },
+    {
+      "priority": 5,
+      "task": "Account-level product audit checklist on web/mobile (manual)",
+      "why": "Confirms meal plan, offline, pantry, household reliability beyond unit tests"
+    }
+  ]
+}
