@@ -39,9 +39,20 @@ benchmarks/pantry/
 
 ```bash
 npm run bench:pantry:freeze     # snapshot versions from live DB
-npm run bench:pantry            # offline eval on development + safety
+npm run bench:pantry:cases      # regenerate development/validation/safety/heldout
+npm run test:pantry-cookability # unit gates for false-ready killers
+npm run bench:pantry            # offline eval (includes heldout)
 npm run bench:pantry:report     # print latest report summary
 ```
+
+## Production improvements wired to the product
+
+- **Ready** = zero essential missing (+ quantity check when both sides known)
+- Allergy / equipment / time hard filters (`src/lib/pantryConstraints.ts`)
+- Cook now vs Shop first UI modes on pantry matches
+- LLM cannot promote a local non-ready dish to Ready
+- Weak token matches blocked (`oil` ≠ `palm oil`, paprika ≠ pap)
+- Prep-state guard (flour ≠ whole grain; fresh ≠ stockfish)
 
 ## Launch gates (provisional)
 

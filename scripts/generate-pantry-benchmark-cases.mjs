@@ -1118,6 +1118,89 @@ while (development.length > 50 && validation.length < 15) {
   validation.push(c);
 }
 
+// Seed held-out from remaining development (never used for threshold tuning)
+while (development.length > 40 && heldout.length < 12) {
+  const c = development.pop();
+  c.split = "heldout";
+  c.id = `${c.id}-heldout`;
+  heldout.push(c);
+}
+
+// Extra held-out editor cases (fresh IDs)
+heldout.push(
+  caseOf({
+    id: "held-001-fonio-diaspora",
+    split: "heldout",
+    market: "diaspora-us",
+    mode: "cook_now",
+    tags: ["heldout", "grain"],
+    pantry: pantry(["fonio", "onion", "tomato", "oil", "salt", "garlic"]),
+    candidates: [
+      recipe("r-fonio-pilaf", "Fonio Pilaf", "Mali", ["fonio", "onion", "tomato", "oil", "salt", "garlic"]),
+      recipe("r-couscous", "Couscous Bowl", "Morocco", ["couscous", "onion", "oil", "salt"]),
+    ],
+    gold: {
+      relevance: { "r-fonio-pilaf": 3, "r-couscous": 0 },
+      ready_recipe_ids: ["r-fonio-pilaf"],
+      essential_missing_by_recipe: { "r-couscous": ["couscous"] },
+    },
+  }),
+  caseOf({
+    id: "held-002-allergy-shellfish",
+    split: "heldout",
+    market: "ng",
+    mode: "cook_now",
+    tags: ["heldout", "allergy"],
+    pantry: pantry(["crayfish", "palm oil", "onion", "pepper", "salt", "ugu"]),
+    constraints: { allergies: ["shellfish"], diets: [], equipment: ["stove"] },
+    candidates: [
+      recipe(
+        "r-ugu-crayfish",
+        "Ugwu with Crayfish",
+        "Nigeria",
+        ["ugwu", "crayfish", "palm oil", "onion", "pepper", "salt"],
+        { allergens: ["shellfish"] }
+      ),
+      recipe("r-ugu-plain", "Ugwu Stew", "Nigeria", ["ugwu", "palm oil", "onion", "pepper", "salt"]),
+    ],
+    gold: {
+      relevance: { "r-ugu-crayfish": 0, "r-ugu-plain": 3 },
+      critical_safety_ids: ["r-ugu-crayfish"],
+      ready_recipe_ids: ["r-ugu-plain"],
+    },
+  }),
+  caseOf({
+    id: "held-003-quantity-unknown-rice",
+    split: "heldout",
+    market: "gh",
+    mode: "cook_now",
+    tags: ["heldout", "quantity-unknown"],
+    pantry: pantry([
+      { name: "rice", quantity_known: false },
+      { name: "onion" },
+      { name: "tomato" },
+      { name: "oil" },
+      { name: "salt" },
+      { name: "stock cube" },
+    ]),
+    candidates: [
+      recipe("r-jollof", "Jollof", "Ghana", [
+        { name: "rice", quantity: 3, unit: "cups" },
+        { name: "onion", quantity: 1, unit: "piece" },
+        { name: "tomato", quantity: 4, unit: "piece" },
+        { name: "oil", quantity: 3, unit: "tbsp" },
+        { name: "salt", quantity: 1, unit: "tsp" },
+        { name: "stock cube", quantity: 1, unit: "piece" },
+      ]),
+    ],
+    gold: {
+      relevance: { "r-jollof": 1 },
+      ready_recipe_ids: [],
+      notes: "Unknown rice quantity → not ready",
+    },
+  })
+);
+
 function writeJsonl(name, rows) {
   const path = resolve(outDir, name);
   writeFileSync(path, rows.map((r) => JSON.stringify(r)).join("\n") + "\n");

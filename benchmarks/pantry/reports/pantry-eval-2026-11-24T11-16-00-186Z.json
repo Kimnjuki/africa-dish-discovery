@@ -1,0 +1,547 @@
+{
+  "run_id": "pantry-eval-2026-11-24T11-16-00-186Z",
+  "benchmark_version": "1.0.0",
+  "catalog_version": "catalog-2026-11-24-3cbc0793",
+  "ingredient_graph_version": "graph-2026-11-24-3cbc0793",
+  "system_version": "3cbc0793d2e23e6c570e1558abea7955ecb79867",
+  "model_version": null,
+  "prompt_version": null,
+  "splits": [
+    "development",
+    "safety",
+    "validation"
+  ],
+  "case_count": 90,
+  "mode_note": "cook_now relevance≥2; shop_first relevance≥1",
+  "systems": [
+    {
+      "system": "random_baseline",
+      "cases": 90,
+      "metrics": {
+        "precision_at_5": 0.5182291666666666,
+        "ndcg_at_5": 0.8420070592839402,
+        "false_ready_rate": 0,
+        "false_ready_count": 0,
+        "ready_labeled_count": 0,
+        "essential_missing_ingredient_recall": 1,
+        "essential_missing_ingredient_precision": 1,
+        "critical_constraint_violations": 0,
+        "resolution_proxy_accuracy": 1,
+        "p95_latency_ms": 0,
+        "mean_latency_ms": 0,
+        "mean_cost_per_request": 0
+      },
+      "failure_sample": [],
+      "failure_count": 0
+    },
+    {
+      "system": "overlap_baseline",
+      "cases": 90,
+      "metrics": {
+        "precision_at_5": 0.5182291666666666,
+        "ndcg_at_5": 0.8951504981737095,
+        "false_ready_rate": 0.3898305084745763,
+        "false_ready_count": 23,
+        "ready_labeled_count": 59,
+        "essential_missing_ingredient_recall": 0.9746835443037974,
+        "essential_missing_ingredient_precision": 0.9810126582278481,
+        "critical_constraint_violations": 21,
+        "resolution_proxy_accuracy": 1,
+        "p95_latency_ms": 8.466700000000003,
+        "mean_latency_ms": 3.6749233333333335,
+        "mean_cost_per_request": 0
+      },
+      "failure_sample": [
+        {
+          "case_id": "safe-001-peanut-allergy",
+          "recipe_id": "r-mafe",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "safe-001-peanut-allergy",
+          "recipe_id": "r-mafe",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "safe-002-blender-required",
+          "recipe_id": "r-ata-din-din",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "safe-003-time-budget",
+          "recipe_id": "r-bean-stew",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-003",
+          "recipe_id": "r-ke-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-003",
+          "recipe_id": "r-ke-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-006",
+          "recipe_id": "r-ke-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-006",
+          "recipe_id": "r-ke-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-009",
+          "recipe_id": "r-ke-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-009",
+          "recipe_id": "r-ke-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-012",
+          "recipe_id": "r-ke-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-012",
+          "recipe_id": "r-ke-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-015",
+          "recipe_id": "r-ng-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-015",
+          "recipe_id": "r-ng-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-018",
+          "recipe_id": "r-ng-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-018",
+          "recipe_id": "r-ng-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-021",
+          "recipe_id": "r-ng-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-021",
+          "recipe_id": "r-ng-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-024",
+          "recipe_id": "r-ng-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-024",
+          "recipe_id": "r-ng-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-027",
+          "recipe_id": "r-gh-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-027",
+          "recipe_id": "r-gh-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-030",
+          "recipe_id": "r-gh-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-030",
+          "recipe_id": "r-gh-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-033",
+          "recipe_id": "r-gh-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-033",
+          "recipe_id": "r-gh-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-036",
+          "recipe_id": "r-gh-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-036",
+          "recipe_id": "r-gh-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-039",
+          "recipe_id": "r-za-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-039",
+          "recipe_id": "r-za-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-042",
+          "recipe_id": "r-za-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-042",
+          "recipe_id": "r-za-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-045",
+          "recipe_id": "r-za-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-045",
+          "recipe_id": "r-za-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-048",
+          "recipe_id": "r-za-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-048",
+          "recipe_id": "r-za-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "diaspora-us-gen-051",
+          "recipe_id": "r-diaspora-us-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "diaspora-us-gen-051",
+          "recipe_id": "r-diaspora-us-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "diaspora-us-gen-054",
+          "recipe_id": "r-diaspora-us-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "diaspora-us-gen-054",
+          "recipe_id": "r-diaspora-us-5-hard",
+          "type": "production_soft_false_ready"
+        }
+      ],
+      "failure_count": 44
+    },
+    {
+      "system": "quantity_aware_baseline",
+      "cases": 90,
+      "metrics": {
+        "precision_at_5": 0.5182291666666666,
+        "ndcg_at_5": 0.8951504981737095,
+        "false_ready_rate": 0.3898305084745763,
+        "false_ready_count": 23,
+        "ready_labeled_count": 59,
+        "essential_missing_ingredient_recall": 0.9746835443037974,
+        "essential_missing_ingredient_precision": 0.9810126582278481,
+        "critical_constraint_violations": 21,
+        "resolution_proxy_accuracy": 1,
+        "p95_latency_ms": 7.106599999999958,
+        "mean_latency_ms": 3.2606855555555603,
+        "mean_cost_per_request": 0
+      },
+      "failure_sample": [
+        {
+          "case_id": "safe-001-peanut-allergy",
+          "recipe_id": "r-mafe",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "safe-001-peanut-allergy",
+          "recipe_id": "r-mafe",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "safe-002-blender-required",
+          "recipe_id": "r-ata-din-din",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "safe-003-time-budget",
+          "recipe_id": "r-bean-stew",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-003",
+          "recipe_id": "r-ke-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-003",
+          "recipe_id": "r-ke-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-006",
+          "recipe_id": "r-ke-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-006",
+          "recipe_id": "r-ke-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-009",
+          "recipe_id": "r-ke-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-009",
+          "recipe_id": "r-ke-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-012",
+          "recipe_id": "r-ke-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-012",
+          "recipe_id": "r-ke-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-015",
+          "recipe_id": "r-ng-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-015",
+          "recipe_id": "r-ng-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-018",
+          "recipe_id": "r-ng-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-018",
+          "recipe_id": "r-ng-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-021",
+          "recipe_id": "r-ng-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-021",
+          "recipe_id": "r-ng-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-024",
+          "recipe_id": "r-ng-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-024",
+          "recipe_id": "r-ng-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-027",
+          "recipe_id": "r-gh-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-027",
+          "recipe_id": "r-gh-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-030",
+          "recipe_id": "r-gh-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-030",
+          "recipe_id": "r-gh-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-033",
+          "recipe_id": "r-gh-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-033",
+          "recipe_id": "r-gh-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-036",
+          "recipe_id": "r-gh-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-036",
+          "recipe_id": "r-gh-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-039",
+          "recipe_id": "r-za-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-039",
+          "recipe_id": "r-za-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-042",
+          "recipe_id": "r-za-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-042",
+          "recipe_id": "r-za-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-045",
+          "recipe_id": "r-za-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-045",
+          "recipe_id": "r-za-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-048",
+          "recipe_id": "r-za-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-048",
+          "recipe_id": "r-za-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "diaspora-us-gen-051",
+          "recipe_id": "r-diaspora-us-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "diaspora-us-gen-051",
+          "recipe_id": "r-diaspora-us-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "diaspora-us-gen-054",
+          "recipe_id": "r-diaspora-us-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "diaspora-us-gen-054",
+          "recipe_id": "r-diaspora-us-5-hard",
+          "type": "production_soft_false_ready"
+        }
+      ],
+      "failure_count": 44
+    },
+    {
+      "system": "production_matcher",
+      "cases": 90,
+      "metrics": {
+        "precision_at_5": 0.5338541666666666,
+        "ndcg_at_5": 0.9916120398538968,
+        "false_ready_rate": 0,
+        "false_ready_count": 0,
+        "ready_labeled_count": 36,
+        "essential_missing_ingredient_recall": 0.9746835443037974,
+        "essential_missing_ingredient_precision": 0.9810126582278481,
+        "critical_constraint_violations": 0,
+        "resolution_proxy_accuracy": 1,
+        "p95_latency_ms": 8.069600000000037,
+        "mean_latency_ms": 3.405024444444454,
+        "mean_cost_per_request": 0
+      },
+      "failure_sample": [],
+      "failure_count": 0
+    }
+  ],
+  "gates": {
+    "critical_safety": {
+      "pass": true,
+      "detail": [
+        {
+          "system": "random_baseline",
+          "violations": 0
+        },
+        {
+          "system": "overlap_baseline",
+          "violations": 21
+        },
+        {
+          "system": "quantity_aware_baseline",
+          "violations": 21
+        },
+        {
+          "system": "production_matcher",
+          "violations": 0
+        }
+      ]
+    },
+    "false_ready_rate_lt_2pct": {
+      "pass": true,
+      "detail": [
+        {
+          "system": "random_baseline",
+          "rate": 0
+        },
+        {
+          "system": "overlap_baseline",
+          "rate": 0.3898305084745763
+        },
+        {
+          "system": "quantity_aware_baseline",
+          "rate": 0.3898305084745763
+        },
+        {
+          "system": "production_matcher",
+          "rate": 0
+        }
+      ]
+    },
+    "beats_overlap_ndcg": {
+      "pass": true
+    }
+  }
+}

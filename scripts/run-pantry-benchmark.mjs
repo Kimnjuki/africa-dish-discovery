@@ -17,6 +17,7 @@ import { runCase as runOverlap } from "../benchmarks/pantry/runners/overlap.mjs"
 import { runCase as runQuantity } from "../benchmarks/pantry/runners/quantity_aware.mjs";
 import { runCase as runProduction } from "../benchmarks/pantry/runners/production.mjs";
 import { runCase as runRandom } from "../benchmarks/pantry/runners/random.mjs";
+import { runCase as runGraphOffline } from "../benchmarks/pantry/runners/graph_offline.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, "..");
@@ -24,7 +25,7 @@ const benchRoot = resolve(root, "benchmarks/pantry");
 
 const splitArg = (() => {
   const i = process.argv.indexOf("--split");
-  return i >= 0 ? process.argv[i + 1] : "development,safety,validation";
+  return i >= 0 ? process.argv[i + 1] : "development,safety,validation,heldout";
 })();
 const splits = splitArg.split(",").map((s) => s.trim()).filter(Boolean);
 
@@ -111,9 +112,10 @@ function evaluateSystem(systemName, runFn, cases) {
       }
     }
 
-    // Production soft-ready false ready vs gold cook_now
+    // Soft-ready false ready vs gold cook_now (skip constraint-blocked preds)
     if (mode === "cook_now") {
       for (const pred of result.predictions || []) {
+        if (pred.blocked) continue;
         if (pred.productionCanMakeNow && (pred.goldRelevance ?? 0) < 2) {
           failures.push({
             case_id: c.id,
@@ -182,6 +184,7 @@ const systems = [
   ["random_baseline", runRandom],
   ["overlap_baseline", runOverlap],
   ["quantity_aware_baseline", runQuantity],
+  ["graph_offline", runGraphOffline],
   ["production_matcher", runProduction],
 ];
 

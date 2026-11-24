@@ -1,25 +1,26 @@
 {
-  "run_id": "pantry-eval-2026-11-24T11-12-52-549Z",
+  "run_id": "pantry-eval-2026-11-24T11-23-47-070Z",
   "benchmark_version": "1.0.0",
-  "catalog_version": "catalog-2026-11-24-8bbfe38a",
-  "ingredient_graph_version": "graph-2026-11-24-8bbfe38a",
-  "system_version": "8bbfe38a6a8d39d4020ddd7a58b8fd3177462ded",
+  "catalog_version": "catalog-2026-11-24-3cbc0793",
+  "ingredient_graph_version": "graph-2026-11-24-3cbc0793",
+  "system_version": "3cbc0793d2e23e6c570e1558abea7955ecb79867",
   "model_version": null,
   "prompt_version": null,
   "splits": [
     "development",
     "safety",
-    "validation"
+    "validation",
+    "heldout"
   ],
-  "case_count": 90,
+  "case_count": 93,
   "mode_note": "cook_now relevance≥2; shop_first relevance≥1",
   "systems": [
     {
       "system": "random_baseline",
-      "cases": 90,
+      "cases": 93,
       "metrics": {
-        "precision_at_5": 0.5182291666666666,
-        "ndcg_at_5": 0.8196260056118494,
+        "precision_at_5": 0.5176767676767676,
+        "ndcg_at_5": 0.83506495612178,
         "false_ready_rate": 0,
         "false_ready_count": 0,
         "ready_labeled_count": 0,
@@ -36,19 +37,19 @@
     },
     {
       "system": "overlap_baseline",
-      "cases": 90,
+      "cases": 93,
       "metrics": {
-        "precision_at_5": 0.5182291666666666,
-        "ndcg_at_5": 0.8951504981737095,
-        "false_ready_rate": 0.3898305084745763,
-        "false_ready_count": 23,
-        "ready_labeled_count": 59,
-        "essential_missing_ingredient_recall": 0.9746835443037974,
-        "essential_missing_ingredient_precision": 0.9810126582278481,
-        "critical_constraint_violations": 21,
+        "precision_at_5": 0.5176767676767676,
+        "ndcg_at_5": 0.8945513581632735,
+        "false_ready_rate": 0.3968253968253968,
+        "false_ready_count": 25,
+        "ready_labeled_count": 63,
+        "essential_missing_ingredient_recall": 0.975,
+        "essential_missing_ingredient_precision": 0.98125,
+        "critical_constraint_violations": 22,
         "resolution_proxy_accuracy": 1,
-        "p95_latency_ms": 8.053700000000049,
-        "mean_latency_ms": 3.4338322222222226,
+        "p95_latency_ms": 11.846100000000035,
+        "mean_latency_ms": 4.652416129032255,
         "mean_cost_per_request": 0
       },
       "failure_sample": [
@@ -253,23 +254,23 @@
           "type": "production_soft_false_ready"
         }
       ],
-      "failure_count": 44
+      "failure_count": 46
     },
     {
       "system": "quantity_aware_baseline",
-      "cases": 90,
+      "cases": 93,
       "metrics": {
-        "precision_at_5": 0.5182291666666666,
-        "ndcg_at_5": 0.8951504981737095,
-        "false_ready_rate": 0.3898305084745763,
-        "false_ready_count": 23,
-        "ready_labeled_count": 59,
-        "essential_missing_ingredient_recall": 0.9746835443037974,
-        "essential_missing_ingredient_precision": 0.9810126582278481,
-        "critical_constraint_violations": 21,
+        "precision_at_5": 0.5176767676767676,
+        "ndcg_at_5": 0.8945513581632735,
+        "false_ready_rate": 0.3870967741935484,
+        "false_ready_count": 24,
+        "ready_labeled_count": 62,
+        "essential_missing_ingredient_recall": 0.975,
+        "essential_missing_ingredient_precision": 0.98125,
+        "critical_constraint_violations": 22,
         "resolution_proxy_accuracy": 1,
-        "p95_latency_ms": 8.276099999999929,
-        "mean_latency_ms": 3.148167777777777,
+        "p95_latency_ms": 8.89269999999999,
+        "mean_latency_ms": 3.9487741935483784,
         "mean_cost_per_request": 0
       },
       "failure_sample": [
@@ -474,23 +475,59 @@
           "type": "production_soft_false_ready"
         }
       ],
-      "failure_count": 44
+      "failure_count": 46
+    },
+    {
+      "system": "graph_offline",
+      "cases": 93,
+      "metrics": {
+        "precision_at_5": 0.5176767676767676,
+        "ndcg_at_5": 0.9797214150313986,
+        "false_ready_rate": 0.08108108108108109,
+        "false_ready_count": 3,
+        "ready_labeled_count": 37,
+        "essential_missing_ingredient_recall": 0.9875,
+        "essential_missing_ingredient_precision": 0.9510416666666666,
+        "critical_constraint_violations": 0,
+        "resolution_proxy_accuracy": 1,
+        "p95_latency_ms": 2.638500000000022,
+        "mean_latency_ms": 1.0562043010752526,
+        "mean_cost_per_request": 0
+      },
+      "failure_sample": [
+        {
+          "case_id": "safe-002-blender-required",
+          "recipe_id": "r-ata-din-din",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "safe-003-time-budget",
+          "recipe_id": "r-bean-stew",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-003-quantity-unknown-rice",
+          "recipe_id": "r-jollof",
+          "type": "production_soft_false_ready"
+        }
+      ],
+      "failure_count": 3
     },
     {
       "system": "production_matcher",
-      "cases": 90,
+      "cases": 93,
       "metrics": {
-        "precision_at_5": 0.5338541666666666,
-        "ndcg_at_5": 0.9916120398538968,
+        "precision_at_5": 0.5858585858585859,
+        "ndcg_at_5": 0.9918885660125595,
         "false_ready_rate": 0,
         "false_ready_count": 0,
-        "ready_labeled_count": 36,
-        "essential_missing_ingredient_recall": 0.9746835443037974,
-        "essential_missing_ingredient_precision": 0.9810126582278481,
+        "ready_labeled_count": 38,
+        "essential_missing_ingredient_recall": 0.975,
+        "essential_missing_ingredient_precision": 0.98125,
         "critical_constraint_violations": 0,
         "resolution_proxy_accuracy": 1,
-        "p95_latency_ms": 5.617399999999975,
-        "mean_latency_ms": 2.970001111111105,
+        "p95_latency_ms": 6.4565000000000055,
+        "mean_latency_ms": 2.927454838709666,
         "mean_cost_per_request": 0
       },
       "failure_sample": [],
@@ -507,11 +544,15 @@
         },
         {
           "system": "overlap_baseline",
-          "violations": 21
+          "violations": 22
         },
         {
           "system": "quantity_aware_baseline",
-          "violations": 21
+          "violations": 22
+        },
+        {
+          "system": "graph_offline",
+          "violations": 0
         },
         {
           "system": "production_matcher",
@@ -528,11 +569,15 @@
         },
         {
           "system": "overlap_baseline",
-          "rate": 0.3898305084745763
+          "rate": 0.3968253968253968
         },
         {
           "system": "quantity_aware_baseline",
-          "rate": 0.3898305084745763
+          "rate": 0.3870967741935484
+        },
+        {
+          "system": "graph_offline",
+          "rate": 0.08108108108108109
         },
         {
           "system": "production_matcher",

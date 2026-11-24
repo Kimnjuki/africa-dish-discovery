@@ -1,6 +1,5 @@
 /**
- * Production matcher semantics on fixture candidates (JSON path + production canMakeNow).
- * Does not call Supabase / LLM — deterministic offline mirror of JSON fallback.
+ * Production matcher: JSON cookability path + constraints (deterministic, no LLM).
  */
 import { findMatchingRecipes, calculateRecipeMatch } from "../../../src/utils/recipeMatching.ts";
 
@@ -14,6 +13,7 @@ export function runCase(c, options = {}) {
     ingredient_name: p.name,
     quantity: p.quantity ?? undefined,
     unit: p.unit ?? undefined,
+    quantity_known: p.quantity_known,
     expires_at: p.expires_at ?? undefined,
   }));
 
@@ -21,70 +21,48 @@ export function runCase(c, options = {}) {
     return { ranked: [], predictions: [], latencyMs: 0 };
   }
 
+  const constraints = {
+    allergies: c.constraints?.allergies || [],
+    diets: c.constraints?.diets || [],
+    equipment: c.constraints?.equipment || [],
+    maxTotalMinutes: c.constraints?.max_total_minutes ?? null,
+    servings: c.constraints?.servings ?? null,
+  };
+
   const t0 = performance.now();
-  const matches = findMatchingRecipes(pantry, c.candidates || [], 10);
+  const matches = findMatchingRecipes(pantry, c.candidates || [], {
+    mode,
+    constraints,
+    excludeBlocked: true,
+    minMatchPercentage: 10,
+  });
   const latencyMs = performance.now() - t0;
   const byId = new Map(matches.map((m) => [m.recipe.id, m]));
 
-  // Apply allergy / equipment / time soft filters when constraints present
-  const allergies = new Set((c.constraints?.allergies || []).map((a) => a.toLowerCase()));
-  const equipment = new Set((c.constraints?.equipment || []).map((e) => e.toLowerCase()));
-  const maxMin = c.constraints?.max_total_minutes;
-
   const predictions = (c.candidates || []).map((rec) => {
-    const m = byId.get(rec.id) || calculateRecipeMatch(pantry, rec);
-    let blocked = false;
-    if (allergies.size) {
-      for (const a of rec.allergens || []) {
-        if (allergies.has(String(a).toLowerCase())) blocked = true;
-      }
-      // Also block if peanut allergy and recipe/pantry match peanut butter ingredient
-      if (allergies.has("peanut")) {
-        const blob = JSON.stringify(rec.ingredients || []).toLowerCase();
-        if (blob.includes("peanut") || blob.includes("groundnut")) blocked = true;
-      }
-    }
-    if (equipment.size && Array.isArray(rec.requires_equipment)) {
-      for (const need of rec.requires_equipment) {
-        if (!equipment.has(String(need).toLowerCase())) blocked = true;
-      }
-    }
-    if (maxMin != null) {
-      const total = (rec.prep_time || 0) + (rec.cook_time || 0);
-      if (total > maxMin) blocked = true;
-    }
-
-    // Production ready flag (legacy soft) vs cookability-first
-    const productionReady = m.canMakeNow && !blocked;
-    const strictReady = m.missingIngredients.length === 0 && m.matchedCount > 0 && !blocked;
-    const labeledReady = mode === "cook_now" ? strictReady : productionReady && !blocked;
-
+    const m =
+      byId.get(rec.id) ||
+      calculateRecipeMatch(pantry, rec);
+    const inResults = byId.has(rec.id);
+    const labeledReady = Boolean(m.canMakeNow) && inResults;
     return {
       recipeId: rec.id,
       labeledReady,
-      productionCanMakeNow: productionReady,
+      // Only count Ready when the recipe survives constraint filtering.
+      productionCanMakeNow: labeledReady,
       missingIngredients: m.missingIngredients,
       matchedIngredients: m.matchedIngredients,
       matchPercentage: m.matchPercentage,
       goldRelevance: c.gold?.relevance?.[rec.id] ?? 0,
-      safetyFail: blocked
-        ? false
-        : (c.gold?.critical_safety_ids || []).includes(rec.id) && labeledReady,
-      blocked,
-      score: blocked ? -1 : m.matchPercentage,
+      safetyFail: (c.gold?.critical_safety_ids || []).includes(rec.id) && labeledReady,
+      blocked: !inResults && (c.gold?.critical_safety_ids || []).includes(rec.id),
+      score: inResults ? m.matchPercentage : -1,
+      quantityWarning: m.quantityWarning || null,
     };
   });
 
-  predictions.sort((a, b) => {
-    if (a.blocked !== b.blocked) return Number(a.blocked) - Number(b.blocked);
-    if (Number(b.labeledReady) !== Number(a.labeledReady)) {
-      return Number(b.labeledReady) - Number(a.labeledReady);
-    }
-    return b.score - a.score;
-  });
-
   return {
-    ranked: predictions.filter((p) => !p.blocked).map((p) => p.recipeId),
+    ranked: matches.map((m) => m.recipe.id),
     predictions,
     latencyMs,
   };

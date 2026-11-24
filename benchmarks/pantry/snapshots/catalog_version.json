@@ -1,7 +1,7 @@
 {
-  "catalog_version": "catalog-2026-11-24-8bbfe38a",
-  "frozen_at": "2026-11-24T11:10:04.930Z",
-  "git_commit": "8bbfe38a6a8d39d4020ddd7a58b8fd3177462ded",
+  "catalog_version": "catalog-2026-11-24-3cbc0793",
+  "frozen_at": "2026-11-24T11:14:45.391Z",
+  "git_commit": "3cbc0793d2e23e6c570e1558abea7955ecb79867",
   "counts": {
     "recipes": 2103,
     "recipe_ingredients": 14007
