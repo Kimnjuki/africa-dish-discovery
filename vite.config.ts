@@ -13,6 +13,9 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      // Register from main.tsx via virtual:pwa-register so we can force reload
+      // when a new SW takes control (Cloudflare was holding old sw.js for hours).
+      injectRegister: false,
       includeAssets: ['favicon.ico', 'robots.txt', 'images/**/*'],
       manifest: {
         name: 'LadhaQuest - African Recipes',
@@ -55,15 +58,16 @@ export default defineConfig({
             // Recipe REST (capped). App-level offlineStore holds pantry/plan snapshots —
             // do not precache the full catalog.
             urlPattern: /^https:\/\/.*\.supabase\.co\/rest\/v1\/recipes.*/,
-            handler: 'StaleWhileRevalidate',
+            handler: 'NetworkFirst',
             options: {
-              cacheName: 'recipes-detail-cache',
+              cacheName: 'recipes-detail-v3',
+              networkTimeoutSeconds: 8,
               expiration: {
                 maxEntries: 40,
-                maxAgeSeconds: 60 * 60 * 24 * 3 // 3 days
+                maxAgeSeconds: 60 * 60 * 24 // 1 day
               },
               cacheableResponse: {
-                statuses: [0, 200]
+                statuses: [200]
               }
             }
           },
@@ -71,28 +75,28 @@ export default defineConfig({
             urlPattern: /^https:\/\/images\.unsplash\.com\/.*/,
             handler: 'CacheFirst',
             options: {
-              cacheName: 'image-cache',
+              cacheName: 'image-cache-v3',
               expiration: {
                 maxEntries: 60,
                 maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
               },
               cacheableResponse: {
-                statuses: [0, 200]
+                statuses: [200]
               }
             }
           },
           {
-            // Supabase storage + image transforms (mobile-friendly)
-            urlPattern: /^https:\/\/.*\.supabase\.co\/storage\/v1\/.*/,
+            // Public object URLs only — /render/image is not enabled (403).
+            urlPattern: /^https:\/\/.*\.supabase\.co\/storage\/v1\/object\/.*/,
             handler: 'CacheFirst',
             options: {
-              cacheName: 'supabase-media-cache',
+              cacheName: 'supabase-media-v3',
               expiration: {
                 maxEntries: 80,
                 maxAgeSeconds: 60 * 60 * 24 * 14
               },
               cacheableResponse: {
-                statuses: [0, 200]
+                statuses: [200]
               }
             }
           }
