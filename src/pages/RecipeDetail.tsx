@@ -101,41 +101,10 @@ const RecipeDetail = () => {
         }
       }
 
-      // Narrow select — avoid select('*') payload on mobile networks
-      const selectCols = [
-        "id",
-        "name",
-        "slug",
-        "country",
-        "continent",
-        "category",
-        "summary",
-        "difficulty",
-        "prep_time",
-        "cook_time",
-        "servings",
-        "tags",
-        "dietary_tags",
-        "image_url",
-        "ingredients",
-        "steps",
-        "history",
-        "history_sources",
-        "calories",
-        "protein",
-        "carbs",
-        "fats",
-        "cuisine_type",
-        "world_equivalent_dish",
-        "dish_id",
-        "region_id",
-        "local_names",
-        "ethnic_group",
-        "occasion_tags",
-        "allergen_tags",
-        "dishes(original_name_native, primary_tribe_ethnicity, region, phonetic_spelling)",
-        "regions(name)",
-      ].join(",");
+      // Use * + embeds — production DB lacks recipes.local_names / recipes.ethnic_group
+      // (those live on dishes). Explicit column lists that include missing cols → HTTP 400.
+      const selectCols =
+        "*, dishes(original_name_native, primary_tribe_ethnicity, region, phonetic_spelling), regions(name)";
 
       let rec: RecipeRow | null = null;
       {

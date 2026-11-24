@@ -156,16 +156,13 @@ export function lighterImageUrl(url: string | null | undefined, dataSaver: boole
       u.searchParams.set("auto", "format");
       return u.toString();
     }
-    if (u.hostname.includes("supabase") && u.pathname.includes("/storage/v1/object/")) {
-      u.pathname = u.pathname.replace("/storage/v1/object/", "/storage/v1/render/image/");
-      u.searchParams.set("width", "480");
-      u.searchParams.set("quality", "55");
-      u.searchParams.set("resize", "contain");
-      return u.toString();
-    }
+    // Image Transformation (/render/image) is not enabled on this project (403).
+    // Keep public object URLs; optionally strip accidental render paths.
     if (u.hostname.includes("supabase") && u.pathname.includes("/storage/v1/render/image/")) {
-      u.searchParams.set("width", "480");
-      u.searchParams.set("quality", "55");
+      u.pathname = u.pathname.replace("/storage/v1/render/image/", "/storage/v1/object/");
+      u.searchParams.delete("width");
+      u.searchParams.delete("quality");
+      u.searchParams.delete("resize");
       return u.toString();
     }
   } catch {

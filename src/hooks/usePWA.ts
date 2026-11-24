@@ -17,9 +17,14 @@ export function usePWA() {
       setIsInstalled(true);
     }
 
-    // Listen for install prompt
+    // Capture install prompt without blocking Chrome's default banner forever.
+    // Only preventDefault on /install where we call prompt() from the UI.
     const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault();
+      const onInstallPage =
+        typeof window !== "undefined" && window.location.pathname.startsWith("/install");
+      if (onInstallPage) {
+        e.preventDefault();
+      }
       setDeferredPrompt(e as BeforeInstallPromptEvent);
       setIsInstallable(true);
     };

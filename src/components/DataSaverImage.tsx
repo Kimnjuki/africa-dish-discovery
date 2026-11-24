@@ -16,7 +16,7 @@ type Props = {
 };
 
 /**
- * Recipe/media image that respects data-saver, uses CDN transforms,
+ * Recipe/media image that respects data-saver, uses safe CDN params,
  * and falls back to a placeholder when the remote URL fails (common on mobile).
  */
 export function DataSaverImage({

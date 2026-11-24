@@ -1,7 +1,7 @@
 /**
  * Optimize remote recipe images for faster loads (especially mobile).
  * - Unsplash: width/quality params
- * - Supabase storage: render/image transform when available
+ * - Supabase storage: keep /object/public URLs (Image Transformation is not enabled → /render/image returns 403)
  * - Falls back to original URL on any parse failure
  */
 
@@ -19,29 +19,27 @@ export function optimizeImageUrl(
     const u = new URL(url, typeof window !== "undefined" ? window.location.origin : "https://www.ladhaquest.com");
 
     if (u.hostname.includes("unsplash.com")) {
-      u.searchParams.set("w", String(width));
-      u.searchParams.set("q", String(quality));
-      u.searchParams.set("auto", "format");
-      u.searchParams.set("fit", "crop");
-      return u.toString();
+      // Drop non-Unsplash junk params that break CDN caching (e.g. &dish=…)
+      const w = u.searchParams.get("w") || String(width);
+      const q = u.searchParams.get("q") || String(quality);
+      const clean = new URL(`${u.origin}${u.pathname}`);
+      clean.searchParams.set("w", w);
+      clean.searchParams.set("q", q);
+      clean.searchParams.set("auto", "format");
+      clean.searchParams.set("fit", "crop");
+      return clean.toString();
     }
 
-    // Supabase object → render transform (works when Image Transformation is enabled)
-    if (u.hostname.includes("supabase") && u.pathname.includes("/storage/v1/object/")) {
-      u.pathname = u.pathname.replace("/storage/v1/object/", "/storage/v1/render/image/");
-      u.searchParams.set("width", String(width));
-      u.searchParams.set("quality", String(quality));
-      u.searchParams.set("resize", "contain");
-      return u.toString();
-    }
-
-    // Already a render URL — ensure width/quality
+    // If a previous build rewrote to /render/image/, map back to public object URL
     if (u.hostname.includes("supabase") && u.pathname.includes("/storage/v1/render/image/")) {
-      u.searchParams.set("width", String(width));
-      u.searchParams.set("quality", String(quality));
+      u.pathname = u.pathname.replace("/storage/v1/render/image/", "/storage/v1/object/");
+      u.searchParams.delete("width");
+      u.searchParams.delete("quality");
+      u.searchParams.delete("resize");
       return u.toString();
     }
 
+    // Leave Supabase /object/public URLs unchanged (transforms require a paid add-on)
     return url;
   } catch {
     return url;
@@ -53,6 +51,7 @@ export function imageSrcSet(
   widths: number[] = [320, 640, 960]
 ): string | undefined {
   if (!url) return undefined;
+  if (!url.includes("unsplash.com")) return undefined;
   try {
     const parts = widths
       .map((w) => {
