@@ -42,9 +42,11 @@ const FeaturedRecipes = () => {
   const fetchFeaturedRecipes = async () => {
     try {
       const africaFilter = "is_african.eq.true,continent.eq.Africa";
+      const listCols =
+        "id,name,slug,country,summary,prep_time,cook_time,servings,difficulty,tags,image_url,calories,protein,carbs,fats,ingredients,steps";
       const { data, error } = await supabase
         .from("recipes")
-        .select("*")
+        .select(listCols)
         .or(africaFilter)
         .not("image_url", "is", null)
         .order("created_at", { ascending: false })
@@ -55,7 +57,7 @@ const FeaturedRecipes = () => {
       if (rows.length < 6) {
         const { data: fallback } = await supabase
           .from("recipes")
-          .select("*")
+          .select(listCols)
           .or(africaFilter)
           .order("created_at", { ascending: false })
           .limit(6);

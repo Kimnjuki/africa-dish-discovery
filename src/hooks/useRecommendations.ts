@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 interface Recipe {
   id: string;
   name: string;
+  slug?: string | null;
   summary: string;
   country: string;
   cuisine_type: string;
@@ -82,6 +83,14 @@ export function useRecommendations(category: string = "for_you", limit: number =
 
   useEffect(() => {
     fetchRecommendations();
+  }, [fetchRecommendations]);
+
+  useEffect(() => {
+    const onRefresh = () => {
+      void fetchRecommendations();
+    };
+    window.addEventListener("ladhaquest:recommendations-refresh", onRefresh);
+    return () => window.removeEventListener("ladhaquest:recommendations-refresh", onRefresh);
   }, [fetchRecommendations]);
 
   const trackInteraction = useCallback(async (

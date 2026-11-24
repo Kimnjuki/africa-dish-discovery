@@ -46,8 +46,8 @@ export default defineConfig({
       },
       workbox: {
         // App shell only — recipe catalog stays out of the precache
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp}'],
-        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5 MB limit
+        globPatterns: ['**/*.{js,css,html,ico,svg,webp}'],
+        maximumFileSizeToCacheInBytes: 2 * 1024 * 1024, // 2 MB — skip huge JPGs
         navigateFallback: '/index.html',
         navigateFallbackDenylist: [/^\/api/, /^\/auth/],
         runtimeCaching: [
@@ -73,8 +73,23 @@ export default defineConfig({
             options: {
               cacheName: 'image-cache',
               expiration: {
-                maxEntries: 40,
+                maxEntries: 60,
                 maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
+              },
+              cacheableResponse: {
+                statuses: [0, 200]
+              }
+            }
+          },
+          {
+            // Supabase storage + image transforms (mobile-friendly)
+            urlPattern: /^https:\/\/.*\.supabase\.co\/storage\/v1\/.*/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'supabase-media-cache',
+              expiration: {
+                maxEntries: 80,
+                maxAgeSeconds: 60 * 60 * 24 * 14
               },
               cacheableResponse: {
                 statuses: [0, 200]
@@ -89,5 +104,18 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "vendor-react": ["react", "react-dom", "react-router-dom"],
+          "vendor-supabase": ["@supabase/supabase-js"],
+          "vendor-query": ["@tanstack/react-query"],
+          "vendor-charts": ["recharts"],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 700,
   },
 });

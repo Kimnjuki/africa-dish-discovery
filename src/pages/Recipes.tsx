@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,10 +18,12 @@ import useRequireAuth from "@/hooks/useRequireAuth";
 import recipesHero from "@/assets/recipes-hero.jpg";
 import { withParsedRecipeFields, type IngredientValue, type StepValue } from "@/types/content";
 import { readErrorMessage } from "@/lib/errors";
+import { toSlug } from "@/lib/recipeText";
 
 interface Recipe {
   id: string;
   name: string;
+  slug?: string | null;
   country: string;
   summary: string;
   prep_time: number;
@@ -37,6 +39,10 @@ interface Recipe {
   carbs?: number;
   fats?: number;
 }
+
+const LIST_SELECT =
+  "id,name,slug,country,summary,prep_time,cook_time,servings,difficulty,tags,image_url,calories,protein,carbs,fats,ingredients,steps";
+const PAGE_LIMIT = 60;
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -59,27 +65,29 @@ const Recipes = () => {
   const fetchRecipes = async () => {
     try {
       setLoading(true);
-      
-      const query = supabase
-        .from('recipes')
-        .select('*');
 
-      const { data, error } = await query.order('created_at', { ascending: false });
+      const { data, error } = await supabase
+        .from("recipes")
+        .select(LIST_SELECT)
+        .order("created_at", { ascending: false })
+        .limit(PAGE_LIMIT);
 
       if (error) {
-        console.error('Supabase error:', error);
+        console.error("Supabase error:", error);
         throw error;
       }
 
       if (!data) {
         setRecipes([]);
+        setFilteredRecipes([]);
         return;
       }
 
-      setRecipes(data.map(withParsedRecipeFields));
-      setFilteredRecipes(data.map(withParsedRecipeFields));
+      const parsed = data.map(withParsedRecipeFields);
+      setRecipes(parsed);
+      setFilteredRecipes(parsed);
     } catch (error: unknown) {
-      console.error('Error fetching recipes:', error);
+      console.error("Error fetching recipes:", error);
       toast.error(readErrorMessage(error) || "Failed to load recipes");
       setRecipes([]);
       setFilteredRecipes([]);
@@ -228,21 +236,29 @@ const Recipes = () => {
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredRecipes.map((recipe) => (
-                <Card key={recipe.id} className="group hover:shadow-warm transition-all duration-300 overflow-hidden">
+              {filteredRecipes.map((recipe) => {
+                const href = `/recipe/${recipe.slug || toSlug(recipe.name)}`;
+                return (
+                <Card key={recipe.id} className="group relative hover:shadow-warm transition-all duration-300 overflow-hidden">
                   <RecipeSchema recipe={recipe} />
                   <div className="relative">
-                    <RecipeImagePlaceholder
-                      name={recipe.name}
-                      country={recipe.country}
-                      imageUrl={recipe.image_url}
-                      className="h-48 w-full"
-                    />
+                    <Link to={href} className="block">
+                      <RecipeImagePlaceholder
+                        name={recipe.name}
+                        country={recipe.country}
+                        imageUrl={recipe.image_url}
+                        className="h-48 w-full"
+                      />
+                    </Link>
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="absolute top-2 right-2 bg-background/80 hover:bg-background"
-                      onClick={() => addToFavorites(recipe.id, recipe.name)}
+                      className="absolute top-2 right-2 z-10 bg-background/80 hover:bg-background"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        addToFavorites(recipe.id, recipe.name);
+                      }}
                       title={user ? "Add to favorites" : "Sign in to save"}
                     >
                       {user ? <Heart className="w-4 h-4" /> : <Lock className="w-4 h-4" />}
@@ -255,9 +271,11 @@ const Recipes = () => {
                       <span className="text-sm text-primary font-medium">{recipe.country}</span>
                     </div>
                     
-                    <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
-                      {recipe.name}
-                    </h3>
+                    <Link to={href}>
+                      <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
+                        {recipe.name}
+                      </h3>
+                    </Link>
                     
                     <p className="text-muted-foreground mb-4 line-clamp-2">
                       {recipe.summary}
@@ -287,16 +305,22 @@ const Recipes = () => {
                       </div>
                     </div>
                     
-                    <Button 
-                      variant="outline" 
-                      className="w-full"
-                      onClick={() => startCooking(recipe)}
-                    >
-                      Start Cooking
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button variant="outline" className="flex-1" asChild>
+                        <Link to={href}>View Recipe</Link>
+                      </Button>
+                      <Button
+                        variant="secondary"
+                        className="flex-1"
+                        onClick={() => startCooking(recipe)}
+                      >
+                        Start Cooking
+                      </Button>
+                    </div>
                   </CardContent>
                 </Card>
-              ))}
+              );
+              })}
             </div>
           )}
         </div>

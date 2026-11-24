@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { ChefHat } from "lucide-react";
+import { optimizeImageUrl } from "@/lib/imageUrl";
 
 interface RecipeImagePlaceholderProps {
   name?: string;
@@ -13,6 +15,9 @@ const RecipeImagePlaceholder = ({
   className = "", 
   imageUrl 
 }: RecipeImagePlaceholderProps) => {
+  const [failed, setFailed] = useState(false);
+  const optimized = !failed ? optimizeImageUrl(imageUrl, { width: 640, quality: 70 }) : null;
+
   // Get gradient based on country/region for visual variety
   const getGradient = () => {
     const countryLower = (country || "").toLowerCase();
@@ -61,35 +66,18 @@ const RecipeImagePlaceholder = ({
 
   const frame = `relative flex h-full w-full min-h-[8rem] items-center justify-center overflow-hidden ${className}`;
 
-  // If there's a valid image URL, show the image
-  if (imageUrl) {
+  // If there's a valid image URL, show the image (with CDN resize + error fallback)
+  if (optimized) {
     return (
       <div className={frame}>
         <img
-          src={imageUrl}
+          src={optimized}
           alt={name || "Recipe"}
           loading="lazy"
           decoding="async"
           className="absolute inset-0 h-full w-full object-cover"
-          onError={(e) => {
-            // If image fails to load, hide it to show placeholder
-            e.currentTarget.style.display = 'none';
-            const placeholder = e.currentTarget.nextElementSibling as HTMLElement;
-            if (placeholder) placeholder.style.display = 'flex';
-          }}
+          onError={() => setFailed(true)}
         />
-        {/* Hidden placeholder that shows if image fails */}
-        <div 
-          className={`absolute inset-0 bg-gradient-to-br ${getGradient()} items-center justify-center hidden`}
-        >
-          <div className="text-center text-white p-4">
-            <ChefHat className="w-10 h-10 mx-auto mb-2 opacity-80" />
-            <p className="text-sm font-medium line-clamp-2 opacity-90">{name}</p>
-            {country && (
-              <p className="text-xs opacity-70 mt-1">{country}</p>
-            )}
-          </div>
-        </div>
       </div>
     );
   }

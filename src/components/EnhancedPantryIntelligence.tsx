@@ -187,14 +187,15 @@ const EnhancedPantryIntelligence = () => {
   const findMatchingRecipes = async () => {
     setLoading(true);
     try {
-      const pageSize = 1000;
+      // Cap client-side scan — prefer graph match path in PantryDashboard for full corpus
+      const pageSize = 500;
       let recipes: Recipe[] = [];
       let from = 0;
-      while (from < 3000) {
+      while (from < 1000) {
         const { data, error } = await supabase
           .from("recipes")
           .select(
-            "id,name,country,summary,ingredients,prep_time,cook_time,servings,difficulty,tags,image_url,cuisine_type,category"
+            "id,name,slug,country,summary,ingredients,prep_time,cook_time,servings,difficulty,tags,image_url,cuisine_type,category"
           )
           .not("ingredients", "is", null)
           .order("name")

@@ -116,20 +116,19 @@ const RecipeIndex = () => {
   };
 
   useEffect(() => {
+    let cancelled = false;
     const load = async () => {
       setLoading(true);
       // steps intentionally omitted — reduces payload significantly.
-      // ingredients kept as JSON fallback; graph text preferred for facet filter.
-      const [recipeRes, graphText] = await Promise.all([
-        supabase
-          .from("recipes")
-          .select(
-            "id,name,slug,country,continent,category,summary,difficulty,prep_time,cook_time,servings,tags,dietary_tags,image_url,ingredients,calories,protein,carbs,fats,dishes(original_name_native)"
-          )
-          .order("name", { ascending: true })
-          .limit(4000),
-        loadRecipeGraphIngredientText(),
-      ]);
+      // Show list ASAP; enrich ingredient graph text afterward.
+      const recipeRes = await supabase
+        .from("recipes")
+        .select(
+          "id,name,slug,country,continent,category,summary,difficulty,prep_time,cook_time,servings,tags,dietary_tags,image_url,ingredients,calories,protein,carbs,fats,dishes(original_name_native)"
+        )
+        .order("name", { ascending: true })
+        .limit(1500);
+      if (cancelled) return;
       const { data, error } = recipeRes;
       if (!error && data) {
         setRecipes(
@@ -148,14 +147,30 @@ const RecipeIndex = () => {
             return {
               ...row,
               local_names: native ? [native] : row.local_names || null,
-              graph_ingredient_text: graphText.get(row.id) || null,
+              graph_ingredient_text: null,
             };
           })
         );
       }
       setLoading(false);
+
+      try {
+        const graphText = await loadRecipeGraphIngredientText();
+        if (cancelled || !graphText.size) return;
+        setRecipes((prev) =>
+          prev.map((r) => ({
+            ...r,
+            graph_ingredient_text: graphText.get(r.id) || r.graph_ingredient_text || null,
+          }))
+        );
+      } catch {
+        /* JSON ingredient fallback remains usable */
+      }
     };
     load();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const queryExpansion = useMemo(() => expandSearchQuery(get("q")), [params]);
@@ -499,20 +514,13 @@ const RecipeIndex = () => {
                           aria-label={`View recipe: ${r.name}`}
                         >
                           <Card className="overflow-hidden hover:shadow-warm transition-all h-full">
-                            <div className="aspect-video overflow-hidden">
-                              {r.image_url ? (
-                                <img
-                                  src={r.image_url}
-                                  alt={`${r.name} from ${r.country}`}
-                                  width={640}
-                                  height={360}
-                                  loading="lazy"
-                                  decoding="async"
-                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                                />
-                              ) : (
-                                <RecipeImagePlaceholder name={r.name} country={r.country} />
-                              )}
+                            <div className="aspect-video overflow-hidden bg-muted">
+                              <RecipeImagePlaceholder
+                                name={r.name}
+                                country={r.country}
+                                imageUrl={r.image_url}
+                                className="h-full w-full group-hover:scale-105 transition-transform duration-300"
+                              />
                             </div>
                             <CardContent className="p-4">
                               <div className="flex items-start justify-between gap-2 mb-1">

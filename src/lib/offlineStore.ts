@@ -144,7 +144,7 @@ export async function hydrateOfflineFromIndexedDb(): Promise<number> {
   return hydrateLocalStorageFromIdb(IDB_MIRROR_KEYS);
 }
 
-/** Prefer smaller Unsplash / common CDN URLs when data-saver is on. */
+/** Prefer smaller Unsplash / Supabase CDN URLs when data-saver is on. */
 export function lighterImageUrl(url: string | null | undefined, dataSaver: boolean): string | null {
   if (!url) return null;
   if (!dataSaver) return url;
@@ -152,13 +152,21 @@ export function lighterImageUrl(url: string | null | undefined, dataSaver: boole
     const u = new URL(url);
     if (u.hostname.includes("unsplash.com") || u.hostname.includes("images.unsplash.com")) {
       u.searchParams.set("w", "480");
-      u.searchParams.set("q", "60");
+      u.searchParams.set("q", "55");
       u.searchParams.set("auto", "format");
       return u.toString();
     }
-    if (u.hostname.includes("supabase") && u.pathname.includes("/storage/")) {
-      // Keep original path; caller may still skip decode-heavy images when saver is on
-      return url;
+    if (u.hostname.includes("supabase") && u.pathname.includes("/storage/v1/object/")) {
+      u.pathname = u.pathname.replace("/storage/v1/object/", "/storage/v1/render/image/");
+      u.searchParams.set("width", "480");
+      u.searchParams.set("quality", "55");
+      u.searchParams.set("resize", "contain");
+      return u.toString();
+    }
+    if (u.hostname.includes("supabase") && u.pathname.includes("/storage/v1/render/image/")) {
+      u.searchParams.set("width", "480");
+      u.searchParams.set("quality", "55");
+      return u.toString();
     }
   } catch {
     /* keep original */

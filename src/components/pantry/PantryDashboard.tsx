@@ -447,15 +447,15 @@ const PantryDashboard = () => {
       }
 
       if (!localMatches.length) {
-        const pageSize = 1000;
+        const pageSize = 500;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any -- paginated recipe corpus for matcher
         let recipes: any[] = [];
         let from = 0;
-        while (from < 3000) {
+        while (from < 1000) {
           const { data, error } = await supabase
             .from("recipes")
             .select(
-              "id,name,country,summary,prep_time,cook_time,servings,difficulty,image_url,tags,ingredients,cuisine_type,category,allergen_tags,dietary_tags"
+              "id,name,slug,country,summary,prep_time,cook_time,servings,difficulty,image_url,tags,ingredients,cuisine_type,category,allergen_tags,dietary_tags"
             )
             .not("ingredients", "is", null)
             .order("name")

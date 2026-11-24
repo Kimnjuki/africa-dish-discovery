@@ -117,26 +117,31 @@ export const RecipeReviews = ({
       try {
         const { data, error } = await supabase
           .from("recipe_reviews")
-          .select("*")
+          .select(
+            "id, recipe_id, user_id, rating, review_text, cooked_photo_url, created_at, updated_at"
+          )
           .eq("recipe_id", recipeId)
-          .order("created_at", { ascending: false });
+          .order("created_at", { ascending: false })
+          .limit(50);
 
         if (error) throw error;
 
-        const reviewsWithProfiles = await Promise.all(
-          (data || []).map(async (review) => {
-            const { data: profile } = await supabase
-              .from("profiles")
-              .select("full_name")
-              .eq("id", review.user_id)
-              .single();
+        const userIds = [...new Set((data || []).map((r) => r.user_id).filter(Boolean))];
+        const nameById = new Map<string, string>();
+        if (userIds.length) {
+          const { data: profiles } = await supabase
+            .from("profiles")
+            .select("id, full_name")
+            .in("id", userIds);
+          for (const p of profiles || []) {
+            nameById.set(p.id, p.full_name || "Anonymous");
+          }
+        }
 
-            return {
-              ...review,
-              profiles: { full_name: profile?.full_name || "Anonymous" },
-            };
-          })
-        );
+        const reviewsWithProfiles = (data || []).map((review) => ({
+          ...review,
+          profiles: { full_name: nameById.get(review.user_id) || "Anonymous" },
+        }));
 
         setReviews(reviewsWithProfiles);
 

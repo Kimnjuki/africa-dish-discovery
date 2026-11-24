@@ -60,6 +60,17 @@ export function useOnboarding() {
 
   const completeOnboarding = () => {
     setShowOnboarding(false);
+    // Surface personalized picks after taste/skill onboarding
+    window.dispatchEvent(new CustomEvent("ladhaquest:recommendations-refresh"));
+    requestAnimationFrame(() => {
+      const target = document.getElementById("recommendations");
+      if (target) {
+        const top = target.getBoundingClientRect().top + window.scrollY - 72;
+        window.scrollTo({ top: Math.max(0, top), behavior: "smooth" });
+      } else {
+        window.location.hash = "recommendations";
+      }
+    });
   };
 
   const skipOnboarding = () => {

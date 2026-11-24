@@ -79,12 +79,14 @@ const RecipeDetail = () => {
 
   useEffect(() => {
     if (!slug) return;
+    let cancelled = false;
     (async () => {
       setLoading(true);
 
       if (isBrowserOffline()) {
         const cached = getCachedRecipes().find((r) => r.slug === slug);
         if (cached) {
+          if (cancelled) return;
           setRecipe(
             withParsedRecipeFields({
               ...cached,
@@ -99,10 +101,47 @@ const RecipeDetail = () => {
         }
       }
 
-      const selectCols =
-        "*, dishes(original_name_native, primary_tribe_ethnicity, region, phonetic_spelling), regions(name)";
+      // Narrow select — avoid select('*') payload on mobile networks
+      const selectCols = [
+        "id",
+        "name",
+        "slug",
+        "country",
+        "continent",
+        "category",
+        "summary",
+        "difficulty",
+        "prep_time",
+        "cook_time",
+        "servings",
+        "tags",
+        "dietary_tags",
+        "image_url",
+        "ingredients",
+        "steps",
+        "history",
+        "history_sources",
+        "calories",
+        "protein",
+        "carbs",
+        "fats",
+        "cuisine_type",
+        "world_equivalent_dish",
+        "dish_id",
+        "region_id",
+        "local_names",
+        "ethnic_group",
+        "occasion_tags",
+        "allergen_tags",
+        "dishes(original_name_native, primary_tribe_ethnicity, region, phonetic_spelling)",
+        "regions(name)",
+      ].join(",");
 
-      let { data: rec } = await supabase.from("recipes").select(selectCols).eq("slug", slug).maybeSingle();
+      let rec: RecipeRow | null = null;
+      {
+        const { data } = await supabase.from("recipes").select(selectCols).eq("slug", slug).maybeSingle();
+        rec = (data as unknown as RecipeRow | null) ?? null;
+      }
       if (!rec) {
         const { data: d } = await supabase.from("dishes").select("id,name").eq("slug", slug).maybeSingle();
         if (d) {
@@ -111,72 +150,85 @@ const RecipeDetail = () => {
             .select(selectCols)
             .or(`dish_id.eq.${d.id},name.eq.${d.name}`)
             .limit(1);
-          rec = data?.[0] ?? null;
+          rec = ((data?.[0] as unknown as RecipeRow | undefined) ?? null);
         }
       }
+      if (cancelled) return;
+
       const parsed = rec ? (withParsedRecipeFields(rec) as RecipeRow) : null;
       setRecipe(parsed);
       setServings(rec?.servings || 4);
+      // Unblock first paint before secondary queries finish
+      setLoading(false);
 
-      if (parsed?.id) {
-        const { data: summary } = await supabase
+      if (!parsed?.id) {
+        setRatingSummary(null);
+        setRelated([]);
+        return;
+      }
+
+      cacheRecipe({
+        id: parsed.id!,
+        name: parsed.name,
+        country: parsed.country || "",
+        image_url: parsed.image_url ?? null,
+        prep_time: parsed.prep_time ?? null,
+        cook_time: parsed.cook_time ?? null,
+        servings: parsed.servings ?? null,
+        difficulty: parsed.difficulty ?? null,
+        summary: parsed.summary ?? null,
+        slug: parsed.slug || slug,
+        ingredients: parsed.ingredients,
+        steps: parsed.steps,
+      });
+      trackRecipeView({
+        id: parsed.id!,
+        slug: parsed.slug || slug || "",
+        name: parsed.name,
+        country: parsed.country || undefined,
+        imageUrl: parsed.image_url,
+      });
+      track(EVENTS.RECIPE_VIEWED, {
+        slug: parsed.slug || slug,
+        name: parsed.name,
+        country: parsed.country,
+      });
+
+      const [summaryRes, relatedRes] = await Promise.all([
+        supabase
           .from("recipe_ratings_summary")
           .select("average_rating, total_reviews")
           .eq("recipe_id", parsed.id)
-          .maybeSingle();
-        if (summary?.total_reviews && summary.total_reviews > 0) {
-          setRatingSummary({
-            average: Number(summary.average_rating) || 0,
-            count: Number(summary.total_reviews) || 0,
-          });
-        } else {
-          setRatingSummary(null);
-        }
+          .maybeSingle(),
+        rec?.country
+          ? supabase
+              .from("recipes")
+              .select("id,name,slug,country,image_url,category")
+              .eq("country", rec.country)
+              .neq("id", rec.id)
+              .limit(6)
+          : Promise.resolve({ data: null as { id: string; name: string; slug?: string; country?: string; image_url?: string; category?: string }[] | null }),
+      ]);
+
+      if (cancelled) return;
+
+      const summary = summaryRes.data;
+      if (summary?.total_reviews && summary.total_reviews > 0) {
+        setRatingSummary({
+          average: Number(summary.average_rating) || 0,
+          count: Number(summary.total_reviews) || 0,
+        });
       } else {
         setRatingSummary(null);
       }
 
-      if (parsed) {
-        cacheRecipe({
-          id: parsed.id!,
-          name: parsed.name,
-          country: parsed.country || "",
-          image_url: parsed.image_url ?? null,
-          prep_time: parsed.prep_time ?? null,
-          cook_time: parsed.cook_time ?? null,
-          servings: parsed.servings ?? null,
-          difficulty: parsed.difficulty ?? null,
-          summary: parsed.summary ?? null,
-          slug: parsed.slug || slug,
-          ingredients: parsed.ingredients,
-          steps: parsed.steps,
-        });
-        trackRecipeView({
-          id: parsed.id!,
-          slug: parsed.slug || slug || "",
-          name: parsed.name,
-          country: parsed.country || undefined,
-          imageUrl: parsed.image_url,
-        });
-        track(EVENTS.RECIPE_VIEWED, {
-          slug: parsed.slug || slug,
-          name: parsed.name,
-          country: parsed.country,
-        });
-      }
-      if (rec?.country) {
-        const { data } = await supabase
-          .from("recipes")
-          .select("id,name,slug,country,image_url,category")
-          .eq("country", rec.country)
-          .neq("id", rec.id)
-          .limit(6);
-        setRelated(dataSaver ? (data || []).map((r) => ({ ...r, image_url: null })) : data || []);
-      } else {
-        setRelated([]);
-      }
-      setLoading(false);
+      const relatedRows = relatedRes.data || [];
+      setRelated(dataSaver ? relatedRows.map((r) => ({ ...r, image_url: null })) : relatedRows);
     })();
+
+    return () => {
+      cancelled = true;
+    };
   }, [slug, dataSaver]);
 
   const base = recipe?.servings || 4;
@@ -442,8 +494,8 @@ const RecipeDetail = () => {
                       <CardContent className="grid sm:grid-cols-2 gap-3">
                         {related.map((r) => (
                           <Link key={r.id} to={`/recipe/${r.slug || toSlug(r.name)}`} className="flex gap-3 items-center rounded-md border p-2 hover:border-primary/50">
-                            <div className="w-14 h-14 rounded overflow-hidden shrink-0">
-                              {r.image_url ? <img src={r.image_url} alt={r.name} loading="lazy" className="w-full h-full object-cover" /> : <RecipeImagePlaceholder name={r.name} country={r.country} />}
+                            <div className="w-14 h-14 rounded overflow-hidden shrink-0 bg-muted">
+                              <RecipeImagePlaceholder name={r.name} country={r.country} imageUrl={r.image_url} className="h-14 w-14" />
                             </div>
                             <div className="min-w-0"><p className="font-medium text-sm truncate">{r.name}</p><p className="text-xs text-muted-foreground">{r.category || country}</p></div>
                           </Link>

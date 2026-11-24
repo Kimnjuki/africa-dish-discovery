@@ -595,10 +595,11 @@ export const calculateRecipeMatch = (
       ingredientName: label,
     });
     if (!cmp.comparable) {
-      if (cmp.reason === "unknown_quantity") {
+      const reason = "reason" in cmp ? cmp.reason : null;
+      if (reason === "unknown_quantity") {
         // Recipe asks for a measured amount; pantry qty unknown → never claim Ready
         quantityWarning = `Confirm you have enough ${label}`;
-      } else if (cmp.reason === "unknown_density" || cmp.reason === "incompatible_units") {
+      } else if (reason === "unknown_density" || reason === "incompatible_units") {
         // Cannot convert measured pantry ↔ recipe → do not claim Ready
         quantityWarning = `Confirm units for ${label} (cannot convert pantry ↔ recipe)`;
       }
