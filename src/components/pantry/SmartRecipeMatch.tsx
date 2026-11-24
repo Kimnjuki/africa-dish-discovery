@@ -66,17 +66,28 @@ const SmartRecipeMatch = ({
 }: SmartRecipeMatchProps) => {
   const [expandedRecipe, setExpandedRecipe] = useState<string | null>(null);
   const [cookFromExpiring, setCookFromExpiring] = useState(false);
+  /** cook_now = only Ready; shop_first = include short shopping lists */
+  const [listMode, setListMode] = useState<"cook_now" | "shop_first">("cook_now");
 
   const expiringCount = useMemo(
     () => matches.filter(isExpiringMatch).length,
     [matches]
   );
 
+  const cookNowCount = useMemo(() => matches.filter((m) => m.canCookNow).length, [matches]);
+
   const visibleMatches = useMemo(() => {
-    if (!cookFromExpiring) return matches;
-    const filtered = matches.filter(isExpiringMatch);
-    return filtered.length ? filtered : matches.filter((m) => m.priority === "high");
-  }, [matches, cookFromExpiring]);
+    let list = matches;
+    if (listMode === "cook_now") {
+      const ready = matches.filter((m) => m.canCookNow);
+      list = ready.length ? ready : matches.filter((m) => m.missingIngredients.length <= 2);
+    }
+    if (cookFromExpiring) {
+      const filtered = list.filter(isExpiringMatch);
+      return filtered.length ? filtered : list.filter((m) => m.priority === "high");
+    }
+    return list;
+  }, [matches, cookFromExpiring, listMode]);
 
   const getMatchColor = (score: number) => {
     if (score >= 80) return "text-green-600 bg-green-100 dark:bg-green-900/30";
@@ -131,6 +142,33 @@ const SmartRecipeMatch = ({
 
   return (
     <div className="space-y-6">
+      <Card>
+        <CardContent className="p-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <p className="font-medium text-sm">Recommendation mode</p>
+            <p className="text-xs text-muted-foreground">
+              Cook now shows only dishes you can finish with this pantry. Shop first includes short shopping lists — missing items stay disclosed.
+            </p>
+          </div>
+          <div className="flex gap-2 shrink-0">
+            <Button
+              size="sm"
+              variant={listMode === "cook_now" ? "default" : "outline"}
+              onClick={() => setListMode("cook_now")}
+            >
+              Cook now ({cookNowCount})
+            </Button>
+            <Button
+              size="sm"
+              variant={listMode === "shop_first" ? "default" : "outline"}
+              onClick={() => setListMode("shop_first")}
+            >
+              Shop first
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
       <Card className="border-amber-500/20 bg-amber-500/5">
         <CardContent className="p-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-3">
@@ -200,14 +238,28 @@ const SmartRecipeMatch = ({
                 <div className="flex-1 min-w-0">
                   <div className="flex flex-wrap items-start gap-2 mb-2">
                     <h3 className="font-semibold text-lg">{match.name}</h3>
-                    {match.canCookNow && (
+                    {match.canCookNow ? (
                       <Badge className="bg-green-100 text-green-700 dark:bg-green-900/30">
                         <Check className="w-3 h-3 mr-1" />
                         Ready to cook
                       </Badge>
-                    )}
+                    ) : match.missingIngredients.length > 0 ? (
+                      <Badge className="bg-orange-100 text-orange-800 dark:bg-orange-900/30">
+                        <AlertTriangle className="w-3 h-3 mr-1" />
+                        Missing {match.missingIngredients.length} essential
+                        {match.missingIngredients.length === 1 ? "" : "s"}
+                      </Badge>
+                    ) : null}
                     {getPriorityBadge(match.priority, match.priorityReason)}
                   </div>
+                  {!match.canCookNow && match.missingIngredients.length > 0 && (
+                    <p className="text-xs text-orange-700 dark:text-orange-300 mb-2">
+                      Need: {match.missingIngredients.slice(0, 4).join(", ")}
+                      {match.missingIngredients.length > 4
+                        ? ` +${match.missingIngredients.length - 4} more`
+                        : ""}
+                    </p>
+                  )}
 
                   {match.summary && (
                     <p className="text-sm text-muted-foreground line-clamp-2 mb-3">
@@ -331,9 +383,10 @@ const SmartRecipeMatch = ({
                   <Button
                     onClick={() => onStartCooking(match)}
                     className={match.canCookNow ? "bg-green-600 hover:bg-green-700" : ""}
+                    variant={match.canCookNow ? "default" : "outline"}
                   >
                     <ChefHat className="w-4 h-4 mr-2" />
-                    Cook
+                    {match.canCookNow ? "Cook now" : "View recipe"}
                   </Button>
                   {match.missingIngredients.length > 0 && (
                     <Button

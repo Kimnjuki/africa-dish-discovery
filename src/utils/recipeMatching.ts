@@ -1,12 +1,18 @@
 import type { IngredientValue } from "../types/content.ts";
 import { getSubstituteNames } from "../lib/substitutionGraph.ts";
+import {
+  recipeViolatesConstraints,
+  type PantryMatchConstraints,
+} from "../lib/pantryConstraints.ts";
 
-interface PantryIngredient {
+export interface PantryIngredient {
   id: string;
   name: string;
   ingredient_name?: string;
   quantity?: number;
   unit?: string;
+  /** When false, quantity is unknown — never claim ready for qty-gated staples. */
+  quantity_known?: boolean;
   expires_at?: string;
 }
 
@@ -24,9 +30,21 @@ interface Recipe {
   summary?: string;
   cuisine_type?: string;
   category?: string;
+  allergens?: string[];
+  allergen_tags?: string[];
+  dietary_tags?: string[];
+  requires_equipment?: string[];
 }
 
 export type CookabilityMode = "cook_now" | "shop_first";
+
+export interface MatchOptions {
+  mode?: CookabilityMode;
+  constraints?: PantryMatchConstraints | null;
+  /** Drop constraint-blocked recipes from results (default true). */
+  excludeBlocked?: boolean;
+  minMatchPercentage?: number;
+}
 
 export interface MatchResult {
   recipe: Recipe;
@@ -45,6 +63,9 @@ export interface MatchResult {
   priorityReason?: string;
   /** Unboosted recipe coverage 0–100 (for eval / explanations). */
   recipeCoverage?: number;
+  constraintBlocked?: boolean;
+  constraintReasons?: string[];
+  quantityWarning?: string | null;
 }
 
 /** Lightweight extras beyond the Africa-first substitution graph (generic pantry noise). */
@@ -540,13 +561,57 @@ export const calculateRecipeMatch = (
     Math.max(recipeCoverage, blended) + Math.min(urgencyBoost, 12) + (matchedCount >= 3 ? 5 : 0)
   );
 
+  // Quantity / uncertainty demotion (same-unit compare when both sides known)
+  let quantityWarning: string | null = null;
+  for (let i = 0; i < rawIngredients.length; i++) {
+    const raw = rawIngredients[i];
+    if (typeof raw !== "object" || raw === null) continue;
+    const reqQty =
+      typeof (raw as { quantity?: unknown }).quantity === "number"
+        ? Number((raw as { quantity: number }).quantity)
+        : typeof (raw as { amount?: unknown }).amount === "number"
+          ? Number((raw as { amount: number }).amount)
+          : null;
+    const reqUnit = String((raw as { unit?: string }).unit || "").toLowerCase();
+    const label = recipeLabels[i];
+    if (reqQty == null || !label) continue;
+    const hit = pantryMatchesIngredient(normalizedUserIngredients, label);
+    if (!hit) continue;
+    const pan = hit.user as {
+      normalizedName: string;
+      quantity?: number;
+      unit?: string;
+      quantity_known?: boolean;
+      name: string;
+      ingredient_name?: string;
+    };
+    if (pan.quantity_known === false || (pan.quantity == null && pan.quantity_known !== true)) {
+      // Explicit unknown qty on a quantified staple → not ready
+      if (/\b(flour|rice|meat|fish|oil|beans|meal|dough)\b/i.test(label)) {
+        quantityWarning = `Confirm you have enough ${label}`;
+      }
+      continue;
+    }
+    if (pan.quantity == null) continue;
+    const pu = String(pan.unit || "").toLowerCase();
+    if (pu && reqUnit && pu !== reqUnit) continue; // conversion graph later
+    if (Number(pan.quantity) + 1e-9 < reqQty) {
+      quantityWarning = `Not enough ${label} (${pan.quantity}${pu ? " " + pu : ""} < ${reqQty}${reqUnit ? " " + reqUnit : ""})`;
+      break;
+    }
+  }
+
   // Cookability-first: Ready only when every essential ingredient is present
   // (exact or reviewed substitute already counted above). Overlap ≠ cookable.
-  const canMakeNow = missingIngredients.length === 0 && matchedCount > 0;
+  let canMakeNow = missingIngredients.length === 0 && matchedCount > 0;
+  if (quantityWarning) canMakeNow = false;
 
   let priority: "high" | "medium" | "low" = "low";
   let priorityReason: string | undefined;
-  if (urgencyBoost >= 10 && recipeCoverage >= 35) {
+  if (quantityWarning) {
+    priority = "medium";
+    priorityReason = quantityWarning;
+  } else if (urgencyBoost >= 10 && recipeCoverage >= 35) {
     priority = "high";
     priorityReason = "Uses ingredients expiring soon";
   } else if (canMakeNow) {
@@ -578,45 +643,83 @@ export const calculateRecipeMatch = (
     priority,
     priorityReason,
     recipeCoverage,
+    quantityWarning,
   };
 };
+
+function densityOf(m: MatchResult) {
+  return m.totalIngredients > 0 ? m.matchedCount / m.totalIngredients : 0;
+}
+
+/** Cookability-first sort: ready → fewer missing → coverage → urgency. */
+export const sortByCookability = (matches: MatchResult[]): MatchResult[] =>
+  [...matches].sort((a, b) => {
+    if (Number(b.canMakeNow) !== Number(a.canMakeNow)) {
+      return Number(b.canMakeNow) - Number(a.canMakeNow);
+    }
+    if (a.missingIngredients.length !== b.missingIngredients.length) {
+      return a.missingIngredients.length - b.missingIngredients.length;
+    }
+    if (b.urgencyBoost !== a.urgencyBoost) return b.urgencyBoost - a.urgencyBoost;
+    if (b.matchPercentage !== a.matchPercentage) return b.matchPercentage - a.matchPercentage;
+    if (densityOf(b) !== densityOf(a)) return densityOf(b) - densityOf(a);
+    if (b.matchedCount !== a.matchedCount) return b.matchedCount - a.matchedCount;
+    return b.pantryCoverage - a.pantryCoverage;
+  });
 
 export const findMatchingRecipes = (
   userIngredients: PantryIngredient[],
   allRecipes: Recipe[],
-  minMatchPercentage: number = 20
+  minMatchPercentage: number | MatchOptions = 20
 ): MatchResult[] => {
   if (!userIngredients.length) return [];
+
+  const opts: MatchOptions =
+    typeof minMatchPercentage === "number"
+      ? { minMatchPercentage }
+      : minMatchPercentage || {};
+  const minPct = opts.minMatchPercentage ?? 20;
+  const mode = opts.mode || "cook_now";
+  const excludeBlocked = opts.excludeBlocked !== false;
 
   // Expand "tomatoes garlic onion" style rows into discrete pantry items
   const expanded = expandPantryIngredients(userIngredients);
   const pantrySize = expanded.length;
 
-  const density = (m: MatchResult) =>
-    m.totalIngredients > 0 ? m.matchedCount / m.totalIngredients : 0;
-
-  return allRecipes
-    .map((recipe) => calculateRecipeMatch(expanded, recipe))
+  let results = allRecipes
+    .map((recipe) => {
+      const match = calculateRecipeMatch(expanded, recipe);
+      const { blocked, reasons } = recipeViolatesConstraints(recipe, opts.constraints);
+      if (blocked) {
+        return {
+          ...match,
+          canMakeNow: false,
+          constraintBlocked: true,
+          constraintReasons: reasons,
+          priority: "low" as const,
+          priorityReason: reasons[0] || "Blocked by dietary or equipment constraints",
+        };
+      }
+      return { ...match, constraintBlocked: false, constraintReasons: [] as string[] };
+    })
     .filter((match) => {
+      if (match.constraintBlocked && excludeBlocked) return false;
       if (match.totalIngredients === 0) return false;
-      // Ignore technique/notes blobs with huge ingredient dumps and weak coverage
-      if (match.totalIngredients >= 20 && density(match) < 0.35) return false;
-      // Strong absolute overlaps still count on mid-size recipes
-      if (match.matchedCount >= 3 && density(match) >= 0.25) return true;
+      if (match.totalIngredients >= 20 && densityOf(match) < 0.35) return false;
+      // cook_now mode: prefer stronger overlaps; still keep short shopping lists
+      if (mode === "cook_now") {
+        if (match.canMakeNow) return true;
+        if (match.missingIngredients.length <= 2 && match.matchedCount >= 2) return true;
+        if (match.matchedCount >= 3 && densityOf(match) >= 0.35) return true;
+        return false;
+      }
+      if (match.matchedCount >= 3 && densityOf(match) >= 0.25) return true;
       if (match.matchedCount >= 2 && match.matchPercentage >= 15) return true;
       if (match.matchedCount >= 1 && pantrySize <= 2 && match.pantryCoverage >= 50) return true;
-      return match.matchPercentage >= minMatchPercentage && match.matchedCount >= 1;
-    })
-    .sort((a, b) => {
-      // Waste-first: recipes that burn down expiring pantry items rise first
-      if (b.urgencyBoost !== a.urgencyBoost) return b.urgencyBoost - a.urgencyBoost;
-      if (Number(b.canMakeNow) !== Number(a.canMakeNow)) return Number(b.canMakeNow) - Number(a.canMakeNow);
-      if (b.matchPercentage !== a.matchPercentage) return b.matchPercentage - a.matchPercentage;
-      if (density(b) !== density(a)) return density(b) - density(a);
-      if (b.matchedCount !== a.matchedCount) return b.matchedCount - a.matchedCount;
-      if (b.pantryCoverage !== a.pantryCoverage) return b.pantryCoverage - a.pantryCoverage;
-      return a.missingIngredients.length - b.missingIngredients.length;
+      return match.matchPercentage >= minPct && match.matchedCount >= 1;
     });
+
+  return sortByCookability(results);
 };
 
 /** Matches that specifically help clear items expiring within ~3 days. */

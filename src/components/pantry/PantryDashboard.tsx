@@ -47,8 +47,15 @@ import {
   findMatchingRecipes,
   buildPantryInsights,
   splitPantryInput,
+  sortByCookability,
 } from "@/utils/recipeMatching";
 import { matchPantryViaIngredientGraph } from "@/lib/graphPantryMatch";
+import {
+  loadPantryConstraints,
+  recipeViolatesConstraints,
+  savePantryConstraints,
+  type PantryMatchConstraints,
+} from "@/lib/pantryConstraints";
 import { track, EVENTS } from "@/lib/analytics";
 import type { CookableRecipe } from "@/types/content";
 import type { User } from "@supabase/supabase-js";
@@ -78,6 +85,12 @@ const PantryDashboard = () => {
   const [householdName, setHouseholdName] = useState<string | null>(null);
   const [sharedHouseholdItems, setSharedHouseholdItems] = useState<SharedPantryItem[]>([]);
   const [usingOfflineSnapshot, setUsingOfflineSnapshot] = useState(false);
+  const [pantryConstraints, setPantryConstraints] = useState<PantryMatchConstraints>(() =>
+    typeof window !== "undefined"
+      ? loadPantryConstraints()
+      : { allergies: [], diets: [], equipment: ["stove"], maxTotalMinutes: null }
+  );
+  const [allergyInput, setAllergyInput] = useState("");
   const { isOffline } = usePWA();
 
   useOfflinePantrySync(user?.id);
@@ -386,7 +399,22 @@ const PantryDashboard = () => {
       try {
         const graph = await matchPantryViaIngredientGraph(pantryPayload, 40);
         if (graph.matches.length > 0) {
-          localMatches = graph.matches;
+          localMatches = sortByCookability(
+            graph.matches
+              .map((m) => {
+                const { blocked, reasons } = recipeViolatesConstraints(m.recipe, pantryConstraints);
+                if (!blocked) return m;
+                return {
+                  ...m,
+                  canMakeNow: false,
+                  constraintBlocked: true,
+                  constraintReasons: reasons,
+                  priority: "low" as const,
+                  priorityReason: reasons[0] || m.priorityReason,
+                };
+              })
+              .filter((m) => !m.constraintBlocked)
+          );
           usedGraph = graph.meta.usedGraph;
         }
       } catch (graphErr) {
@@ -402,7 +430,7 @@ const PantryDashboard = () => {
           const { data, error } = await supabase
             .from("recipes")
             .select(
-              "id,name,country,summary,prep_time,cook_time,servings,difficulty,image_url,tags,ingredients,cuisine_type,category"
+              "id,name,country,summary,prep_time,cook_time,servings,difficulty,image_url,tags,ingredients,cuisine_type,category,allergen_tags,dietary_tags"
             )
             .not("ingredients", "is", null)
             .order("name")
@@ -414,7 +442,12 @@ const PantryDashboard = () => {
           from += pageSize;
         }
 
-        localMatches = findMatchingRecipes(pantryPayload, recipes, 18).slice(0, 40);
+        localMatches = findMatchingRecipes(pantryPayload, recipes, {
+          minMatchPercentage: 18,
+          mode: "cook_now",
+          constraints: pantryConstraints,
+          excludeBlocked: true,
+        }).slice(0, 40);
       }
 
       const enrichedMatches: RecipeMatch[] = localMatches.map((match) => ({
@@ -532,7 +565,7 @@ const PantryDashboard = () => {
       if (!silent) toast.error("Failed to find recipe matches");
       setMatchLoading(false);
     }
-  }, [pantryItems]);
+  }, [pantryItems, pantryConstraints]);
 
   const addToShoppingList = async (ingredients: string[]) => {
     if (!user) return;
@@ -729,7 +762,96 @@ const PantryDashboard = () => {
         </TabsContent>
 
         {/* AI Recipe Matching */}
-        <TabsContent value="recipes" className="mt-6">
+        <TabsContent value="recipes" className="mt-6 space-y-4">
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base">Cookability constraints</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              <p className="text-xs text-muted-foreground">
+                Hard filters for Ready-to-cook. Allergies never become Ready. Set a time budget to hide long cooks.
+              </p>
+              <div className="flex flex-wrap gap-2 items-center">
+                {(pantryConstraints.allergies || []).map((a) => (
+                  <Badge key={a} variant="secondary" className="gap-1">
+                    {a}
+                    <button
+                      type="button"
+                      className="ml-1 text-muted-foreground hover:text-foreground"
+                      aria-label={`Remove ${a}`}
+                      onClick={() => {
+                        const next = {
+                          ...pantryConstraints,
+                          allergies: (pantryConstraints.allergies || []).filter((x) => x !== a),
+                        };
+                        setPantryConstraints(next);
+                        savePantryConstraints(next);
+                      }}
+                    >
+                      ×
+                    </button>
+                  </Badge>
+                ))}
+                <Input
+                  className="h-9 w-40"
+                  placeholder="Add allergy…"
+                  value={allergyInput}
+                  onChange={(e) => setAllergyInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key !== "Enter") return;
+                    e.preventDefault();
+                    const v = allergyInput.trim().toLowerCase();
+                    if (!v) return;
+                    const next = {
+                      ...pantryConstraints,
+                      allergies: [...new Set([...(pantryConstraints.allergies || []), v])],
+                    };
+                    setPantryConstraints(next);
+                    savePantryConstraints(next);
+                    setAllergyInput("");
+                  }}
+                />
+                <div className="flex items-center gap-2 text-sm">
+                  <label htmlFor="max-mins" className="text-muted-foreground">
+                    Max minutes
+                  </label>
+                  <Input
+                    id="max-mins"
+                    type="number"
+                    min={0}
+                    className="h-9 w-24"
+                    placeholder="Any"
+                    value={pantryConstraints.maxTotalMinutes ?? ""}
+                    onChange={(e) => {
+                      const n = e.target.value === "" ? null : Number(e.target.value);
+                      const next = {
+                        ...pantryConstraints,
+                        maxTotalMinutes: n != null && Number.isFinite(n) ? n : null,
+                      };
+                      setPantryConstraints(next);
+                      savePantryConstraints(next);
+                    }}
+                  />
+                </div>
+                <label className="flex items-center gap-2 text-sm cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={(pantryConstraints.equipment || []).includes("blender")}
+                    onChange={(e) => {
+                      const set = new Set(pantryConstraints.equipment || ["stove"]);
+                      if (e.target.checked) set.add("blender");
+                      else set.delete("blender");
+                      set.add("stove");
+                      const next = { ...pantryConstraints, equipment: [...set] };
+                      setPantryConstraints(next);
+                      savePantryConstraints(next);
+                    }}
+                  />
+                  I have a blender
+                </label>
+              </div>
+            </CardContent>
+          </Card>
           <SmartRecipeMatch
             matches={recipeMatches}
             loading={matchLoading}

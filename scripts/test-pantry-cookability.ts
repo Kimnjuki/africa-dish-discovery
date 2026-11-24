@@ -88,6 +88,49 @@ console.log("teff grain must not make injera ready");
   assert(m.missingIngredients.some((x) => /flour/i.test(x)), "discloses teff flour missing");
 }
 
+console.log("constraints — peanut allergy blocks mafe");
+{
+  const pantry = [
+    { id: "1", name: "chicken", ingredient_name: "chicken" },
+    { id: "2", name: "onion", ingredient_name: "onion" },
+    { id: "3", name: "peanut butter", ingredient_name: "peanut butter" },
+    { id: "4", name: "tomato", ingredient_name: "tomato" },
+    { id: "5", name: "oil", ingredient_name: "oil" },
+    { id: "6", name: "salt", ingredient_name: "salt" },
+  ];
+  const recipes = [
+    {
+      id: "mafe",
+      name: "Mafé",
+      ingredients: [
+        { name: "chicken" },
+        { name: "peanut butter" },
+        { name: "onion" },
+        { name: "tomato" },
+        { name: "oil" },
+        { name: "salt" },
+      ],
+      allergens: ["peanut"],
+    },
+    {
+      id: "yassa",
+      name: "Yassa",
+      ingredients: [
+        { name: "chicken" },
+        { name: "onion" },
+        { name: "oil" },
+        { name: "salt" },
+      ],
+    },
+  ];
+  const ranked = findMatchingRecipes(pantry, recipes, {
+    mode: "cook_now",
+    constraints: { allergies: ["peanut"], equipment: ["stove"] },
+  });
+  assert(!ranked.some((m) => m.recipe.id === "mafe"), "mafe excluded under peanut allergy");
+  assert(ranked.some((m) => m.recipe.id === "yassa" && m.canMakeNow), "yassa still cookable");
+}
+
 console.log("ranking — ready above missing-main");
 {
   const pantry = [
