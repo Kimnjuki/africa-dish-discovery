@@ -22,7 +22,7 @@ import {
 import { usePWA } from "@/hooks/usePWA";
 import { useDataSaver } from "@/hooks/useDataSaver";
 import { useToast } from "@/hooks/use-toast";
-import { DataSaverImage } from "@/components/DataSaverImage";
+import RecipeImagePlaceholder from "@/components/RecipeImagePlaceholder";
 import {
   clearCachedRecipes,
   getCachedRecipes,
@@ -449,17 +449,12 @@ const OfflineRecipes = () => {
                       className="overflow-hidden hover:shadow-lg transition-shadow"
                     >
                       <div className="aspect-video relative overflow-hidden bg-muted">
-                        {recipe.image_url ? (
-                          <DataSaverImage
-                            src={recipe.image_url}
-                            alt={recipe.name}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <ChefHat className="w-12 h-12 text-muted-foreground" />
-                          </div>
-                        )}
+                        <RecipeImagePlaceholder
+                          name={recipe.name}
+                          country={recipe.country}
+                          imageUrl={recipe.image_url}
+                          className="w-full h-full"
+                        />
                         <Badge
                           variant="secondary"
                           className="absolute top-2 right-2 bg-background/80 backdrop-blur-sm"

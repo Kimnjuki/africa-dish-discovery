@@ -14,6 +14,7 @@ import { CulinaryPrestigeScore } from "@/components/comparison/CulinaryPrestigeS
 import { VitalityScore } from "@/components/comparison/VitalityScore";
 import { ExplorerLevel } from "@/components/comparison/ExplorerLevel";
 import { SplitScreenSlider } from "@/components/comparison/SplitScreenSlider";
+import RecipeImagePlaceholder from "@/components/RecipeImagePlaceholder";
 import { withParsedRecipeFields, type IngredientValue } from "@/types/content";
 
 interface Recipe {
@@ -398,13 +399,12 @@ const RecipeComparison = () => {
                   leftContent={
                     <div className="space-y-4 pr-4">
                       <div className="aspect-video rounded-lg overflow-hidden bg-muted">
-                        {comparedRecipes[0].image_url ? (
-                          <img src={comparedRecipes[0].image_url} alt={comparedRecipes[0].name} className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <ChefHat className="h-12 w-12 text-muted-foreground" />
-                          </div>
-                        )}
+                        <RecipeImagePlaceholder
+                          name={comparedRecipes[0].name}
+                          country={comparedRecipes[0].country}
+                          imageUrl={comparedRecipes[0].image_url}
+                          className="w-full h-full"
+                        />
                       </div>
                       <div>
                         <Badge className="mb-2">{comparedRecipes[0].country}</Badge>
@@ -425,13 +425,12 @@ const RecipeComparison = () => {
                   rightContent={
                     <div className="space-y-4 pl-4">
                       <div className="aspect-video rounded-lg overflow-hidden bg-muted">
-                        {comparedRecipes[1].image_url ? (
-                          <img src={comparedRecipes[1].image_url} alt={comparedRecipes[1].name} className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center">
-                            <ChefHat className="h-12 w-12 text-muted-foreground" />
-                          </div>
-                        )}
+                        <RecipeImagePlaceholder
+                          name={comparedRecipes[1].name}
+                          country={comparedRecipes[1].country}
+                          imageUrl={comparedRecipes[1].image_url}
+                          className="w-full h-full"
+                        />
                       </div>
                       <div>
                         <Badge variant="secondary" className="mb-2 bg-orange-500/20 text-orange-600">{comparedRecipes[1].country}</Badge>

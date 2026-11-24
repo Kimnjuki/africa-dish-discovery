@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { PageMeta } from "@/components/seo/PageMeta";
@@ -13,11 +14,14 @@ import { EnhancedRecipePreparation } from "@/components/enhanced/EnhancedRecipeP
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SmartRecommendations } from "@/components/SmartRecommendations";
 import { NutritionBadge } from "@/components/NutritionBadge";
+import RecipeImagePlaceholder from "@/components/RecipeImagePlaceholder";
 import { withParsedRecipeFields, type IngredientValue, type StepValue } from "@/types/content";
+import { toSlug } from "@/lib/recipeText";
 
 interface Recipe {
   id: string;
   name: string;
+  slug?: string | null;
   country: string;
   summary: string;
   prep_time: number;
@@ -79,9 +83,12 @@ const Meals = () => {
   const fetchRecipes = async () => {
     try {
       const { data, error } = await supabase
-        .from('recipes')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("recipes")
+        .select(
+          "id,name,slug,country,summary,prep_time,cook_time,servings,difficulty,tags,ingredients,steps,image_url,category,calories,protein,carbs,fats"
+        )
+        .order("created_at", { ascending: false })
+        .limit(120);
 
       if (error) throw error;
       setRecipes((data || []).map(withParsedRecipeFields));
@@ -345,27 +352,26 @@ const Meals = () => {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredRecipes.map((recipe) => (
+                {filteredRecipes.map((recipe) => {
+                  const href = `/recipe/${recipe.slug || toSlug(recipe.name)}`;
+                  return (
                   <Card key={recipe.id} className="group hover:shadow-warm transition-all duration-300">
-                    <div className="aspect-video bg-gradient-map overflow-hidden rounded-t-lg">
-                      {recipe.image_url ? (
-                        <img 
-                          src={recipe.image_url} 
-                          alt={recipe.name}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <Utensils className="w-12 h-12 text-muted-foreground" />
-                        </div>
-                      )}
-                    </div>
+                    <Link to={href} className="aspect-video bg-gradient-map overflow-hidden rounded-t-lg block">
+                      <RecipeImagePlaceholder
+                        name={recipe.name}
+                        country={recipe.country}
+                        imageUrl={recipe.image_url}
+                        className="w-full h-full"
+                      />
+                    </Link>
                     
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between mb-2">
-                        <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
-                          {recipe.name}
-                        </h3>
+                        <Link to={href}>
+                          <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
+                            {recipe.name}
+                          </h3>
+                        </Link>
                         <Badge variant="secondary" className="text-xs">
                           {recipe.country}
                         </Badge>
@@ -392,17 +398,22 @@ const Meals = () => {
                         <NutritionBadge calories={recipe.calories} protein={recipe.protein} carbs={recipe.carbs} fats={recipe.fats} />
                       </div>
 
-                      
-                      <Button 
-                        className="w-full" 
-                        variant="outline"
-                        onClick={() => startCooking(recipe)}
-                      >
-                        Start Cooking
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button className="flex-1" variant="outline" asChild>
+                          <Link to={href}>View Recipe</Link>
+                        </Button>
+                        <Button
+                          className="flex-1"
+                          variant="secondary"
+                          onClick={() => startCooking(recipe)}
+                        >
+                          Start Cooking
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
-                ))}
+                );
+                })}
               </div>
             )}
           </div>

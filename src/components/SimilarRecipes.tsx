@@ -1,13 +1,17 @@
 import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useRecommendations } from "@/hooks/useRecommendations";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import RecipeImagePlaceholder from "@/components/RecipeImagePlaceholder";
 import { Clock, ChefHat } from "lucide-react";
+import { toSlug } from "@/lib/recipeText";
 
 interface Recipe {
   id: string;
   name: string;
+  slug?: string | null;
   summary: string;
   country: string;
   difficulty: string;
@@ -22,10 +26,15 @@ interface SimilarRecipesProps {
   onRecipeSelect?: (recipe: Recipe) => void;
 }
 
+function recipePath(recipe: Recipe): string {
+  return `/recipe/${recipe.slug?.trim() || toSlug(recipe.name)}`;
+}
+
 export function SimilarRecipes({ recipeId, onRecipeSelect }: SimilarRecipesProps) {
   const { getSimilarRecipes, trackInteraction } = useRecommendations();
   const [similarRecipes, setSimilarRecipes] = useState<Recipe[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSimilar = async () => {
@@ -40,11 +49,13 @@ export function SimilarRecipes({ recipeId, onRecipeSelect }: SimilarRecipesProps
     }
   }, [recipeId, getSimilarRecipes]);
 
-  const handleRecipeClick = async (recipe: Recipe) => {
-    await trackInteraction(recipe.id, "view");
+  const openRecipe = async (recipe: Recipe) => {
+    void trackInteraction(recipe.id, "view");
     if (onRecipeSelect) {
       onRecipeSelect(recipe);
+      return;
     }
+    navigate(recipePath(recipe));
   };
 
   if (isLoading) {
@@ -75,16 +86,17 @@ export function SimilarRecipes({ recipeId, onRecipeSelect }: SimilarRecipesProps
       <h3 className="text-lg font-semibold text-foreground">You Might Also Like</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {similarRecipes.map((recipe) => (
-          <Card 
-            key={recipe.id} 
+          <Card
+            key={recipe.id}
             className="overflow-hidden cursor-pointer hover:shadow-md transition-shadow group"
-            onClick={() => handleRecipeClick(recipe)}
+            onClick={() => openRecipe(recipe)}
           >
             <div className="relative h-32 overflow-hidden">
-              <img
-                src={recipe.image_url || "/placeholder.svg"}
-                alt={recipe.name}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              <RecipeImagePlaceholder
+                name={recipe.name}
+                country={recipe.country}
+                imageUrl={recipe.image_url}
+                className="w-full h-full"
               />
               <div className="absolute top-2 left-2">
                 <Badge variant="secondary" className="text-xs bg-background/90">
@@ -100,12 +112,14 @@ export function SimilarRecipes({ recipeId, onRecipeSelect }: SimilarRecipesProps
               )}
             </div>
             <CardContent className="p-3">
-              <h4 className="font-medium text-sm text-foreground mb-1 line-clamp-1 group-hover:text-primary transition-colors">
+              <Link
+                to={recipePath(recipe)}
+                className="font-medium text-sm text-foreground mb-1 line-clamp-1 group-hover:text-primary transition-colors block"
+                onClick={(e) => e.stopPropagation()}
+              >
                 {recipe.name}
-              </h4>
-              <p className="text-xs text-muted-foreground line-clamp-2 mb-2">
-                {recipe.summary}
-              </p>
+              </Link>
+              <p className="text-xs text-muted-foreground line-clamp-2 mb-2">{recipe.summary}</p>
               <div className="flex items-center justify-between text-xs text-muted-foreground">
                 <div className="flex items-center gap-1">
                   <Clock className="h-3 w-3" />

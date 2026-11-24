@@ -11,6 +11,7 @@ import { MapPin, BookOpen, ArrowLeft, ChefHat } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SourceCitations } from "@/components/cultural/SourceCitations";
 import { RecipeCulturalContext } from "@/components/cultural/RecipeCulturalContext";
+import RecipeImagePlaceholder from "@/components/RecipeImagePlaceholder";
 
 interface Dish {
   id: string;
@@ -163,11 +164,13 @@ const CulturalStory = () => {
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {recipes.map(r => (
-                <Link key={r.id} to={`/recipes?recipe=${r.slug}`}>
+                <Link key={r.id} to={`/recipe/${r.slug}`}>
                   <Card className="h-full hover:shadow-md transition-shadow overflow-hidden">
-                    {r.image_url && (
-                      <img src={r.image_url} alt={r.name} loading="lazy" className="w-full h-40 object-cover" />
-                    )}
+                    <RecipeImagePlaceholder
+                      name={r.name}
+                      imageUrl={r.image_url}
+                      className="w-full h-40"
+                    />
                     <CardContent className="p-4">
                       <h3 className="font-semibold">{r.name}</h3>
                       {r.brief_description && (

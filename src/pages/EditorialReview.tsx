@@ -12,6 +12,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import RecipeImagePlaceholder from "@/components/RecipeImagePlaceholder";
 import { CheckCircle, XCircle, Loader2, ShieldAlert, RotateCcw } from "lucide-react";
 import { asIngredientList, asStepList } from "@/types/content";
 import type { Json } from "@/integrations/supabase/types";
@@ -312,9 +313,12 @@ export default function EditorialReview() {
                             <span>{new Date(u.created_at).toLocaleDateString()}</span>
                           </div>
                         </div>
-                        {r.image_url && (
-                          <img src={r.image_url} alt={r.name} className="h-24 w-24 object-cover rounded" />
-                        )}
+                        <RecipeImagePlaceholder
+                          name={r.name}
+                          country={r.country}
+                          imageUrl={r.image_url}
+                          className="h-24 w-24 rounded"
+                        />
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-3">

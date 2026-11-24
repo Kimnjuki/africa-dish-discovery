@@ -6,9 +6,10 @@ import { PageMeta } from "@/components/seo/PageMeta";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { 
-  Calendar, 
-  ChefHat, 
+import RecipeImagePlaceholder from "@/components/RecipeImagePlaceholder";
+import {
+  Calendar,
+  ChefHat,
   Clock, 
   Users, 
   Utensils,
@@ -266,13 +267,12 @@ const SharedMealPlan = () => {
                           </div>
                           {meal && meal.recipe ? (
                             <div className="space-y-1">
-                              {meal.recipe.image_url && (
-                                <img 
-                                  src={meal.recipe.image_url} 
-                                  alt={meal.recipe.name}
-                                  className="w-full h-16 object-cover rounded"
-                                />
-                              )}
+                              <RecipeImagePlaceholder
+                                name={meal.recipe.name}
+                                country={meal.recipe.country}
+                                imageUrl={meal.recipe.image_url}
+                                className="w-full h-16 rounded"
+                              />
                               <p className="text-xs font-medium line-clamp-2">{meal.recipe.name}</p>
                               <div className="flex items-center gap-1 text-xs text-muted-foreground">
                                 <Clock className="w-3 h-3" />

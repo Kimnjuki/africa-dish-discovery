@@ -241,15 +241,12 @@ const DishEncyclopedia = () => {
                   )}
                 </div>
                 <div className="rounded-lg overflow-hidden h-56 lg:h-full">
-                  {recipe?.image_url ? (
-                    <img
-                      src={recipe.image_url}
-                      alt={`${title} from ${country}`}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <RecipeImagePlaceholder name={title} country={country} />
-                  )}
+                  <RecipeImagePlaceholder
+                    name={title}
+                    country={country}
+                    imageUrl={recipe?.image_url}
+                    className="w-full h-full"
+                  />
                 </div>
               </header>
 
@@ -283,16 +280,12 @@ const DishEncyclopedia = () => {
                             <Card className="hover:border-primary/50 transition-all">
                               <CardContent className="p-3 flex gap-3 items-center">
                                 <div className="w-14 h-14 rounded overflow-hidden shrink-0">
-                                  {r.image_url ? (
-                                    <img
-                                      src={r.image_url}
-                                      alt={`${r.name} from ${r.country}`}
-                                      loading="lazy"
-                                      className="w-full h-full object-cover"
-                                    />
-                                  ) : (
-                                    <RecipeImagePlaceholder name={r.name} country={r.country} />
-                                  )}
+                                  <RecipeImagePlaceholder
+                                    name={r.name}
+                                    country={r.country}
+                                    imageUrl={r.image_url}
+                                    className="w-full h-full"
+                                  />
                                 </div>
                                 <div className="min-w-0">
                                   <p className="font-medium text-sm truncate">{r.name}</p>

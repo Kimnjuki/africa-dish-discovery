@@ -62,7 +62,7 @@ export const CountryGuideSection = ({
           {festiveDishes.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-3">
               {festiveDishes.slice(0, 8).map((d) => (
-                <Link key={d.slug} to={`/recipes?recipe=${d.slug}`}>
+                <Link key={d.slug} to={`/recipe/${d.slug}`}>
                   <Badge variant="outline" className="hover:bg-accent transition-colors">
                     {d.name}
                   </Badge>

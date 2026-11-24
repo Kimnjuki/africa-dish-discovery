@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Loader2, ExternalLink } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchCreatorBySlug, sameAsLinks, type CreatorProfile } from "@/lib/creatorProfile";
+import RecipeImagePlaceholder from "@/components/RecipeImagePlaceholder";
 
 type RecipeCard = {
   id: string;
@@ -163,14 +164,12 @@ export default function CreatorProfilePage() {
                     to={`/recipe/${r.slug}`}
                     className="block overflow-hidden rounded-lg border hover:border-primary/40 transition-colors"
                   >
-                    {r.image_url && (
-                      <img
-                        src={r.image_url}
-                        alt={r.name}
-                        className="aspect-[4/3] w-full object-cover"
-                        loading="lazy"
-                      />
-                    )}
+                    <RecipeImagePlaceholder
+                      name={r.name}
+                      country={r.country || undefined}
+                      imageUrl={r.image_url}
+                      className="aspect-[4/3] w-full"
+                    />
                     <div className="p-3 space-y-1">
                       <p className="font-medium leading-snug">{r.name}</p>
                       {r.country && <p className="text-xs text-muted-foreground">{r.country}</p>}

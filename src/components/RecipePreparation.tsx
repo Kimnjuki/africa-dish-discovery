@@ -6,6 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Clock, Users, Star, ChefHat, CheckCircle, Circle, Timer, ArrowLeft, Play, Pause, RotateCcw } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import RecipeImagePlaceholder from "@/components/RecipeImagePlaceholder";
 import { itemText } from "@/lib/recipeText";
 import type { IngredientValue, StepValue } from "@/types/content";
 
@@ -240,17 +241,16 @@ export const RecipePreparation = ({ recipe, onBack }: RecipePreparationProps) =>
             </Card>
 
             {/* Recipe Image */}
-            {recipe.image_url && (
-              <Card className="overflow-hidden">
-                <div className="h-64">
-                  <img 
-                    src={recipe.image_url}
-                    alt={recipe.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </Card>
-            )}
+            <Card className="overflow-hidden">
+              <div className="h-64">
+                <RecipeImagePlaceholder
+                  name={recipe.name}
+                  country={recipe.country}
+                  imageUrl={recipe.image_url}
+                  className="w-full h-full"
+                />
+              </div>
+            </Card>
           </div>
 
           {/* Sidebar */}

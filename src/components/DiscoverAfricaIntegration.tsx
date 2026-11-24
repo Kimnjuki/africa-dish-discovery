@@ -6,6 +6,7 @@ import { Clock, Users, ChefHat, Star, Bookmark, Heart, PlayCircle } from "lucide
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import CookingPopup from "./CookingPopup";
+import RecipeImagePlaceholder from "./RecipeImagePlaceholder";
 import discoverAfricaHero from "@/assets/discover-africa-hero.jpg";
 import { withParsedRecipeFields, type IngredientValue, type StepValue } from "@/types/content";
 import type { User } from "@supabase/supabase-js";
@@ -191,17 +192,12 @@ const DiscoverAfricaIntegration = () => {
               className="group border-primary/10 shadow-soft hover:shadow-warm transition-all duration-300 transform hover:scale-105"
             >
               <div className="relative h-48 overflow-hidden rounded-t-lg">
-                {recipe.image_url ? (
-                  <img 
-                    src={recipe.image_url} 
-                    alt={recipe.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gradient-sunset flex items-center justify-center">
-                    <ChefHat className="w-16 h-16 text-white/60" />
-                  </div>
-                )}
+                <RecipeImagePlaceholder
+                  name={recipe.name}
+                  country={recipe.country}
+                  imageUrl={recipe.image_url}
+                  className="w-full h-full"
+                />
                 
                 <div className="absolute top-4 left-4">
                   <Badge variant="outline" className="bg-primary/90 text-primary-foreground">

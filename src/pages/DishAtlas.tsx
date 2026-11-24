@@ -256,16 +256,12 @@ const DishAtlas = () => {
                           <Card className="h-full group overflow-hidden hover:shadow-warm transition-all">
                             <div className="flex">
                               <div className="w-24 shrink-0 relative">
-                                {r.image_url ? (
-                                  <img
-                                    src={r.image_url}
-                                    alt={`${r.name} from ${r.country}`}
-                                    loading="lazy"
-                                    className="w-full h-full object-cover"
-                                  />
-                                ) : (
-                                  <RecipeImagePlaceholder name={r.name} country={r.country} />
-                                )}
+                                <RecipeImagePlaceholder
+                                  name={r.name}
+                                  country={r.country}
+                                  imageUrl={r.image_url}
+                                  className="w-full h-full"
+                                />
                                 <span className="absolute top-1 left-1 text-xs font-bold bg-background/90 rounded px-1.5">
                                   #{i + 1}
                                 </span>

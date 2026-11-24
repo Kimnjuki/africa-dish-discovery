@@ -5,8 +5,9 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { 
-  ChefHat, 
+import RecipeImagePlaceholder from "@/components/RecipeImagePlaceholder";
+import {
+  ChefHat,
   Clock, 
   Users, 
   ShoppingCart, 
@@ -222,16 +223,13 @@ const SmartRecipeMatch = ({
             <CardContent className="p-4">
               <div className="flex flex-col lg:flex-row gap-4">
                 {/* Recipe Image/Placeholder */}
-                <div className="w-full lg:w-32 h-24 lg:h-auto rounded-lg bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center shrink-0">
-                  {match.image_url ? (
-                    <img 
-                      src={match.image_url} 
-                      alt={match.name}
-                      className="w-full h-full object-cover rounded-lg"
-                    />
-                  ) : (
-                    <ChefHat className="w-8 h-8 text-primary/50" />
-                  )}
+                <div className="w-full lg:w-32 h-24 lg:h-auto rounded-lg overflow-hidden shrink-0">
+                  <RecipeImagePlaceholder
+                    name={match.name}
+                    country={match.country}
+                    imageUrl={match.image_url}
+                    className="w-full h-full rounded-lg"
+                  />
                 </div>
 
                 {/* Recipe Info */}

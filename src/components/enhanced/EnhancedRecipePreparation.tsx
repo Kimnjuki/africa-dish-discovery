@@ -25,6 +25,7 @@ import { RecipeNotes } from "@/components/recipe/RecipeNotes";
 import { CookMode } from "@/components/recipe/CookMode";
 import { PrintRecipeButton } from "@/components/PrintRecipeButton";
 import { RecipeTrustNotice } from "@/components/recipe/RecipeTrustNotice";
+import RecipeImagePlaceholder from "@/components/RecipeImagePlaceholder";
 import { itemText } from "@/lib/recipeText";
 import type { IngredientValue, StepValue } from "@/types/content";
 
@@ -799,17 +800,16 @@ export const EnhancedRecipePreparation = ({ recipe, onBack }: RecipePreparationP
             </Card>
 
             {/* Recipe Image */}
-            {recipe.image_url && (
-              <Card className="overflow-hidden">
-                <div className="h-64">
-                  <img 
-                    src={recipe.image_url}
-                    alt={recipe.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              </Card>
-            )}
+            <Card className="overflow-hidden">
+              <div className="h-64">
+                <RecipeImagePlaceholder
+                  name={recipe.name}
+                  country={recipe.country}
+                  imageUrl={recipe.image_url}
+                  className="w-full h-full"
+                />
+              </div>
+            </Card>
 
             {/* Tips, make-ahead, storage, freezer and equipment */}
             <div id="recipe-notes" className="scroll-mt-24"><RecipeNotes recipe={recipe} /></div>

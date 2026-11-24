@@ -340,25 +340,12 @@ const RecipeGallery = () => {
                 {continentRecipes.map(recipe => (
                   <Card key={recipe.id} className="group overflow-hidden hover:shadow-lg transition-all">
                     <div className="relative">
-                      {hasValidImage(recipe.image_url) ? (
-                        <img
-                          src={recipe.image_url!}
-                          alt={recipe.name}
-                          className={`w-full object-cover ${viewMode === "grid" ? "aspect-square" : "aspect-square"}`}
-                          loading="lazy"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).style.display = 'none';
-                            (e.target as HTMLImageElement).nextElementSibling?.classList.remove('hidden');
-                          }}
-                        />
-                      ) : null}
-                      <div className={hasValidImage(recipe.image_url) ? "hidden" : ""}>
-                        <RecipeImagePlaceholder
-                          name={recipe.name}
-                          country={recipe.country}
-                          className={`w-full ${viewMode === "grid" ? "aspect-square" : "aspect-square"}`}
-                        />
-                      </div>
+                      <RecipeImagePlaceholder
+                        name={recipe.name}
+                        country={recipe.country}
+                        imageUrl={hasValidImage(recipe.image_url) ? recipe.image_url : null}
+                        className={`w-full ${viewMode === "grid" ? "aspect-square" : "aspect-square"}`}
+                      />
                       
                       {/* Country flag overlay */}
                       <div className="absolute top-2 left-2">

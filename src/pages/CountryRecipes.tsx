@@ -13,6 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowLeft, MapPin } from "lucide-react";
 import { getCountryFlag } from "@/utils/countryFlags";
 import { NutritionBadge } from "@/components/NutritionBadge";
+import RecipeImagePlaceholder from "@/components/RecipeImagePlaceholder";
 import type { IngredientValue } from "@/types/content";
 
 interface Recipe {
@@ -131,7 +132,7 @@ const CountryRecipes = () => {
     hasPart: recipes.slice(0, 20).map(r => ({
       "@type": "Recipe",
       name: r.name,
-      url: `https://www.ladhaquest.com/recipes?recipe=${r.slug}`,
+      url: `https://www.ladhaquest.com/recipe/${r.slug}`,
       image: r.image_url || undefined,
     })),
   };
@@ -214,11 +215,14 @@ const CountryRecipes = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {visible.map(r => (
-              <Link key={r.id} to={`/recipes?recipe=${r.slug}`}>
+              <Link key={r.id} to={`/recipe/${r.slug}`}>
                 <Card className="h-full hover:shadow-md transition-shadow overflow-hidden">
-                  {r.image_url && (
-                    <img src={r.image_url} alt={`${r.name} — traditional dish from ${country}`} loading="lazy" className="w-full h-48 object-cover" />
-                  )}
+                  <RecipeImagePlaceholder
+                    name={r.name}
+                    country={country}
+                    imageUrl={r.image_url}
+                    className="w-full h-48"
+                  />
                   <CardContent className="p-4">
                     <h3 className="font-semibold text-lg">{r.name}</h3>
                     {r.brief_description && (

@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import ingredientsHero from "@/assets/ingredients-hero.jpg";
 import { EnhancedRecipePreparation } from "@/components/enhanced/EnhancedRecipePreparation";
+import RecipeImagePlaceholder from "@/components/RecipeImagePlaceholder";
 import { withParsedRecipeFields, type IngredientValue, type StepValue } from "@/types/content";
 
 interface Recipe {
@@ -290,17 +291,12 @@ const Ingredients = () => {
                     {filteredRecipes.map((recipe) => (
                       <Card key={recipe.id} className="group hover:shadow-warm transition-all duration-300">
                         <div className="aspect-video bg-gradient-map overflow-hidden rounded-t-lg">
-                          {recipe.image_url ? (
-                            <img 
-                              src={recipe.image_url} 
-                              alt={recipe.name}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center">
-                              <category.icon className="w-12 h-12 text-muted-foreground" />
-                            </div>
-                          )}
+                          <RecipeImagePlaceholder
+                            name={recipe.name}
+                            country={recipe.country}
+                            imageUrl={recipe.image_url}
+                            className="w-full h-full"
+                          />
                         </div>
                         
                         <CardContent className="p-4">

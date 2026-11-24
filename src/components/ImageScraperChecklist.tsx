@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';
 import { useToast } from '@/hooks/use-toast';
+import RecipeImagePlaceholder from '@/components/RecipeImagePlaceholder';
 import { Download, CheckCircle2, AlertCircle, Search } from 'lucide-react';
 
 interface Recipe {
@@ -513,13 +514,12 @@ export const ImageScraperChecklist = () => {
                   )}
                 </div>
 
-                {hasImage && recipe.image_url && (
-                  <img 
-                    src={recipe.image_url} 
-                    alt={recipe.name}
-                    className="h-12 w-12 object-cover rounded"
-                  />
-                )}
+                <RecipeImagePlaceholder
+                  name={recipe.name}
+                  country={recipe.country}
+                  imageUrl={hasImage ? recipe.image_url : null}
+                  className="h-12 w-12 rounded"
+                />
               </div>
             );
           })}

@@ -268,24 +268,16 @@ export const ImageVerificationTool = () => {
             </CardHeader>
             <CardContent>
               <div className="relative aspect-video rounded-lg overflow-hidden mb-4 bg-muted">
-                {currentRecipe.image_url && !currentRecipe.image_url.includes('example.com') ? (
-                  <img
-                    src={currentRecipe.image_url}
-                    alt={currentRecipe.name}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = 'none';
-                    }}
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <RecipeImagePlaceholder
-                      name={currentRecipe.name}
-                      country={currentRecipe.country}
-                      className="w-full h-full"
-                    />
-                  </div>
-                )}
+                <RecipeImagePlaceholder
+                  name={currentRecipe.name}
+                  country={currentRecipe.country}
+                  imageUrl={
+                    currentRecipe.image_url && !currentRecipe.image_url.includes('example.com')
+                      ? currentRecipe.image_url
+                      : null
+                  }
+                  className="w-full h-full"
+                />
               </div>
 
               <div className="space-y-2 text-sm">

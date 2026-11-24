@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import RecipeImagePlaceholder from "@/components/RecipeImagePlaceholder";
 import { Sparkles, Star, TrendingUp, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -201,17 +202,12 @@ export const SmartRecommendations = ({ onRecipeSelect }: SmartRecommendationsPro
           {recommendations.map((recipe) => (
             <Card key={recipe.id} className="group hover:shadow-warm transition-all duration-300">
               <div className="aspect-video bg-gradient-map overflow-hidden rounded-t-lg relative">
-                {recipe.image_url ? (
-                  <img 
-                    src={recipe.image_url} 
-                    alt={recipe.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gradient-primary">
-                    <Sparkles className="w-12 h-12 text-primary-foreground" />
-                  </div>
-                )}
+                <RecipeImagePlaceholder
+                  name={recipe.name}
+                  country={recipe.country}
+                  imageUrl={recipe.image_url}
+                  className="w-full h-full"
+                />
                 
                 {recipe.match_percentage && recipe.match_percentage > 30 && (
                   <Badge className="absolute top-2 right-2 bg-primary">

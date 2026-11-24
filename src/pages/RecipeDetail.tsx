@@ -32,7 +32,6 @@ import { withParsedRecipeFields, type CookableRecipe } from "@/types/content";
 import { cacheRecipe, getCachedRecipes, isBrowserOffline } from "@/lib/offlineStore";
 import { trackRecipeView } from "@/lib/recentlyViewed";
 import { useDataSaver } from "@/hooks/useDataSaver";
-import { DataSaverImage } from "@/components/DataSaverImage";
 import { track, EVENTS } from "@/lib/analytics";
 
 type DishProvenance = {
@@ -308,16 +307,12 @@ const RecipeDetail = () => {
             <>
               <header className="grid lg:grid-cols-5 gap-8 mb-10">
                 <div className="lg:col-span-3 rounded-lg overflow-hidden h-64 lg:h-96">
-                  {recipe.image_url ? (
-                    <DataSaverImage
-                      src={recipe.image_url}
-                      alt={`${title} from ${country}`}
-                      className="w-full h-full object-cover"
-                      loading="eager"
-                    />
-                  ) : (
-                    <RecipeImagePlaceholder name={title} country={country} className="h-full min-h-64" />
-                  )}
+                  <RecipeImagePlaceholder
+                    name={title}
+                    country={country}
+                    imageUrl={recipe.image_url}
+                    className="h-full min-h-64 w-full"
+                  />
                 </div>
                 <div className="lg:col-span-2">
                   <h1 className="mb-3 text-3xl font-bold leading-tight sm:text-4xl">{localHeading}</h1>
