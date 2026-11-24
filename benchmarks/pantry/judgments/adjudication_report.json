@@ -1,0 +1,13 @@
+{
+  "generated_at": "2026-11-24T11:38:44.419Z",
+  "total_pairs": 156,
+  "agreed": 148,
+  "disagreements": 8,
+  "missing_reviewer": 0,
+  "agreement_rate": 0.9487179487179487,
+  "freeze_ready": false,
+  "outputs": {
+    "disagreements": "C:\\Users\\Administrator\\Downloads\\africa-dish-discovery-main\\benchmarks\\pantry\\judgments\\disagreements.jsonl",
+    "adjudicated": "C:\\Users\\Administrator\\Downloads\\africa-dish-discovery-main\\benchmarks\\pantry\\judgments\\recipe_relevance.adjudicated.jsonl"
+  }
+}
