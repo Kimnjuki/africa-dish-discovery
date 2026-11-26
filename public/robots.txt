@@ -49,6 +49,12 @@ Disallow: /image-verification
 Disallow: /image-scraper
 Disallow: /recipe-gallery
 
+# Query/prefill URLs — not index targets (canonicals + sitemap use clean paths)
+Disallow: /contact?*
+Disallow: /recipes?*
+Disallow: /cuisine-map?*
+Disallow: /recipe-index?*q=
+
 # Service workers only — keep /assets/ crawlable so Google can render JS/CSS.
 # Assets still send X-Robots-Tag: noindex via nginx so they are not indexed as pages.
 Disallow: /registerSW.js

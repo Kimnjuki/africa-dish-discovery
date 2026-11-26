@@ -32,6 +32,10 @@ const Contact = () => {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  const hasPrefillParams = Boolean(
+    searchParams.get("subject") || searchParams.get("message")
+  );
+
   // Prefill from provenance “suggest a correction” and other deep links
   useEffect(() => {
     const subject = searchParams.get("subject");
@@ -118,6 +122,7 @@ const Contact = () => {
         description="Get in touch with the LadhaQuest team. We'd love to hear from you about recipes, partnerships, or any questions."
         keywords="contact LadhaQuest, get in touch, support, feedback, African recipes"
         canonical="https://www.ladhaquest.com/contact"
+        noIndex={hasPrefillParams}
       />
       
       <Navigation />

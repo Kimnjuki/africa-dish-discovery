@@ -54,8 +54,14 @@ const Recipes = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Legacy deep link /recipes?recipe=<slug> → /recipe/<slug> (nginx also 301s in prod).
+    const slug = new URLSearchParams(window.location.search).get("recipe")?.trim();
+    if (slug) {
+      navigate(`/recipe/${slug}`, { replace: true });
+      return;
+    }
     fetchRecipes();
-  }, []);
+  }, [navigate]);
 
   const handleSearchResults = (results: Recipe[], isAiEnhanced: boolean) => {
     setFilteredRecipes(results);
