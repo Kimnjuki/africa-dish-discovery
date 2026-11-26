@@ -2,26 +2,30 @@
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <sitemap>
     <loc>https://www.ladhaquest.com/sitemap-pages.xml</loc>
-    <lastmod>2026-11-17</lastmod>
+    <lastmod>2026-11-24</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://www.ladhaquest.com/sitemap-recipes.xml</loc>
-    <lastmod>2026-11-17</lastmod>
+    <lastmod>2026-11-24</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://www.ladhaquest.com/sitemap-dishes.xml</loc>
-    <lastmod>2026-11-17</lastmod>
+    <lastmod>2026-11-24</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://www.ladhaquest.com/sitemap-countries.xml</loc>
-    <lastmod>2026-11-17</lastmod>
+    <lastmod>2026-11-24</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://www.ladhaquest.com/sitemap-blog.xml</loc>
-    <lastmod>2026-11-17</lastmod>
+    <lastmod>2026-11-24</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://www.ladhaquest.com/sitemap-stories.xml</loc>
-    <lastmod>2026-11-17</lastmod>
+    <lastmod>2026-11-24</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://www.ladhaquest.com/sitemap-facets.xml</loc>
+    <lastmod>2026-11-24</lastmod>
   </sitemap>
 </sitemapindex>

@@ -1,0 +1,1068 @@
+{
+  "run_id": "pantry-eval-2026-11-24T11-38-57-468Z",
+  "benchmark_version": "1.0.0",
+  "catalog_version": "catalog-2026-11-24-3cbc0793",
+  "ingredient_graph_version": "graph-2026-11-24-3cbc0793",
+  "system_version": "75f597f8fb88862021c06e654895dce3955f52da",
+  "model_version": null,
+  "prompt_version": null,
+  "splits": [
+    "development",
+    "safety",
+    "validation",
+    "heldout"
+  ],
+  "case_count": 280,
+  "mode_note": "cook_now relevance≥2; shop_first relevance≥1",
+  "systems": [
+    {
+      "system": "random_baseline",
+      "cases": 280,
+      "metrics": {
+        "precision_at_5": 0.6705426356589147,
+        "ndcg_at_5": 0.9086295049382914,
+        "false_ready_rate": 0,
+        "false_ready_count": 0,
+        "ready_labeled_count": 0,
+        "essential_missing_ingredient_recall": 1,
+        "essential_missing_ingredient_precision": 1,
+        "critical_constraint_violations": 0,
+        "resolution_proxy_accuracy": 1,
+        "p95_latency_ms": 0,
+        "mean_latency_ms": 0,
+        "mean_cost_per_request": 0
+      },
+      "failure_sample": [],
+      "failure_count": 0
+    },
+    {
+      "system": "overlap_baseline",
+      "cases": 280,
+      "metrics": {
+        "precision_at_5": 0.6705426356589147,
+        "ndcg_at_5": 0.9654826388232298,
+        "false_ready_rate": 0.48788927335640137,
+        "false_ready_count": 141,
+        "ready_labeled_count": 289,
+        "essential_missing_ingredient_recall": 0.740506329113924,
+        "essential_missing_ingredient_precision": 0.7436708860759493,
+        "critical_constraint_violations": 61,
+        "resolution_proxy_accuracy": 1,
+        "p95_latency_ms": 3.9207999999999856,
+        "mean_latency_ms": 1.7268735714285708,
+        "mean_cost_per_request": 0
+      },
+      "failure_sample": [
+        {
+          "case_id": "safe-001-peanut-allergy",
+          "recipe_id": "r-mafe",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "safe-001-peanut-allergy",
+          "recipe_id": "r-mafe",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "safe-002-blender-required",
+          "recipe_id": "r-ata-din-din",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "safe-003-time-budget",
+          "recipe_id": "r-bean-stew",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-003",
+          "recipe_id": "r-ke-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-003",
+          "recipe_id": "r-ke-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-006",
+          "recipe_id": "r-ke-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-006",
+          "recipe_id": "r-ke-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-009",
+          "recipe_id": "r-ke-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-009",
+          "recipe_id": "r-ke-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-012",
+          "recipe_id": "r-ke-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-012",
+          "recipe_id": "r-ke-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-015",
+          "recipe_id": "r-ng-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-015",
+          "recipe_id": "r-ng-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-018",
+          "recipe_id": "r-ng-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-018",
+          "recipe_id": "r-ng-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-021",
+          "recipe_id": "r-ng-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-021",
+          "recipe_id": "r-ng-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-024",
+          "recipe_id": "r-ng-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-024",
+          "recipe_id": "r-ng-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-027",
+          "recipe_id": "r-gh-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-027",
+          "recipe_id": "r-gh-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-030",
+          "recipe_id": "r-gh-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-030",
+          "recipe_id": "r-gh-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-033",
+          "recipe_id": "r-gh-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-033",
+          "recipe_id": "r-gh-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-036",
+          "recipe_id": "r-gh-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-036",
+          "recipe_id": "r-gh-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-039",
+          "recipe_id": "r-za-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-039",
+          "recipe_id": "r-za-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-042",
+          "recipe_id": "r-za-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-042",
+          "recipe_id": "r-za-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-045",
+          "recipe_id": "r-za-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-045",
+          "recipe_id": "r-za-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-048",
+          "recipe_id": "r-za-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-048",
+          "recipe_id": "r-za-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "diaspora-us-gen-051",
+          "recipe_id": "r-diaspora-us-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "diaspora-us-gen-051",
+          "recipe_id": "r-diaspora-us-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "diaspora-us-gen-054",
+          "recipe_id": "r-diaspora-us-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "diaspora-us-gen-054",
+          "recipe_id": "r-diaspora-us-5-hard",
+          "type": "production_soft_false_ready"
+        }
+      ],
+      "failure_count": 202
+    },
+    {
+      "system": "quantity_aware_baseline",
+      "cases": 280,
+      "metrics": {
+        "precision_at_5": 0.6705426356589147,
+        "ndcg_at_5": 0.9654826388232298,
+        "false_ready_rate": 0.4358974358974359,
+        "false_ready_count": 102,
+        "ready_labeled_count": 234,
+        "essential_missing_ingredient_recall": 0.740506329113924,
+        "essential_missing_ingredient_precision": 0.7436708860759493,
+        "critical_constraint_violations": 61,
+        "resolution_proxy_accuracy": 1,
+        "p95_latency_ms": 3.9233999999999014,
+        "mean_latency_ms": 1.66624,
+        "mean_cost_per_request": 0
+      },
+      "failure_sample": [
+        {
+          "case_id": "safe-001-peanut-allergy",
+          "recipe_id": "r-mafe",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "safe-001-peanut-allergy",
+          "recipe_id": "r-mafe",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "safe-002-blender-required",
+          "recipe_id": "r-ata-din-din",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "safe-003-time-budget",
+          "recipe_id": "r-bean-stew",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-003",
+          "recipe_id": "r-ke-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-003",
+          "recipe_id": "r-ke-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-006",
+          "recipe_id": "r-ke-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-006",
+          "recipe_id": "r-ke-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-009",
+          "recipe_id": "r-ke-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-009",
+          "recipe_id": "r-ke-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ke-gen-012",
+          "recipe_id": "r-ke-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ke-gen-012",
+          "recipe_id": "r-ke-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-015",
+          "recipe_id": "r-ng-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-015",
+          "recipe_id": "r-ng-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-018",
+          "recipe_id": "r-ng-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-018",
+          "recipe_id": "r-ng-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-021",
+          "recipe_id": "r-ng-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-021",
+          "recipe_id": "r-ng-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "ng-gen-024",
+          "recipe_id": "r-ng-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "ng-gen-024",
+          "recipe_id": "r-ng-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-027",
+          "recipe_id": "r-gh-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-027",
+          "recipe_id": "r-gh-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-030",
+          "recipe_id": "r-gh-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-030",
+          "recipe_id": "r-gh-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-033",
+          "recipe_id": "r-gh-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-033",
+          "recipe_id": "r-gh-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "gh-gen-036",
+          "recipe_id": "r-gh-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "gh-gen-036",
+          "recipe_id": "r-gh-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-039",
+          "recipe_id": "r-za-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-039",
+          "recipe_id": "r-za-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-042",
+          "recipe_id": "r-za-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-042",
+          "recipe_id": "r-za-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-045",
+          "recipe_id": "r-za-8-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-045",
+          "recipe_id": "r-za-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "za-gen-048",
+          "recipe_id": "r-za-11-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "za-gen-048",
+          "recipe_id": "r-za-11-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "diaspora-us-gen-051",
+          "recipe_id": "r-diaspora-us-2-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "diaspora-us-gen-051",
+          "recipe_id": "r-diaspora-us-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "diaspora-us-gen-054",
+          "recipe_id": "r-diaspora-us-5-hard",
+          "type": "critical_safety_ready"
+        },
+        {
+          "case_id": "diaspora-us-gen-054",
+          "recipe_id": "r-diaspora-us-5-hard",
+          "type": "production_soft_false_ready"
+        }
+      ],
+      "failure_count": 202
+    },
+    {
+      "system": "graph_offline",
+      "cases": 280,
+      "metrics": {
+        "precision_at_5": 0.6844961240310077,
+        "ndcg_at_5": 0.9933620459275442,
+        "false_ready_rate": 0.4396887159533074,
+        "false_ready_count": 113,
+        "ready_labeled_count": 257,
+        "essential_missing_ingredient_recall": 0.7468354430379747,
+        "essential_missing_ingredient_precision": 0.7283755274261603,
+        "critical_constraint_violations": 0,
+        "resolution_proxy_accuracy": 1,
+        "p95_latency_ms": 1.3692000000000917,
+        "mean_latency_ms": 0.588696785714289,
+        "mean_cost_per_request": 0
+      },
+      "failure_sample": [
+        {
+          "case_id": "safe-002-blender-required",
+          "recipe_id": "r-ata-din-din",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "safe-003-time-budget",
+          "recipe_id": "r-bean-stew",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-003-quantity-unknown-rice",
+          "recipe_id": "r-jollof",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ke-cook-1",
+          "recipe_id": "r-held-grow-ke-cook-1-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-ke-cook-1",
+          "recipe_id": "r-held-grow-ke-cook-1-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-gh-allergy-egg-1",
+          "recipe_id": "r-held-grow-gh-allergy-egg-1-bad",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-et-unkqty-1",
+          "recipe_id": "r-held-grow-et-unkqty-1",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-sn-cook-1",
+          "recipe_id": "r-held-grow-sn-cook-1-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-sn-cook-1",
+          "recipe_id": "r-held-grow-sn-cook-1-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ug-allergy-dairy-1",
+          "recipe_id": "r-held-grow-ug-allergy-dairy-1-bad",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-cm-unkqty-1",
+          "recipe_id": "r-held-grow-cm-unkqty-1",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-diaspora-us-cook-1",
+          "recipe_id": "r-held-grow-diaspora-us-cook-1-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-diaspora-us-cook-1",
+          "recipe_id": "r-held-grow-diaspora-us-cook-1-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ke-allergy-shellfish-2",
+          "recipe_id": "r-held-grow-ke-allergy-shellfish-2-bad",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-gh-unkqty-2",
+          "recipe_id": "r-held-grow-gh-unkqty-2",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-za-cook-2",
+          "recipe_id": "r-held-grow-za-cook-2-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-za-cook-2",
+          "recipe_id": "r-held-grow-za-cook-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ug-unkqty-2",
+          "recipe_id": "r-held-grow-ug-unkqty-2",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ci-cook-2",
+          "recipe_id": "r-held-grow-ci-cook-2-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-ci-cook-2",
+          "recipe_id": "r-held-grow-ci-cook-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-diaspora-us-allergy-fish-2",
+          "recipe_id": "r-held-grow-diaspora-us-allergy-fish-2-bad",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ke-unkqty-3",
+          "recipe_id": "r-held-grow-ke-unkqty-3",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ng-cook-3",
+          "recipe_id": "r-held-grow-ng-cook-3-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-ng-cook-3",
+          "recipe_id": "r-held-grow-ng-cook-3-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-za-allergy-gluten-3",
+          "recipe_id": "r-held-grow-za-allergy-gluten-3-bad",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-sn-unkqty-3",
+          "recipe_id": "r-held-grow-sn-unkqty-3",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-tz-cook-3",
+          "recipe_id": "r-held-grow-tz-cook-3-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-tz-cook-3",
+          "recipe_id": "r-held-grow-tz-cook-3-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ci-allergy-egg-3",
+          "recipe_id": "r-held-grow-ci-allergy-egg-3-bad",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-diaspora-us-unkqty-3",
+          "recipe_id": "r-held-grow-diaspora-us-unkqty-3",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-diaspora-uk-cook-3",
+          "recipe_id": "r-held-grow-diaspora-uk-cook-3-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-diaspora-uk-cook-3",
+          "recipe_id": "r-held-grow-diaspora-uk-cook-3-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ng-allergy-dairy-4",
+          "recipe_id": "r-held-grow-ng-allergy-dairy-4-bad",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-za-unkqty-4",
+          "recipe_id": "r-held-grow-za-unkqty-4",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-et-cook-4",
+          "recipe_id": "r-held-grow-et-cook-4-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-et-cook-4",
+          "recipe_id": "r-held-grow-et-cook-4-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-tz-allergy-shellfish-4",
+          "recipe_id": "r-held-grow-tz-allergy-shellfish-4-bad",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ci-unkqty-4",
+          "recipe_id": "r-held-grow-ci-unkqty-4",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-cm-cook-4",
+          "recipe_id": "r-held-grow-cm-cook-4-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-cm-cook-4",
+          "recipe_id": "r-held-grow-cm-cook-4-hard",
+          "type": "production_soft_false_ready"
+        }
+      ],
+      "failure_count": 152
+    },
+    {
+      "system": "production_matcher",
+      "cases": 280,
+      "metrics": {
+        "precision_at_5": 0.7682170542635659,
+        "ndcg_at_5": 0.9776310859299708,
+        "false_ready_rate": 0.21195652173913043,
+        "false_ready_count": 39,
+        "ready_labeled_count": 184,
+        "essential_missing_ingredient_recall": 0.740506329113924,
+        "essential_missing_ingredient_precision": 0.7436708860759493,
+        "critical_constraint_violations": 0,
+        "resolution_proxy_accuracy": 1,
+        "p95_latency_ms": 4.61239999999998,
+        "mean_latency_ms": 1.8487253571428692,
+        "mean_cost_per_request": 0
+      },
+      "failure_sample": [
+        {
+          "case_id": "held-grow-ke-cook-1",
+          "recipe_id": "r-held-grow-ke-cook-1-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-ke-cook-1",
+          "recipe_id": "r-held-grow-ke-cook-1-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-sn-cook-1",
+          "recipe_id": "r-held-grow-sn-cook-1-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-sn-cook-1",
+          "recipe_id": "r-held-grow-sn-cook-1-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-diaspora-us-cook-1",
+          "recipe_id": "r-held-grow-diaspora-us-cook-1-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-diaspora-us-cook-1",
+          "recipe_id": "r-held-grow-diaspora-us-cook-1-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-za-cook-2",
+          "recipe_id": "r-held-grow-za-cook-2-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-za-cook-2",
+          "recipe_id": "r-held-grow-za-cook-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ci-cook-2",
+          "recipe_id": "r-held-grow-ci-cook-2-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-ci-cook-2",
+          "recipe_id": "r-held-grow-ci-cook-2-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ng-cook-3",
+          "recipe_id": "r-held-grow-ng-cook-3-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-ng-cook-3",
+          "recipe_id": "r-held-grow-ng-cook-3-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-tz-cook-3",
+          "recipe_id": "r-held-grow-tz-cook-3-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-tz-cook-3",
+          "recipe_id": "r-held-grow-tz-cook-3-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-diaspora-uk-cook-3",
+          "recipe_id": "r-held-grow-diaspora-uk-cook-3-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-diaspora-uk-cook-3",
+          "recipe_id": "r-held-grow-diaspora-uk-cook-3-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-et-cook-4",
+          "recipe_id": "r-held-grow-et-cook-4-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-et-cook-4",
+          "recipe_id": "r-held-grow-et-cook-4-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-cm-cook-4",
+          "recipe_id": "r-held-grow-cm-cook-4-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-cm-cook-4",
+          "recipe_id": "r-held-grow-cm-cook-4-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-gh-cook-5",
+          "recipe_id": "r-held-grow-gh-cook-5-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-gh-cook-5",
+          "recipe_id": "r-held-grow-gh-cook-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ug-cook-5",
+          "recipe_id": "r-held-grow-ug-cook-5-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-ug-cook-5",
+          "recipe_id": "r-held-grow-ug-cook-5-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ke-cook-6",
+          "recipe_id": "r-held-grow-ke-cook-6-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-ke-cook-6",
+          "recipe_id": "r-held-grow-ke-cook-6-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-sn-cook-6",
+          "recipe_id": "r-held-grow-sn-cook-6-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-sn-cook-6",
+          "recipe_id": "r-held-grow-sn-cook-6-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-diaspora-us-cook-6",
+          "recipe_id": "r-held-grow-diaspora-us-cook-6-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-diaspora-us-cook-6",
+          "recipe_id": "r-held-grow-diaspora-us-cook-6-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-za-cook-7",
+          "recipe_id": "r-held-grow-za-cook-7-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-za-cook-7",
+          "recipe_id": "r-held-grow-za-cook-7-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ci-cook-7",
+          "recipe_id": "r-held-grow-ci-cook-7-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-ci-cook-7",
+          "recipe_id": "r-held-grow-ci-cook-7-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-ng-cook-8",
+          "recipe_id": "r-held-grow-ng-cook-8-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-ng-cook-8",
+          "recipe_id": "r-held-grow-ng-cook-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-tz-cook-8",
+          "recipe_id": "r-held-grow-tz-cook-8-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-tz-cook-8",
+          "recipe_id": "r-held-grow-tz-cook-8-hard",
+          "type": "production_soft_false_ready"
+        },
+        {
+          "case_id": "held-grow-diaspora-uk-cook-8",
+          "recipe_id": "r-held-grow-diaspora-uk-cook-8-hard",
+          "type": "false_ready_missing_essential",
+          "missing": [
+            "beef"
+          ]
+        },
+        {
+          "case_id": "held-grow-diaspora-uk-cook-8",
+          "recipe_id": "r-held-grow-diaspora-uk-cook-8-hard",
+          "type": "production_soft_false_ready"
+        }
+      ],
+      "failure_count": 78
+    }
+  ],
+  "gates": {
+    "critical_safety": {
+      "pass": true,
+      "detail": [
+        {
+          "system": "random_baseline",
+          "violations": 0
+        },
+        {
+          "system": "overlap_baseline",
+          "violations": 61
+        },
+        {
+          "system": "quantity_aware_baseline",
+          "violations": 61
+        },
+        {
+          "system": "graph_offline",
+          "violations": 0
+        },
+        {
+          "system": "production_matcher",
+          "violations": 0
+        }
+      ]
+    },
+    "false_ready_rate_lt_2pct": {
+      "pass": false,
+      "detail": [
+        {
+          "system": "random_baseline",
+          "rate": 0
+        },
+        {
+          "system": "overlap_baseline",
+          "rate": 0.48788927335640137
+        },
+        {
+          "system": "quantity_aware_baseline",
+          "rate": 0.4358974358974359
+        },
+        {
+          "system": "graph_offline",
+          "rate": 0.4396887159533074
+        },
+        {
+          "system": "production_matcher",
+          "rate": 0.21195652173913043
+        }
+      ]
+    },
+    "beats_overlap_ndcg": {
+      "pass": true
+    }
+  }
+}
