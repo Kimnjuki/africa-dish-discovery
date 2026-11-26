@@ -341,12 +341,15 @@ function readStaticBlog() {
 const baseHtml = readFileSync(indexHtmlPath, "utf8");
 let hubCount = 0;
 for (const [path, title, description, h1] of hubs) {
+  // Leave __LQ_CANONICAL__ for recipe-index so nginx can inject allow-listed
+  // facet self-canonicals (?country=, etc.). Other hubs bake a stable URL.
+  const canonical = path === "recipe-index" ? "__LQ_CANONICAL__" : `${site}/${path}`;
   publishHtml(
     path,
     shellPage(baseHtml, {
       title,
       description,
-      canonical: `${site}/${path}`,
+      canonical,
       h1,
     })
   );

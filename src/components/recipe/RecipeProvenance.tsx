@@ -138,7 +138,7 @@ export function RecipeProvenance({
 
         <div className="border-t pt-3">
           <Button asChild variant="outline" size="sm" className="h-9">
-            <Link to={correctionHref}>
+            <Link to={correctionHref} rel="nofollow">
               <MessageCircleWarning className="mr-2 h-4 w-4" />
               Suggest a correction
             </Link>
