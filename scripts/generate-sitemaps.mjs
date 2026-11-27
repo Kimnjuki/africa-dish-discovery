@@ -36,19 +36,49 @@ function loadEnv() {
   );
 }
 
+function publicSupabase() {
+  const path = resolve(root, "src/integrations/supabase/client.ts");
+  if (!existsSync(path)) return {};
+  const src = readFileSync(path, "utf8");
+  return {
+    url: src.match(/SUPABASE_URL = "([^"]+)"/)?.[1] || "",
+    key: src.match(/SUPABASE_PUBLISHABLE_KEY = "([^"]+)"/)?.[1] || "",
+  };
+}
+
+function isHttpUrl(value) {
+  try {
+    const u = new URL(String(value).trim());
+    return u.protocol === "http:" || u.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function firstHttpUrl(...candidates) {
+  for (const c of candidates) {
+    const v = String(c || "").trim().replace(new RegExp("/+$"), "");
+    if (v && isHttpUrl(v)) return v;
+  }
+  return "";
+}
+
 // Prefer process.env (Docker/Coolify build args) over local .env file.
 const env = { ...loadEnv(), ...process.env };
-const url = env.SUPABASE_URL || env.VITE_SUPABASE_URL;
+const pub = publicSupabase();
+// Coolify often sets SUPABASE_URL to a key or host without https:// — skip invalid values.
+const url = firstHttpUrl(env.SUPABASE_URL, env.VITE_SUPABASE_URL, pub.url);
 const key =
   env.SUPABASE_SECRET_KEY ||
   env.SUPABASE_SERVICE_ROLE_KEY ||
   env.SUPABASE_PUBLISHABLE_KEY ||
-  env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  pub.key;
 
 if (!url || !key) {
   // Do not fail Coolify/Docker builds — committed public/sitemap*.xml still ship.
   console.warn(
-    "generate-sitemaps: missing SUPABASE_URL / API key — keeping existing public/sitemap*.xml"
+    "generate-sitemaps: missing/invalid SUPABASE_URL or API key — keeping existing public/sitemap*.xml"
   );
   process.exit(0);
 }
@@ -209,29 +239,38 @@ const staticPages = [
 
 console.log("Fetching content from Supabase…");
 
-const [recipes, dishes, recipeCountries, africanCountryRows, dbBlog] = await Promise.all([
-  fetchAll("recipes", "slug,name,summary,country,image_url,updated_at,created_at", {
-    filter: "slug=not.is.null",
-    order: "slug.asc",
-  }),
-  fetchAll("dishes", "slug,updated_at,created_at,cultural_significance", {
-    filter: "slug=not.is.null",
-    order: "slug.asc",
-  }),
-  fetchAll("recipes", "country,updated_at", {
-    filter: "country=not.is.null",
-    order: "country.asc",
-  }),
-  // Fetch African country names for facet sitemap entries.
-  fetchAll("recipes", "country,updated_at", {
-    filter: "continent=eq.Africa&country=not.is.null",
-    order: "country.asc",
-  }).catch(() => []),
-  fetchAll("blog_posts", "slug,title,excerpt,image_url,published_at,updated_at,is_published", {
-    filter: "is_published=eq.true&slug=not.is.null",
-    order: "slug.asc",
-  }).catch(() => []),
-]);
+let recipes, dishes, recipeCountries, africanCountryRows, dbBlog;
+try {
+  [recipes, dishes, recipeCountries, africanCountryRows, dbBlog] = await Promise.all([
+    fetchAll("recipes", "slug,name,summary,country,image_url,updated_at,created_at", {
+      filter: "slug=not.is.null",
+      order: "slug.asc",
+    }),
+    fetchAll("dishes", "slug,updated_at,created_at,cultural_significance", {
+      filter: "slug=not.is.null",
+      order: "slug.asc",
+    }),
+    fetchAll("recipes", "country,updated_at", {
+      filter: "country=not.is.null",
+      order: "country.asc",
+    }),
+    // Fetch African country names for facet sitemap entries.
+    fetchAll("recipes", "country,updated_at", {
+      filter: "continent=eq.Africa&country=not.is.null",
+      order: "country.asc",
+    }).catch(() => []),
+    fetchAll("blog_posts", "slug,title,excerpt,image_url,published_at,updated_at,is_published", {
+      filter: "is_published=eq.true&slug=not.is.null",
+      order: "slug.asc",
+    }).catch(() => []),
+  ]);
+} catch (err) {
+  console.warn(
+    "generate-sitemaps: Supabase fetch failed — keeping existing public/sitemap*.xml"
+  );
+  console.warn(err?.cause?.message || err?.message || err);
+  process.exit(0);
+}
 
 const uniqueRecipes = new Map();
 for (const r of recipes) {
