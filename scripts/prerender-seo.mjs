@@ -74,15 +74,46 @@ function publicSupabase() {
   };
 }
 
+function isHttpUrl(value) {
+  try {
+    const u = new URL(String(value).trim());
+    return u.protocol === "http:" || u.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function firstHttpUrl(...candidates) {
+  for (const c of candidates) {
+    const v = String(c || "").trim().replace(new RegExp("/+$"), "");
+    if (v && isHttpUrl(v)) return v;
+  }
+  return "";
+}
+
+function firstApiKey(...candidates) {
+  for (const c of candidates) {
+    const v = String(c || "").trim();
+    if (v && v.startsWith("eyJ")) return v;
+  }
+  for (const c of candidates) {
+    const v = String(c || "").trim();
+    if (v && !isHttpUrl(v) && v.length > 20) return v;
+  }
+  return "";
+}
+
 const env = { ...loadEnv(), ...process.env };
 const pub = publicSupabase();
-const url = env.SUPABASE_URL || env.VITE_SUPABASE_URL || pub.url;
-const key =
-  env.SUPABASE_SECRET_KEY ||
-  env.SUPABASE_SERVICE_ROLE_KEY ||
-  env.SUPABASE_PUBLISHABLE_KEY ||
-  env.VITE_SUPABASE_PUBLISHABLE_KEY ||
-  pub.key;
+// Coolify may inject a key into SUPABASE_URL — only accept real http(s) URLs.
+const url = firstHttpUrl(env.SUPABASE_URL, env.VITE_SUPABASE_URL, pub.url);
+const key = firstApiKey(
+  env.SUPABASE_SECRET_KEY,
+  env.SUPABASE_SERVICE_ROLE_KEY,
+  env.SUPABASE_PUBLISHABLE_KEY,
+  env.VITE_SUPABASE_PUBLISHABLE_KEY,
+  pub.key
+);
 
 if (!existsSync(distDir)) {
   console.warn("prerender-seo: dist/ missing — run vite build first");
@@ -379,32 +410,37 @@ let countryCount = 0;
 if (!url || !key) {
   console.warn("prerender-seo: no Supabase credentials — skipping recipe and country shells");
 } else {
-  const recipes = await fetchAfricanRecipes();
-  const countries = new Map();
-  for (const recipe of recipes) {
-    if (!recipe.slug) continue;
-    publishHtml(`recipe/${recipe.slug}`, injectMeta(baseHtml, recipe));
-    written++;
-    const name = String(recipe.country || "").trim();
-    if (!name) continue;
-    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-    if (slug && !countries.has(slug)) countries.set(slug, name);
-  }
-  for (const [slug, name] of countries) {
-    publishHtml(
-      `country/${slug}`,
-      shellPage(baseHtml, {
-        title: `${name} Food Guide | LadhaQuest`.length <= 60
-          ? `${name} Food Guide | LadhaQuest`
-          : `${name} Recipes | LadhaQuest`,
-        description: clipMeta(
-          `Explore authentic ${name} recipes on LadhaQuest, with local dishes, ingredients, and cooking context.`
-        ),
-        canonical: `${site}/country/${slug}`,
-        h1: `${name} recipes`,
-      })
-    );
-    countryCount++;
+  try {
+    const recipes = await fetchAfricanRecipes();
+    const countries = new Map();
+    for (const recipe of recipes) {
+      if (!recipe.slug) continue;
+      publishHtml(`recipe/${recipe.slug}`, injectMeta(baseHtml, recipe));
+      written++;
+      const name = String(recipe.country || "").trim();
+      if (!name) continue;
+      const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+      if (slug && !countries.has(slug)) countries.set(slug, name);
+    }
+    for (const [slug, name] of countries) {
+      publishHtml(
+        `country/${slug}`,
+        shellPage(baseHtml, {
+          title: `${name} Food Guide | LadhaQuest`.length <= 60
+            ? `${name} Food Guide | LadhaQuest`
+            : `${name} Recipes | LadhaQuest`,
+          description: clipMeta(
+            `Explore authentic ${name} recipes on LadhaQuest, with local dishes, ingredients, and cooking context.`
+          ),
+          canonical: `${site}/country/${slug}`,
+          h1: `${name} recipes`,
+        })
+      );
+      countryCount++;
+    }
+  } catch (err) {
+    console.warn("prerender-seo: Supabase fetch failed — shipping vite dist without recipe shells");
+    console.warn(err?.cause?.message || err?.message || err);
   }
 }
 

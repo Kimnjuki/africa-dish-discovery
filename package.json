@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "prebuild": "node scripts/generate-sitemaps.mjs || true",
-    "build": "vite build && node scripts/prerender-seo.mjs",
+    "build": "vite build && (node scripts/prerender-seo.mjs || true)",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit -p tsconfig.app.json",

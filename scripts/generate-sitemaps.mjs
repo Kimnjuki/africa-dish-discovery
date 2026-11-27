@@ -68,12 +68,18 @@ const env = { ...loadEnv(), ...process.env };
 const pub = publicSupabase();
 // Coolify often sets SUPABASE_URL to a key or host without https:// — skip invalid values.
 const url = firstHttpUrl(env.SUPABASE_URL, env.VITE_SUPABASE_URL, pub.url);
+// Prefer JWT-shaped keys; Coolify sometimes puts a URL or garbage in *_KEY slots.
+const keyCandidates = [
+  env.SUPABASE_SECRET_KEY,
+  env.SUPABASE_SERVICE_ROLE_KEY,
+  env.SUPABASE_PUBLISHABLE_KEY,
+  env.VITE_SUPABASE_PUBLISHABLE_KEY,
+  pub.key,
+];
 const key =
-  env.SUPABASE_SECRET_KEY ||
-  env.SUPABASE_SERVICE_ROLE_KEY ||
-  env.SUPABASE_PUBLISHABLE_KEY ||
-  env.VITE_SUPABASE_PUBLISHABLE_KEY ||
-  pub.key;
+  keyCandidates.map((v) => String(v || "").trim()).find((v) => v.startsWith("eyJ")) ||
+  keyCandidates.map((v) => String(v || "").trim()).find((v) => v && !isHttpUrl(v) && v.length > 20) ||
+  "";
 
 if (!url || !key) {
   // Do not fail Coolify/Docker builds — committed public/sitemap*.xml still ship.
