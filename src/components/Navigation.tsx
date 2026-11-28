@@ -54,16 +54,23 @@ const Navigation = () => {
     setIsMenuOpen(false);
   };
 
-  const navItems = [
-    { label: "Home", href: "/", isRoute: true, protected: false },
-    { label: "Recipes", href: "/recipes", isRoute: true, protected: false },
-    { label: "Browse All", href: "/recipe-index", isRoute: true, protected: false },
-    { label: "Countries", href: "/countries", isRoute: true, protected: false },
-    { label: "Atlas", href: "/atlas", isRoute: true, protected: false },
-    { label: "Map", href: "/cuisine-map", isRoute: true, protected: false },
-    { label: "Meals", href: "/meals", isRoute: true, protected: false },
-    { label: "Blog", href: "/blog", isRoute: true, protected: false },
+  /** Primary browse links — kept short on mobile. */
+  const primaryNavItems = [
+    { label: "Home", href: "/" },
+    { label: "Recipes", href: "/recipes" },
+    { label: "Countries", href: "/countries" },
+    { label: "Atlas", href: "/atlas" },
   ];
+
+  /** Secondary browse — desktop + mobile “More” section. */
+  const secondaryNavItems = [
+    { label: "Browse All", href: "/recipe-index" },
+    { label: "Map", href: "/cuisine-map" },
+    { label: "Meals", href: "/meals" },
+    { label: "Blog", href: "/blog" },
+  ];
+
+  const navItems = [...primaryNavItems, ...secondaryNavItems];
 
   const protectedNavItems = [
     { label: "Pantry", href: "/pantry", icon: Package, featureName: "Pantry Intelligence" },
@@ -189,37 +196,61 @@ const Navigation = () => {
           </Button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu — primary browse first, tools collapsed under More */}
         {isMenuOpen && (
-          <div className="xl:hidden py-4 border-t border-primary/10 animate-slide-in-up">
-            <div className="flex flex-col gap-2">
-              {navItems.map((item) => (
+          <div className="xl:hidden max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-primary/10 py-4 animate-slide-in-up">
+            <div className="flex flex-col gap-1">
+              <p className="px-1 pb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                Browse
+              </p>
+              {primaryNavItems.map((item) => (
                 <Link
                   key={item.label}
                   to={item.href}
-                  className="flex min-h-11 items-center text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                  className="flex min-h-12 items-center rounded-md px-2 text-base font-medium text-foreground hover:bg-primary/5 hover:text-primary"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.label}
                 </Link>
               ))}
-              
-              {/* Protected Items */}
+
+              <p className="mt-3 px-1 pb-1 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                More
+              </p>
+              {secondaryNavItems.map((item) => (
+                <Link
+                  key={item.label}
+                  to={item.href}
+                  className="flex min-h-11 items-center rounded-md px-2 text-sm font-medium text-muted-foreground hover:bg-primary/5 hover:text-primary"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              ))}
+
               {protectedNavItems.map((item) => (
                 <button
                   key={item.label}
                   onClick={() => handleProtectedNavigation(item.href, item.featureName)}
-                  className="flex min-h-11 items-center gap-2 text-left text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                  className="flex min-h-11 items-center gap-2 rounded-md px-2 text-left text-sm font-medium text-muted-foreground hover:bg-primary/5 hover:text-primary"
                 >
                   <item.icon className="w-4 h-4" />
                   {item.label}
-                  {!user && <span className="text-xs opacity-50">🔒</span>}
+                  {!user && <span className="text-xs opacity-50">Sign in</span>}
                 </button>
               ))}
 
               <Link
+                to="/offline-recipes"
+                className="flex min-h-11 items-center gap-2 rounded-md px-2 text-sm font-medium text-muted-foreground hover:bg-primary/5 hover:text-primary"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <WifiOff className="w-4 h-4" />
+                Offline Mode
+              </Link>
+              <Link
                 to="/creator-studio"
-                className="flex min-h-11 items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                className="flex min-h-11 items-center gap-2 rounded-md px-2 text-sm font-medium text-muted-foreground hover:bg-primary/5 hover:text-primary"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <Sparkles className="w-4 h-4" />
@@ -227,7 +258,7 @@ const Navigation = () => {
               </Link>
               <Link
                 to="/submit-recipe"
-                className="flex min-h-11 items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                className="flex min-h-11 items-center gap-2 rounded-md px-2 text-sm font-medium text-muted-foreground hover:bg-primary/5 hover:text-primary"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <Upload className="w-4 h-4" />
@@ -235,26 +266,18 @@ const Navigation = () => {
               </Link>
               <Link
                 to="/import-recipe"
-                className="flex min-h-11 items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                className="flex min-h-11 items-center gap-2 rounded-md px-2 text-sm font-medium text-muted-foreground hover:bg-primary/5 hover:text-primary"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <FileUp className="w-4 h-4" />
                 Import recipe
               </Link>
-              <Link
-                to="/offline-recipes"
-                className="flex min-h-11 items-center gap-2 text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <WifiOff className="w-4 h-4" />
-                Offline Mode
-              </Link>
               
-              <div className="flex items-center gap-3 pt-4 border-t border-primary/10">
+              <div className="flex items-center gap-3 border-t border-primary/10 pt-4">
                 <Button 
                   variant="ghost" 
                   size="sm" 
-                  className="flex-1"
+                  className="h-11 flex-1"
                   onClick={() => {
                     navigate('/recipes');
                     setIsMenuOpen(false);
@@ -267,7 +290,7 @@ const Navigation = () => {
                   <Button 
                     variant="earth" 
                     size="sm" 
-                    className="flex-1"
+                    className="h-11 flex-1"
                     onClick={() => {
                       handleSignOut();
                       setIsMenuOpen(false);
@@ -278,7 +301,7 @@ const Navigation = () => {
                   </Button>
                 ) : (
                   <Link to="/auth" className="flex-1" onClick={() => setIsMenuOpen(false)}>
-                    <Button variant="earth" size="sm" className="w-full">
+                    <Button variant="earth" size="sm" className="h-11 w-full">
                       <User className="w-4 h-4" />
                       Sign In
                     </Button>

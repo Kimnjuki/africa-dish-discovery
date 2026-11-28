@@ -365,34 +365,36 @@ const RecipeDetail = () => {
                   </div>
                   <div className="flex flex-wrap gap-2">
                     <Button variant="hero" className="h-12 hover:scale-100" onClick={() => setCookMode(true)}><Utensils className="mr-2 h-4 w-4" />Start cooking</Button>
-                    <Button variant="outline" className="h-12" onClick={() => setCooking(true)}>Full guide</Button>
+                    <Button variant="outline" className="hidden h-12 sm:inline-flex" onClick={() => setCooking(true)}>Full guide</Button>
                     <Button asChild variant="outline" className="h-12">
                       <a href="#reviews">I made this</a>
                     </Button>
                     <SaveButton type="recipe" slug={recipe.slug} id={recipe.id} label={recipe.name} />
-                    {recipe.id && recipe.slug && (
-                      <RecipeBoxSave
-                        recipeId={recipe.id}
-                        slug={recipe.slug}
-                        name={recipe.name}
-                        country={recipe.country}
-                        imageUrl={recipe.image_url}
-                        ingredients={recipe.ingredients}
-                        steps={recipe.steps}
-                        servings={recipe.servings}
-                        prepTime={recipe.prep_time ?? recipe.prep_time_minutes}
-                        cookTime={recipe.cook_time ?? recipe.cook_time_minutes}
-                      />
-                    )}
-                    <PrintRecipeButton recipe={recipe} servingMultiplier={mult} />
-                    {encyclopediaSlug && (
-                      <Button asChild variant="outline" className="h-12">
-                        <Link to={`/dish/${encyclopediaSlug}`}>
-                          <BookOpen className="mr-2 h-4 w-4" />
-                          Dish guide
-                        </Link>
-                      </Button>
-                    )}
+                    <div className="hidden flex-wrap gap-2 sm:flex">
+                      {recipe.id && recipe.slug && (
+                        <RecipeBoxSave
+                          recipeId={recipe.id}
+                          slug={recipe.slug}
+                          name={recipe.name}
+                          country={recipe.country}
+                          imageUrl={recipe.image_url}
+                          ingredients={recipe.ingredients}
+                          steps={recipe.steps}
+                          servings={recipe.servings}
+                          prepTime={recipe.prep_time ?? recipe.prep_time_minutes}
+                          cookTime={recipe.cook_time ?? recipe.cook_time_minutes}
+                        />
+                      )}
+                      <PrintRecipeButton recipe={recipe} servingMultiplier={mult} />
+                      {encyclopediaSlug && (
+                        <Button asChild variant="outline" className="h-12">
+                          <Link to={`/dish/${encyclopediaSlug}`}>
+                            <BookOpen className="mr-2 h-4 w-4" />
+                            Dish guide
+                          </Link>
+                        </Button>
+                      )}
+                    </div>
                   </div>
                   <RecipeTrustNotice verificationStatus={recipe.verification_status} safetyNotes={recipe.safety_notes} itemType={recipe.item_type} className="mt-4" />
                   <RecipeRecordStatus
