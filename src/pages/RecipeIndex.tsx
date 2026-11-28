@@ -132,11 +132,14 @@ const RecipeIndex = () => {
       setLoading(true);
       // steps intentionally omitted — reduces payload significantly.
       // Show list ASAP; enrich ingredient graph text afterward.
+      // Default Africa-first catalog for topical authority; users can still
+      // open ?continent=… facets once loaded (non-Africa rows simply absent here).
       const recipeRes = await supabase
         .from("recipes")
         .select(
           "id,name,slug,country,continent,category,summary,difficulty,prep_time,cook_time,servings,tags,dietary_tags,image_url,ingredients,calories,protein,carbs,fats,dishes(original_name_native)"
         )
+        .or("is_african.eq.true,continent.eq.Africa")
         .order("name", { ascending: true })
         .limit(1500);
       if (cancelled) return;

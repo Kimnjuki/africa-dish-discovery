@@ -87,6 +87,7 @@ const Meals = () => {
         .select(
           "id,name,slug,country,summary,prep_time,cook_time,servings,difficulty,tags,ingredients,steps,image_url,category,calories,protein,carbs,fats"
         )
+        .or("is_african.eq.true,continent.eq.Africa")
         .order("created_at", { ascending: false })
         .limit(120);
 

@@ -248,16 +248,19 @@ console.log("Fetching content from Supabase…");
 let recipes, dishes, recipeCountries, africanCountryRows, dbBlog;
 try {
   [recipes, dishes, recipeCountries, africanCountryRows, dbBlog] = await Promise.all([
-    fetchAll("recipes", "slug,name,summary,country,image_url,updated_at,created_at", {
+    // Africa-first crawl graph: only African recipes enter sitemap-recipes.xml
+    // (Global cookbook imports stay in the app but are demoted from search).
+    fetchAll("recipes", "slug,name,summary,country,image_url,updated_at,created_at,is_african,continent", {
+      filter: "slug=not.is.null&or=(is_african.eq.true,continent.eq.Africa)",
+      order: "slug.asc",
+    }),
+    fetchAll("dishes", "slug,updated_at,created_at,cultural_significance,continent,country", {
       filter: "slug=not.is.null",
       order: "slug.asc",
     }),
-    fetchAll("dishes", "slug,updated_at,created_at,cultural_significance", {
-      filter: "slug=not.is.null",
-      order: "slug.asc",
-    }),
+    // Country hubs in sitemap: African cuisines only (closes Global dilution).
     fetchAll("recipes", "country,updated_at", {
-      filter: "country=not.is.null",
+      filter: "country=not.is.null&or=(is_african.eq.true,continent.eq.Africa)",
       order: "country.asc",
     }),
     // Fetch African country names for facet sitemap entries.

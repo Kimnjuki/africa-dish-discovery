@@ -149,6 +149,7 @@ const DishAtlas = () => {
           .select(
             "id,name,slug,country,continent,category,summary,tags,image_url"
           )
+          .or("is_african.eq.true,continent.eq.Africa")
           .not("country", "is", null)
           .range(from, from + PAGE - 1);
         if (error || !data || data.length === 0) break;

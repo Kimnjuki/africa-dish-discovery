@@ -30,6 +30,7 @@ import { itemText, toList, toSlug } from "@/lib/recipeText";
 import { countryPath } from "@/lib/countryCanonical";
 import { resolveRecipeSeo, toCanonicalUrl } from "@/lib/recipeSeoOverrides";
 import { getRecipeSeoEnrichment } from "@/lib/recipeSeoEnrichment";
+import { isAfricanRecipe } from "@/lib/africaFilter";
 import { RecipeSeoEnrichmentBlock } from "@/components/seo/RecipeSeoEnrichment";
 import { Clock, Users, ChefHat, Utensils, Lightbulb, Globe2, Minus, Plus, BookOpen } from "lucide-react";
 import { withParsedRecipeFields, type CookableRecipe } from "@/types/content";
@@ -256,6 +257,9 @@ const RecipeDetail = () => {
   });
   const enrichment = getRecipeSeoEnrichment(slug);
   const encyclopediaSlug = enrichment?.dishSlug || slug;
+  // Keep Global recipes reachable in-app, but demote them from organic search
+  // so African topical authority compounds (GSC off-brand dilution fix).
+  const african = isAfricanRecipe(recipe);
 
   return (
     <div className="min-h-screen">
@@ -265,6 +269,7 @@ const RecipeDetail = () => {
         canonical={toCanonicalUrl(`/recipe/${slug}`)}
         ogImage={recipe?.image_url || undefined}
         type="article"
+        noIndex={Boolean(recipe) && !african}
       />
       {recipe && (
         <RecipeSchema

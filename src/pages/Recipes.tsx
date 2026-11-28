@@ -75,6 +75,7 @@ const Recipes = () => {
       const { data, error } = await supabase
         .from("recipes")
         .select(LIST_SELECT)
+        .or("is_african.eq.true,continent.eq.Africa")
         .order("created_at", { ascending: false })
         .limit(PAGE_LIMIT);
 
