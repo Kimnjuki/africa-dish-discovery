@@ -27,6 +27,10 @@ import { SaveButton } from "@/components/SaveButton";
 import { RecipeBoxSave } from "@/components/recipe/RecipeBoxSave";
 import { getCountryFlag } from "@/utils/countryFlags";
 import { itemText, toList, toSlug } from "@/lib/recipeText";
+import { countryPath } from "@/lib/countryCanonical";
+import { resolveRecipeSeo, toCanonicalUrl } from "@/lib/recipeSeoOverrides";
+import { getRecipeSeoEnrichment } from "@/lib/recipeSeoEnrichment";
+import { RecipeSeoEnrichmentBlock } from "@/components/seo/RecipeSeoEnrichment";
 import { Clock, Users, ChefHat, Utensils, Lightbulb, Globe2, Minus, Plus, BookOpen } from "lucide-react";
 import { withParsedRecipeFields, type CookableRecipe } from "@/types/content";
 import { cacheRecipe, getCachedRecipes, isBrowserOffline } from "@/lib/offlineStore";
@@ -243,13 +247,22 @@ const RecipeDetail = () => {
   const localHeading = preferLocal && localNames[0] ? localNames[0] : title;
   const nameGloss =
     preferLocal && localNames[0] ? title : localNames.length > 0 ? localNames.join(" · ") : "";
+  const seo = resolveRecipeSeo({
+    slug,
+    name: title,
+    country,
+    summary: recipe?.summary,
+    briefDescription: recipe?.brief_description,
+  });
+  const enrichment = getRecipeSeoEnrichment(slug);
+  const encyclopediaSlug = enrichment?.dishSlug || slug;
 
   return (
     <div className="min-h-screen">
       <PageMeta
-        title={`${title} Recipe${country ? ` — ${country}` : ""} | LadhaQuest`}
-        description={recipe?.summary || `How to cook ${title}: ingredients, step-by-step method, tips and cultural history.`}
-        canonical={`https://www.ladhaquest.com/recipe/${slug}`}
+        title={seo.title}
+        description={seo.description}
+        canonical={toCanonicalUrl(`/recipe/${slug}`)}
         ogImage={recipe?.image_url || undefined}
         type="article"
       />
@@ -291,7 +304,7 @@ const RecipeDetail = () => {
             items={[
               { label: "Home", href: "/" },
               { label: "Recipes", href: "/recipe-index" },
-              ...(country ? [{ label: country, href: `/country/${toSlug(country)}` }] : []),
+              ...(country ? [{ label: country, href: countryPath(country) }] : []),
               { label: title },
             ]}
           />
@@ -364,6 +377,14 @@ const RecipeDetail = () => {
                       />
                     )}
                     <PrintRecipeButton recipe={recipe} servingMultiplier={mult} />
+                    {encyclopediaSlug && (
+                      <Button asChild variant="outline" className="h-12">
+                        <Link to={`/dish/${encyclopediaSlug}`}>
+                          <BookOpen className="mr-2 h-4 w-4" />
+                          Dish guide
+                        </Link>
+                      </Button>
+                    )}
                   </div>
                   <RecipeTrustNotice verificationStatus={recipe.verification_status} safetyNotes={recipe.safety_notes} itemType={recipe.item_type} className="mt-4" />
                   <RecipeRecordStatus
@@ -429,15 +450,29 @@ const RecipeDetail = () => {
                     </CardContent>
                   </Card>
 
-                  {recipe.history && (
+                  {enrichment && slug && (
+                    <RecipeSeoEnrichmentBlock slug={slug} enrichment={enrichment} />
+                  )}
+
+                  {(recipe.history || encyclopediaSlug) && (
                     <Card>
                       <CardHeader><CardTitle className="flex items-center gap-2"><Globe2 className="w-5 h-5 text-primary" />Cultural history</CardTitle></CardHeader>
                       <CardContent className="text-muted-foreground space-y-3">
-                        <p className="whitespace-pre-line">{recipe.history}</p>
-                        <SourceCitations sources={recipe.history_sources} />
-                        <Button asChild variant="link" className="px-0">
-                          <Link to={`/dish/${recipe.slug}`}><BookOpen className="w-4 h-4 mr-1" />Read the encyclopedia entry</Link>
-                        </Button>
+                        {recipe.history ? (
+                          <>
+                            <p className="whitespace-pre-line">{recipe.history}</p>
+                            <SourceCitations sources={recipe.history_sources} />
+                          </>
+                        ) : (
+                          <p>
+                            Learn the names, region, and cultural context for {title} in the dish encyclopedia.
+                          </p>
+                        )}
+                        {encyclopediaSlug && (
+                          <Button asChild variant="link" className="px-0">
+                            <Link to={`/dish/${encyclopediaSlug}`}><BookOpen className="w-4 h-4 mr-1" />Read the encyclopedia entry</Link>
+                          </Button>
+                        )}
                       </CardContent>
                     </Card>
                   )}

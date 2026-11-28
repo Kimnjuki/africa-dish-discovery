@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MapPin, Languages, Users, CalendarHeart, BookOpen, MessageCircleWarning } from "lucide-react";
 import { SourceCitations } from "@/components/cultural/SourceCitations";
-import { toSlug } from "@/lib/recipeText";
+import { countryPath } from "@/lib/countryCanonical";
 
 export interface RecipeProvenanceProps {
   recipeName: string;
@@ -74,7 +74,7 @@ export function RecipeProvenance({
         {hasPlace && (
           <div className="flex flex-wrap items-center gap-2">
             {country && (
-              <Link to={`/country/${toSlug(country)}`}>
+              <Link to={countryPath(country)}>
                 <Badge variant="secondary">{country}</Badge>
               </Link>
             )}
@@ -128,12 +128,16 @@ export function RecipeProvenance({
               {truncate(history!.trim(), historyMaxChars)}
             </p>
             <SourceCitations sources={historySources} />
-            {recipeSlug && (
-              <Button asChild variant="link" className="mt-1 h-auto px-0">
-                <Link to={`/dish/${recipeSlug}`}>Full encyclopedia entry</Link>
-              </Button>
-            )}
           </div>
+        )}
+
+        {recipeSlug && (
+          <Button asChild variant="link" className="h-auto px-0">
+            <Link to={`/dish/${recipeSlug}`}>
+              <BookOpen className="mr-1 h-4 w-4" />
+              Full encyclopedia entry
+            </Link>
+          </Button>
         )}
 
         <div className="border-t pt-3">

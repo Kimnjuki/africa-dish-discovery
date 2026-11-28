@@ -14,6 +14,8 @@
  * Stable param order follows FACET_KEYS: q, country, continent, category, diet, difficulty, time, ingredient.
  */
 
+import { facetCountryLabel } from "./countryCanonical.mjs";
+
 const SITE_ORIGIN = "https://www.ladhaquest.com";
 const INDEX_PATH = "/recipe-index";
 
@@ -69,13 +71,22 @@ export function shouldIndexFacetUrl(params: URLSearchParams): boolean {
  * @param params - URLSearchParams from the current /recipe-index URL.
  */
 export function canonicalForFacetUrl(params: URLSearchParams): string {
-  if (!shouldIndexFacetUrl(params)) {
+  // `?country=IT` and `?country=Italy` are the same list. Declare the display
+  // name as canonical so Google does not have to choose between them.
+  const normalized = new URLSearchParams(params);
+  const country = normalized.get("country")?.trim();
+  if (country) {
+    const label = facetCountryLabel(country);
+    if (label) normalized.set("country", label);
+  }
+
+  if (!shouldIndexFacetUrl(normalized)) {
     return `${SITE_ORIGIN}${INDEX_PATH}`;
   }
 
   // Bare index → canonical without query string.
   const active = FACET_KEYS.filter((k) => {
-    const v = params.get(k);
+    const v = normalized.get(k);
     return v !== null && v.trim() !== "";
   });
   if (active.length === 0) {
@@ -85,7 +96,7 @@ export function canonicalForFacetUrl(params: URLSearchParams): string {
   // Single allow-listed facet → stable ordered params.
   const ordered = new URLSearchParams();
   for (const k of FACET_KEYS) {
-    const v = params.get(k);
+    const v = normalized.get(k);
     if (v && v.trim()) ordered.set(k, v.trim());
   }
   return `${SITE_ORIGIN}${INDEX_PATH}?${ordered.toString()}`;

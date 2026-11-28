@@ -4,15 +4,24 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { PageMeta } from "@/components/seo/PageMeta";
 import { Breadcrumbs } from "@/components/seo/Breadcrumbs";
-import { Card, CardContent } from "@/components/ui/card";
+import { FaqSchema } from "@/components/seo/FaqSchema";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { supabase } from "@/integrations/supabase/client";
 import RecipeImagePlaceholder from "@/components/RecipeImagePlaceholder";
 import { getCountryFlag } from "@/utils/countryFlags";
-import { Star, Trophy, Soup, Globe2 } from "lucide-react";
+import { ATLAS_FAQS, ATLAS_SEO, ATLAS_WINNER_CLUSTERS } from "@/lib/atlasSeo";
+import { toCanonicalUrl } from "@/lib/recipeSeoOverrides";
+import { Star, Trophy, Soup, Globe2, Map, HelpCircle, Sparkles } from "lucide-react";
 
 interface AtlasRecipe {
   id: string;
@@ -47,7 +56,14 @@ const ICONIC = [
   "zigni", "kitfo", "shiro", "brik", "merguez", "mechoui", "seswaa", "nshima",
   "sadza", "cachupa", "romazava", "poulet dg", "ndole", "attieke", "kedjenou",
   "mafé", "chin chin", "bissap", "palm wine", "rooibos", "amasi",
+  // Week 3–4 GSC winners + cluster anchors
+  "katapa", "mahamri", "bonbon coco", "bonbon", "mofo anana", "lumanda",
+  "urojo", "chiponde", "feuille", "manioc",
 ];
+
+function clusterHref(slug: string) {
+  return slug.startsWith("/") ? slug : `/recipe/${slug}`;
+}
 
 const iconicBoost = (name: string) => {
   const n = name.toLowerCase();
@@ -199,7 +215,7 @@ const DishAtlas = () => {
         "@type": "ListItem",
         position: i + 1,
         name: r.name,
-        url: `https://www.ladhaquest.com/dish/${r.slug || toSlug(r.name)}`,
+        url: toCanonicalUrl(`/recipe/${r.slug || toSlug(r.name)}`),
       })),
     };
   }, [ranked]);
@@ -207,11 +223,12 @@ const DishAtlas = () => {
   return (
     <div className="min-h-screen">
       <PageMeta
-        title="African Food Atlas | Top 50 Dishes, Best Stews & 100 Foods to Try"
-        description="Ranked lists of Africa's best dishes, scored on reader ratings and authenticity depth. Explore the top 50 African dishes, the best stews and soups, and 100 foods to try across the continent."
-        keywords="top african dishes, best african stews, foods to try in africa, african food atlas, dish rankings"
-        canonical="https://www.ladhaquest.com/atlas"
+        title={ATLAS_SEO.title}
+        description={ATLAS_SEO.description}
+        keywords={ATLAS_SEO.keywords}
+        canonical={toCanonicalUrl("/atlas")}
       />
+      <FaqSchema faqs={ATLAS_FAQS} idKey="atlas" />
       {itemListJsonLd && (
         <script type="application/ld+json">{JSON.stringify(itemListJsonLd)}</script>
       )}
@@ -221,13 +238,62 @@ const DishAtlas = () => {
         <div className="container mx-auto px-6">
           <Breadcrumbs items={[{ label: "Home", href: "/" }, { label: "Food Atlas" }]} />
           <header className="mb-8">
-            <h1 className="text-4xl font-bold mb-2">African Food Atlas</h1>
+            <h1 className="text-4xl font-bold mb-2">{ATLAS_SEO.h1}</h1>
             <p className="text-muted-foreground max-w-2xl">
-              Ranked, editorially framed lists of the continent's dishes. Every ranking blends
-              reader ratings with authenticity depth: documented cultural history, verified
-              country attribution and dish-specific photography.
+              Ranked lists of Africa’s landmark dishes, plus curated clusters around recipes
+              cooks already find on search — cassava-leaf stews, East African street breads,
+              and Malagasy snacks — scored with authenticity depth and reader ratings.
             </p>
           </header>
+
+          <section className="mb-10" aria-labelledby="winner-clusters-heading">
+            <div className="mb-4 flex items-center gap-2">
+              <Sparkles className="h-5 w-5 text-primary" />
+              <h2 id="winner-clusters-heading" className="text-xl font-semibold">
+                Start with dishes that already convert
+              </h2>
+            </div>
+            <p className="mb-6 max-w-3xl text-sm text-muted-foreground">
+              Three topical clusters built from LadhaQuest’s strongest search recipes. Open the
+              winner, then explore related dishes in the same culinary family.
+            </p>
+            <div className="grid gap-4 md:grid-cols-3">
+              {ATLAS_WINNER_CLUSTERS.map((cluster) => (
+                <Card key={cluster.id} className="h-full">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-base">{cluster.title}</CardTitle>
+                    <p className="text-sm text-muted-foreground">{cluster.blurb}</p>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <Button asChild variant="default" className="w-full justify-start">
+                      <Link to={clusterHref(cluster.winner.slug)}>
+                        Cook {cluster.winner.label}
+                      </Link>
+                    </Button>
+                    <ul className="space-y-1.5">
+                      {cluster.satellites.map((s) => (
+                        <li key={s.slug}>
+                          <Link
+                            to={clusterHref(s.slug)}
+                            className="text-sm font-medium text-primary hover:underline"
+                          >
+                            {s.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      {cluster.hubs.map((h) => (
+                        <Button key={h.slug} asChild variant="outline" size="sm" className="h-8">
+                          <Link to={clusterHref(h.slug)}>{h.label}</Link>
+                        </Button>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </section>
 
           {loading ? (
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -298,9 +364,43 @@ const DishAtlas = () => {
             </Tabs>
           )}
 
-          <div className="mt-12 text-center">
+          <section className="mt-12" aria-labelledby="atlas-faq-heading">
+            <Card>
+              <CardHeader>
+                <CardTitle id="atlas-faq-heading" className="flex items-center gap-2 text-lg">
+                  <HelpCircle className="h-5 w-5 text-primary" />
+                  Food Atlas FAQ
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Accordion type="multiple" className="w-full">
+                  {ATLAS_FAQS.map((item, i) => (
+                    <AccordionItem key={i} value={`atlas-faq-${i}`}>
+                      <AccordionTrigger className="text-left text-sm sm:text-base">
+                        {item.q}
+                      </AccordionTrigger>
+                      <AccordionContent className="text-muted-foreground">
+                        {item.a}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+              </CardContent>
+            </Card>
+          </section>
+
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
+            <Button asChild variant="default">
+              <Link to="/cuisine-map">
+                <Map className="mr-2 h-4 w-4" />
+                Open the cuisine map
+              </Link>
+            </Button>
             <Button asChild variant="outline">
-              <Link to="/recipe-index">Browse the full recipe index</Link>
+              <Link to="/countries">Browse by country</Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link to="/recipe-index">Full recipe index</Link>
             </Button>
           </div>
         </div>

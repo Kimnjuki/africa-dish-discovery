@@ -11,6 +11,7 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { AdminGate } from "@/components/AdminGate";
 import { RequireAuth } from "@/components/RequireAuth";
 import { AuthUrlErrorRedirect } from "@/components/AuthUrlErrorRedirect";
+import { CanonicalPathRedirect } from "@/components/seo/CanonicalPathRedirect";
 
 // Eager load only the most critical pages
 import Index from "./pages/Index";
@@ -89,6 +90,7 @@ const App = () => (
       <CookieConsent />
       <BrowserRouter>
         <AuthUrlErrorRedirect />
+        <CanonicalPathRedirect />
         <ErrorBoundary>
           <Suspense fallback={<PageLoader />}>
             <Routes>

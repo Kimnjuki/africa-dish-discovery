@@ -25,6 +25,7 @@ import {
 import { loadRecipeGraphIngredientText } from "@/lib/graphIngredientIndex";
 import { LocalNameToggle, usePreferLocalNames } from "@/components/recipe/LocalNameToggle";
 import { shouldIndexFacetUrl, canonicalForFacetUrl } from "@/lib/facetIndexation";
+import { facetCountryLabel, sameCountry } from "@/lib/countryCanonical";
 import { track, EVENTS } from "@/lib/analytics";
 
 /** Index-list recipe — steps intentionally omitted to reduce payload. */
@@ -115,6 +116,16 @@ const RecipeIndex = () => {
     setVisible(PAGE_SIZE);
   };
 
+  // /recipe-index?country=IT and ?country=Italy are the same list.
+  useEffect(() => {
+    const country = params.get("country");
+    if (!country) return;
+    const label = facetCountryLabel(country);
+    if (!label || label === country) return;
+    const next = buildStableParams(params, "country", label);
+    setParams(next, { replace: true });
+  }, [params, setParams]);
+
   useEffect(() => {
     let cancelled = false;
     const load = async () => {
@@ -191,7 +202,7 @@ const RecipeIndex = () => {
 
     /** Test recipe against all active filters EXCEPT the specified one. */
     const testExcept = (r: IndexRecipe, except: FacetKey): boolean => {
-      if (except !== "country" && countryFilter && r.country !== countryFilter) return false;
+      if (except !== "country" && countryFilter && !sameCountry(r.country, countryFilter)) return false;
       if (except !== "continent" && continentFilter && r.continent !== continentFilter) return false;
       if (except !== "category" && categoryFilter && r.category !== categoryFilter) return false;
       if (except !== "difficulty" && difficultyFilter && r.difficulty !== difficultyFilter)
@@ -243,7 +254,7 @@ const RecipeIndex = () => {
     };
 
     return {
-      countries: count("country", (r) => r.country).slice(0, 30),
+      countries: count("country", (r) => (r.country ? facetCountryLabel(r.country) : r.country)).slice(0, 30),
       continents: count("continent", (r) => r.continent),
       categories: count("category", (r) => r.category).slice(0, 12),
       diets: countDiet(),
@@ -261,7 +272,7 @@ const RecipeIndex = () => {
     const time = parseInt(get("time") || "0", 10);
 
     const filtered = recipes.filter((r) => {
-      if (country && r.country !== country) return false;
+      if (country && !sameCountry(r.country, country)) return false;
       if (continent && r.continent !== continent) return false;
       if (category && r.category !== category) return false;
       if (difficulty && r.difficulty !== difficulty) return false;

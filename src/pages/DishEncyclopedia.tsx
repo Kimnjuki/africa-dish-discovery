@@ -17,9 +17,21 @@ import { SourceCitations } from "@/components/cultural/SourceCitations";
 import { RecipeTrustNotice } from "@/components/recipe/RecipeTrustNotice";
 import { SaveButton } from "@/components/SaveButton";
 import { withParsedRecipeFields, type CookableRecipe, type VenueRecord } from "@/types/content";
+import { countryPath } from "@/lib/countryCanonical";
+import { resolveDishSeo, toCanonicalUrl } from "@/lib/recipeSeoOverrides";
+import { dishToRecipePath, getRecipeSeoEnrichment } from "@/lib/recipeSeoEnrichment";
 
 const toSlug = (s: string) =>
   s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+
+/** Keep the long cultural essay on /story/ so this page is not a copy of it. */
+function culturalExcerpt(text: string): string {
+  const clean = text.replace(/\s+/g, " ").trim();
+  if (clean.length <= 280) return clean;
+  const sliced = clean.slice(0, 260);
+  const cut = sliced.lastIndexOf(". ");
+  return `${(cut > 140 ? sliced.slice(0, cut + 1) : sliced).trim()}…`;
+}
 
 interface DishRow {
   id: string;
@@ -115,6 +127,17 @@ const DishEncyclopedia = () => {
 
   const title = dish?.name || recipe?.name || "Dish";
   const country = dish?.country || recipe?.country || "";
+  const seo = resolveDishSeo({
+    slug: dishSlug,
+    name: title,
+    country,
+    summary: dish?.summary || recipe?.summary,
+  });
+  const enrichment = getRecipeSeoEnrichment(recipe?.slug || dishSlug);
+  const recipePath = dishToRecipePath({
+    recipeSlug: recipe?.slug || enrichment?.dishSlug,
+    dishSlug,
+  });
 
   const jsonLd = useMemo(() => {
     if (!title) return null;
@@ -144,13 +167,9 @@ const DishEncyclopedia = () => {
   return (
     <div className="min-h-screen">
       <PageMeta
-        title={`${title} | Dish Encyclopedia${country ? ` — ${country}` : ""}`}
-        description={
-          dish?.summary ||
-          recipe?.summary ||
-          `${title}: native name, pronunciation, region, cultural history and where to eat it.`
-        }
-        canonical={`https://www.ladhaquest.com/dish/${dishSlug}`}
+        title={seo.title}
+        description={seo.description}
+        canonical={toCanonicalUrl(`/dish/${dishSlug}`)}
       />
       {jsonLd && <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>}
       <Navigation />
@@ -162,7 +181,7 @@ const DishEncyclopedia = () => {
               { label: "Home", href: "/" },
               { label: "Food Atlas", href: "/atlas" },
               ...(country
-                ? [{ label: country, href: `/country/${toSlug(country)}` }]
+                ? [{ label: country, href: countryPath(country) }]
                 : []),
               { label: title },
             ]}
@@ -222,22 +241,40 @@ const DishEncyclopedia = () => {
                       className="mt-4"
                     />
                   )}
-                  {recipe && (
-                    <div className="mt-6 flex flex-wrap gap-3">
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    {recipe && (
                       <Button variant="hero" onClick={() => setCooking(true)}>
                         <Utensils className="w-4 h-4 mr-2" /> Start cooking
                       </Button>
-                      <Button asChild variant="default">
-                        <Link to={`/recipe/${recipe.slug || dishSlug}`}>View full recipe</Link>
+                    )}
+                    {recipePath && (
+                      <Button asChild variant={recipe ? "default" : "hero"}>
+                        <Link to={recipePath}>
+                          <Utensils className="w-4 h-4 mr-2" />
+                          {recipe ? "View full recipe" : "Open cooking recipe"}
+                        </Link>
                       </Button>
+                    )}
+                    {country && (
                       <Button asChild variant="outline">
-                        <Link to={`/country/${toSlug(country)}`}>More from {country}</Link>
+                        <Link to={countryPath(country)}>More from {country}</Link>
                       </Button>
-                      <SaveButton type="dish" slug={dishSlug || ""} id={dish?.id} label={title} />
+                    )}
+                    <SaveButton type="dish" slug={dishSlug || ""} id={dish?.id} label={title} />
+                    {country && (
                       <Button asChild variant="ghost">
                         <Link to={`/cuisine-map?country=${encodeURIComponent(country)}`}>On the map</Link>
                       </Button>
-                    </div>
+                    )}
+                  </div>
+                  {recipePath && (
+                    <p className="mt-3 text-sm text-muted-foreground">
+                      Full ingredients and step-by-step method live on the{" "}
+                      <Link to={recipePath} className="font-medium text-primary hover:underline">
+                        recipe page
+                      </Link>
+                      — this encyclopedia entry covers names, region, and cultural context.
+                    </p>
                   )}
                 </div>
                 <div className="rounded-lg overflow-hidden h-56 lg:h-full">
@@ -260,11 +297,32 @@ const DishEncyclopedia = () => {
                         </CardTitle>
                       </CardHeader>
                       <CardContent className="prose prose-sm max-w-none text-muted-foreground">
-                        <p>{dish?.cultural_significance || recipe?.cultural_significance}</p>
-                        <SourceCitations
-                          sources={dish?.cultural_sources ?? recipe?.cultural_sources}
-                          className="not-prose pt-2"
-                        />
+                        {(() => {
+                          const full = String(
+                            dish?.cultural_significance || recipe?.cultural_significance || ""
+                          ).trim();
+                          const storySlug = dish?.slug || dishSlug;
+                          const linkStory = full.length >= 200 && !!storySlug;
+                          return (
+                            <>
+                              <p>{linkStory ? culturalExcerpt(full) : full}</p>
+                              {linkStory && (
+                                <p className="not-prose pt-3">
+                                  <Link
+                                    to={`/story/${storySlug}`}
+                                    className="text-sm font-medium text-primary hover:underline"
+                                  >
+                                    Read the full cultural story
+                                  </Link>
+                                </p>
+                              )}
+                              <SourceCitations
+                                sources={dish?.cultural_sources ?? recipe?.cultural_sources}
+                                className="not-prose pt-2"
+                              />
+                            </>
+                          );
+                        })()}
                       </CardContent>
                     </Card>
                   )}
@@ -272,31 +330,34 @@ const DishEncyclopedia = () => {
                   {related.length > 0 && (
                     <Card>
                       <CardHeader>
-                        <CardTitle>Related dishes from {country}</CardTitle>
+                        <CardTitle>Related recipes from {country}</CardTitle>
                       </CardHeader>
                       <CardContent className="grid sm:grid-cols-2 gap-3">
-                        {related.map((r) => (
-                          <Link key={r.id} to={`/dish/${r.slug || toSlug(r.name)}`}>
-                            <Card className="hover:border-primary/50 transition-all">
-                              <CardContent className="p-3 flex gap-3 items-center">
-                                <div className="w-14 h-14 rounded overflow-hidden shrink-0">
-                                  <RecipeImagePlaceholder
-                                    name={r.name}
-                                    country={r.country}
-                                    imageUrl={r.image_url}
-                                    className="w-full h-full"
-                                  />
-                                </div>
-                                <div className="min-w-0">
-                                  <p className="font-medium text-sm truncate">{r.name}</p>
-                                  <p className="text-xs text-muted-foreground truncate">
-                                    {r.category || country}
-                                  </p>
-                                </div>
-                              </CardContent>
-                            </Card>
-                          </Link>
-                        ))}
+                        {related.map((r) => {
+                          const relatedSlug = r.slug || toSlug(r.name);
+                          return (
+                            <Link key={r.id} to={`/recipe/${relatedSlug}`}>
+                              <Card className="hover:border-primary/50 transition-all">
+                                <CardContent className="p-3 flex gap-3 items-center">
+                                  <div className="w-14 h-14 rounded overflow-hidden shrink-0">
+                                    <RecipeImagePlaceholder
+                                      name={r.name}
+                                      country={r.country}
+                                      imageUrl={r.image_url}
+                                      className="w-full h-full"
+                                    />
+                                  </div>
+                                  <div className="min-w-0">
+                                    <p className="font-medium text-sm truncate">{r.name}</p>
+                                    <p className="text-xs text-muted-foreground truncate">
+                                      {r.category || country}
+                                    </p>
+                                  </div>
+                                </CardContent>
+                              </Card>
+                            </Link>
+                          );
+                        })}
                       </CardContent>
                     </Card>
                   )}

@@ -8,14 +8,18 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getCountryFlag, getContinent } from "@/utils/countryFlags";
 import { Progress } from "@/components/ui/progress";
+import {
+  canonicalCountrySlug,
+  countryDisplayName,
+  toCountrySlug,
+} from "@/lib/countryCanonical";
 
 interface CountryStat {
+  slug: string;
   country: string;
   continent: string | null;
   count: number;
 }
-
-const toSlug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
 const CountriesIndex = () => {
   const [countries, setCountries] = useState<CountryStat[]>([]);
@@ -37,11 +41,20 @@ const CountriesIndex = () => {
       }
       const map = new Map<string, CountryStat>();
       rows.forEach((r) => {
-        const c = r.country?.trim();
-        if (!c) return;
-        const cur = map.get(c) || { country: c, continent: r.continent, count: 0 };
+        const raw = r.country?.trim();
+        if (!raw) return;
+        const slug = canonicalCountrySlug(toCountrySlug(raw));
+        if (!slug) return;
+        const country = countryDisplayName(slug);
+        const cur = map.get(slug) || {
+          slug,
+          country,
+          continent: r.continent || getContinent(country),
+          count: 0,
+        };
         cur.count += 1;
-        map.set(c, cur);
+        if (!cur.continent && r.continent) cur.continent = r.continent;
+        map.set(slug, cur);
       });
       setCountries([...map.values()].sort((a, b) => b.count - a.count));
       setLoading(false);
@@ -100,7 +113,7 @@ const CountriesIndex = () => {
               <h2 className="text-2xl font-semibold mb-4">{continent}</h2>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
                 {list.map(c => (
-                  <Link key={c.country} to={`/country/${toSlug(c.country)}`}>
+                  <Link key={c.slug} to={`/country/${c.slug}`}>
                     <Card className="hover:shadow-md hover:border-primary/50 transition-all">
                       <CardContent className="p-4 flex items-center gap-3">
                         <span className="text-3xl">{getCountryFlag(c.country)}</span>

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { toCanonicalUrl } from '@/lib/recipeSeoOverrides';
 
 interface PageMetaProps {
   title: string;
@@ -32,6 +33,7 @@ export const PageMeta = ({
   useEffect(() => {
     const safeTitle = clipText(title, 60);
     const safeDescription = clipText(description, 155);
+    const safeCanonical = canonical ? toCanonicalUrl(canonical) : undefined;
     // Set title
     document.title = safeTitle;
     const absoluteOg = ogImage.startsWith('http')
@@ -68,7 +70,7 @@ export const PageMeta = ({
     updateMeta('og:title', safeTitle, true);
     updateMeta('og:description', safeDescription, true);
     updateMeta('og:image', absoluteOg, true);
-    updateMeta('og:url', canonical || window.location.href, true);
+    updateMeta('og:url', safeCanonical || toCanonicalUrl(window.location.href), true);
     updateMeta('og:site_name', 'LadhaQuest', true);
 
     // Twitter tags
@@ -77,15 +79,15 @@ export const PageMeta = ({
     updateMeta('twitter:description', safeDescription);
     updateMeta('twitter:image', absoluteOg);
 
-    // Canonical URL
-    if (canonical) {
+    // Canonical URL (always slash-free on www)
+    if (safeCanonical) {
       let linkElement = document.querySelector('link[rel="canonical"]') as HTMLLinkElement;
       if (!linkElement) {
         linkElement = document.createElement('link');
         linkElement.rel = 'canonical';
         document.head.appendChild(linkElement);
       }
-      linkElement.href = canonical;
+      linkElement.href = safeCanonical;
     }
   }, [title, description, keywords, ogImage, canonical, type, noIndex]);
 

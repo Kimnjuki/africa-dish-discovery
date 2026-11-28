@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, Navigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -15,6 +15,11 @@ import { getCountryFlag } from "@/utils/countryFlags";
 import { NutritionBadge } from "@/components/NutritionBadge";
 import RecipeImagePlaceholder from "@/components/RecipeImagePlaceholder";
 import type { IngredientValue } from "@/types/content";
+import {
+  canonicalCountrySlug,
+  countryDisplayName,
+  countryPostgrestOr,
+} from "@/lib/countryCanonical";
 
 interface Recipe {
   id: string;
@@ -35,9 +40,6 @@ interface Recipe {
   tags: string[] | null;
   ingredients: IngredientValue[] | null;
 }
-
-const slugToCountry = (slug: string) =>
-  slug.split("-").map(s => s.charAt(0).toUpperCase() + s.slice(1)).join(" ");
 
 const STOP_WORDS = new Set([
   "cup","cups","tablespoon","tablespoons","teaspoon","teaspoons","gram","grams","g","kg","ml","litre",
@@ -61,26 +63,34 @@ const ingredientText = (ing: unknown): string => {
 
 const CountryRecipes = () => {
   const { countrySlug } = useParams<{ countrySlug: string }>();
-  const country = useMemo(() => (countrySlug ? slugToCountry(countrySlug) : ""), [countrySlug]);
+  const canonicalSlug = countrySlug ? canonicalCountrySlug(countrySlug) : null;
+  const needsRedirect = !!countrySlug && canonicalSlug !== countrySlug;
+  const country = useMemo(
+    () => (canonicalSlug ? countryDisplayName(canonicalSlug) : ""),
+    [canonicalSlug]
+  );
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState<string>("");
 
   useEffect(() => {
-    if (!country) return;
+    if (!canonicalSlug || needsRedirect) {
+      setLoading(false);
+      return;
+    }
     (async () => {
       setLoading(true);
       const { data } = await supabase
         .from("recipes")
         .select("id,name,slug,image_url,brief_description,difficulty,category,continent,prep_time,cook_time,servings,calories,protein,carbs,fats,tags,ingredients")
-        .ilike("country", country)
+        .or(countryPostgrestOr(canonicalSlug))
         .order("name")
         .limit(300);
       setRecipes((data as unknown as Recipe[]) || []);
       setActiveCategory("");
       setLoading(false);
     })();
-  }, [country]);
+  }, [canonicalSlug, needsRedirect]);
 
   const flag = getCountryFlag(country);
   const region = recipes.find(r => r.continent)?.continent || null;
@@ -137,12 +147,16 @@ const CountryRecipes = () => {
     })),
   };
 
+  if (needsRedirect) {
+    return <Navigate to={canonicalSlug ? `/country/${canonicalSlug}` : "/countries"} replace />;
+  }
+
   return (
     <div className="min-h-screen">
       <PageMeta
         title={`${country} Food Guide | LadhaQuest`}
         description={`A complete guide to ${country} cuisine: staple pantry, meal structure, festive dishes and ${recipes.length}+ authentic recipes with cultural context and step-by-step instructions.`}
-        canonical={`https://www.ladhaquest.com/country/${countrySlug}`}
+        canonical={`https://www.ladhaquest.com/country/${canonicalSlug}`}
       />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Navigation />

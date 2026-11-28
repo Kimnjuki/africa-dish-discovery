@@ -11,6 +11,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AlertCircle, CheckCircle2, ExternalLink, Search } from "lucide-react";
+import { countryPath } from "@/lib/countryCanonical";
 
 interface Dish {
   id: string;
@@ -60,9 +61,6 @@ const AFRICAN_COUNTRIES: { name: string; region: string }[] = [
   { name: "Namibia", region: "Southern Africa" }, { name: "South Africa", region: "Southern Africa" },
   { name: "Zambia", region: "Southern Africa" }, { name: "Zimbabwe", region: "Southern Africa" },
 ];
-
-const countrySlug = (c: string) =>
-  c.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
 const AdminDishQA = () => {
   const [dishes, setDishes] = useState<Dish[]>([]);
@@ -237,7 +235,7 @@ const AdminDishQA = () => {
                             <TableCell className="text-right">{c.dishes}</TableCell>
                             <TableCell className="text-right">{c.recipes}</TableCell>
                             <TableCell className="text-right">
-                              <Link className="inline-flex items-center gap-1 text-primary hover:underline" to={`/country/${countrySlug(c.country)}`}>
+                              <Link className="inline-flex items-center gap-1 text-primary hover:underline" to={countryPath(c.country)}>
                                 Open <ExternalLink className="h-3 w-3" />
                               </Link>
                             </TableCell>
@@ -406,7 +404,7 @@ const AfricaCoverage = ({ dishes, recipes }: { dishes: Dish[]; recipes: Recipe[]
               <ul className="text-sm space-y-1 max-h-72 overflow-auto">
                 {list.sort((a, b) => a.name.localeCompare(b.name)).map(r => (
                   <li key={r.name} className="flex items-center justify-between">
-                    <Link to={`/country/${countrySlug(r.name)}`} className="hover:underline">
+                    <Link to={countryPath(r.name)} className="hover:underline">
                       {r.name}
                     </Link>
                     <div className="flex items-center gap-2">

@@ -8,6 +8,9 @@
 import { readFileSync, writeFileSync, mkdirSync, existsSync, copyFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { resolveRecipeSeo, toCanonicalUrl } from "../src/lib/recipeSeoOverrides.mjs";
+import { getRecipeSeoEnrichment } from "../src/lib/recipeSeoEnrichment.mjs";
+import { ATLAS_FAQS, ATLAS_SEO, ATLAS_WINNER_CLUSTERS } from "../src/lib/atlasSeo.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, "..");
@@ -138,7 +141,7 @@ const hubs = [
   ["recipe-index", "Recipe Index by Country & Diet | LadhaQuest", "Search LadhaQuest recipes by country, diet, and cook time.", "Recipe index"],
   ["countries", "Browse Recipes by Country | LadhaQuest", "Open a food guide for each African cuisine on LadhaQuest.", "Recipes by country"],
   ["continents", "African Regional Cuisines | LadhaQuest", "Explore West, East, North, Central, and Southern African cooking.", "African regions"],
-  ["atlas", "African Food Atlas | Dishes to Try", "Landmark African dishes, stews, and foods to cook next.", "African food atlas"],
+  ["atlas", ATLAS_SEO.title, ATLAS_SEO.description, ATLAS_SEO.h1],
   ["cuisine-map", "Cuisine Map of Africa | LadhaQuest", "Explore African dishes by region and country, with native names.", "Cuisine map of Africa"],
   ["meals", "African Breakfast, Lunch & Dinner", "Find African meal ideas by time of day across the continent.", "African meals"],
   ["ingredients", "African Cooking Ingredients Guide", "Spices, staples, produce, and how they are used in African kitchens.", "African cooking ingredients"],
@@ -184,20 +187,22 @@ function clipMeta(text, max = 155) {
 }
 
 function injectMeta(html, recipe) {
-  const countryBit = recipe.country ? ` — ${recipe.country}` : "";
-  let title = `${recipe.name} Recipe${countryBit} | LadhaQuest`;
-  if (title.length > 60) {
-    title = `${recipe.name}${countryBit} | LadhaQuest`;
-  }
-  if (title.length > 60) {
-    title = `${String(recipe.name || "").slice(0, 40).trim()} | LadhaQuest`;
-  }
+  const seo = resolveRecipeSeo({
+    slug: recipe.slug,
+    name: recipe.name,
+    country: recipe.country,
+    summary: recipe.summary,
+    briefDescription: recipe.brief_description,
+  });
+  const title = clipMeta(seo.title, 60);
   const description = clipMeta(
-    recipe.summary ||
-      recipe.brief_description ||
-      `Authentic ${recipe.country || "African"} recipe for ${recipe.name}. Ingredients, steps, and cultural context on LadhaQuest.`
+    seo.overridden
+      ? seo.description
+      : recipe.summary ||
+          recipe.brief_description ||
+          `Authentic ${recipe.country || "African"} recipe for ${recipe.name}. Ingredients, steps, and cultural context on LadhaQuest.`
   );
-  const canonical = `${site}/recipe/${recipe.slug}`;
+  const canonical = toCanonicalUrl(`/recipe/${recipe.slug}`);
   const image = recipe.image_url || `${site}/og-image.jpg`;
   const ingredients = asList(recipe.ingredients).slice(0, 40);
   const steps = asList(recipe.steps).slice(0, 30);
@@ -226,6 +231,44 @@ function injectMeta(html, recipe) {
     dateModified: recipe.updated_at || recipe.created_at || undefined,
   };
 
+  const enrichment = getRecipeSeoEnrichment(recipe.slug);
+  const faqBlock =
+    enrichment?.faqs?.length > 0
+      ? `<h2>Frequently asked questions</h2>
+    <dl>${enrichment.faqs
+      .map(
+        (f) =>
+          `<dt>${escapeHtml(f.q)}</dt><dd>${escapeHtml(f.a)}</dd>`
+      )
+      .join("")}</dl>`
+      : "";
+  const linkBlock =
+    enrichment?.internalLinks?.length > 0
+      ? `<h2>Explore related dishes</h2>
+    <ul>${enrichment.internalLinks
+      .map(
+        (l) =>
+          `<li><a href="${site}${escapeHtml(l.href)}">${escapeHtml(l.label)}</a></li>`
+      )
+      .join("")}</ul>`
+      : "";
+  const dishLink = enrichment?.dishSlug
+    ? `<p><a href="${site}/dish/${escapeHtml(enrichment.dishSlug)}">Dish encyclopedia entry</a></p>`
+    : "";
+
+  const faqSchema =
+    enrichment?.faqs?.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: enrichment.faqs.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }
+      : null;
+
   const noscript = `<noscript>
   <article>
     <p>${escapeHtml(description)}</p>
@@ -234,6 +277,9 @@ function injectMeta(html, recipe) {
     <ul>${ingredients.map((i) => `<li>${escapeHtml(i)}</li>`).join("")}</ul>
     <h2>Method</h2>
     <ol>${steps.map((s) => `<li>${escapeHtml(s)}</li>`).join("")}</ol>
+    ${faqBlock}
+    ${linkBlock}
+    ${dishLink}
     <p><a href="${canonical}">View full recipe on LadhaQuest</a></p>
   </article>
 </noscript>`;
@@ -280,10 +326,15 @@ function injectMeta(html, recipe) {
   // One visible H1 in the crawl shell. Recipe copy stays in noscript for non-JS crawlers.
   out = out.replace(/<h1>[^<]*<\/h1>/i, `<h1>${escapeHtml(recipe.name)}</h1>`);
   out = out.replace(/<script type="application\/ld\+json">[\s\S]*?<\/script>/i, "");
-  out = out.replace(
-    "</head>",
-    `<script type="application/ld+json">${JSON.stringify(schema)}</script>\n</head>`
-  );
+  const schemaScripts = [
+    `<script type="application/ld+json">${JSON.stringify(schema)}</script>`,
+    faqSchema
+      ? `<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>`
+      : "",
+  ]
+    .filter(Boolean)
+    .join("\n");
+  out = out.replace("</head>", `${schemaScripts}\n</head>`);
   out = out.replace('<div id="seo-shell">', `<div id="seo-shell">\n${noscript}`);
 
   return out;
@@ -343,6 +394,8 @@ function shellPage(html, { title, description, canonical, h1 }) {
           </p>
           <h2>Explore LadhaQuest</h2>
           <ul>
+            <li><a href="/atlas">African food atlas</a></li>
+            <li><a href="/cuisine-map">Cuisine map</a></li>
             <li><a href="/recipes">Browse recipes</a></li>
             <li><a href="/recipe-index">Recipe index</a></li>
             <li><a href="/countries">Recipes by country</a></li>
@@ -351,6 +404,72 @@ function shellPage(html, { title, description, canonical, h1 }) {
             <li><a href="${canonical}">Canonical page</a></li>
           </ul>
         </main>`
+  );
+  return out;
+}
+
+/** Atlas hub shell with winner clusters + FAQ for non-JS crawlers. */
+function shellAtlasPage(html) {
+  const clusterHtml = ATLAS_WINNER_CLUSTERS.map((c) => {
+    const winnerHref = c.winner.slug.startsWith("/")
+      ? c.winner.slug
+      : `/recipe/${c.winner.slug}`;
+    const sats = c.satellites
+      .map((s) => {
+        const href = s.slug.startsWith("/") ? s.slug : `/recipe/${s.slug}`;
+        return `<li><a href="${href}">${escapeHtml(s.label)}</a></li>`;
+      })
+      .join("");
+    return `<section>
+      <h3>${escapeHtml(c.title)}</h3>
+      <p>${escapeHtml(c.blurb)}</p>
+      <p><a href="${winnerHref}"><strong>${escapeHtml(c.winner.label)}</strong></a></p>
+      <ul>${sats}</ul>
+    </section>`;
+  }).join("");
+
+  const faqHtml = ATLAS_FAQS.map(
+    (f) => `<dt>${escapeHtml(f.q)}</dt><dd>${escapeHtml(f.a)}</dd>`
+  ).join("");
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: ATLAS_FAQS.map((f) => ({
+      "@type": "Question",
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a },
+    })),
+  };
+
+  let out = shellPage(html, {
+    title: ATLAS_SEO.title,
+    description: ATLAS_SEO.description,
+    canonical: `${site}/atlas`,
+    h1: ATLAS_SEO.h1,
+  });
+
+  out = out.replace(
+    /<main>[\s\S]*?<\/main>/i,
+    `<main>
+          <h1>${escapeHtml(ATLAS_SEO.h1)}</h1>
+          <p>${escapeHtml(ATLAS_SEO.description)}</p>
+          <h2>Start with dishes that already convert</h2>
+          ${clusterHtml}
+          <h2>Food Atlas FAQ</h2>
+          <dl>${faqHtml}</dl>
+          <h2>Explore LadhaQuest</h2>
+          <ul>
+            <li><a href="/cuisine-map">Cuisine map</a></li>
+            <li><a href="/countries">Recipes by country</a></li>
+            <li><a href="/recipe-index">Recipe index</a></li>
+            <li><a href="/recipes">Browse recipes</a></li>
+          </ul>
+        </main>`
+  );
+  out = out.replace(
+    "</head>",
+    `<script type="application/ld+json">${JSON.stringify(faqSchema)}</script>\n</head>`
   );
   return out;
 }
@@ -374,6 +493,11 @@ let hubCount = 0;
 for (const [path, title, description, h1] of hubs) {
   // Leave __LQ_CANONICAL__ for recipe-index so nginx can inject allow-listed
   // facet self-canonicals (?country=, etc.). Other hubs bake a stable URL.
+  if (path === "atlas") {
+    publishHtml(path, shellAtlasPage(baseHtml));
+    hubCount++;
+    continue;
+  }
   const canonical = path === "recipe-index" ? "__LQ_CANONICAL__" : `${site}/${path}`;
   publishHtml(
     path,

@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getCountryFlag } from "@/utils/countryFlags";
 import { SaveButton } from "@/components/SaveButton";
 import { toSlug } from "@/lib/recipeText";
+import { canonicalCountrySlug, countryPath, toCountrySlug } from "@/lib/countryCanonical";
 import { MapPin, AlertTriangle } from "lucide-react";
 
 // Approximate country centroids [lon, lat]
@@ -136,13 +137,13 @@ const CuisineMap = () => {
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between gap-2">
                   <CardTitle>{getCountryFlag(country)} {country}</CardTitle>
-                  <SaveButton type="country" slug={toSlug(country)} label={country} showLabel={false} />
+                  <SaveButton type="country" slug={canonicalCountrySlug(toCountrySlug(country)) || toSlug(country)} label={country} showLabel={false} />
                 </CardHeader>
                 <CardContent className="space-y-3 max-h-[600px] overflow-auto">
                   <div className="flex gap-2 flex-wrap">
                     <Badge variant="secondary">{REGION_OF[country]}</Badge>
                     <Badge variant="outline">{selected.length} dishes</Badge>
-                    <Button asChild size="sm" variant="link"><Link to={`/country/${toSlug(country)}`}>Country page</Link></Button>
+                    <Button asChild size="sm" variant="link"><Link to={countryPath(country)}>Country page</Link></Button>
                   </div>
                   {selected.map((d) => {
                     const s = d.slug || toSlug(d.name);
