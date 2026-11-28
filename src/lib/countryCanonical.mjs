@@ -10,6 +10,23 @@
 
 /** @type {CountryRecord[]} */
 export const COUNTRIES = [
+  // African island / Lusophone aliases (keep one indexable hub each).
+  {
+    slug: "cape-verde",
+    name: "Cape Verde",
+    aliases: ["Cabo Verde", "CV", "Republic of Cabo Verde"],
+  },
+  {
+    slug: "sao-tome-and-principe",
+    name: "São Tomé and Príncipe",
+    aliases: [
+      "Sao Tome and Principe",
+      "Sao Tome",
+      "São Tomé",
+      "ST",
+      "STP",
+    ],
+  },
   { slug: "argentina", name: "Argentina", aliases: ["AR", "Ar"] },
   { slug: "australia", name: "Australia", aliases: ["AU", "Au"] },
   { slug: "china", name: "China", aliases: ["CN", "Cn"] },

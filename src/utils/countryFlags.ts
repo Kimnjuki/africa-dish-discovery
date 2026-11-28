@@ -194,13 +194,14 @@ export const getCountryFlag = (country: string): string => {
 export const getContinent = (country: string): string => {
   const africaCountries = [
     'Algeria', 'Angola', 'Benin', 'Botswana', 'Burkina Faso', 'Burundi', 'Cameroon',
-    'Cape Verde', 'Central African Republic', 'Chad', 'Comoros', 'Congo', 'DRC',
+    'Cape Verde', 'Cabo Verde', 'Central African Republic', 'Chad', 'Comoros', 'Congo', 'DRC',
     "Côte d'Ivoire", 'Ivory Coast', 'Djibouti', 'Egypt', 'Equatorial Guinea', 'Eritrea',
     'Eswatini', 'Ethiopia', 'Gabon', 'Gambia', 'Ghana', 'Guinea', 'Guinea-Bissau',
     'Kenya', 'Lesotho', 'Liberia', 'Libya', 'Madagascar', 'Malawi', 'Mali', 'Mauritania',
     'Mauritius', 'Morocco', 'Mozambique', 'Namibia', 'Niger', 'Nigeria', 'Rwanda',
+    'Sao Tome', 'São Tomé', 'Sao Tome and Principe', 'São Tomé and Príncipe',
     'Senegal', 'Seychelles', 'Sierra Leone', 'Somalia', 'South Africa', 'South Sudan',
-    'Sudan', 'Tanzania', 'Togo', 'Tunisia', 'Uganda', 'Zambia', 'Zimbabwe'
+    'Sudan', 'Tanzania', 'Zanzibar', 'Togo', 'Tunisia', 'Uganda', 'Zambia', 'Zimbabwe'
   ];
   
   const asiaCountries = [

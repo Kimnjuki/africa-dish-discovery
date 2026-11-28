@@ -154,8 +154,8 @@ const CountryRecipes = () => {
   return (
     <div className="min-h-screen">
       <PageMeta
-        title={`${country} Food Guide | LadhaQuest`}
-        description={`A complete guide to ${country} cuisine: staple pantry, meal structure, festive dishes and ${recipes.length}+ authentic recipes with cultural context and step-by-step instructions.`}
+        title={`Authentic ${country} Recipes & Food Guide | LadhaQuest`}
+        description={`Cook authentic ${country} dishes: local names, pantry staples, meal structure, festive food and ${recipes.length}+ step-by-step African recipes on LadhaQuest.`}
         canonical={`https://www.ladhaquest.com/country/${canonicalSlug}`}
       />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />

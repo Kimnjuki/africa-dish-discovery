@@ -97,9 +97,9 @@ export const ATLAS_WINNER_CLUSTERS = [
   },
   {
     id: "lusophone-islands",
-    title: "Cape Verde, São Tomé & island tables",
+    title: "Cape Verde & São Tomé",
     blurb:
-      "Lusophone and Indian Ocean island cooking: cachupa, djagacida, fruta pão, cabidela, and Liberian jollof nearby on the West African coast.",
+      "Lusophone Atlantic islands: cachupa, djagacida, roasted breadfruit and Santomean cabidela.",
     winner: { slug: "cachupa", label: "Cachupa (Cape Verde)" },
     satellites: [
       { slug: "djagacida-cape-verde", label: "Djagacida" },
@@ -109,12 +109,46 @@ export const ATLAS_WINNER_CLUSTERS = [
         label: "Frango à cabidela",
       },
       { slug: "jollof-rice-liberian", label: "Liberian jollof" },
-      { slug: "bourgeois-grillé-seychelles", label: "Bourgeois grillé" },
     ],
     hubs: [
       { slug: "/country/cape-verde", label: "Cape Verde" },
       { slug: "/country/sao-tome-and-principe", label: "São Tomé" },
       { slug: "/country/liberia", label: "Liberia" },
+    ],
+  },
+  {
+    id: "indian-ocean-creole",
+    title: "Indian Ocean Creole islands",
+    blurb:
+      "Mauritius, Seychelles and Comoros: Creole fish, coconut curries, and spice-coast snacks.",
+    winner: { slug: "bourgeois-grillé-seychelles", label: "Bourgeois grillé" },
+    satellites: [
+      { slug: "vindaye-poisson-mauritius", label: "Vindaye poisson" },
+      { slug: "gateau-patate-mauritius", label: "Gateau patate" },
+      { slug: "achard-légumes-mauricien-mauritius", label: "Achard légumes" },
+      { slug: "pweza-wa-nazi-comoros", label: "Pweza wa nazi" },
+    ],
+    hubs: [
+      { slug: "/country/mauritius", label: "Mauritius" },
+      { slug: "/country/seychelles", label: "Seychelles" },
+      { slug: "/country/comoros", label: "Comoros" },
+    ],
+  },
+  {
+    id: "zanzibar-coast",
+    title: "Zanzibar & Swahili coast",
+    blurb:
+      "Spice-island street food under Tanzania: urojo, coastal breads, and coconut seafood.",
+    winner: { slug: "urojo-tanzania", label: "Urojo (Zanzibar mix)" },
+    satellites: [
+      { slug: "mahamri-kenya", label: "Mahamri" },
+      { slug: "ugali-kenya", label: "Ugali" },
+      { slug: "morsik-kenya", label: "Mursik" },
+    ],
+    hubs: [
+      { slug: "/country/tanzania", label: "Tanzania" },
+      { slug: "/country/kenya", label: "Kenya" },
+      { slug: "/cuisine-map", label: "Cuisine map" },
     ],
   },
 ];

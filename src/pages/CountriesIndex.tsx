@@ -33,6 +33,7 @@ const CountriesIndex = () => {
         const { data, error } = await supabase
           .from("recipes")
           .select("country,continent")
+          .or("is_african.eq.true,continent.eq.Africa")
           .not("country", "is", null)
           .range(from, from + PAGE - 1);
         if (error || !data || data.length === 0) break;
@@ -76,16 +77,16 @@ const CountriesIndex = () => {
   return (
     <div className="min-h-screen">
       <PageMeta
-        title="Browse Recipes by Country | LadhaQuest"
-        description="Explore authentic recipes from every country, organized by continent. Discover regional cuisines, cultural stories, and traditional dishes from around the world."
+        title="African Recipes by Country & Island | LadhaQuest"
+        description="Browse authentic African recipes by country and island — from Nigeria and Ethiopia to Cape Verde, Madagascar, Mauritius, Seychelles and São Tomé."
         canonical="https://www.ladhaquest.com/countries"
       />
       <Navigation />
       <main className="container mx-auto px-6 py-12">
         <header className="mb-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold">Recipes by Country</h1>
+          <h1 className="text-4xl md:text-5xl font-bold">African Recipes by Country</h1>
           <p className="text-muted-foreground mt-2">
-            Explore {countries.length} cuisines and {totalRecipes} recipes from around the world
+            Explore {countries.length} African cuisines and {totalRecipes} recipes across the mainland and islands
           </p>
         </header>
 

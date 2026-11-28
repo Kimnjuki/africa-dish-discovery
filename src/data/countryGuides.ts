@@ -118,6 +118,97 @@ export const COUNTRY_GUIDES: Record<string, CountryGuide> = {
       "Tabaski (Eid al-Adha) means grilled ram and onion yassa; Korité brings lakh, and weddings serve thiakry for dessert.",
     flavours: ["yet and guedj (fermented seafood)", "tamarind", "groundnut", "lime", "nététou"],
   },
+  Madagascar: {
+    intro:
+      "Malagasy cooking blends Austronesian, African and French island traditions: rice at nearly every meal, leafy greens (brèdes), coconut, and snacks like mofo anana and bonbon coco. Romazava and ravitoto anchor the everyday table.",
+    mealStructure: [
+      "Breakfast: rice leftover or mofo with coffee",
+      "Lunch: vary (rice) with laoka — stews, greens or dried fish",
+      "Dinner: lighter soups or leftovers",
+      "Snacks: mofo anana, koba, bonbon coco",
+    ],
+    festive:
+      "Famadihana and Independence Day tables lean on zebu stews, rice mountains and shared sweets; coastal towns add seafood and coconut dishes.",
+    flavours: ["ginger", "vanilla", "coconut", "brèdes greens", "voatsiperifery pepper"],
+  },
+  Mauritius: {
+    intro:
+      "Mauritian Creole cooking is a crossroads of Indian, Chinese, African and French kitchens: dholl puri, vindaye, rougaille, gateaux piments and seafood curries. Chillies, thyme and turmeric travel freely across street stalls and home pots.",
+    mealStructure: [
+      "Breakfast: farata or bread with chutney",
+      "Lunch: dholl puri with gros pois, or rice with curry",
+      "Dinner: rougaille, vindaye or Chinese-Mauritian noodles",
+      "Street food: gateaux piments, samosas, alouda",
+    ],
+    festive:
+      "Cavadee, Chinese New Year and Christmas each bring their own sweets and feast dishes; weekend beach braais feature grilled fish and salad.",
+    flavours: ["thyme", "turmeric", "chilli", "tamarind", "curry leaf"],
+  },
+  Seychelles: {
+    intro:
+      "Seychellois Creole food is ocean-first: grilled bourgeois and other reef fish, coconut curry, breadfruit, and tangy satini. French technique meets African and Indian spice on granite islands.",
+    mealStructure: [
+      "Breakfast: breadfruit or rice leftovers with chutney",
+      "Lunch: grilled fish with rice and satini",
+      "Dinner: coconut curry, octopus or ladob",
+      "Snacks: gateaux, fruit and fresh juice",
+    ],
+    festive:
+      "National Day and family Sundays centre on grilled fish, kari koko and shared rice; Christmas tables add richer stews and sweets.",
+    flavours: ["coconut", "chilli", "cinnamon", "fresh lime", "creole spice"],
+  },
+  "Cape Verde": {
+    intro:
+      "Cape Verdean (Cabo Verde) cooking is built on cachupa — slow corn, beans and meat or fish — plus rice dishes like djagacida, grilled catch, and Portuguese-Atlantic pantry staples. Island life means improvising with what the sea and market allow.",
+    mealStructure: [
+      "Breakfast: bread with coffee or leftover cachupa",
+      "Lunch: cachupa or rice with beans and fish",
+      "Dinner: lighter soups, grilled fish, or djagacida",
+      "Drinks: grogue, pontche, and strong coffee",
+    ],
+    festive:
+      "Festas and Independence celebrations bring richer cachupa rica, music and shared plates; Easter and Christmas lean on seafood and sweets.",
+    flavours: ["dried corn", "bay leaf", "garlic", "olive oil", "pimenta"],
+  },
+  "São Tomé and Príncipe": {
+    intro:
+      "Santomean cooking sits on cocoa islands in the Gulf of Guinea: breadfruit (fruta pão), fish stews, cabidela, and Portuguese-African techniques with palm oil and tropical produce.",
+    mealStructure: [
+      "Breakfast: bread or leftover starch with tea",
+      "Lunch: fish stew or cabidela with rice or breadfruit",
+      "Dinner: lighter soups and grilled catch",
+      "Snacks: roasted breadfruit and fruit",
+    ],
+    festive:
+      "Independence and feast days highlight seafood, chicken cabidela and shared island sweets; cocoa and coffee culture frames hospitality.",
+    flavours: ["palm oil", "chili", "citrus", "smoked fish", "breadfruit"],
+  },
+  Comoros: {
+    intro:
+      "Comorian cooking is Swahili-Indian Ocean Creole: coconut rice, grilled fish, mandazi cousins, and fragrant spice blends shared with the coast of East Africa and Madagascar.",
+    mealStructure: [
+      "Breakfast: bread or fried dough with tea",
+      "Lunch: rice with coconut sauce and fish",
+      "Dinner: stews, grilled seafood, or leftovers",
+      "Snacks: fritters and tropical fruit",
+    ],
+    festive:
+      "Weddings and religious holidays feature large rice trays, meat or fish for guests, and sweet coconut dishes.",
+    flavours: ["coconut", "cardamom", "clove", "chili", "lemongrass"],
+  },
+  "Equatorial Guinea": {
+    intro:
+      "Equatorial Guinean food spans mainland Fang kitchens and Bioko island tables: peanut sauces, fish, plantain, and Spanish colonial pantry notes over Central African staples.",
+    mealStructure: [
+      "Breakfast: plantain or bread with tea",
+      "Lunch: peanut or palm sauces with fish or meat and starch",
+      "Dinner: lighter soups and leftovers",
+      "Island tables: more seafood and tropical sides",
+    ],
+    festive:
+      "Independence and family gatherings feature large shared stews; coastal Bioko adds grilled fish and festive rice.",
+    flavours: ["groundnut", "palm oil", "chili", "smoked fish", "plantain"],
+  },
 };
 
 export const buildGenericGuide = (country: string, region?: string | null): CountryGuide => ({
