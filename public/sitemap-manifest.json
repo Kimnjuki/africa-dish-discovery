@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T20:56:17.770Z",
+  "generatedAt": "2026-11-28T16:14:10.990Z",
   "site": "https://www.ladhaquest.com",
   "submitInBing": "https://www.ladhaquest.com/sitemap.xml",
   "submitInGsc": "https://www.ladhaquest.com/sitemap.xml",
@@ -14,13 +14,13 @@
   ],
   "counts": {
     "pages": 15,
-    "recipes": 2103,
-    "recipeImages": 2103,
-    "dishes": 1428,
-    "countries": 156,
+    "recipes": 1480,
+    "recipeImages": 1480,
+    "dishes": 192,
+    "countries": 55,
     "blog": 12,
-    "stories": 883,
+    "stories": 0,
     "facetCountryUrls": 54,
-    "totalUrls": 4651
+    "totalUrls": 1808
   }
 }

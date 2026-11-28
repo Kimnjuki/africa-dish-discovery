@@ -49,6 +49,9 @@ Disallow: /image-verification
 Disallow: /image-scraper
 Disallow: /recipe-gallery
 
+# Cultural stories canonicalize to /dish/ and are noindex — save crawl budget
+Disallow: /story/
+
 # Query/prefill URLs — not index targets (canonicals + sitemap use clean paths)
 Disallow: /contact?*
 Disallow: /recipes?*

@@ -15,12 +15,22 @@
 import { readFileSync, writeFileSync, unlinkSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  canonicalCountrySlug,
+  listCanonicalRedirects,
+  toCountrySlug as canonicalToCountrySlug,
+} from "../src/lib/countryCanonical.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, "..");
 const publicDir = resolve(root, "public");
 const site = "https://www.ladhaquest.com";
 const today = new Date().toISOString().slice(0, 10);
+
+/** Paths nginx/app permanently redirect — never advertise these in sitemaps. */
+const REDIRECT_FROM = new Set(
+  listCanonicalRedirects().map((r) => r.from.replace(/\/+$/, "") || "/")
+);
 
 function loadEnv() {
   const envPath = resolve(root, ".env");
@@ -105,10 +115,7 @@ function escapeXml(s) {
 }
 
 function toCountrySlug(name) {
-  return String(name)
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+  return canonicalToCountrySlug(name);
 }
 
 function formatLastmod(value) {
@@ -287,23 +294,35 @@ for (const r of recipes) {
   uniqueRecipes.set(r.slug, r);
 }
 
-const uniqueDishes = new Map();
-for (const d of dishes) {
-  if (!d.slug) continue;
-  uniqueDishes.set(d.slug, d);
-}
-
 const countryMap = new Map();
+const africanCountryNames = new Set();
 for (const row of recipeCountries) {
   const name = row.country?.trim();
   if (!name) continue;
-  const slug = toCountrySlug(name);
-  if (!slug) continue;
+  const rawSlug = toCountrySlug(name);
+  const slug = canonicalCountrySlug(rawSlug);
+  if (!slug) continue; // fusion / non-place labels
+  const loc = `/country/${slug}`;
+  if (REDIRECT_FROM.has(loc)) continue; // never sitemap a redirect target
+  africanCountryNames.add(name.toLowerCase());
   const prev = countryMap.get(slug);
   const last = formatLastmod(row.updated_at);
   if (!prev || last > prev.lastmod) {
     countryMap.set(slug, { name, slug, lastmod: last });
   }
+}
+
+const uniqueDishes = new Map();
+for (const d of dishes) {
+  if (!d.slug) continue;
+  // Prefer recipe URL when the same slug exists (canonical consolidation).
+  if (uniqueRecipes.has(d.slug)) continue;
+  const continent = String(d.continent || "").toLowerCase();
+  const country = String(d.country || "").trim().toLowerCase();
+  const isAfrica =
+    continent === "africa" || (country && africanCountryNames.has(country));
+  if (!isAfrica) continue;
+  uniqueDishes.set(d.slug, d);
 }
 
 const staticBlog = readStaticBlogSlugs();
@@ -313,10 +332,8 @@ for (const p of dbBlog) {
   if (p.slug) blogMap.set(p.slug, p);
 }
 
-// Only index story URLs when cultural copy is substantial (avoids 1:1 /dish duplicate noise).
-const storyDishes = [...uniqueDishes.values()].filter(
-  (d) => typeof d.cultural_significance === "string" && d.cultural_significance.trim().length >= 200
-);
+// Stories now noindex + canonicalize to /dish/ — keep sitemap empty to stop discovery bloat.
+const storyDishes = [];
 
 // Remove legacy flat sitemap if regenerating index layout
 const legacyExtra = ["sitemap-recipes-2.xml"];
