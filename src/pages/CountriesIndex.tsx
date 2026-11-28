@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { PageMeta } from "@/components/seo/PageMeta";
+import { HubSeoContent } from "@/components/seo/HubSeoContent";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getCountryFlag, getContinent } from "@/utils/countryFlags";
@@ -130,6 +131,7 @@ const CountriesIndex = () => {
             </section>
           ))
         )}
+        <HubSeoContent path="/countries" hideHeading />
       </main>
       <Footer />
     </div>

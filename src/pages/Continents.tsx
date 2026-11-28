@@ -2,6 +2,7 @@ import Navigation from "@/components/Navigation";
 import ContinentsExplorer from "@/components/ContinentsExplorer";
 import Footer from "@/components/Footer";
 import { PageMeta } from "@/components/seo/PageMeta";
+import { HubSeoContent } from "@/components/seo/HubSeoContent";
 
 const Continents = () => {
   return (
@@ -16,6 +17,7 @@ const Continents = () => {
       <Navigation />
       <main>
         <ContinentsExplorer />
+        <HubSeoContent path="/continents" hideHeading />
       </main>
       <Footer />
     </div>

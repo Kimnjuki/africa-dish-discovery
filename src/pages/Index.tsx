@@ -4,6 +4,7 @@ import Hero from "@/components/Hero";
 import CallToAction from "@/components/CallToAction";
 import Footer from "@/components/Footer";
 import { PageMeta } from "@/components/seo/PageMeta";
+import { HubSeoContent } from "@/components/seo/HubSeoContent";
 import { PantryShowcase } from "@/components/PantryShowcase";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { TasteOnboarding } from "@/components/onboarding/TasteOnboarding";
@@ -94,6 +95,7 @@ const Index = () => {
             </div>
           </section>
           <CallToAction />
+          <HubSeoContent path="/" hideHeading />
         </main>
         <Footer />
       </div>

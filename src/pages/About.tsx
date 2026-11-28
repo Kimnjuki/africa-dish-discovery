@@ -1,6 +1,7 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { PageMeta } from "@/components/seo/PageMeta";
+import { HubSeoContent } from "@/components/seo/HubSeoContent";
 import { Users, Heart, Globe, Award, BookOpen, ChefHat } from "lucide-react";
 
 const About = () => {
@@ -143,6 +144,7 @@ const About = () => {
             </a>
           </div>
         </section>
+        <HubSeoContent path="/about" hideHeading />
       </main>
       
       <Footer />

@@ -12,6 +12,7 @@ import { resolveRecipeSeo, toCanonicalUrl } from "../src/lib/recipeSeoOverrides.
 import { getRecipeSeoEnrichment } from "../src/lib/recipeSeoEnrichment.mjs";
 import { ATLAS_FAQS, ATLAS_SEO, ATLAS_WINNER_CLUSTERS } from "../src/lib/atlasSeo.mjs";
 import { recipeSchemaImageList, toAbsoluteImageUrl } from "../src/lib/recipeSchemaImages.mjs";
+import { getHubSeoContent } from "../src/lib/hubSeoContent.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, "..");
@@ -345,7 +346,15 @@ function injectMeta(html, recipe) {
     .filter(Boolean)
     .join("\n");
   out = out.replace("</head>", `${schemaScripts}\n</head>`);
-  out = out.replace('<div id="seo-shell">', `<div id="seo-shell">\n${noscript}`);
+  if (/<div id="seo-shell">/i.test(out)) {
+    out = out.replace('<div id="seo-shell">', `<div id="seo-shell">\n${noscript}`);
+  } else {
+    const recipeMain = `<main>
+          <h1>${escapeHtml(recipe.name)}</h1>
+          ${noscript}
+        </main>`;
+    out = injectSeoMain(out, recipeMain);
+  }
 
   return out;
 }
@@ -360,7 +369,111 @@ function publishHtml(urlPath, html) {
   }
 }
 
-function shellPage(html, { title, description, canonical, h1 }) {
+const SEO_SHELL_HEADER = `<header>
+          <p><a href="/">LadhaQuest</a> — Africa-first recipes</p>
+          <nav aria-label="Primary">
+            <ul>
+              <li><a href="/recipe-index">Recipe index</a></li>
+              <li><a href="/recipes">Browse recipes</a></li>
+              <li><a href="/countries">Recipes by country</a></li>
+              <li><a href="/continents">African regions</a></li>
+              <li><a href="/atlas">Dish atlas</a></li>
+              <li><a href="/cuisine-map">Cuisine map</a></li>
+              <li><a href="/meals">Meals</a></li>
+              <li><a href="/blog">Food blog</a></li>
+              <li><a href="/about">About</a></li>
+              <li><a href="/contact">Contact</a></li>
+            </ul>
+          </nav>
+        </header>`;
+
+function exploreListHtml(canonical) {
+  return `<h2>Explore LadhaQuest</h2>
+          <ul>
+            <li><a href="/atlas">African food atlas</a></li>
+            <li><a href="/cuisine-map">Cuisine map</a></li>
+            <li><a href="/recipes">Browse recipes</a></li>
+            <li><a href="/recipe-index">Recipe index</a></li>
+            <li><a href="/countries">Recipes by country</a></li>
+            <li><a href="/continents">African regions</a></li>
+            <li><a href="/blog">Food blog</a></li>
+            <li><a href="${canonical}">Canonical page</a></li>
+          </ul>`;
+}
+
+function hubMainHtml(path, { h1, description, canonical }) {
+  const hub = getHubSeoContent(path.startsWith("/") ? path : `/${path}`);
+  const heading = escapeHtml(hub?.h1 || h1);
+  if (hub) {
+    const sections = hub.sections
+      .map((section) => {
+        const h2 = section.heading
+          ? `<h2>${escapeHtml(section.heading)}</h2>`
+          : "";
+        const paras = section.paragraphs
+          .map((p) => `<p>${escapeHtml(p)}</p>`)
+          .join("\n");
+        const links =
+          section.links && section.links.length
+            ? `<ul>${section.links
+                .map(
+                  (l) =>
+                    `<li><a href="${escapeHtml(l.href)}">${escapeHtml(l.label)}</a></li>`
+                )
+                .join("")}</ul>`
+            : "";
+        return `${h2}\n${paras}\n${links}`;
+      })
+      .join("\n");
+    return `<main>
+          <h1>${heading}</h1>
+          <p>${escapeHtml(hub.intro)}</p>
+          ${sections}
+          ${exploreListHtml(canonical)}
+        </main>`;
+  }
+  return `<main>
+          <h1>${heading}</h1>
+          <p>${escapeHtml(description)}</p>
+          <p>
+            LadhaQuest helps you cook authentic African food at home with local ingredient names,
+            market-aware substitutions, meal planning, and offline cook mode. Browse recipes by
+            country, region, meal type, or landmark dish clusters in the food atlas.
+          </p>
+          <p>
+            Each guide emphasizes cultural context, native dish names, and practical steps so you
+            can shop, prep, and plate with confidence — whether you are cooking West African stews,
+            East African breads, North African tagines, or Southern African braai classics.
+          </p>
+          ${exploreListHtml(canonical)}
+        </main>`;
+}
+
+/** Inject crawlable body even when vite dist shipped an empty #root. */
+function injectSeoMain(html, mainHtml) {
+  if (/<main>[\s\S]*?<\/main>/i.test(html)) {
+    return html.replace(/<main>[\s\S]*?<\/main>/i, mainHtml);
+  }
+  const shell = `<div id="seo-shell">\n${SEO_SHELL_HEADER}\n${mainHtml}\n</div>`;
+  if (/<div id="seo-shell">/i.test(html)) {
+    return html.replace(
+      /<div id="seo-shell">[\s\S]*?<\/div>\s*(?=<\/div>\s*<\/body>|<script)/i,
+      shell
+    );
+  }
+  if (/<div id="root">\s*<\/div>/i.test(html)) {
+    return html.replace(/<div id="root">\s*<\/div>/i, `<div id="root">${shell}</div>`);
+  }
+  if (/<div id="root">/i.test(html)) {
+    return html.replace(
+      /<div id="root">[\s\S]*?<\/div>\s*(?=<script|<\/body>)/i,
+      `<div id="root">${shell}</div>\n    `
+    );
+  }
+  return html.replace(/<\/body>/i, `${shell}\n</body>`);
+}
+
+function shellPage(html, { title, description, canonical, h1, path }) {
   let out = html;
   out = out.replace(/<title>[^<]*<\/title>/i, `<title>${escapeHtml(title)}</title>`);
   out = out.replace(
@@ -392,29 +505,8 @@ function shellPage(html, { title, description, canonical, h1 }) {
     `<meta name="twitter:description" content="${escapeHtml(description)}" />`
   );
   out = out.replace(/<h1>[^<]*<\/h1>/i, `<h1>${escapeHtml(h1)}</h1>`);
-  // Give hub/country/blog shells enough visible copy for non-JS crawlers.
-  out = out.replace(
-    /<main>[\s\S]*?<\/main>/i,
-    `<main>
-          <h1>${escapeHtml(h1)}</h1>
-          <p>${escapeHtml(description)}</p>
-          <p>
-            LadhaQuest helps you cook authentic African food at home with local ingredient names,
-            market-aware substitutions, meal planning, and offline cook mode.
-          </p>
-          <h2>Explore LadhaQuest</h2>
-          <ul>
-            <li><a href="/atlas">African food atlas</a></li>
-            <li><a href="/cuisine-map">Cuisine map</a></li>
-            <li><a href="/recipes">Browse recipes</a></li>
-            <li><a href="/recipe-index">Recipe index</a></li>
-            <li><a href="/countries">Recipes by country</a></li>
-            <li><a href="/continents">African regions</a></li>
-            <li><a href="/blog">Food blog</a></li>
-            <li><a href="${canonical}">Canonical page</a></li>
-          </ul>
-        </main>`
-  );
+  // Give hub/country/blog shells enough visible copy for non-JS crawlers (150+ words).
+  out = injectSeoMain(out, hubMainHtml(path || "", { h1, description, canonical }));
   return out;
 }
 
@@ -457,10 +549,11 @@ function shellAtlasPage(html) {
     description: ATLAS_SEO.description,
     canonical: `${site}/atlas`,
     h1: ATLAS_SEO.h1,
+    path: "/atlas",
   });
 
-  out = out.replace(
-    /<main>[\s\S]*?<\/main>/i,
+  out = injectSeoMain(
+    out,
     `<main>
           <h1>${escapeHtml(ATLAS_SEO.h1)}</h1>
           <p>${escapeHtml(ATLAS_SEO.description)}</p>
@@ -500,6 +593,21 @@ function readStaticBlog() {
 
 const baseHtml = readFileSync(indexHtmlPath, "utf8");
 let hubCount = 0;
+
+// Homepage: patch dist/index.html so empty-root builds still ship crawlable copy.
+{
+  const homeHtml = shellPage(baseHtml, {
+    title: "LadhaQuest | Authentic African Recipes from 54 Countries",
+    description:
+      "Cook authentic African food at home. 2,100+ recipes with local ingredient names, substitutions, meal planning, and offline cook mode.",
+    canonical: `${site}/`,
+    h1: "LadhaQuest — Authentic African Recipes from 54 Countries",
+    path: "/",
+  });
+  writeFileSync(indexHtmlPath, homeHtml);
+  hubCount++;
+}
+
 for (const [path, title, description, h1] of hubs) {
   // Leave __LQ_CANONICAL__ for recipe-index so nginx can inject allow-listed
   // facet self-canonicals (?country=, etc.). Other hubs bake a stable URL.
@@ -516,6 +624,7 @@ for (const [path, title, description, h1] of hubs) {
       description,
       canonical,
       h1,
+      path: `/${path}`,
     })
   );
   hubCount++;

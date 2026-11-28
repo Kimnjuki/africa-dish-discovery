@@ -10,6 +10,7 @@ import { useDataSaver } from "@/hooks/useDataSaver";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { PageMeta } from "@/components/seo/PageMeta";
+import { HubSeoContent } from "@/components/seo/HubSeoContent";
 import { useToast } from "@/hooks/use-toast";
 import {
   FREE_LIMITS,
@@ -261,6 +262,7 @@ const Install = () => {
             </CardContent>
           </Card>
         </div>
+        <HubSeoContent path="/install" hideHeading />
       </main>
 
       <Footer />

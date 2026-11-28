@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { PageMeta } from "@/components/seo/PageMeta";
+import { HubSeoContent } from "@/components/seo/HubSeoContent";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -287,6 +288,7 @@ const Contact = () => {
             </div>
           </div>
         </div>
+        <HubSeoContent path="/contact" hideHeading />
       </main>
       
       <Footer />

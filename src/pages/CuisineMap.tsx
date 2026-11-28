@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { PageMeta } from "@/components/seo/PageMeta";
+import { HubSeoContent } from "@/components/seo/HubSeoContent";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -165,6 +166,7 @@ const CuisineMap = () => {
             )}
           </div>
         </div>
+        <HubSeoContent path="/cuisine-map" hideHeading />
       </main>
       <Footer />
     </div>
