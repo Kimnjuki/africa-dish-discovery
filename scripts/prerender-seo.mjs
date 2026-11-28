@@ -11,6 +11,7 @@ import { fileURLToPath } from "node:url";
 import { resolveRecipeSeo, toCanonicalUrl } from "../src/lib/recipeSeoOverrides.mjs";
 import { getRecipeSeoEnrichment } from "../src/lib/recipeSeoEnrichment.mjs";
 import { ATLAS_FAQS, ATLAS_SEO, ATLAS_WINNER_CLUSTERS } from "../src/lib/atlasSeo.mjs";
+import { recipeSchemaImageList, toAbsoluteImageUrl } from "../src/lib/recipeSchemaImages.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, "..");
@@ -203,30 +204,39 @@ function injectMeta(html, recipe) {
           `Authentic ${recipe.country || "African"} recipe for ${recipe.name}. Ingredients, steps, and cultural context on LadhaQuest.`
   );
   const canonical = toCanonicalUrl(`/recipe/${recipe.slug}`);
-  const image = recipe.image_url || `${site}/og-image.jpg`;
+  const images = recipeSchemaImageList(recipe.image_url, site);
+  const image = images[0] || toAbsoluteImageUrl(null, site);
   const ingredients = asList(recipe.ingredients).slice(0, 40);
   const steps = asList(recipe.steps).slice(0, 30);
+  const prep = recipe.prep_time || 0;
+  const cook = recipe.cook_time || 0;
+  const total = prep || cook ? prep + cook : 0;
 
   const schema = {
     "@context": "https://schema.org/",
     "@type": "Recipe",
     name: recipe.name,
     description,
-    image: [image],
+    image: images,
     recipeCuisine: recipe.cuisine_type || recipe.country || "African",
     recipeCategory: recipe.category || "Main Course",
     recipeYield: `${recipe.servings || 4} servings`,
-    ...(recipe.prep_time ? { prepTime: `PT${recipe.prep_time}M` } : {}),
-    ...(recipe.cook_time ? { cookTime: `PT${recipe.cook_time}M` } : {}),
+    ...(prep ? { prepTime: `PT${prep}M` } : {}),
+    ...(cook ? { cookTime: `PT${cook}M` } : {}),
+    ...(total ? { totalTime: `PT${total}M` } : {}),
     recipeIngredient: ingredients,
     recipeInstructions: steps.map((text, i) => ({
       "@type": "HowToStep",
       position: i + 1,
+      name: `Step ${i + 1}`,
       text,
+      url: `${canonical}#step${i + 1}`,
     })),
     author: { "@type": "Organization", name: "LadhaQuest", url: site },
     publisher: { "@type": "Organization", name: "LadhaQuest", url: site },
     url: canonical,
+    mainEntityOfPage: canonical,
+    isAccessibleForFree: true,
     datePublished: recipe.created_at || undefined,
     dateModified: recipe.updated_at || recipe.created_at || undefined,
   };

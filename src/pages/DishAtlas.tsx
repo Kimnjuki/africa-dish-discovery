@@ -59,6 +59,7 @@ const ICONIC = [
   // Week 3–4 GSC winners + cluster anchors
   "katapa", "mahamri", "bonbon coco", "bonbon", "mofo anana", "lumanda",
   "urojo", "chiponde", "feuille", "manioc",
+  "cachupa", "djagacida", "fruta pão", "cabidela", "liberian jollof", "bourgeois",
 ];
 
 function clusterHref(slug: string) {

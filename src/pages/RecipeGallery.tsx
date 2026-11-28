@@ -180,8 +180,10 @@ const RecipeGallery = () => {
   return (
     <div className="min-h-screen bg-background">
       <PageMeta
-        title="Recipe Image Gallery | Browse Authentic Dish Photos | LadhaQuest"
-        description="Explore our curated gallery of authentic recipe images from around the world. Filter by continent, country, and browse high-quality dish photos."
+        title="Recipe Image Gallery | Admin | LadhaQuest"
+        description="Internal recipe image QA gallery. Not indexed for search."
+        noIndex
+        canonical="https://www.ladhaquest.com/recipe-gallery"
       />
       <Navigation />
 

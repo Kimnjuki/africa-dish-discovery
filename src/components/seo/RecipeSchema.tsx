@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import type { IngredientValue, StepValue } from "@/types/content";
+import { recipeSchemaImageList } from "@/lib/recipeSchemaImages";
 
 export interface RecipeSchemaRating {
   average: number;
@@ -137,9 +138,8 @@ export const RecipeSchema = ({
     const total =
       prep != null || cook != null ? (prep || 0) + (cook || 0) : undefined;
 
-    const images = recipe.image_url
-      ? [recipe.image_url]
-      : [`${siteOrigin}/placeholder.svg`];
+    // Absolute multi-size URLs for Google Recipe Gallery CTR (never placeholder.svg).
+    const images = recipeSchemaImageList(recipe.image_url, siteOrigin);
 
     // Use Person when a named human author is available; fall back to Organization.
     // Person is preferred by Google when creator_profiles exist.

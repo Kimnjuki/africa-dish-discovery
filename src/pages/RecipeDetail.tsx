@@ -324,7 +324,10 @@ const RecipeDetail = () => {
                     name={title}
                     country={country}
                     imageUrl={recipe.image_url}
-                    className="h-full min-h-64 w-full"
+                    className="h-full min-h-64 w-full !aspect-auto"
+                    width={1200}
+                    height={900}
+                    priority
                   />
                 </div>
                 <div className="lg:col-span-2">

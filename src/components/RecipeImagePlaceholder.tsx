@@ -7,16 +7,26 @@ interface RecipeImagePlaceholderProps {
   country?: string;
   className?: string;
   imageUrl?: string | null;
+  /** Intrinsic size hints for LCP / rich-result friendly crops (default 4:3). */
+  width?: number;
+  height?: number;
+  /** Use eager loading for above-the-fold heroes. */
+  priority?: boolean;
 }
 
 const RecipeImagePlaceholder = ({ 
   name, 
   country, 
   className = "", 
-  imageUrl 
+  imageUrl,
+  width = 1200,
+  height = 900,
+  priority = false,
 }: RecipeImagePlaceholderProps) => {
   const [failed, setFailed] = useState(false);
-  const optimized = !failed ? optimizeImageUrl(imageUrl, { width: 640, quality: 70 }) : null;
+  const optimized = !failed
+    ? optimizeImageUrl(imageUrl, { width: Math.min(width, 1200), quality: 72 })
+    : null;
 
   // Get gradient based on country/region for visual variety
   const getGradient = () => {
@@ -64,7 +74,7 @@ const RecipeImagePlaceholder = ({
     return "from-primary/60 via-primary/80 to-primary";
   };
 
-  const frame = `relative flex h-full w-full min-h-[8rem] items-center justify-center overflow-hidden ${className}`;
+  const frame = `relative flex h-full w-full min-h-[8rem] items-center justify-center overflow-hidden aspect-[4/3] ${className}`;
 
   // If there's a valid image URL, show the image (with CDN resize + error fallback)
   if (optimized) {
@@ -73,8 +83,11 @@ const RecipeImagePlaceholder = ({
         <img
           src={optimized}
           alt={name || "Recipe"}
-          loading="lazy"
+          width={width}
+          height={height}
+          loading={priority ? "eager" : "lazy"}
           decoding="async"
+          fetchPriority={priority ? "high" : undefined}
           className="absolute inset-0 h-full w-full object-cover"
           onError={() => setFailed(true)}
         />

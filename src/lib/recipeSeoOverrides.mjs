@@ -133,6 +133,27 @@ export const RECIPE_SEO_OVERRIDES = {
     description:
       "Malawian chiponde recipe on LadhaQuest: ingredients, method, and how it fits Southern African relish cooking.",
   },
+  // Liberian / Cape Verde / São Tomé (+ Seychelles) long-tails.
+  "djagacida-cape-verde": {
+    title: "Djagacida Recipe — Cape Verde | LadhaQuest",
+    description:
+      "Cape Verdean djagacida: traditional island rice dish with beans and savory seasoning. Ingredients and method.",
+  },
+  cachupa: {
+    title: "Cachupa Recipe — Cape Verde Stew | LadhaQuest",
+    description:
+      "How to make Cape Verdean cachupa: slow-cooked corn, beans, and meat or fish. The national comfort stew of Cabo Verde.",
+  },
+  "frango-à-cabidela-santomense-sao-tome-and-principe": {
+    title: "Frango à Cabidela — São Tomé Recipe | LadhaQuest",
+    description:
+      "Santomean frango à cabidela: chicken cooked in a rich blood-sauce tradition. Ingredients, method, and serving tips.",
+  },
+  "bourgeois-grillé-seychelles": {
+    title: "Bourgeois Grillé — Seychelles Fish | LadhaQuest",
+    description:
+      "Seychellois bourgeois grillé: grilled red snapper (bourgeois) with Creole seasoning. Island fish recipe step by step.",
+  },
 };
 
 /** Dish encyclopedia pages — keep definitional so they don't steal recipe CTR. */
@@ -192,6 +213,21 @@ export const DISH_SEO_OVERRIDES = {
     title: "What Is Mahamri? Kenyan Tea-Time Bread",
     description:
       "Mahamri explained: Swahili-coast fried bread related to mandazi, tea pairings, and the full cooking recipe.",
+  },
+  cachupa: {
+    title: "What Is Cachupa? Cape Verde National Stew",
+    description:
+      "Cachupa explained: Cabo Verde’s corn-and-bean stew, rica vs pobre styles, and where to cook the full recipe.",
+  },
+  "djagacida-cape-verde": {
+    title: "What Is Djagacida? Cape Verde Rice Dish",
+    description:
+      "Djagacida explained: Cape Verdean savory rice, how it differs from cachupa, and the step-by-step recipe.",
+  },
+  "jollof-rice-liberian": {
+    title: "What Is Liberian Jollof? West African Rice",
+    description:
+      "Liberian jollof explained: how it differs from Nigerian and Ghanaian styles, and where to cook it on LadhaQuest.",
   },
 };
 

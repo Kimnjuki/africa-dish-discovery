@@ -403,6 +403,188 @@ export const RECIPE_SEO_ENRICHMENT = {
       { href: "/atlas", label: "Greens cluster on the atlas" },
     ],
   },
+
+  // --- Liberian / Cape Verde / São Tomé long-tails ---
+  "jollof-rice-liberian": {
+    dishSlug: "jollof-rice-liberian",
+    keyPhrases: [
+      "liberian jollof rice recipe",
+      "how to cook liberian jollof rice",
+      "jollof rice liberian recipe",
+    ],
+    faqs: [
+      {
+        q: "How is Liberian jollof different from Nigerian or Ghanaian jollof?",
+        a: "Liberian jollof is typically a tomato-rich, one-pot rice with its own spice balance and texture. Nigerian and Ghanaian styles use different pepper blends, rice handling, and party-rice techniques—Liberian jollof stands on its own.",
+      },
+      {
+        q: "What rice works best for Liberian jollof?",
+        a: "Long-grain rice is common. Rinse until water runs clearer, then cook in the tomato-pepper base so grains absorb flavor without turning mushy.",
+      },
+      {
+        q: "What do you serve with Liberian jollof?",
+        a: "Fried plantain, salad, or grilled chicken/fish are classic sides. Keep the pepper heat adjustable for the table.",
+      },
+      {
+        q: "Can I make Liberian jollof without specialty peppers?",
+        a: "Yes—use available fresh chili or cayenne with tomato paste and onions. The key is a deep tomato base and well-seasoned stock.",
+      },
+    ],
+    internalLinks: [
+      { href: "/dish/jollof-rice-liberian", label: "Liberian jollof encyclopedia" },
+      { href: "/country/liberia", label: "Liberian recipes" },
+      { href: "/recipe/banku-and-tilapia-ghana", label: "Banku and tilapia" },
+      { href: "/recipe/burukutu-nigeria", label: "Burukutu" },
+      { href: "/atlas", label: "African food atlas" },
+    ],
+  },
+  "fruta-pão-assada-sao-tome-and-principe": {
+    dishSlug: "fruta-pão-assada-sao-tome-and-principe",
+    keyPhrases: ["fruta pão", "fruta pão de são tomé", "roasted breadfruit"],
+    faqs: [
+      {
+        q: "What is fruta pão assada?",
+        a: "Fruta pão assada is roasted breadfruit prepared in the São Tomé and Príncipe style—a starchy island staple with a mild, potato-like crumb when cooked.",
+      },
+      {
+        q: "How do you roast breadfruit?",
+        a: "Score or portion the fruit, oil lightly, and roast until the flesh is soft and the edges caramelize. Season simply so the breadfruit flavor stays clear.",
+      },
+      {
+        q: "What else should I cook from São Tomé?",
+        a: "Try Santomean frango à cabidela and other island recipes, or browse the São Tomé country hub for more Lusophone African dishes.",
+      },
+    ],
+    internalLinks: [
+      { href: "/dish/fruta-pão-assada-sao-tome-and-principe", label: "Fruta pão encyclopedia" },
+      { href: "/country/sao-tome-and-principe", label: "São Tomé recipes" },
+      {
+        href: "/recipe/frango-à-cabidela-santomense-sao-tome-and-principe",
+        label: "Frango à cabidela",
+      },
+      { href: "/recipe/cachupa", label: "Cape Verdean cachupa" },
+      { href: "/atlas", label: "Island cooking on the atlas" },
+    ],
+  },
+  "djagacida-cape-verde": {
+    dishSlug: "djagacida-cape-verde",
+    keyPhrases: ["djagacida", "Cape Verde rice", "Cabo Verde djagacida"],
+    faqs: [
+      {
+        q: "What is djagacida?",
+        a: "Djagacida is a Cape Verdean (Cabo Verde) rice dish—savory, comforting, and often cooked with beans and seasoned stock as an everyday island meal.",
+      },
+      {
+        q: "How is djagacida different from cachupa?",
+        a: "Cachupa is the slow corn-and-bean national stew. Djagacida is a rice-centered plate—lighter and faster, while still tasting distinctly Cape Verdean.",
+      },
+      {
+        q: "What should I serve with djagacida?",
+        a: "A simple salad, fried fish, or leftover cachupa on the side makes a full Cabo Verdean table.",
+      },
+    ],
+    internalLinks: [
+      { href: "/dish/djagacida-cape-verde", label: "Djagacida encyclopedia" },
+      { href: "/country/cape-verde", label: "Cape Verde recipes" },
+      { href: "/recipe/cachupa", label: "Cachupa" },
+      {
+        href: "/recipe/fruta-pão-assada-sao-tome-and-principe",
+        label: "Fruta pão (São Tomé)",
+      },
+      { href: "/atlas", label: "Island cluster on the atlas" },
+    ],
+  },
+  cachupa: {
+    dishSlug: "cachupa",
+    keyPhrases: ["cachupa", "Cape Verde stew", "Cabo Verde cachupa"],
+    faqs: [
+      {
+        q: "What is cachupa?",
+        a: "Cachupa is Cape Verde’s national stew of slow-cooked corn (hominy), beans, and often meat, sausage, or fish. It is hearty, layered, and cooked low and slow.",
+      },
+      {
+        q: "What is the difference between cachupa rica and cachupa pobre?",
+        a: "Cachupa rica is the richer weekend version with more meats; cachupa pobre is the everyday, lighter bean-and-corn pot. Both are authentic Cabo Verdean cooking.",
+      },
+      {
+        q: "How long does cachupa take?",
+        a: "Plan for a long simmer—often 2+ hours—so the corn softens and flavors meld. Many cooks prepare a large pot for leftovers that taste better the next day.",
+      },
+      {
+        q: "What else pairs with cachupa?",
+        a: "Try djagacida for a rice day, or explore other Lusophone African dishes from São Tomé on LadhaQuest.",
+      },
+    ],
+    internalLinks: [
+      { href: "/dish/cachupa", label: "Cachupa encyclopedia" },
+      { href: "/country/cape-verde", label: "Cape Verde recipes" },
+      { href: "/recipe/djagacida-cape-verde", label: "Djagacida" },
+      {
+        href: "/recipe/frango-à-cabidela-santomense-sao-tome-and-principe",
+        label: "Frango à cabidela",
+      },
+      { href: "/atlas", label: "Island cluster on the atlas" },
+    ],
+  },
+  "frango-à-cabidela-santomense-sao-tome-and-principe": {
+    dishSlug: "frango-à-cabidela-santomense-sao-tome-and-principe",
+    keyPhrases: ["cabidela", "frango à cabidela", "São Tomé chicken"],
+    faqs: [
+      {
+        q: "What is frango à cabidela?",
+        a: "Frango à cabidela is a Portuguese-influenced chicken dish cooked with a thickened sauce traditionally including chicken blood—prepared in a Santomean style on São Tomé and Príncipe.",
+      },
+      {
+        q: "Is cabidela the same in Angola and São Tomé?",
+        a: "Related techniques travel across Lusophone Africa, but seasoning and sides differ by country. This recipe follows the Santomean presentation on LadhaQuest.",
+      },
+      {
+        q: "What can I serve with cabidela?",
+        a: "Rice or roasted breadfruit (fruta pão) make natural companions on a São Tomé table.",
+      },
+    ],
+    internalLinks: [
+      {
+        href: "/dish/frango-à-cabidela-santomense-sao-tome-and-principe",
+        label: "Cabidela encyclopedia",
+      },
+      { href: "/country/sao-tome-and-principe", label: "São Tomé recipes" },
+      {
+        href: "/recipe/fruta-pão-assada-sao-tome-and-principe",
+        label: "Fruta pão assada",
+      },
+      { href: "/recipe/cachupa", label: "Cape Verdean cachupa" },
+      { href: "/atlas", label: "Island cluster on the atlas" },
+    ],
+  },
+  "bourgeois-grillé-seychelles": {
+    dishSlug: "bourgeois-grillé-seychelles",
+    keyPhrases: ["bourgeois fish seychelles", "bourgeois grillé", "Seychelles red snapper"],
+    faqs: [
+      {
+        q: "What is bourgeois grillé?",
+        a: "Bourgeois grillé is grilled bourgeois fish (a prized red snapper) from the Seychelles—simply seasoned Creole-style and cooked over high heat.",
+      },
+      {
+        q: "What fish can I use if I can’t find bourgeois?",
+        a: "Any firm red snapper or similar reef fish works. Keep the seasoning bright and don’t overcook the fillets.",
+      },
+      {
+        q: "What sides go with Seychellois grilled fish?",
+        a: "Rice, grilled vegetables, or a fresh salad. Explore other Indian Ocean recipes on the atlas for a wider island spread.",
+      },
+    ],
+    internalLinks: [
+      { href: "/dish/bourgeois-grillé-seychelles", label: "Bourgeois grillé encyclopedia" },
+      { href: "/country/seychelles", label: "Seychelles recipes" },
+      {
+        href: "/recipe/fruta-pão-assada-sao-tome-and-principe",
+        label: "Fruta pão (São Tomé)",
+      },
+      { href: "/recipe/bonbon-coco-madagascar", label: "Bonbon coco" },
+      { href: "/atlas", label: "Island cluster on the atlas" },
+    ],
+  },
 };
 
 /**

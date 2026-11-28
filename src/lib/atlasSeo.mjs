@@ -95,4 +95,26 @@ export const ATLAS_WINNER_CLUSTERS = [
       { slug: "/meals", label: "Meals by time of day" },
     ],
   },
+  {
+    id: "lusophone-islands",
+    title: "Cape Verde, São Tomé & island tables",
+    blurb:
+      "Lusophone and Indian Ocean island cooking: cachupa, djagacida, fruta pão, cabidela, and Liberian jollof nearby on the West African coast.",
+    winner: { slug: "cachupa", label: "Cachupa (Cape Verde)" },
+    satellites: [
+      { slug: "djagacida-cape-verde", label: "Djagacida" },
+      { slug: "fruta-pão-assada-sao-tome-and-principe", label: "Fruta pão assada" },
+      {
+        slug: "frango-à-cabidela-santomense-sao-tome-and-principe",
+        label: "Frango à cabidela",
+      },
+      { slug: "jollof-rice-liberian", label: "Liberian jollof" },
+      { slug: "bourgeois-grillé-seychelles", label: "Bourgeois grillé" },
+    ],
+    hubs: [
+      { slug: "/country/cape-verde", label: "Cape Verde" },
+      { slug: "/country/sao-tome-and-principe", label: "São Tomé" },
+      { slug: "/country/liberia", label: "Liberia" },
+    ],
+  },
 ];
