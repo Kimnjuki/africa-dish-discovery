@@ -16,7 +16,8 @@ const NotFound = () => {
       <PageMeta
         title="Page Not Found | LadhaQuest"
         description="The page you requested could not be found on LadhaQuest."
-        canonical="https://www.ladhaquest.com/404"
+        canonical="https://www.ladhaquest.com/"
+        noIndex
       />
       <Navigation />
       <main className="flex-1 flex items-center justify-center px-6 py-20">

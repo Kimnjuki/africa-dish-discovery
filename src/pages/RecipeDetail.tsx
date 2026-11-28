@@ -260,16 +260,22 @@ const RecipeDetail = () => {
   // Keep Global recipes reachable in-app, but demote them from organic search
   // so African topical authority compounds (GSC off-brand dilution fix).
   const african = isAfricanRecipe(recipe);
+  // Soft-404 guard: missing recipes must not self-canonicalize as indexable URLs.
+  const missing = !loading && !recipe;
 
   return (
     <div className="min-h-screen">
       <PageMeta
-        title={seo.title}
-        description={seo.description}
-        canonical={toCanonicalUrl(`/recipe/${slug}`)}
+        title={missing ? "Recipe Not Found | LadhaQuest" : seo.title}
+        description={
+          missing
+            ? "That recipe could not be found. Browse authentic African recipes on LadhaQuest."
+            : seo.description
+        }
+        canonical={toCanonicalUrl(missing ? "/recipe-index" : `/recipe/${slug}`)}
         ogImage={recipe?.image_url || undefined}
         type="article"
-        noIndex={Boolean(recipe) && !african}
+        noIndex={missing || (Boolean(recipe) && !african)}
       />
       {recipe && (
         <RecipeSchema

@@ -79,10 +79,16 @@ const CulturalStory = () => {
   if (!dish) {
     return (
       <div className="min-h-screen">
+        <PageMeta
+          title="Story Not Found | LadhaQuest"
+          description="That cultural story could not be found. Browse African dishes on LadhaQuest."
+          canonical="https://www.ladhaquest.com/atlas"
+          noIndex
+        />
         <Navigation />
         <div className="container mx-auto px-6 py-24 text-center">
           <h1 className="text-3xl font-bold mb-4">Story not found</h1>
-          <Link to="/recipes"><Button>Browse Recipes</Button></Link>
+          <Link to="/atlas"><Button>Back to the atlas</Button></Link>
         </div>
       </div>
     );
@@ -98,6 +104,7 @@ const CulturalStory = () => {
     locationCreated: dish.country
       ? { "@type": "Place", name: dish.country }
       : undefined,
+    mainEntityOfPage: `https://www.ladhaquest.com/dish/${dish.slug}`,
   };
 
   return (
@@ -105,7 +112,9 @@ const CulturalStory = () => {
       <PageMeta
         title={`${dish.name} — Cultural Story, Origin & History | LadhaQuest`}
         description={(dish.cultural_significance || dish.summary || `Learn the cultural origin and history of ${dish.name} from ${dish.country}.`).slice(0, 160)}
-        canonical={`https://www.ladhaquest.com/story/${dish.slug}`}
+        // Consolidate story ↔ dish duplicates: encyclopedia owns the indexable URL.
+        canonical={`https://www.ladhaquest.com/dish/${dish.slug}`}
+        noIndex
       />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Navigation />

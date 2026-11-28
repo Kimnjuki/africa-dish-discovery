@@ -138,9 +138,13 @@ const DishEncyclopedia = () => {
     recipeSlug: recipe?.slug || enrichment?.dishSlug,
     dishSlug,
   });
+  const missing = !loading && !dish && !recipe;
+  // Same-slug recipe owns the indexable URL — encyclopedia stays for UX but
+  // noindexes to stop GSC "Google chose different canonical" collisions.
+  const sameSlugRecipe = Boolean(recipe?.slug && dishSlug && recipe.slug === dishSlug);
 
   const jsonLd = useMemo(() => {
-    if (!title) return null;
+    if (!title || missing || sameSlugRecipe) return null;
     return {
       "@context": "https://schema.org",
       "@type": "Article",
@@ -150,7 +154,7 @@ const DishEncyclopedia = () => {
       description:
         dish?.summary || recipe?.summary || `Encyclopedia entry for ${title} from ${country}.`,
     };
-  }, [title, country, dish, recipe]);
+  }, [title, country, dish, recipe, missing, sameSlugRecipe]);
 
   if (cooking && recipe) {
     return (
@@ -167,9 +171,20 @@ const DishEncyclopedia = () => {
   return (
     <div className="min-h-screen">
       <PageMeta
-        title={seo.title}
-        description={seo.description}
-        canonical={toCanonicalUrl(`/dish/${dishSlug}`)}
+        title={missing ? "Dish Not Found | LadhaQuest" : seo.title}
+        description={
+          missing
+            ? "That dish could not be found. Explore the African food atlas on LadhaQuest."
+            : seo.description
+        }
+        canonical={toCanonicalUrl(
+          missing
+            ? "/atlas"
+            : sameSlugRecipe && recipePath
+              ? recipePath
+              : `/dish/${dishSlug}`
+        )}
+        noIndex={missing || sameSlugRecipe}
       />
       {jsonLd && <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>}
       <Navigation />
